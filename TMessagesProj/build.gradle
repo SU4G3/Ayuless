@@ -50,8 +50,11 @@ dependencies {
     implementation 'androidx.interpolator:interpolator:1.0.0'
     implementation 'androidx.biometric:biometric:1.1.0'
     implementation 'androidx.webkit:webkit:1.14.0'
+    // Ayuless: previously pulled in transitively by Play Services.
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.vectordrawable:vectordrawable:1.2.0'
 
-    implementation 'com.google.android.gms:play-services-cast-framework:21.4.0'
+    // Ayuless: removed proprietary Google/Play integration.
     implementation "androidx.mediarouter:mediarouter:1.7.0"
     implementation 'com.google.zxing:core:3.5.4'
     implementation 'com.neovisionaries:nv-websocket-client:2.14'
@@ -63,33 +66,19 @@ dependencies {
     compileOnly 'org.checkerframework:checker-qual:2.5.2'
     compileOnly 'org.checkerframework:checker-compat-qual:2.5.0'
 
-    implementation 'com.google.android.gms:play-services-maps:18.1.0'
-    implementation 'com.google.android.gms:play-services-auth:20.4.0'
-    implementation 'com.google.android.gms:play-services-vision:20.1.3'
-    implementation 'com.google.android.gms:play-services-wearable:18.0.0'
-    implementation 'com.google.android.gms:play-services-location:21.0.1'
-    implementation 'com.google.android.gms:play-services-wallet:19.1.0'
+    // Ayuless: removed proprietary Google/Play integration.
     implementation 'com.googlecode.mp4parser:isoparser:1.0.6'
     implementation 'com.stripe:stripe-android:2.0.2'
-    implementation 'com.google.mlkit:language-id:17.0.6'
-    implementation 'com.android.billingclient:billing:8.0.0'
+    // Ayuless: removed proprietary Google/Play integration.
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'com.google.guava:guava:31.1-android'
-    implementation 'com.google.android.play:integrity:1.3.0'
-    implementation 'com.google.android.gms:play-services-safetynet:18.0.1'
+    // Ayuless: removed proprietary Google/Play integration.
 
-    implementation 'com.google.android.gms:play-services-mlkit-subject-segmentation:16.0.0-beta1'
-    implementation 'com.google.android.gms:play-services-mlkit-image-labeling:16.0.8'
-
-    // Pinned: firebase-pnv alone would pull credentials 1.5.0 (passkeys were built on 1.6.0-alpha04).
+    // Ayuless: retain the open-source credentials API for platform passkeys.
     implementation "androidx.credentials:credentials:1.6.0-alpha04"
-    implementation "androidx.credentials:credentials-play-services-auth:1.6.0-alpha04"
+    // Ayuless: removed proprietary Google/Play integration.
 
-    // 34.19.0 is the last BoM for minSdk 23: BoM 35.x requires minSdk 24 (33.16.0 was the last for Android 5).
-    api platform('com.google.firebase:firebase-bom:34.19.0')
-    implementation 'com.google.firebase:firebase-messaging'
-    implementation "com.google.firebase:firebase-pnv"
-    implementation 'com.google.firebase:firebase-appindexing:20.0.0'
+    // Ayuless: Firebase BoM, messaging, PNV and app indexing removed.
 
     implementation "io.noties.markwon:core:4.6.2"
     implementation "io.noties.markwon:ext-strikethrough:4.6.2"
@@ -107,9 +96,7 @@ dependencies {
     api project(":TMessagesProj_Modules:media3:media-lib-session")
     api project(':jlatexmath')
 
-//    implementation 'com.google.mlkit:translate:17.0.3'
-
-    implementation 'com.google.android.recaptcha:recaptcha:18.7.1'
+    // Ayuless: removed proprietary Google/Play integration.
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
 }
@@ -137,6 +124,16 @@ try {
 }
 
 android {
+    // Ayuless: SDK-specific implementations are replaced by org.ayuless fallbacks.
+    sourceSets.main.java {
+        exclude 'org/telegram/messenger/GoogleMapsProvider.java'
+        exclude 'org/telegram/messenger/GoogleLocationProvider.java'
+        exclude 'org/telegram/messenger/FirebasePhoneNumberVerificationHelper.java'
+        exclude 'org/telegram/messenger/GcmPushListenerService.java'
+        exclude 'org/telegram/messenger/WearAuthListenerService.java'
+        exclude 'org/telegram/messenger/chromecast/ChromecastOptionsProvider.java'
+    }
+
     compileSdkVersion 36
     buildToolsVersion '36.0.0'
     ndkVersion "27.2.12479018"
@@ -275,7 +272,7 @@ def getProps(String propName) {
         return "";
     }
 }
-apply plugin: 'com.google.gms.google-services'
+// Ayuless: removed proprietary Google/Play integration.
 
 task checkVisibility {
     doFirst {

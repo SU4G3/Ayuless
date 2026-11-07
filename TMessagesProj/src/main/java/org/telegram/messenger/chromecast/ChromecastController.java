@@ -5,16 +5,16 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.cast.CastDevice;
-import com.google.android.gms.cast.MediaError;
-import com.google.android.gms.cast.MediaLoadOptions;
-import com.google.android.gms.cast.MediaMetadata;
-import com.google.android.gms.cast.MediaStatus;
-import com.google.android.gms.cast.framework.CastContext;
-import com.google.android.gms.cast.framework.CastSession;
-import com.google.android.gms.cast.framework.SessionManager;
-import com.google.android.gms.cast.framework.SessionManagerListener;
-import com.google.android.gms.cast.framework.media.RemoteMediaClient;
+import org.ayuless.nogms.Cast.CastDevice; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Cast.MediaError; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Cast.MediaLoadOptions; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Cast.MediaMetadata; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Cast.MediaStatus; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Cast.CastContext; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Cast.CastSession; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Cast.SessionManager; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Cast.SessionManagerListener; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Cast.RemoteMediaClient; // Ayuless: local fallback without proprietary SDK.
 
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.ui.CastSync;
@@ -59,7 +59,8 @@ public class ChromecastController implements SessionManagerListener<CastSession>
     }
 
     public String setCover(File file) {
-        return state.setCoverFile(file);
+        // Ayuless: proprietary integration is unavailable.
+        return null;
     }
 
     public boolean isPlaying(ChromecastMediaVariations media) {

@@ -58,9 +58,9 @@ import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.ProductDetails;
-import com.android.billingclient.api.QueryProductDetailsParams;
+import org.ayuless.nogms.Billing.BillingClient; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Billing.ProductDetails; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Billing.QueryProductDetailsParams; // Ayuless: local fallback without proprietary SDK.
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BillingController;

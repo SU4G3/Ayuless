@@ -8,15 +8,15 @@ import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.cast.Cast;
-import com.google.android.gms.cast.MediaError;
-import com.google.android.gms.cast.MediaSeekOptions;
-import com.google.android.gms.cast.MediaStatus;
-import com.google.android.gms.cast.framework.CastContext;
-import com.google.android.gms.cast.framework.CastSession;
-import com.google.android.gms.cast.framework.Session;
-import com.google.android.gms.cast.framework.SessionManagerListener;
-import com.google.android.gms.cast.framework.media.RemoteMediaClient;
+// Ayuless: removed unused SDK import.
+import org.ayuless.nogms.Cast.MediaError; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Cast.MediaSeekOptions; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Cast.MediaStatus; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Cast.CastContext; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Cast.CastSession; // Ayuless: local fallback without proprietary SDK.
+// Ayuless: removed unused SDK import.
+import org.ayuless.nogms.Cast.SessionManagerListener; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Cast.RemoteMediaClient; // Ayuless: local fallback without proprietary SDK.
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;

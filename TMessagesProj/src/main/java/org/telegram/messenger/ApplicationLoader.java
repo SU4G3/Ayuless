@@ -32,8 +32,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
+// Ayuless: removed unused SDK import.
 
 import org.json.JSONObject;
 import org.telegram.messenger.utils.Choreographer60FpsContent;
@@ -92,7 +91,7 @@ public class ApplicationLoader extends Application {
     }
 
     protected ILocationServiceProvider onCreateLocationServiceProvider() {
-        return new GoogleLocationProvider();
+        return new org.ayuless.nogms.PlatformLocationProvider(); // Ayuless: Android location.
     }
 
     public static IMapsProvider getMapsProvider() {
@@ -103,7 +102,7 @@ public class ApplicationLoader extends Application {
     }
 
     protected IMapsProvider onCreateMapsProvider() {
-        return new GoogleMapsProvider();
+        return new org.ayuless.nogms.UnavailableMapsProvider(); // Ayuless: TODO MapLibre (#4).
     }
 
     public static PushListenerController.IPushListenerServiceProvider getPushProvider() {
@@ -413,13 +412,8 @@ public class ApplicationLoader extends Application {
     }
 
     private boolean checkPlayServices() {
-        try {
-            int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-            return resultCode == ConnectionResult.SUCCESS;
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
-        return true;
+        // Ayuless: proprietary integration is unavailable.
+        return false;
     }
 
     private static long lastNetworkCheck = -1;

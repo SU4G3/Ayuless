@@ -17,9 +17,9 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
+import org.ayuless.nogms.Vision.Frame; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Vision.Barcode; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Vision.BarcodeDetector; // Ayuless: local fallback without proprietary SDK.
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.MessagesController;

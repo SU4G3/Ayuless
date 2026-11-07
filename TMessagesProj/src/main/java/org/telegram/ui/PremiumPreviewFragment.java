@@ -54,10 +54,10 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.BillingFlowParams;
-import com.android.billingclient.api.ProductDetails;
-import com.android.billingclient.api.Purchase;
+import org.ayuless.nogms.Billing.BillingClient; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Billing.BillingFlowParams; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Billing.ProductDetails; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Billing.Purchase; // Ayuless: local fallback without proprietary SDK.
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;

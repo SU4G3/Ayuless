@@ -80,8 +80,8 @@ import androidx.media3.extractor.jpeg.MotionPhotoDescription;
 import androidx.media3.extractor.jpeg.XmpMotionPhotoDescriptionParser;
 
 import org.telegram.ui.AspectRatioFrameLayout;
-import com.google.android.gms.cast.MediaMetadata;
-import com.google.android.gms.common.images.WebImage;
+import org.ayuless.nogms.Cast.MediaMetadata; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Cast.WebImage; // Ayuless: local fallback without proprietary SDK.
 
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.chromecast.ChromecastController;

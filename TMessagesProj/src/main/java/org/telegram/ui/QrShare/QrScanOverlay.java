@@ -42,9 +42,9 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
+import org.ayuless.nogms.Vision.Frame; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Vision.Barcode; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Vision.BarcodeDetector; // Ayuless: local fallback without proprietary SDK.
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;

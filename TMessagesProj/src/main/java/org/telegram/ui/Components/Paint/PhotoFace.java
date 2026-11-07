@@ -3,8 +3,8 @@ package org.telegram.ui.Components.Paint;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 
-import com.google.android.gms.vision.face.Face;
-import com.google.android.gms.vision.face.Landmark;
+import org.ayuless.nogms.Vision.Face; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Vision.Landmark; // Ayuless: local fallback without proprietary SDK.
 
 import org.telegram.ui.Components.Size;
 

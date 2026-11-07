@@ -11,9 +11,9 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.util.SparseArray;
 
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
+import org.ayuless.nogms.Vision.Frame; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Vision.Barcode; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Vision.BarcodeDetector; // Ayuless: local fallback without proprietary SDK.
 
 import java.util.Calendar;
 import java.util.HashMap;

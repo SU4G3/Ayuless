@@ -53,9 +53,9 @@ import androidx.dynamicanimation.animation.FloatValueHolder;
 import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
 
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
+import org.ayuless.nogms.Vision.Frame; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Vision.Barcode; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Vision.BarcodeDetector; // Ayuless: local fallback without proprietary SDK.
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.PlanarYUVLuminanceSource;
