@@ -239,6 +239,26 @@ public final class AyulessStore {
         });
     }
 
+    /** All (dialog_id, msg_id) pairs of stored deleted messages. Callback runs on the UI thread. */
+    public void loadDeletedIds(Callback<java.util.HashMap<Long, java.util.HashSet<Integer>>> callback) {
+        queue.postRunnable(() -> {
+            java.util.HashMap<Long, java.util.HashSet<Integer>> result = new java.util.HashMap<>();
+            try (Cursor c = db().rawQuery("SELECT dialog_id, msg_id FROM deleted_messages", null)) {
+                while (c.moveToNext()) {
+                    long dialogId = c.getLong(0);
+                    java.util.HashSet<Integer> ids = result.get(dialogId);
+                    if (ids == null) {
+                        result.put(dialogId, ids = new java.util.HashSet<>());
+                    }
+                    ids.add(c.getInt(1));
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            AndroidUtilities.runOnUIThread(() -> callback.run(result));
+        });
+    }
+
     /** Previous versions of a message, oldest first. */
     public void getEdits(long dialogId, int msgId, Callback<ArrayList<StoredEdit>> callback) {
         queue.postRunnable(() -> {

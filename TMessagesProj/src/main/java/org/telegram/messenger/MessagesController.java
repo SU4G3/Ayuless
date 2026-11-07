@@ -9352,6 +9352,8 @@ public class MessagesController extends BaseController implements NotificationCe
         if ((messages == null || messages.isEmpty()) && taskId == 0) {
             return;
         }
+        // Ayuless: anti-delete must not keep messages this client deletes itself.
+        org.ayuless.antidelete.LocalDeletes.record(currentAccount, dialogId, messages);
         ArrayList<Integer> toSend = null;
         long channelId;
         if (taskId == 0) {
@@ -21115,6 +21117,8 @@ public class MessagesController extends BaseController implements NotificationCe
         LongSparseIntArray markAsReadMessagesOutboxFinal = markAsReadMessagesOutbox;
         LongSparseArray<ArrayList<Integer>> markContentAsReadMessagesFinal = markContentAsReadMessages;
         SparseIntArray markAsReadEncryptedFinal = markAsReadEncrypted;
+        // Ayuless: anti-delete keeps server-deleted messages out of the local deletion batch.
+        deletedMessages = org.ayuless.antidelete.AntiDelete.filter(currentAccount, deletedMessages);
         LongSparseArray<ArrayList<Integer>> deletedMessagesFinal = deletedMessages;
         LongSparseArray<ArrayList<Integer>> deletedQuickRepliesMessagesFinal = deletedQuickReplyMessages;
         LongSparseArray<ArrayList<Integer>> scheduledDeletedMessagesFinal = scheduledDeletedMessages;
