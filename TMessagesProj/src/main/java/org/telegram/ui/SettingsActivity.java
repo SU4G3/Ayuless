@@ -804,6 +804,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         items.add(SettingCell.Factory.of(8, IconBackgroundColors.CYAN.top, IconBackgroundColors.CYAN.bottom, R.drawable.settings_devices, getString(R.string.SettingsDevices), getString(R.string.SettingsDevicesInfo)));
         items.add(SettingCell.Factory.of(9, IconBackgroundColors.ORANGE_DEEP.top, IconBackgroundColors.ORANGE_DEEP.bottom, R.drawable.settings_power, getString(R.string.SettingsPowerSaving), getString(R.string.SettingsPowerSavingInfo)));
         items.add(SettingCell.Factory.of(10, IconBackgroundColors.PURPLE.top, IconBackgroundColors.PURPLE.bottom, R.drawable.settings_language, getString(R.string.SettingsLanguage), LocaleController.getCurrentLanguageName()));
+        // Ayuless: entry point for Ayuless settings.
+        items.add(SettingCell.Factory.of(900, IconBackgroundColors.PURPLE.top, IconBackgroundColors.PURPLE.bottom, R.drawable.settings_privacy, getString(R.string.AyulessSettings), getString(R.string.AyulessSettingsInfo)));
 
         items.add(UItem.asShadow(null));
         if (!walletAbove && getMessagesController().config.walletAvailable.get()) {
@@ -940,6 +942,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 break;
             case 9:
                 presentSettingFragment(new LiteModeSettingsActivity());
+                break;
+            case 900: // Ayuless: open Ayuless settings.
+                presentSettingFragment(new org.ayuless.settings.AyulessSettingsActivity());
                 break;
             case 10:
                 presentSettingFragment(new LanguageSelectActivity());
