@@ -126,6 +126,7 @@ android {
     defaultConfig.versionCode = Integer.parseInt(APP_VERSION_CODE)
 
     applicationVariants.all { variant ->
+        variant.resValue "string", "AyulessApplicationId", variant.applicationId
         variant.outputs.all { output ->
             outputFileName = "app.apk"
             output.versionCodeOverride = defaultConfig.versionCode * 10 + variant.productFlavors.get(0).abiVersionCode

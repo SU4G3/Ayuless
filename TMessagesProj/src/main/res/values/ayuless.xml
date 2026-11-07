@@ -2,5 +2,6 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later
      Copyright (C) 2026 Ayuless contributors -->
 <resources>
+    <string name="AyulessLauncherName" translatable="false">Ayuless</string>
     <string name="AyulessMapsUnavailable">Maps are currently unavailable in Ayuless.</string>
 </resources>

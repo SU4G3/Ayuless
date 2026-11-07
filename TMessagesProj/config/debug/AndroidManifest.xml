@@ -20,9 +20,9 @@
     <!-- Ayuless: Google Maps receive permission removed. -->
 
     <application
-        android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:label="@string/AppNameBeta"
+        android:icon="@mipmap/ic_launcher_ayuless"
+        android:roundIcon="@mipmap/ic_launcher_ayuless_round"
+        android:label="@string/AyulessLauncherName"
         android:theme="@style/Theme.TMessages.Start"
         android:hardwareAccelerated="true"
         android:largeHeap="true"

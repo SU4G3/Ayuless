@@ -34,9 +34,9 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
-        android:icon="@mipmap/ic_launcher_sa"
-        android:roundIcon="@mipmap/ic_launcher_sa"
-        android:label="@string/AppName"
+        android:icon="@mipmap/ic_launcher_ayuless"
+        android:roundIcon="@mipmap/ic_launcher_ayuless_round"
+        android:label="@string/AyulessLauncherName"
         android:theme="@style/Theme.TMessages.Start"
         android:hardwareAccelerated="true"
         android:largeHeap="true"
