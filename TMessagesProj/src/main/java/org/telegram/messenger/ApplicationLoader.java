@@ -102,7 +102,8 @@ public class ApplicationLoader extends Application {
     }
 
     protected IMapsProvider onCreateMapsProvider() {
-        return new org.ayuless.nogms.UnavailableMapsProvider(); // Ayuless: TODO MapLibre (#4).
+        // Ayuless: render interactive maps using MapLibre without Google services.
+        return new org.ayuless.maps.MapLibreMapsProvider();
     }
 
     public static PushListenerController.IPushListenerServiceProvider getPushProvider() {
