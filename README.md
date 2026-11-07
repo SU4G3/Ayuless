@@ -61,7 +61,7 @@ cp API_KEYS.example API_KEYS   # впиши свои APP_ID / APP_HASH с https:
 ./gradlew assembleAfatRelease
 ```
 
-Файл `API_KEYS` в git-ignore и никогда не коммитится. APK появится в `TMessagesProj_App/build/outputs/apk/`.
+Файл `API_KEYS` в git-ignore и никогда не коммитится. APK появится в `TMessagesProj_App/build/outputs/apk/afat/release/app.apk`. ID приложения: `org.ayuless.messenger`.
 
 ### Участие
 
@@ -105,7 +105,7 @@ cp API_KEYS.example API_KEYS   # put your own APP_ID / APP_HASH from https://my.
 ./gradlew assembleAfatRelease
 ```
 
-`API_KEYS` is git-ignored and must never be committed. The APK ends up in `TMessagesProj_App/build/outputs/apk/`.
+`API_KEYS` is git-ignored and must never be committed. The APK ends up in `TMessagesProj_App/build/outputs/apk/afat/release/app.apk`. Application ID: `org.ayuless.messenger`.
 
 ### Contributing
 
