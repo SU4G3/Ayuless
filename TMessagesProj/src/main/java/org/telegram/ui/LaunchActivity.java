@@ -7718,12 +7718,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 }
             }
         } else if (id == NotificationCenter.needShowPlayServicesAlert) {
-            try {
-                final Status status = (Status) args[0];
-                status.startResolutionForResult(this, PLAY_SERVICES_REQUEST_CHECK_SETTINGS);
-            } catch (Throwable ignore) {
-
-            }
+            // Ayuless: no Play Services settings resolution without GMS.
         } else if (id == NotificationCenter.fileLoaded) {
             String path = (String) args[0];
             if (loadingThemeFileName != null) {

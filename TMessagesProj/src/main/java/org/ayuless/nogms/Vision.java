@@ -32,6 +32,7 @@ public final class Vision {
         private Bitmap bitmap;
         private ByteBuffer bytes;
         private int width, height;
+        public static final int ROTATION_0 = 0, ROTATION_90 = 1, ROTATION_180 = 2, ROTATION_270 = 3;
         public static final class Builder {
             private final Frame frame=new Frame();
             public Builder setBitmap(Bitmap b) { frame.bitmap=b; return this; }

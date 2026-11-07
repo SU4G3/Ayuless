@@ -50,6 +50,9 @@ dependencies {
     implementation 'androidx.interpolator:interpolator:1.0.0'
     implementation 'androidx.biometric:biometric:1.1.0'
     implementation 'androidx.webkit:webkit:1.14.0'
+    // Ayuless: previously pulled in transitively by Play Services.
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.vectordrawable:vectordrawable:1.2.0'
 
     // Ayuless: removed proprietary Google/Play integration.
     implementation "androidx.mediarouter:mediarouter:1.7.0"

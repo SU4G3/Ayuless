@@ -60,7 +60,7 @@ public final class Google {
         public static Task<GoogleSignInAccount> getSignedInAccountFromIntent(Intent i) { return Task.failed(); }
         public static GoogleSignInClient getClient(Context c, GoogleSignInOptions o) { return new GoogleSignInClient(); }
     }
-    public static final class GoogleSignInAccount { public String getIdToken() { return null; } }
+    public static final class GoogleSignInAccount { public String getIdToken() { return null; } public String getEmail() { return null; } }
     public static final class GoogleSignInClient {
         public Task<Void> signOut() { return Task.failed(); }
         public Intent getSignInIntent() { throw new UnsupportedOperationException("Google sign-in unavailable"); }

@@ -63,7 +63,8 @@ public class BuildVars {
     }
 
     public static boolean useInvoiceBilling() {
-        return IS_BILLING_UNAVAILABLE || BillingController.billingClientEmpty || // Ayuless: use invoice payments. DEBUG_VERSION && false || ApplicationLoader.isStandaloneBuild() || isBetaApp() && false || isHuaweiStoreApp() || hasDirectCurrency();
+        // Ayuless: always use invoice payments, Play Billing is not shipped.
+        return IS_BILLING_UNAVAILABLE || BillingController.billingClientEmpty || DEBUG_VERSION && false || ApplicationLoader.isStandaloneBuild() || isBetaApp() && false || isHuaweiStoreApp() || hasDirectCurrency();
     }
 
     private static boolean hasDirectCurrency() {
