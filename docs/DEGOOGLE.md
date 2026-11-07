@@ -4,8 +4,9 @@
 # Building Ayuless without proprietary Google SDKs
 
 Issue #2 targets `:TMessagesProj_App:compileAfatReleaseJavaWithJavac` and the
-`afatRelease` APK. New Java adapters live in `org.ayuless.nogms`; upstream changes
-are marked `Ayuless:`. These adapters are original implementations. No code was
+`afatRelease` APK. New Java adapters live in `org.ayuless.nogms` and
+`org.ayuless.maps`; upstream changes are marked `Ayuless:`. These adapters are
+original implementations. No code was
 copied from other Telegram forks.
 
 ## Removed dependencies
@@ -13,7 +14,7 @@ copied from other Telegram forks.
 | Dependency removed | Replacement / unavailable feature |
 | --- | --- |
 | `com.google.android.gms:play-services-cast-framework:21.4.0` | Cast discovery, sessions and playback unavailable. `Cast` adapters retain optional UI types; Cast menus are disabled. No Cast HTTP server is started by the cover path. |
-| `com.google.android.gms:play-services-maps:18.1.0` | `UnavailableMapsProvider` displays an unavailable message. No fake map or camera coordinates are delivered. MapLibre is issue #4. |
+| `com.google.android.gms:play-services-maps:18.1.0` | `org.ayuless.maps.MapLibreMapsProvider`, using `org.maplibre.gl:android-sdk:11.8.0`, renders interactive maps, live markers and proximity circles. Keyless OpenFreeMap Liberty tiles retain MapLibre's OSM attribution control. Android platform location supplies the location dot and callbacks. |
 | `com.google.android.gms:play-services-auth:20.4.0` | Google sign-in hidden by the services capability check; local adapters fail requests. SMS Retriever registration removed; manual code entry remains. |
 | `com.google.android.gms:play-services-vision:20.1.3` | `Vision` uses the existing ZXing library for bitmap/NV21 QR and raw barcode decoding. Face detection and automatic face-mask placement unavailable. Structured North American driver-license parsing unavailable; native MRZ recognition remains. |
 | `com.google.android.gms:play-services-wearable:18.0.0` | Wear auth listener removed from manifests and Java source set; outgoing Wear messages fail locally. Android notification reply support remains. |
@@ -42,6 +43,25 @@ including transitive dependencies. ZXing, Gson, Guava, AndroidX credentials,
 MediaRouter and other existing open-source dependencies remain. MediaRouter has
 no Cast route provider in this build; the dependency guard also catches any
 future attempt to introduce GMS transitively.
+
+MapLibre's dependency excludes `com.google.android.gms` defensively; the root
+guard still rejects proprietary groups everywhere else. Style URLs are centralized
+in `MapLibreMapsProvider`. Both light and dark use
+`https://tiles.openfreemap.org/styles/liberty` until a dark style can be verified.
+Telegram's Google-specific raw style JSON is treated as a theme selection, not
+passed to MapLibre. Satellite/hybrid requests fall back to street maps because
+no keyless imagery source is configured. Tiles and styles require internet access
+on the device; map readiness does not wait for a tile download. An external Maps
+app is not required for the embedded map.
+
+The provider forwards create/start/resume/pause/stop/destroy/low-memory events,
+ignoring the upstream worker-thread prewarm and duplicate create calls. Platform
+location subscriptions stop on pause/destroy; location permissions remain under
+the existing Telegram UI. Markers support anchors, rotation, tags, icons, clicks
+and title/snippet text; metre-radius circles use geodesic polygons and dashed
+outlines. Overlays are retained while styles load and restored after style changes.
+The dark-style URL, resolved dependency graph and SDK integration have not been
+verified offline; see the remaining device/build checks below.
 
 The optional Huawei distribution is excluded from `settings.gradle`; its root
 AGConnect plugin/repository are removed. Its historical sources and HMS
@@ -118,13 +138,27 @@ Additional offline checks passed:
   is implied.
 - Source audit, XML component-preservation checks and `git diff --check` passed.
 
+For the MapLibre integration (#4), Java 8 syntax checks passed, and the provider
+compiled against Android API 36, cached AndroidX and temporary MapLibre type
+declarations. This checks Java types and the complete `IMapsProvider` contract,
+not real SDK signatures. JVM checks exercised production circle geometry at
+equatorial/high latitudes and the date line, metre radii, closed rings, gap-first
+dash patterns, option snapshots and removal before style loading. No real SDK,
+tile rendering or device lifecycle test was possible. In particular, verify the
+SDK's bitmap-density handling for icon offsets and the style/render callback
+timing on the device; neither can be established by these offline checks.
+
 ## Remaining work
 
 - Issue #3: implement UnifiedPush token lifecycle and encrypted message delivery.
   Notifications currently rely on the existing Telegram connection/background
   service, subject to Android background restrictions.
-- Issue #4: implement MapLibre rendering, location selection and map lifecycle.
-  Interactive maps are unavailable until then.
+- Issue #4: compile the MapLibre 11.8.0 integration when dependency downloads are
+  available, then test rendering/OSM attribution, location selection, live marker
+  rotation/clicks, proximity circles, bounds fitting, permissions and lifecycle
+  on a device without Google services. Verify the resolved graph contains no GMS.
+  Verify a keyless dark style before changing the Liberty fallback. Satellite and
+  hybrid imagery remain unconfigured.
 - Test login alternatives on a test account. The server decides which methods
   are offered; a mandatory Integrity/reCAPTCHA challenge cannot be satisfied by
   an SDK-free client. Platform passkeys require a compatible Android provider.
