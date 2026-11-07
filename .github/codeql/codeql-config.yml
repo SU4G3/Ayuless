@@ -1,0 +1,15 @@
+name: Ayuless CodeQL config
+
+queries:
+  - uses: security-extended
+
+# Scan app sources and workflows; skip vendored third-party code and generated output.
+paths:
+  - TMessagesProj/src
+  - TMessagesProj_App/src
+  - .github/workflows
+paths-ignore:
+  - TMessagesProj/jni
+  - TMessagesProj_Modules
+  - TMessagesProj/src/main/java/androidx
+  - "**/build"
