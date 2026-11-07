@@ -101,6 +101,28 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
 }
 
+// Ayuless: Load private API credentials from the ignored root file, with CI environment overrides.
+def apiKeys = new Properties()
+def apiKeysFile = rootProject.file('API_KEYS')
+if (apiKeysFile.exists()) {
+    apiKeysFile.withInputStream { apiKeys.load(it) }
+}
+def appId = (System.getenv('APP_ID') ?: apiKeys.getProperty('APP_ID'))?.trim()
+def appHash = (System.getenv('APP_HASH') ?: apiKeys.getProperty('APP_HASH'))?.trim()
+if (!appId || !appHash) {
+    throw new GradleException('Missing APP_ID or APP_HASH. Copy API_KEYS.example to API_KEYS at the repository root and fill in your credentials, or set APP_ID and APP_HASH environment variables.')
+}
+// Ayuless: Normalize APP_ID to a decimal Java int literal and keep credentials out of errors.
+def appIdValue
+try {
+    appIdValue = Integer.parseInt(appId)
+    if (appIdValue <= 0) {
+        throw new NumberFormatException()
+    }
+} catch (NumberFormatException ignored) {
+    throw new GradleException('APP_ID must be a positive 32-bit integer in API_KEYS or the APP_ID environment variable.')
+}
+
 android {
     // Ayuless: SDK-specific implementations are replaced by org.ayuless fallbacks.
     sourceSets.main.java {
@@ -137,6 +159,9 @@ android {
     }
 
     defaultConfig {
+        // Ayuless: Generate credentials in the library's org.telegram.messenger.BuildConfig.
+        buildConfigField "int", "APP_ID", appIdValue.toString()
+        buildConfigField "String", "APP_HASH", groovy.json.JsonOutput.toJson(appHash)
         minSdkVersion 23
         targetSdkVersion 36
 
