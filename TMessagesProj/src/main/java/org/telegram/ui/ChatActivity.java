@@ -1294,6 +1294,7 @@ public class ChatActivity extends BaseFragment implements
     public final static int OPTION_VIEW_STATISTICS = 115;
     public final static int OPTION_WELCOME_REVERT = 116;
     public final static int OPTION_SEND_MONEY = 117;
+    public final static int OPTION_AYULESS_EDIT_HISTORY = 9001; // Ayuless: edit history
 
     private final static int[] allowedNotificationsDuringChatListAnimations = new int[]{
             NotificationCenter.messagesRead,
@@ -34243,6 +34244,10 @@ public class ChatActivity extends BaseFragment implements
         }
         boolean preserveDim = false;
         switch (option) {
+            case OPTION_AYULESS_EDIT_HISTORY: { // Ayuless: edit history
+                org.ayuless.edits.EditHistorySheet.show(getParentActivity(), currentAccount, selectedObject);
+                break;
+            }
             case OPTION_RETRY: {
                 final MessageObject object = selectedObject;
                 final MessageObject.GroupedMessages group = selectedObjectGroup;
@@ -47031,6 +47036,13 @@ public class ChatActivity extends BaseFragment implements
             items.add(getString(R.string.WelcomeMessageRevert));
             options.add(OPTION_WELCOME_REVERT);
             icons.add(R.drawable.outline_revert_24);
+        }
+
+        // Ayuless: edit history entry when previous versions are stored.
+        if (org.ayuless.edits.EditHistory.hasHistory(currentAccount, selectedObject)) {
+            items.add("Edit history");
+            options.add(OPTION_AYULESS_EDIT_HISTORY);
+            icons.add(R.drawable.msg_recent);
         }
     }
 
