@@ -1,0 +1,3 @@
+# Copy to API_KEYS (git-ignored) and fill in your own values from https://my.telegram.org/apps
+APP_ID=12345
+APP_HASH=0123456789abcdef0123456789abcdef

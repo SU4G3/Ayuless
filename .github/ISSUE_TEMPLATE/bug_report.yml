@@ -1,0 +1,39 @@
+name: Bug report
+description: Something does not work as expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "Never paste API hashes, session data or private messages."
+  - type: input
+    id: version
+    attributes:
+      label: Ayuless version / commit
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and Android version
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options: [Ghost mode, Anti-delete, Edit history, Settings, Build, Push / UnifiedPush, Maps, Other]
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      render: text
