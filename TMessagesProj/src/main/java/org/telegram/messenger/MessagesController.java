@@ -16218,6 +16218,7 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         getNotificationCenter().postNotificationName(NotificationCenter.appDidLogout);
         getMessagesStorage().cleanup(false);
+        org.ayuless.storage.AyulessStore.getInstance(currentAccount).clearAll(); // Ayuless: wipe local deleted/edit history on logout
         cleanup();
         getContactsController().deleteUnknownAppAccounts();
     }
