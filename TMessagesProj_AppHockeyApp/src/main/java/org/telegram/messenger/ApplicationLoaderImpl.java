@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import androidx.core.content.FileProvider;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+// Ayuless: Crashlytics removed.
 
 import org.telegram.messenger.regular.BuildConfig;
 import org.telegram.tgnet.ConnectionsManager;
@@ -44,73 +44,8 @@ public class ApplicationLoaderImpl extends ApplicationLoader {
 
     @Override
     protected void startAppCenterInternal(Activity context) {
-        if (org.telegram.messenger.BuildConfig.DEBUG) {
-            return;
-        }
-        try {
-            if (BuildVars.DEBUG_VERSION) {
-                String userId = "" + UserConfig.getInstance(UserConfig.selectedAccount).clientUserId;
-                if (UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser() != null) {
-                    final String username = UserObject.getPublicUsername(UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser());
-                    if (!TextUtils.isEmpty(username))
-                        userId = "@" + username;
-                }
-                if (ConnectionsManager.getInstance(UserConfig.selectedAccount).isTestBackend()) {
-                    userId += " [TEST SERVER]";
-                }
-
-                final FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
-                crashlytics.setUserId(userId);
-                crashlytics.setCustomKey("version", getVersionName(org.telegram.messenger.BuildConfig.VERSION_NUM));
-                crashlytics.setCustomKey("model", Build.MODEL);
-                crashlytics.setCustomKey("manufacturer", Build.MANUFACTURER);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    crashlytics.setCustomKey("soc_model", Build.SOC_MODEL);
-                    crashlytics.setCustomKey("soc_manufacturer", Build.SOC_MANUFACTURER);
-                }
-                crashlytics.setCustomKey("device", Build.DEVICE);
-                crashlytics.setCustomKey("product", Build.PRODUCT);
-                crashlytics.setCustomKey("hardware", Build.HARDWARE);
-                crashlytics.setCustomKey("user", Build.USER);
-                crashlytics.setCrashlyticsCollectionEnabled(true);
-            }
-            /*
-            if (BuildVars.DEBUG_VERSION) {
-                Distribute.setEnabledForDebuggableBuild(true);
-                String appHash = org.telegram.messenger.BuildConfig.APP_CENTER_HASH;
-                if (TextUtils.isEmpty(appHash)) {
-                    throw new RuntimeException("App Center hash is empty. add to local.properties field APP_CENTER_HASH_PRIVATE and APP_CENTER_HASH_PUBLIC");
-                }
-                AppCenter.start(context.getApplication(), appHash, Distribute.class, Crashes.class, Analytics.class);
-                Crashes.getMinidumpDirectory().thenAccept(path -> {
-                    if (path != null) {
-                        Utilities.setupNativeCrashesListener(path);
-                    }
-                });
-                CustomProperties props = new CustomProperties();
-                props.set("model", Build.MODEL);
-                props.set("manufacturer", Build.MANUFACTURER);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    props.set("soc_model", Build.SOC_MODEL);
-                    props.set("soc_manufacturer", Build.SOC_MANUFACTURER);
-                }
-                props.set("device", Build.DEVICE);
-                props.set("product", Build.PRODUCT);
-                props.set("hardware", Build.HARDWARE);
-                props.set("user", Build.USER);
-                AppCenter.setCustomProperties(props);
-                String userId = "uid=" + UserConfig.getInstance(UserConfig.selectedAccount).clientUserId;
-                if (UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser() != null) {
-                    final String username = UserObject.getPublicUsername(UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser());
-                    if (!TextUtils.isEmpty(username))
-                        userId += " @" + username;
-                }
-                AppCenter.setUserId(userId);
-            }
-            */
-        } catch (Throwable e) {
-            FileLog.e(e);
-        }
+        // Ayuless: proprietary integration is unavailable.
+        // Ayuless: crash reporting SDKs are not shipped.
     }
 
     private static long lastUpdateCheckTime;
@@ -130,16 +65,8 @@ public class ApplicationLoaderImpl extends ApplicationLoader {
     }
 
     protected void appCenterLogInternal(Throwable e) {
-        try {
-            FirebaseCrashlytics.getInstance().recordException(e);
-        } catch (Throwable recordException) {
-            FileLog.e(recordException, false);
-        }
-        try {
-            // Crashes.trackError(e);
-        } catch (Throwable ignore) {
-
-        }
+        // Ayuless: proprietary integration is unavailable.
+        FileLog.e(e, false);
     }
 
     protected void logDualCameraInternal(boolean success, boolean vendor) {

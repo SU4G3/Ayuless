@@ -19,10 +19,10 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.BillingFlowParams;
-import com.android.billingclient.api.ProductDetails;
-import com.android.billingclient.api.QueryProductDetailsParams;
+import org.ayuless.nogms.Billing.BillingClient; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Billing.BillingFlowParams; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Billing.ProductDetails; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Billing.QueryProductDetailsParams; // Ayuless: local fallback without proprietary SDK.
 
 import org.json.JSONObject;
 import org.telegram.SQLite.SQLiteCursor;

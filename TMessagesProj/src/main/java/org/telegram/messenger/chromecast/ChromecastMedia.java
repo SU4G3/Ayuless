@@ -2,8 +2,8 @@ package org.telegram.messenger.chromecast;
 
 import android.net.Uri;
 
-import com.google.android.gms.cast.MediaInfo;
-import com.google.android.gms.cast.MediaMetadata;
+import org.ayuless.nogms.Cast.MediaInfo; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Cast.MediaMetadata; // Ayuless: local fallback without proprietary SDK.
 
 public class ChromecastMedia {
     public static final String IMAGE_JPEG = "image/jpeg";

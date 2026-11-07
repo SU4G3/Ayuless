@@ -68,7 +68,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import androidx.media3.common.C;
-import com.google.android.gms.cast.framework.CastContext;
+import org.ayuless.nogms.Cast.CastContext; // Ayuless: local fallback without proprietary SDK.
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -1105,7 +1105,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                 }
             }
         };
-        castAvailable = true;
+        castAvailable = false; // Ayuless: Cast is unavailable without its proprietary SDK.
         try {
             castItemButton.setRouteSelector(CastContext.getSharedInstance(context).getMergedSelector());
         } catch (Exception e) {

@@ -151,10 +151,10 @@ import androidx.media3.common.Format;
 import androidx.media3.exoplayer.analytics.AnalyticsListener;
 import androidx.media3.exoplayer.video.VideoFrameMetadataListener;
 import androidx.media3.common.VideoSize;
-import com.google.android.gms.cast.framework.CastContext;
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.face.Face;
-import com.google.android.gms.vision.face.FaceDetector;
+import org.ayuless.nogms.Cast.CastContext; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Vision.Frame; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Vision.Face; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Vision.FaceDetector; // Ayuless: local fallback without proprietary SDK.
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimationNotificationsLocker;
@@ -5836,7 +5836,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 }
             }
         };
-        boolean castAvailable = true;
+        boolean castAvailable = false; // Ayuless: Cast is unavailable without its proprietary SDK.
         try {
             castItemButton.setRouteSelector(CastContext.getSharedInstance(activityContext).getMergedSelector());
         } catch (Exception e) {

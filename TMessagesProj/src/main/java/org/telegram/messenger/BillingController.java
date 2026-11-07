@@ -13,18 +13,18 @@ import androidx.annotation.Nullable;
 import androidx.core.util.Consumer;
 import androidx.core.util.Pair;
 
-import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.BillingClientStateListener;
-import com.android.billingclient.api.BillingFlowParams;
-import com.android.billingclient.api.BillingResult;
-import com.android.billingclient.api.ConsumeParams;
-import com.android.billingclient.api.PendingPurchasesParams;
-import com.android.billingclient.api.ProductDetails;
-import com.android.billingclient.api.Purchase;
-import com.android.billingclient.api.PurchasesResponseListener;
-import com.android.billingclient.api.PurchasesUpdatedListener;
-import com.android.billingclient.api.QueryProductDetailsParams;
-import com.android.billingclient.api.QueryPurchasesParams;
+import org.ayuless.nogms.Billing.BillingClient; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Billing.BillingClientStateListener; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Billing.BillingFlowParams; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Billing.BillingResult; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Billing.ConsumeParams; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Billing.PendingPurchasesParams; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Billing.ProductDetails; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Billing.Purchase; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Billing.PurchasesResponseListener; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Billing.PurchasesUpdatedListener; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Billing.QueryProductDetailsParams; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Billing.QueryPurchasesParams; // Ayuless: local fallback without proprietary SDK.
 
 import org.telegram.messenger.utils.BillingUtilities;
 import org.telegram.tgnet.ConnectionsManager;
@@ -181,7 +181,10 @@ public class BillingController implements PurchasesUpdatedListener, BillingClien
 
     public void queryProductDetails(List<QueryProductDetailsParams.Product> products, ProductDetailsResponseListenerLegacy responseListener) {
         if (!isReady()) {
-            throw new IllegalStateException("Billing: Controller should be ready for this call!");
+            // Ayuless: complete unavailable queries without leaving purchase UI waiting.
+            responseListener.onProductDetailsResponse(BillingResult.newBuilder()
+                .setResponseCode(BillingClient.BillingResponseCode.BILLING_UNAVAILABLE).build(), Collections.emptyList());
+            return;
         }
         billingClient.queryProductDetailsAsync(QueryProductDetailsParams.newBuilder().setProductList(products).build(), (billingResult, queryProductDetailsResult) ->
             responseListener.onProductDetailsResponse(billingResult, queryProductDetailsResult.getProductDetailsList()));

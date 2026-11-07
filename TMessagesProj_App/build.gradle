@@ -18,10 +18,15 @@ configurations.all {
 dependencies {
     implementation project(':TMessagesProj')
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
-    implementation files('../TMessagesProj/libs/libgsaverification-client.aar')
+    // Ayuless: removed proprietary Google/Play integration.
 }
 
 android {
+    // Ayuless: no local proprietary search verification AAR.
+    sourceSets.main.java {
+        exclude 'org/telegram/messenger/GoogleVoiceClientActivity.java'
+        exclude 'org/telegram/messenger/GoogleVoiceClientService.java'
+    }
     compileSdkVersion 36
     buildToolsVersion '36.0.0'
 
@@ -194,4 +199,4 @@ android {
     }
 }
 
-apply plugin: 'com.google.gms.google-services'
+// Ayuless: removed proprietary Google/Play integration.

@@ -73,15 +73,14 @@ import androidx.dynamicanimation.animation.FloatValueHolder;
 import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.wallet.AutoResolveHelper;
-import com.google.android.gms.wallet.IsReadyToPayRequest;
-import com.google.android.gms.wallet.PaymentData;
-import com.google.android.gms.wallet.PaymentDataRequest;
-import com.google.android.gms.wallet.PaymentsClient;
-import com.google.android.gms.wallet.Wallet;
-import com.google.android.gms.wallet.WalletConstants;
+import org.ayuless.nogms.Google.Status; // Ayuless: local fallback without proprietary SDK.
+// Ayuless: removed unused SDK import.
+import org.ayuless.nogms.Google.AutoResolveHelper; // Ayuless: local fallback without proprietary SDK.
+// Ayuless: removed unused SDK import.
+import org.ayuless.nogms.Google.PaymentData; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Google.PaymentDataRequest; // Ayuless: local fallback without proprietary SDK.
+import org.ayuless.nogms.Google.PaymentsClient; // Ayuless: local fallback without proprietary SDK.
+// Ayuless: removed unused SDK import.
 import com.stripe.android.Stripe;
 import com.stripe.android.TokenCallback;
 import com.stripe.android.exception.APIConnectionException;
@@ -3206,35 +3205,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     private void initGooglePay(Context context) {
-        if (Build.VERSION.SDK_INT < 19 || getParentActivity() == null) {
-            return;
-        }
-        Wallet.WalletOptions walletOptions = new Wallet.WalletOptions.Builder()
-                .setEnvironment(paymentForm.invoice.test ? WalletConstants.ENVIRONMENT_TEST : WalletConstants.ENVIRONMENT_PRODUCTION)
-                .setTheme(WalletConstants.THEME_LIGHT)
-                .build();
-        paymentsClient = Wallet.getPaymentsClient(context, walletOptions);
-
-        final Optional<JSONObject> isReadyToPayJson = getIsReadyToPayRequest();
-        if (!isReadyToPayJson.isPresent()) {
-            return;
-        }
-        IsReadyToPayRequest request = IsReadyToPayRequest.fromJson(isReadyToPayJson.get().toString());
-        if (request == null) {
-            return;
-        }
-
-        Task<Boolean> task = paymentsClient.isReadyToPay(request);
-        task.addOnCompleteListener(getParentActivity(),
-                task1 -> {
-                    if (task1.isSuccessful()) {
-                        if (googlePayContainer != null) {
-                            googlePayContainer.setVisibility(View.VISIBLE);
-                        }
-                    } else {
-                        FileLog.e("isReadyToPay failed", task1.getException());
-                    }
-                });
+        // Ayuless: proprietary integration is unavailable.
+        if (googlePayContainer != null) googlePayContainer.setVisibility(View.GONE);
     }
 
     private String getTotalPriceString(ArrayList<TLRPC.TL_labeledPrice> prices) {

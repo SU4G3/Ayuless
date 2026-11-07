@@ -1030,7 +1030,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         frameLayout.addView(mapViewClip, frameLayout.indexOfChild(listView), LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
 
         mapView = ApplicationLoader.getMapsProvider().onCreateMapView(context);
-        mapView.getView().setAlpha(0f);
+        // Ayuless: show the unavailable-map message without waiting for a map-loaded event.
+        mapView.getView().setAlpha(ApplicationLoader.getMapsProvider() instanceof org.ayuless.nogms.UnavailableMapsProvider ? 1f : 0f);
         mapView.setOnDispatchTouchEventInterceptor((ev, origMethod) -> {
             pokeMapSnapshot();
             MotionEvent eventToRecycle = null;

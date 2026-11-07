@@ -16,7 +16,7 @@ import androidx.media3.datasource.DataSource;
 import androidx.media3.datasource.DataSpec;
 import androidx.media3.datasource.FileDataSource;
 
-import com.google.android.gms.cast.MediaMetadata;
+import org.ayuless.nogms.Cast.MediaMetadata; // Ayuless: local fallback without proprietary SDK.
 
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;

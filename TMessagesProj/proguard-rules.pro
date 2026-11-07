@@ -1,8 +1,4 @@
--keep public class com.google.android.gms.* { public *; }
--keepnames @com.google.android.gms.common.annotation.KeepName class *
--keepclassmembernames class * {
-    @com.google.android.gms.common.annotation.KeepName *;
-}
+# Ayuless: GMS keep rules removed with the SDK.
 
 -keep @interface androidx.annotation.Keep
 -keep @androidx.annotation.Keep class * { *; }
@@ -51,8 +47,7 @@
     private static native <methods>;
 }
 
-# https://developers.google.com/ml-kit/known-issues#android_issues
--keep class com.google.mlkit.nl.languageid.internal.LanguageIdentificationJni { *; }
+# Ayuless: ML Kit native language detector is not shipped.
 
 # WidgetSandbox: JNI_OnLoad uses RegisterNatives; backend methods are called by native workers.
 -keep class org.telegram.utils.twidget.WidgetSandboxNative { *; }
