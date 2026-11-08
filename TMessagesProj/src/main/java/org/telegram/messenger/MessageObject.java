@@ -12337,6 +12337,9 @@ public class MessageObject {
                 mediaExists = FileLoader.getInstance(currentAccount).getPathToAttach(photo.video_sizes.get(0), null, true, useFileDatabaseQueue).exists();
             }
         }
+        if (!mediaExists && !attachPathExists) { // Ayuless: restore saved media of kept deleted messages
+            org.ayuless.spy.SavedAttachments.onMediaMissing(this);
+        }
         updateQualitiesCached(useFileDatabaseQueue);
     }
 
