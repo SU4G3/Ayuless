@@ -33,7 +33,6 @@ Nothing has been tested on a device yet. All Ayuless features are off by default
 - ✅ Own SQLite DB in `org.ayuless` with size limit and cleanup
 - ✅ Server deletes keep the message, marked as deleted. Self-deletes behave normally.
 - ✅ Edit history from the message menu
-- ✅ Never store secret chats or self-destructing messages
 - ✅ Exceptions: users/chats that are never saved (#27)
 - ✅ Save read date, save last online (local only) (#31)
 - ⏳ Include read dates / last online in export/import; apply Spy exceptions to them
