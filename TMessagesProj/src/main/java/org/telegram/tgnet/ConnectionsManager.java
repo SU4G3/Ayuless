@@ -254,8 +254,9 @@ public class ConnectionsManager extends BaseController {
         }
         getUserConfig().loadConfig();
         String pushString = getRegId();
-        // Use official Telegram fingerprint to avoid API_ID_PUBLISHED_FLOOD
-        String fingerprint = BuildVars.OFFICIAL_FINGERPRINT;
+        // Use dynamic certificate fingerprint (like official client and AyuGram)
+        // Official package_id + installer + valid fingerprint for current APK = no API_ID_PUBLISHED_FLOOD
+        String fingerprint = AndroidUtilities.getCertificateSHA256Fingerprint();
 
         int timezoneOffset = (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000;
         SharedPreferences mainPreferences;
