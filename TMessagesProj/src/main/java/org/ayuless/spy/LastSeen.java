@@ -60,7 +60,7 @@ public final class LastSeen {
 
     /** Records that a user was online at the given unix time. Safe to call from any thread. */
     public static void record(int account, long userId, int time) {
-        if (userId <= 0 || time <= 0 || !isEnabled(account)) {
+        if (userId <= 0 || time <= 0 || !isEnabled(account) || SpyExceptions.isExcepted(account, userId)) {
             return;
         }
         ConcurrentHashMap<Long, Integer> c = cache(account);
@@ -79,7 +79,7 @@ public final class LastSeen {
 
     /** "last seen ... (saved locally)" for a user with a hidden status, or null if unknown. */
     public static String formatHidden(int account, long userId) {
-        if (!isEnabled(account)) {
+        if (!isEnabled(account) || SpyExceptions.isExcepted(account, userId)) {
             return null;
         }
         ConcurrentHashMap<Long, Integer> c = cache(account);

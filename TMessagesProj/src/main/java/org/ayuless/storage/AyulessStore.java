@@ -264,6 +264,7 @@ public final class AyulessStore {
                 }
                 if (isValidExport(tmp)) {
                     imported = merge(tmp);
+                    org.ayuless.spy.LastSeen.reset(account);
                 }
             } catch (Exception e) {
                 FileLog.e(e);
@@ -317,9 +318,45 @@ public final class AyulessStore {
             try {
                 added += copyTable(src, db, "deleted_messages", new String[]{"dialog_id", "msg_id", "topic_id", "date", "deleted_at", "from_id", "data"});
                 added += copyTable(src, db, "edit_history", new String[]{"dialog_id", "msg_id", "edit_date", "version", "text", "entities", "media"});
+                if (hasColumns(src, "read_outbox", "dialog_id", "min_id", "max_id", "read_at")) {
+                    added += copyTable(src, db, "read_outbox", new String[]{"dialog_id", "min_id", "max_id", "read_at"});
+                }
+                if (hasColumns(src, "last_seen", "user_id", "seen_at")) {
+                    added += mergeLastSeen(src, db);
+                }
                 db.setTransactionSuccessful();
             } finally {
                 db.endTransaction();
+            }
+        }
+        return added;
+    }
+
+    /**
+     * last_seen keeps the newest time per user: imported rows win only if they are newer.
+     * Plain SELECT + INSERT/UPDATE because UPSERT needs SQLite 3.24 (API 30+).
+     */
+    private static int mergeLastSeen(SQLiteDatabase src, SQLiteDatabase dst) {
+        int added = 0;
+        try (Cursor c = src.rawQuery("SELECT user_id, seen_at FROM last_seen WHERE user_id > 0", null)) {
+            ContentValues values = new ContentValues();
+            while (c.moveToNext()) {
+                long userId = c.getLong(0);
+                long seenAt = c.getLong(1);
+                long current = -1;
+                try (Cursor e = dst.rawQuery("SELECT seen_at FROM last_seen WHERE user_id = ?", new String[]{String.valueOf(userId)})) {
+                    if (e.moveToFirst()) {
+                        current = e.getLong(0);
+                    }
+                }
+                if (current >= seenAt) {
+                    continue;
+                }
+                values.clear();
+                values.put("user_id", userId);
+                values.put("seen_at", seenAt);
+                dst.insertWithOnConflict("last_seen", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+                added++;
             }
         }
         return added;
