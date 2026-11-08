@@ -11,12 +11,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.io.File;
 
 /**
- * Per-account SQLite database for Ayuless data (deleted messages, edit history).
+ * Per-account SQLite database for Ayuless data (deleted messages, edit history, locally seen
+ * read dates and last-online times).
  * Kept separate from the client's cache4.db so upstream schema migrations never touch it.
  */
 final class AyulessDbHelper extends SQLiteOpenHelper {
 
-    static final int DB_VERSION = 1;
+    static final int DB_VERSION = 2;
 
     AyulessDbHelper(Context context, File dbFile) {
         super(context, dbFile.getAbsolutePath(), null, DB_VERSION);
@@ -26,6 +27,7 @@ final class AyulessDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         createV1(db);
+        createV2(db);
     }
 
     @Override
@@ -33,7 +35,9 @@ final class AyulessDbHelper extends SQLiteOpenHelper {
         // Explicit migration ladder: step v upgrades the schema from v to v + 1.
         for (int v = oldVersion; v < newVersion; v++) {
             switch (v) {
-                // case 1: migrateV1ToV2(db); break;
+                case 1:
+                    createV2(db);
+                    break;
                 default:
                     throw new IllegalStateException("No Ayuless DB migration from v" + v);
             }
@@ -45,7 +49,10 @@ final class AyulessDbHelper extends SQLiteOpenHelper {
         // Data is a local convenience copy: on downgrade start fresh instead of crashing.
         db.execSQL("DROP TABLE IF EXISTS deleted_messages");
         db.execSQL("DROP TABLE IF EXISTS edit_history");
+        db.execSQL("DROP TABLE IF EXISTS read_outbox");
+        db.execSQL("DROP TABLE IF EXISTS last_seen");
         createV1(db);
+        createV2(db);
     }
 
     private static void createV1(SQLiteDatabase db) {
@@ -72,5 +79,19 @@ final class AyulessDbHelper extends SQLiteOpenHelper {
                 "PRIMARY KEY (dialog_id, msg_id, version))");
         db.execSQL("CREATE INDEX IF NOT EXISTS edit_history_dialog ON edit_history (dialog_id)");
         db.execSQL("CREATE INDEX IF NOT EXISTS edit_history_edit_date ON edit_history (edit_date)");
+    }
+
+    /** v2: read dates of outgoing messages and last-online times seen by this client. */
+    private static void createV2(SQLiteDatabase db) {
+        // One row per observed read event: messages with min_id < msg_id <= max_id were read at read_at.
+        db.execSQL("CREATE TABLE IF NOT EXISTS read_outbox (" +
+                "dialog_id INTEGER NOT NULL, " +
+                "min_id INTEGER NOT NULL, " +
+                "max_id INTEGER NOT NULL, " +
+                "read_at INTEGER NOT NULL, " +
+                "PRIMARY KEY (dialog_id, max_id))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS last_seen (" +
+                "user_id INTEGER PRIMARY KEY, " +
+                "seen_at INTEGER NOT NULL)");
     }
 }
