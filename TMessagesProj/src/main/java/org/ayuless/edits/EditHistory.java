@@ -46,7 +46,7 @@ public final class EditHistory {
         MessagesStorage storage = MessagesStorage.getInstance(account);
         storage.getStorageQueue().postRunnable(() -> {
             TLRPC.Message old = readStored(storage, dialogId, msgId);
-            if (old == null || !AyulessStore.isStorable(old)) {
+            if (old == null || !AyulessStore.isStorable(account, old, org.ayuless.content.RetentionConfig.EDIT)) {
                 return;
             }
             if (!contentChanged(old, newText, newEntities, newMediaId)) {

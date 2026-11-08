@@ -6678,10 +6678,10 @@ public class MessagesController extends BaseController implements NotificationCe
         if (chat.migrated_to != null) {
             TLRPC.Chat migratedTo = getChat(chat.migrated_to.channel_id);
             if (migratedTo != null) {
-                return org.ayuless.content.ProtectedContent.chatNoForwards(this, migratedTo, migratedTo.noforwards); // Ayuless
+                return org.ayuless.content.ProtectedContent.chatNoForwards(currentAccount, this, migratedTo, migratedTo.noforwards); // Ayuless: account-specific restrictions
             }
         }
-        return org.ayuless.content.ProtectedContent.chatNoForwards(this, chat, chat.noforwards); // Ayuless
+        return org.ayuless.content.ProtectedContent.chatNoForwards(currentAccount, this, chat, chat.noforwards); // Ayuless: account-specific restrictions
     }
 
     public boolean isChatNoForwards(long chatId) {
@@ -6701,6 +6701,9 @@ public class MessagesController extends BaseController implements NotificationCe
             return false;
         }
 
+        // Ayuless: private protection and auto-delete protection are separate opt-ins.
+        if (org.ayuless.content.RetentionConfig.enabled(currentAccount, org.ayuless.content.RetentionConfig.PRIVATE)
+                && (userFull.ttl_period == 0 || org.ayuless.content.RetentionConfig.enabled(currentAccount, org.ayuless.content.RetentionConfig.AUTO_DELETE))) return false;
         return userFull.noforwards_peer_enabled || userFull.noforwards_my_enabled;
     }
 
@@ -8313,9 +8316,12 @@ public class MessagesController extends BaseController implements NotificationCe
             LongSparseArray<ArrayList<Integer>> taskMedia = currentDeletingTaskMediaMids != null ? currentDeletingTaskMediaMids.clone() : null;
             AndroidUtilities.runOnUIThread(() -> {
                 if (task != null) {
-                    for (int a = 0, N = task.size(); a < N; a++) {
-                        ArrayList<Integer> mids = task.valueAt(a);
-                        deleteMessages(mids, null, null, task.keyAt(a), 0, true, 0, !mids.isEmpty() && mids.get(0) > 0);
+                    // Ayuless: secret-chat expiry also respects the per-category anti-delete opt-ins.
+                    LongSparseArray<ArrayList<Integer>> filtered = org.ayuless.antidelete.AntiDelete.filter(currentAccount, task);
+                    for (int a = 0, N = filtered == null ? 0 : filtered.size(); a < N; a++) {
+                        ArrayList<Integer> mids = filtered.valueAt(a);
+                        if (org.ayuless.content.RetentionConfig.keepMedia(currentAccount, filtered.keyAt(a))) continue;
+                        deleteMessages(mids, null, null, filtered.keyAt(a), 0, true, 0, !mids.isEmpty() && mids.get(0) > 0);
                     }
                 }
                 if (taskMedia != null) {
@@ -8323,14 +8329,19 @@ public class MessagesController extends BaseController implements NotificationCe
                     final MessageObject viewerObject = checkViewer ? SecretMediaViewer.getInstance().getCurrentMessageObject() : null;
                     for (int a = 0, N = taskMedia.size(); a < N; a++) {
                         long dialogId = taskMedia.keyAt(a);
-                        ArrayList<Integer> mids = taskMedia.valueAt(a);
+                        ArrayList<Integer> mids = new ArrayList<>(taskMedia.valueAt(a)); // Ayuless: preserve IDs for timer-task retirement
+                        // Ayuless: leave both the media descriptor and file intact.
+                        if (org.ayuless.content.RetentionConfig.keepMedia(currentAccount, dialogId)) continue;
                         if (checkViewer && viewerObject != null && viewerObject.currentAccount == currentAccount && viewerObject.getDialogId() == dialogId && mids.contains(viewerObject.getId())) {
                             final int id = viewerObject.getId();
                             mids.remove((Integer) id);
-                            viewerObject.forceExpired = true;
-                            final long taskId = createDeleteShowOnceTask(dialogId, id);
-                            SecretMediaViewer.getInstance().setOnClose(() -> doDeleteShowOnceTask(taskId, dialogId, id));
-                            getNotificationCenter().postNotificationName(NotificationCenter.updateMessageMedia, viewerObject.messageOwner);
+                            // Ayuless: eligible anti-delete rows must retain their visible media too.
+                            if (!org.ayuless.antidelete.AntiDelete.keepLoaded(currentAccount, viewerObject.messageOwner)) {
+                                viewerObject.forceExpired = true;
+                                final long taskId = createDeleteShowOnceTask(dialogId, id);
+                                SecretMediaViewer.getInstance().setOnClose(() -> doDeleteShowOnceTask(taskId, dialogId, id));
+                                getNotificationCenter().postNotificationName(NotificationCenter.updateMessageMedia, viewerObject.messageOwner);
+                            }
                         }
                         if (!mids.isEmpty()) {
                             getMessagesStorage().emptyMessagesMedia(dialogId, mids);
@@ -16221,6 +16232,7 @@ public class MessagesController extends BaseController implements NotificationCe
         getNotificationCenter().postNotificationName(NotificationCenter.appDidLogout);
         getMessagesStorage().cleanup(false);
         org.ayuless.storage.AyulessStore.getInstance(currentAccount).clearAll(); // Ayuless: wipe local deleted/edit history on logout
+        org.ayuless.content.RetentionConfig.clearOpened(currentAccount); // Ayuless: account slots can be reused
         cleanup();
         getContactsController().deleteUnknownAppAccounts();
     }
