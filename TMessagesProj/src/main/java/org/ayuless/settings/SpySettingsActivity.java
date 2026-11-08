@@ -18,6 +18,7 @@ import org.ayuless.antidelete.AntiDeleteConfig;
 import org.ayuless.antidelete.DeletedCache;
 import org.ayuless.edits.EditedCache;
 import org.ayuless.edits.EditsConfig;
+import org.ayuless.spy.SpyExceptions;
 import org.ayuless.storage.AyulessStore;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
@@ -27,6 +28,7 @@ import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UniversalAdapter;
 import org.telegram.ui.Components.UniversalFragment;
+import org.telegram.ui.UsersSelectActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,6 +46,7 @@ public class SpySettingsActivity extends UniversalFragment {
 
     private static final int ID_ANTI_DELETE = 1;
     private static final int ID_EDIT_HISTORY = 2;
+    private static final int ID_EXCEPTIONS = 3;
     private static final int ID_STORAGE_USED = 10;
     private static final int ID_STORAGE_LIMIT = 11;
     private static final int ID_EXPORT = 20;
@@ -71,6 +74,10 @@ public class SpySettingsActivity extends UniversalFragment {
         items.add(UItem.asShadow(getString(R.string.AyulessAntiDeleteInfo)));
         items.add(UItem.asCheck(ID_EDIT_HISTORY, getString(R.string.AyulessEditHistory)).setChecked(EditsConfig.isEnabled(account)));
         items.add(UItem.asShadow(getString(R.string.AyulessEditHistoryInfo)));
+        int exceptions = SpyExceptions.get(account).size();
+        items.add(UItem.asButton(ID_EXCEPTIONS, R.drawable.ayuless_solar_msg_block, getString(R.string.AyulessSpyExceptions),
+                exceptions == 0 ? getString(R.string.AyulessSpyExceptionsNone) : String.valueOf(exceptions)));
+        items.add(UItem.asShadow(getString(R.string.AyulessSpyExceptionsInfo)));
 
         items.add(UItem.asHeader(getString(R.string.AyulessStorageHeader)));
         items.add(UItem.asButton(ID_STORAGE_USED, getString(R.string.AyulessStorageUsed), usedBytes < 0 ? "…" : AndroidUtilities.formatFileSize(usedBytes)));
@@ -96,6 +103,9 @@ public class SpySettingsActivity extends UniversalFragment {
                 EditsConfig.setEnabled(account, !EditsConfig.isEnabled(account));
                 update();
                 break;
+            case ID_EXCEPTIONS:
+                selectExceptions();
+                break;
             case ID_STORAGE_LIMIT:
                 showLimitPicker();
                 break;
@@ -120,6 +130,18 @@ public class SpySettingsActivity extends UniversalFragment {
         if (listView != null && listView.adapter != null) {
             listView.adapter.update(true);
         }
+    }
+
+    private void selectExceptions() {
+        final int account = currentAccount;
+        UsersSelectActivity fragment = new UsersSelectActivity(true, SpyExceptions.get(account), 0);
+        fragment.noChatTypes = true;
+        fragment.allowSelf = true;
+        fragment.setDelegate((ids, flags) -> {
+            SpyExceptions.set(account, ids);
+            update();
+        });
+        presentFragment(fragment);
     }
 
     private void refreshSize() {
