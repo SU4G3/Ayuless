@@ -35,7 +35,7 @@ Nothing has been tested on a device yet. All Ayuless features are off by default
 - ✅ Edit history from the message menu
 - ✅ Exceptions: users/chats that are never saved (#27)
 - ✅ Save read date, save last online (local only) (#31)
-- ⏳ Include read dates / last online in export/import; apply Spy exceptions to them
+- ✅ Include read dates / last online in export/import; apply Spy exceptions to them
 - ⏳ Save attachments of deleted messages
 
 ## Step 4: "Ayuless" settings section ✅ (#22, #23)
