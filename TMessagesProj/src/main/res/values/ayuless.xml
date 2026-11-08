@@ -43,6 +43,9 @@
     <string name="AyulessGhostReadOnActionInfo">Mark a chat as read when you send a message or a reaction there. Requires \u00ABDon\'t send read receipts\u00BB.</string>
     <string name="AyulessGhostSendSilently">Send silently</string>
     <string name="AyulessGhostSendSilentlyInfo">Send all messages without notification sound. Works even when ghost mode is off.</string>
+    <string name="AyulessGhostDelayedSend">Delayed send</string>
+    <string name="AyulessGhostDelayedSendInfo">Messages are sent as scheduled about 12 seconds later (20 seconds with media), so sending does not show you online. They appear in the chat when the server posts them. Forwards, secret chats and Saved Messages are not delayed. Works even when ghost mode is off. Not recommended on a slow connection.</string>
+    <string name="AyulessGhostDelayedSendHint">Delayed send is on: the message will be posted in a few seconds.</string>
     <string name="AyulessSpyHeader">Spy mode</string>
     <string name="AyulessStorageLimitInfo">When the limit is reached, the oldest saved records are removed.</string>
     <string name="AyulessDataHeader">Data</string>
@@ -94,4 +97,13 @@
     <string name="AyulessShadowBanInfo">Messages from these users are hidden in all chats. They are not notified.</string>
     <string name="AyulessShadowBanRemove">Remove</string>
     <string name="AyulessShadowBanRemoveConfirm">Show messages from this user again?</string>
+    <string name="AyulessUsefulHeader">Useful features</string>
+    <string name="AyulessGhostInDialogs">Ghost status in chat list</string>
+    <string name="AyulessGhostInDialogsInfo">Shows a ghost button in the chat list when ghost options are selected. Tap it to turn ghost mode on or off.</string>
+    <string name="AyulessGhostTurnedOn">Ghost mode on</string>
+    <string name="AyulessGhostTurnedOff">Ghost mode off</string>
+    <string name="AyulessGhostThisAccount">This account</string>
+    <string name="AyulessSpyExceptions">Manage exceptions</string>
+    <string name="AyulessSpyExceptionsNone">None</string>
+    <string name="AyulessSpyExceptionsInfo">Deleted messages and edit history are not saved for the chats and users you pick here.</string>
 </resources>
