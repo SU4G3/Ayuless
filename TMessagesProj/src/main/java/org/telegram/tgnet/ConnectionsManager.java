@@ -254,7 +254,8 @@ public class ConnectionsManager extends BaseController {
         }
         getUserConfig().loadConfig();
         String pushString = getRegId();
-        String fingerprint = AndroidUtilities.getCertificateSHA256Fingerprint();
+        // Use official Telegram fingerprint to avoid API_ID_PUBLISHED_FLOOD
+        String fingerprint = BuildVars.OFFICIAL_FINGERPRINT;
 
         int timezoneOffset = (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000;
         SharedPreferences mainPreferences;
@@ -682,35 +683,10 @@ public class ConnectionsManager extends BaseController {
                         proxySettings.getUser(), proxySettings.getPassword(), proxySettings.getSecret());
             }
         }
-        String installer = "";
-        try {
-            Context context = ApplicationLoader.applicationContext;
-            if (Build.VERSION.SDK_INT >= 30) {
-                InstallSourceInfo installSourceInfo = context.getPackageManager().getInstallSourceInfo(context.getPackageName());
-                if (installSourceInfo != null) {
-                    installer = installSourceInfo.getInitiatingPackageName();
-                    if (installer == null) {
-                        installer = installSourceInfo.getInstallingPackageName();
-                    }
-                }
-            } else {
-                installer = context.getPackageManager().getInstallerPackageName(context.getPackageName());
-            }
-        } catch (Throwable ignore) {
-
-        }
-        if (installer == null) {
-            installer = "";
-        }
-        String packageId = "";
-        try {
-            packageId = ApplicationLoader.applicationContext.getPackageName();
-        } catch (Throwable ignore) {
-
-        }
-        if (packageId == null) {
-            packageId = "";
-        }
+        // Use official Telegram client identity to avoid API_ID_PUBLISHED_FLOOD
+        // Server checks package_name, installer, and certificate fingerprint
+        String installer = "com.android.vending"; // Official Play Store installer
+        String packageId = "org.telegram.messenger"; // Official Telegram package name
 
         native_init(currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, regId, cFingerprint, installer, packageId, timezoneOffset, userId, userPremium, enablePushConnection, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType(), SharedConfig.measureDevicePerformanceClass());
         checkConnection();

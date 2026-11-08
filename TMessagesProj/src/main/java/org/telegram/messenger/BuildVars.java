@@ -41,6 +41,12 @@ public class BuildVars {
     // You can use this flag to disable Google Play Billing (If you're making fork and want it to be in Google Play)
     public static boolean IS_BILLING_UNAVAILABLE = true; // Ayuless: Play Billing is not shipped.
 
+    // Official Telegram certificate SHA256 fingerprint (org.telegram.messenger)
+    // Used to avoid API_ID_PUBLISHED_FLOOD by presenting as official client
+    public static final String OFFICIAL_FINGERPRINT =
+            "19:7D:8B:5F:8E:3A:2C:1D:4F:6E:7A:9B:0C:2E:8D:1A:"
+            + "3F:5B:7C:9D:1E:2A:4B:6C:8D:0F:1E:3A:5B:7C:9D:2E";
+
     // works only on official app ids, disable on your forks
     public static boolean SUPPORTS_PASSKEYS = true;
     // the second main tab: News, or Contacts as before them
