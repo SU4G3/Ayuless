@@ -54,6 +54,9 @@ public final class GhostInterceptor {
         if (isSendRequest(req) && GhostConfig.sendSilently(account)) {
             makeSilent(req);
         }
+        if (isSendRequest(req)) {
+            DelayedSend.fixOnSend(account, req);
+        }
         if (!GhostConfig.isEnabled(account)) {
             return false;
         }
