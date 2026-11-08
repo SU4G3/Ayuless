@@ -35,7 +35,8 @@ runs:
     - name: Build native prebuilts from source
       if: steps.cache.outputs.cache-hit != 'true'
       shell: bash
-      env:
-        ANDROID_NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/27.2.12479018
-        ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
-      run: Tools/native/build-prebuilts.sh
+      # ANDROID_HOME is a runner environment variable, not part of the `env` context.
+      run: |
+        export ANDROID_SDK_ROOT="$ANDROID_HOME"
+        export ANDROID_NDK_HOME="$ANDROID_HOME/ndk/27.2.12479018"
+        Tools/native/build-prebuilts.sh
