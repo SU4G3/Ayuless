@@ -107,6 +107,9 @@ public final class AyulessStore {
             return;
         }
         final long dialogId = MessageObject.getDialogId(message);
+        if (org.ayuless.spy.SpyExceptions.isExcepted(account, dialogId)) {
+            return;
+        }
         final int msgId = message.id;
         final Long topicId = topicIdOf(message);
         final int date = message.date;
@@ -147,6 +150,9 @@ public final class AyulessStore {
             return;
         }
         final long dialogId = MessageObject.getDialogId(before);
+        if (org.ayuless.spy.SpyExceptions.isExcepted(account, dialogId)) {
+            return;
+        }
         final int msgId = before.id;
         final int editDate = before.edit_date;
         final String text = before.message;
