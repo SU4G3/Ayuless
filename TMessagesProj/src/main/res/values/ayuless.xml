@@ -100,4 +100,7 @@
     <string name="AyulessStoryPromptText">The author will not see you in the viewers list of these stories.</string>
     <string name="AyulessStoryPromptGhost">Ghost mode</string>
     <string name="AyulessStoryPromptNormal">Open normally</string>
+    <string name="AyulessSpyExceptions">Manage exceptions</string>
+    <string name="AyulessSpyExceptionsNone">None</string>
+    <string name="AyulessSpyExceptionsInfo">Deleted messages and edit history are not saved for the chats and users you pick here.</string>
 </resources>

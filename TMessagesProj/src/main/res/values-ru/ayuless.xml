@@ -98,4 +98,7 @@
     <string name="AyulessStoryPromptText">Автор не увидит вас в списке просмотревших эти истории.</string>
     <string name="AyulessStoryPromptGhost">Призрак</string>
     <string name="AyulessStoryPromptNormal">Открыть как обычно</string>
+    <string name="AyulessSpyExceptions">Управление исключениями</string>
+    <string name="AyulessSpyExceptionsNone">Нет</string>
+    <string name="AyulessSpyExceptionsInfo">Для выбранных здесь чатов и пользователей удалённые сообщения и история правок не сохраняются.</string>
 </resources>

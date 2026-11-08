@@ -6,6 +6,7 @@ package org.ayuless.antidelete;
 
 import android.text.TextUtils;
 
+import org.ayuless.spy.SpyExceptions;
 import org.ayuless.storage.AyulessStore;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.messenger.AndroidUtilities;
@@ -80,7 +81,7 @@ public final class AntiDelete {
                             if (message != null) {
                                 message.readAttachPath(data, selfId);
                                 message.dialog_id = uid;
-                                if (AyulessStore.isStorable(message)) {
+                                if (AyulessStore.isStorable(message) && !SpyExceptions.isExcepted(account, uid)) {
                                     kept.add(message);
                                 }
                             }
