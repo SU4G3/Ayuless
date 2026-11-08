@@ -104,4 +104,7 @@
     <string name="AyulessPushStatusFallback">Уведомления идут через фоновое соединение, оно расходует больше батареи.</string>
     <string name="AyulessPushInfo">В Ayuless нет сервисов Google. Чтобы получать пуши без постоянного фонового соединения, установите приложение-дистрибьютор UnifiedPush (например, ntfy или Sunup) и выберите его здесь.</string>
     <string name="AyulessPushLearnMore">О дистрибьюторах UnifiedPush</string>
+    <string name="AyulessSpyExceptions">Управление исключениями</string>
+    <string name="AyulessSpyExceptionsNone">Нет</string>
+    <string name="AyulessSpyExceptionsInfo">Для выбранных здесь чатов и пользователей удалённые сообщения и история правок не сохраняются.</string>
 </resources>
