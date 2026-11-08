@@ -6,9 +6,11 @@
 package org.ayuless.settings;
 
 import static org.telegram.messenger.AndroidUtilities.dp;
+import static org.telegram.messenger.LocaleController.formatString;
 import static org.telegram.messenger.LocaleController.getString;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -16,21 +18,25 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.content.pm.PackageInfoCompat;
+
 import org.ayuless.ghost.GhostConfig;
+import org.telegram.utils.glass.BaseFragmentSimpleGlass;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeBind;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UniversalAdapter;
-import org.telegram.ui.Components.UniversalFragment;
 
 import java.util.ArrayList;
 
 /** Settings > Ayuless: header, feature categories and project links. */
-public class AyulessSettingsActivity extends UniversalFragment {
+public class AyulessSettingsActivity extends AyulessSettingsFragment {
 
     static final String SOURCE_URL = "https://github.com/SU4G3/Ayuless";
     private static final String ISSUES_URL = SOURCE_URL + "/issues";
@@ -52,6 +58,14 @@ public class AyulessSettingsActivity extends UniversalFragment {
     }
 
     @Override
+    public void onInsets(int left, int top, int right, int bottom) {
+        super.onInsets(left, top, right, bottom);
+        if (listView != null) {
+            BaseFragmentSimpleGlass.setListViewParams(listView, top, bottom, dp(12), 0);
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         // Category values (e.g. ghost mode on/off) may have changed in a sub-screen.
@@ -61,12 +75,12 @@ public class AyulessSettingsActivity extends UniversalFragment {
     }
 
     @Override
-    protected void fillItems(ArrayList<UItem> items, UniversalAdapter adapter) {
+    protected void fillSettingsItems(ArrayList<UItem> items, UniversalAdapter adapter) {
         if (headerView == null && getParentActivity() != null) {
             headerView = createHeader(getParentActivity());
         }
         if (headerView != null) {
-            items.add(UItem.asCustom(headerView));
+            items.add(UItem.asCustomShadow(headerView, 198));
         }
 
         items.add(UItem.asHeader(getString(R.string.AyulessCategoriesHeader)));
@@ -124,26 +138,39 @@ public class AyulessSettingsActivity extends UniversalFragment {
     private View createHeader(Context context) {
         LinearLayout layout = new LinearLayout(context);
         layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setGravity(Gravity.CENTER_HORIZONTAL);
-        layout.setPadding(0, dp(20), 0, dp(16));
-        layout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite, getResourceProvider()));
+        layout.setGravity(Gravity.CENTER);
+        layout.setPadding(0, dp(28), 0, dp(28));
 
         ImageView icon = new ImageView(context);
-        icon.setImageResource(R.mipmap.ic_launcher_ayuless_round);
-        layout.addView(icon, LayoutHelper.createLinear(80, 80));
+        icon.setImageResource(R.drawable.ayuless_settings_logo);
+        icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        icon.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+        layout.addView(icon, LayoutHelper.createLinear(72, 72));
 
         TextView name = new TextView(context);
         name.setText(getString(R.string.AyulessLauncherName));
         name.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         name.setTypeface(AndroidUtilities.bold());
-        name.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, getResourceProvider()));
-        layout.addView(name, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 10, 0, 0));
+        name.setGravity(Gravity.CENTER);
+        name.setSingleLine(true);
+        ThemeBind.textColor(name, Theme.key_windowBackgroundWhiteBlackText, getResourceProvider());
+        layout.addView(name, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 50, 16, 50, 0));
 
         TextView version = new TextView(context);
         version.setText(BuildVars.BUILD_VERSION_STRING);
-        version.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        version.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText, getResourceProvider()));
-        layout.addView(version, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 2, 0, 0));
+        try {
+            long code = PackageInfoCompat.getLongVersionCode(
+                    context.getPackageManager().getPackageInfo(context.getPackageName(), 0));
+            version.setText(formatString(R.string.AyulessSettingsVersion, BuildVars.BUILD_VERSION_STRING, code));
+        } catch (PackageManager.NameNotFoundException e) {
+            FileLog.e(e);
+        }
+        version.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+        version.setTypeface(AndroidUtilities.bold());
+        version.setGravity(Gravity.CENTER);
+        version.setLineSpacing(dp(2), 1);
+        ThemeBind.textColor(version, Theme.key_windowBackgroundWhiteGrayText, getResourceProvider());
+        layout.addView(version, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 60, 2, 60, 0));
         return layout;
     }
 }

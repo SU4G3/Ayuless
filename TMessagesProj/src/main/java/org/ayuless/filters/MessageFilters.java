@@ -28,13 +28,17 @@ import java.util.Set;
 /**
  * Message filters: hide incoming messages in chats by keyword / regular expression, by
  * sender (shadow ban), or because the sender is blocked. Display only: nothing is deleted
- * or stored, and secret chats are never filtered.
+ * or stored. Secret chats count as private chats.
  *
  * <p>Settings are app-wide. Reads come from an in-memory snapshot that is replaced on every
  * change, so the chat screen does not touch SharedPreferences per message.
  */
 public final class MessageFilters {
 
+    // NotificationCenter uses positive upstream IDs; reserve a negative ID for this Ayuless event.
+    public static final int SETTINGS_CHANGED = -0x415955;
+
+    private static final String KEY_REAPPLY = "reapplyOpenChats";
     private static final String KEY_ENABLED = "enabled";
     private static final String KEY_PRIVATE = "privateChats";
     private static final String KEY_HIDE_BLOCKED = "hideBlocked";
@@ -125,16 +129,25 @@ public final class MessageFilters {
                 .putString(KEY_SHADOW_BAN, TextUtils.join(",", shadowBan))
                 .apply();
         snapshot = new Snapshot(enabled, privateChats, hideBlocked, new ArrayList<>(filters), new LinkedHashSet<>(shadowBan));
-        AndroidUtilities.runOnUIThread(MessageFilters::refreshDialogLists);
+        AndroidUtilities.runOnUIThread(MessageFilters::notifySettingsChanged);
     }
 
-    /** Redraws chat list previews so they follow the new filter settings. */
-    private static void refreshDialogLists() {
+    /** Settings are global, so notify every activated account on the UI thread. */
+    private static void notifySettingsChanged() {
         for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
             if (UserConfig.getInstance(a).isClientActivated()) {
-                NotificationCenter.getInstance(a).postNotificationName(NotificationCenter.updateInterfaces, MessagesController.UPDATE_MASK_ALL);
+                NotificationCenter.getInstance(a).postNotificationName(SETTINGS_CHANGED);
             }
         }
+    }
+
+    public static boolean reapplyOpenChats() {
+        return prefs().getBoolean(KEY_REAPPLY, false);
+    }
+
+    public static void setReapplyOpenChats(boolean value) {
+        prefs().edit().putBoolean(KEY_REAPPLY, value).apply();
+        AndroidUtilities.runOnUIThread(MessageFilters::notifySettingsChanged);
     }
 
     // ---- settings API ----
@@ -205,18 +218,23 @@ public final class MessageFilters {
         if (!s.enabled || obj == null || obj.messageOwner == null || obj.isOut()) {
             return false;
         }
+        // Secret chats share the private-chat regex switch and use the other participant for sender rules.
         long dialogId = obj.getDialogId();
-        if (DialogObject.isEncryptedDialog(dialogId)) {
-            return false;
-        }
         long fromId = obj.getFromChatId();
+        if (fromId == 0 && DialogObject.isEncryptedDialog(dialogId)) {
+            TLRPC.EncryptedChat chat = MessagesController.getInstance(account).getEncryptedChat(DialogObject.getEncryptedChatId(dialogId));
+            if (chat != null) {
+                long selfId = UserConfig.getInstance(account).getClientUserId();
+                fromId = chat.admin_id == selfId ? chat.participant_id : chat.admin_id;
+            }
+        }
         if (fromId != 0 && s.shadowBan.contains(fromId)) {
             return true;
         }
         if (s.hideBlocked && fromId != 0 && MessagesController.getInstance(account).blockePeers.indexOfKey(fromId) >= 0) {
             return true;
         }
-        if (s.filters.isEmpty() || (dialogId > 0 && !s.privateChats) || obj.messageOwner instanceof TLRPC.TL_messageService) {
+        if (s.filters.isEmpty() || ((DialogObject.isUserDialog(dialogId) || DialogObject.isEncryptedDialog(dialogId)) && !s.privateChats) || obj.messageOwner instanceof TLRPC.TL_messageService) {
             return false;
         }
         String text = obj.messageOwner.message;

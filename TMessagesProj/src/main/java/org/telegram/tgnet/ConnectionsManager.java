@@ -20,6 +20,7 @@ import androidx.media3.common.util.UnstableApi;
 import androidx.media3.exoplayer.upstream.DefaultBandwidthMeter;
 // Ayuless: attestation SDK removed.
 
+import org.ayuless.login.LoginSpoof;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AccountInstance;
@@ -123,6 +124,8 @@ public class ConnectionsManager extends BaseController {
 
     private long lastPauseTime = System.currentTimeMillis();
     private boolean appPaused = true;
+    private int realVersion;
+    private String realAppVersion = "";
     private boolean isUpdating;
     private int connectionState;
     private AtomicInteger lastRequestToken = new AtomicInteger(1);
@@ -254,7 +257,9 @@ public class ConnectionsManager extends BaseController {
         }
         getUserConfig().loadConfig();
         String pushString = getRegId();
-        String fingerprint = AndroidUtilities.getCertificateSHA256Fingerprint();
+        // Use official certificate fingerprint (hardcoded from CI secret, like AyuGram)
+        // Official package_id + installer + valid fingerprint = no API_ID_PUBLISHED_FLOOD
+        String fingerprint = BuildVars.OFFICIAL_FINGERPRINT;
 
         int timezoneOffset = (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000;
         SharedPreferences mainPreferences;
@@ -268,7 +273,18 @@ public class ConnectionsManager extends BaseController {
         if (getUserConfig().getCurrentUser() != null) {
             userPremium = getUserConfig().getCurrentUser().premium;
         }
-        init(SharedConfig.buildVersion(), TLRPC.LAYER, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), userPremium, enablePushConnection);
+
+        long clientUserId = getUserConfig().getClientUserId();
+        realVersion = SharedConfig.buildVersion();
+        realAppVersion = appVersion;
+
+        // Ayuless: package_id and installer are always the official web build values (same as AyuGram).
+        init(realVersion, TLRPC.LAYER, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, clientUserId, userPremium, enablePushConnection, LoginSpoof.INSTALLER, LoginSpoof.PACKAGE_ID);
+
+        // Ayuless: present an older official client while the account is not authorized.
+        if (clientUserId == 0) {
+            setLoginSpoofEnabled(currentAccount, true);
+        }
     }
 
     private String getRegId() {
@@ -669,7 +685,7 @@ public class ConnectionsManager extends BaseController {
         native_setPushConnectionEnabled(currentAccount, value);
     }
 
-    public void init(int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, String regId, String cFingerprint, int timezoneOffset, long userId, boolean userPremium, boolean enablePushConnection) {
+    public void init(int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, String regId, String cFingerprint, int timezoneOffset, long userId, boolean userPremium, boolean enablePushConnection, String installer, String packageId) {
         final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
         final ProxySettings proxySettings = ProxySettings.fromSharedPreferences(preferences);
         if (preferences.getBoolean("proxy_enabled", false) && proxySettings.isValid()) {
@@ -682,35 +698,9 @@ public class ConnectionsManager extends BaseController {
                         proxySettings.getUser(), proxySettings.getPassword(), proxySettings.getSecret());
             }
         }
-        String installer = "";
-        try {
-            Context context = ApplicationLoader.applicationContext;
-            if (Build.VERSION.SDK_INT >= 30) {
-                InstallSourceInfo installSourceInfo = context.getPackageManager().getInstallSourceInfo(context.getPackageName());
-                if (installSourceInfo != null) {
-                    installer = installSourceInfo.getInitiatingPackageName();
-                    if (installer == null) {
-                        installer = installSourceInfo.getInstallingPackageName();
-                    }
-                }
-            } else {
-                installer = context.getPackageManager().getInstallerPackageName(context.getPackageName());
-            }
-        } catch (Throwable ignore) {
-
-        }
-        if (installer == null) {
-            installer = "";
-        }
-        String packageId = "";
-        try {
-            packageId = ApplicationLoader.applicationContext.getPackageName();
-        } catch (Throwable ignore) {
-
-        }
-        if (packageId == null) {
-            packageId = "";
-        }
+        // Use official Telegram client identity to avoid API_ID_PUBLISHED_FLOOD
+        // Server checks package_name, installer, and certificate fingerprint
+        // installer and packageId are passed from caller (login spoof support)
 
         native_init(currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, regId, cFingerprint, installer, packageId, timezoneOffset, userId, userPremium, enablePushConnection, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType(), SharedConfig.measureDevicePerformanceClass());
         checkConnection();
@@ -1022,6 +1012,26 @@ public class ConnectionsManager extends BaseController {
         }
     }
 
+    /**
+     * Ayuless: switch the login client spoof for an account.
+     * Enabled: layer 177, version 45839, app_version "10.10.1 (45839)".
+     * Disabled: the real layer, build number and app version that init() used.
+     * The auth key is kept; native code resends initConnection on every datacenter.
+     */
+    public static void setLoginSpoofEnabled(int currentAccount, boolean enabled) {
+        LoginSpoof.setActive(currentAccount, enabled);
+        if (enabled) {
+            native_setClientVersion(currentAccount, LoginSpoof.LAYER, LoginSpoof.VERSION, LoginSpoof.APP_VERSION, LoginSpoof.INSTALLER, LoginSpoof.PACKAGE_ID);
+        } else {
+            ConnectionsManager instance = getInstance(currentAccount);
+            native_setClientVersion(currentAccount, TLRPC.LAYER, instance.realVersion, instance.realAppVersion, LoginSpoof.INSTALLER, LoginSpoof.PACKAGE_ID);
+        }
+    }
+
+    public static boolean isLoginSpoofActive(int currentAccount) {
+        return LoginSpoof.isActive(currentAccount);
+    }
+
     public static native void native_switchBackend(int currentAccount, boolean restart);
     public static native int native_isTestBackend(int currentAccount);
     public static native void native_pauseNetwork(int currentAccount);
@@ -1049,6 +1059,7 @@ public class ConnectionsManager extends BaseController {
     public static native void native_setLangCode(int currentAccount, String langCode);
     public static native void native_setRegId(int currentAccount, String regId);
     public static native void native_setSystemLangCode(int currentAccount, String langCode);
+    public static native void native_setClientVersion(int currentAccount, int layer, int version, String appVersion, String installer, String packageId);
     public static native void native_setJava(boolean useJavaByteBuffers);
     public static native void native_setPushConnectionEnabled(int currentAccount, boolean value);
     public static native void native_applyDnsConfig(int currentAccount, long address, String phone, int date);

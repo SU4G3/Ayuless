@@ -1294,6 +1294,7 @@ public class ChatActivity extends BaseFragment implements
     public final static int OPTION_VIEW_STATISTICS = 115;
     public final static int OPTION_WELCOME_REVERT = 116;
     public final static int OPTION_SEND_MONEY = 117;
+    public final static int OPTION_AYULESS_SAVE_MEDIA = 9002; // Ayuless: save unlocked timed/secret media
     public final static int OPTION_AYULESS_EDIT_HISTORY = 9001; // Ayuless: edit history
 
     private final static int[] allowedNotificationsDuringChatListAnimations = new int[]{
@@ -2841,6 +2842,7 @@ public class ChatActivity extends BaseFragment implements
         }
 
         observersGroup = getNotificationCenter().createObserversGroup(this);
+        observersGroup.add(org.ayuless.filters.MessageFilters.SETTINGS_CHANGED); // Ayuless: reapply message filters
 
         getNotificationCenter().addPostponeNotificationsCallback(postponeNotificationsWhileLoadingCallback);
         getNotificationCenter().addWeakObserver(this, NotificationCenter.closeChats);
@@ -8723,7 +8725,7 @@ public class ChatActivity extends BaseFragment implements
         chatScrollHelper.setAnimationCallback(chatScrollHelperCallback);
 
         flagSecure = new FlagSecureReason(getParentActivity().getWindow(), () ->
-            currentEncryptedChat != null ||
+            currentEncryptedChat != null && !org.ayuless.content.RetentionConfig.enabled(currentAccount, org.ayuless.content.RetentionConfig.SECRET) || // Ayuless: opt-in secret screenshots
             isPeerNoForwards()
         );
 
@@ -16237,7 +16239,10 @@ public class ChatActivity extends BaseFragment implements
         if (messageObject == null || messageObject.isOut() || !messageObject.isSecretMedia() || messageObject.messageOwner.destroyTime != 0 || messageObject.messageOwner.ttl <= 0) {
             return null;
         }
+        // Ayuless: retained media sends only its original open receipt, including after restart.
+        if (org.ayuless.content.RetentionConfig.wasOpened(currentAccount, messageObject.messageOwner)) return null;
         if (readNow) {
+            org.ayuless.content.RetentionConfig.rememberOpen(currentAccount, messageObject.messageOwner);
             final boolean delete = messageObject.messageOwner.ttl != 0x7FFFFFFF;
             final int ttl = messageObject.messageOwner.ttl == 0x7FFFFFFF ? 0 : messageObject.messageOwner.ttl;
             messageObject.messageOwner.destroyTime = ttl + getConnectionsManager().getCurrentTime();
@@ -16249,6 +16254,8 @@ public class ChatActivity extends BaseFragment implements
             return null;
         } else {
             return () -> {
+                if (org.ayuless.content.RetentionConfig.wasOpened(currentAccount, messageObject.messageOwner)) return;
+                org.ayuless.content.RetentionConfig.rememberOpen(currentAccount, messageObject.messageOwner);
                 final boolean delete = messageObject.messageOwner.ttl != 0x7FFFFFFF;
                 final int ttl = messageObject.messageOwner.ttl == 0x7FFFFFFF ? 0 : messageObject.messageOwner.ttl;
                 messageObject.messageOwner.destroyTime = ttl + getConnectionsManager().getCurrentTime();
@@ -16266,6 +16273,8 @@ public class ChatActivity extends BaseFragment implements
         if (messageObject == null || messageObject.isOut() || !messageObject.isSecretMedia() || messageObject.messageOwner.ttl != 0x7FFFFFFF) {
             return null;
         }
+        // Ayuless: the open receipt remains upstream; only local expiry is suppressed.
+        if (org.ayuless.content.RetentionConfig.keepMedia(currentAccount, dialog_id)) return null;
         final long taskId = getMessagesController().createDeleteShowOnceTask(dialog_id, messageObject.getId());
         messageObject.forceExpired = true;
         if (messageObject.isOutOwner() || !messageObject.isRoundOnce() && !messageObject.isVoiceOnce()) {
@@ -21311,7 +21320,11 @@ public class ChatActivity extends BaseFragment implements
 
     @Override
     public void didReceivedNotification(int id, int account, final Object... args) {
-        if (id == NotificationCenter.messagesDidLoad) {
+        if (id == org.ayuless.filters.MessageFilters.SETTINGS_CHANGED) { // Ayuless: reapply message filters
+            if (org.ayuless.filters.MessageFilters.reapplyOpenChats()) {
+                reloadForMessageFilters();
+            }
+        } else if (id == NotificationCenter.messagesDidLoad) {
             didReceivedNotification_messagesDidLoad(id, account, args);
         } else {
             didReceivedNotification2(id, account, args);
@@ -21320,6 +21333,42 @@ public class ChatActivity extends BaseFragment implements
             didReceivedNotification5(id, account, args);
             didReceivedNotification6(id, account, args);
             didReceivedNotification7(id, account, args);
+        }
+    }
+
+    // Ayuless: use the upstream history loading/reset path, not the already filtered messages list.
+    private void reloadForMessageFilters() {
+        if (currentEncryptedChat != null || chatListView == null || chatLayoutManager == null || chatAdapter == null) {
+            return;
+        }
+        org.ayuless.filters.FilterReloadAnchor anchor = null;
+        if (!(forwardEndReached[0] && chatLayoutManager.findFirstVisibleItemPosition() == 0)) {
+            anchor = org.ayuless.filters.FilterReloadAnchor.capture(currentAccount, chatListView, this::getScrollingOffsetForView);
+        }
+        int anchorId = anchor != null ? anchor.messageId : 0;
+        long anchorDialog = anchor != null ? anchor.dialogId : dialog_id;
+        resetForReload(); // Cancels stale requests and storage tasks; gives the reload a fresh GUID.
+        clearChatData(true);
+        historyPreloaded = false;
+        startLoadFromDate = 0;
+        first_unread_id = 0;
+        scrollToMessage = null;
+        loadingForward = false;
+        postponedScrollToLastMessageQueryIndex = 0;
+        clearOnLoadAndScrollMessageId = anchorId > 0 ? anchorId : -1;
+        clearOnLoadAndScrollOffset = anchor != null ? anchor.offset : 0;
+        if (anchorId > 0 && chatMode != MODE_SEARCH) {
+            startLoadFromMessageId = anchorId;
+            firstMessagesLoaded = true;
+            waitingForLoad.add(lastLoadIndex);
+            getMessagesController().loadMessages(anchorDialog, anchorDialog == dialog_id ? mergeDialogId : 0,
+                    loadInfo, initialMessagesSize, anchorId, 0, true, 0, classGuid,
+                    MessagesController.LOAD_AROUND_MESSAGE, 0, chatMode, threadMessageId, replyMaxReadId, lastLoadIndex++, isTopic);
+        } else {
+            if (chatMode == MODE_SEARCH) {
+                HashtagSearchController.getInstance(currentAccount).clearSearchResults(searchType);
+            }
+            firstLoadMessages();
         }
     }
 
@@ -31973,7 +32022,7 @@ public class ChatActivity extends BaseFragment implements
             }
             final boolean showMessageSeen = !suggestEdit && !isEphemeral && !isReactionsViewAvailable && !isInScheduleMode() && currentChat != null && message.isOutOwner() && message.isSent() && !message.isEditing() && !message.isSending() && !message.isSendError() && !message.isContentUnread() && !message.isUnread() && (ConnectionsManager.getInstance(currentAccount).getCurrentTime() - message.messageOwner.date < getMessagesController().chatReadMarkExpirePeriod) && (ChatObject.isMegagroup(currentChat) || !ChatObject.isChannel(currentChat)) && chatInfo != null && chatInfo.participants_count <= getMessagesController().chatReadMarkSizeThreshold && !(message.messageOwner.action instanceof TLRPC.TL_messageActionChatJoinedByRequest) && chatMode != MODE_SAVED && message.canSetReaction() && !ChatObject.isMonoForum(currentChat);
             final boolean showMessageAuthor = !suggestEdit && !isEphemeral && currentChat != null && !message.isOut() && ChatObject.isMonoForum(currentChat) && ChatObject.canManageMonoForum(currentAccount, currentChat) && -currentChat.linked_monoforum_id == message.getFromChatId();
-            final boolean showPrivateMessageSeen = !suggestEdit && !isEphemeral && !isReactionsViewAvailable && currentChat == null && currentEncryptedChat == null && (currentUser != null && !UserObject.isUserSelf(currentUser) && !UserObject.isReplyUser(currentUser) && !UserObject.isAnonymous(currentUser) && !currentUser.bot && !UserObject.isService(currentUser.id)) && (userInfo == null || !userInfo.read_dates_private || org.ayuless.spy.ReadDates.isEnabled(currentAccount) /* Ayuless */) && !isInScheduleMode() && message.isOutOwner() && message.isSent() && !message.isEditing() && !message.isSending() && !message.isSendError() && !message.isContentUnread() && !message.isUnread() && (ConnectionsManager.getInstance(currentAccount).getCurrentTime() - message.messageOwner.date < getMessagesController().pmReadDateExpirePeriod || org.ayuless.spy.ReadDates.isEnabled(currentAccount) /* Ayuless */) && !(message.messageOwner.action instanceof TLRPC.TL_messageActionChatJoinedByRequest);
+            final boolean showPrivateMessageSeen = !suggestEdit && !isEphemeral && !isReactionsViewAvailable && currentChat == null && (currentEncryptedChat == null || org.ayuless.spy.ReadDates.isEnabled(currentAccount) /* Ayuless: local read date in secret chats */) && (currentUser != null && !UserObject.isUserSelf(currentUser) && !UserObject.isReplyUser(currentUser) && !UserObject.isAnonymous(currentUser) && !currentUser.bot && !UserObject.isService(currentUser.id)) && (userInfo == null || !userInfo.read_dates_private || org.ayuless.spy.ReadDates.isEnabled(currentAccount) /* Ayuless */) && !isInScheduleMode() && message.isOutOwner() && message.isSent() && !message.isEditing() && !message.isSending() && !message.isSendError() && !message.isContentUnread() && !message.isUnread() && (ConnectionsManager.getInstance(currentAccount).getCurrentTime() - message.messageOwner.date < getMessagesController().pmReadDateExpirePeriod || org.ayuless.spy.ReadDates.isEnabled(currentAccount) /* Ayuless */) && !(message.messageOwner.action instanceof TLRPC.TL_messageActionChatJoinedByRequest);
             final boolean showPrivateMessageEdit = !suggestEdit && !isEphemeral && (currentUser == null || !UserObject.isReplyUser(currentUser) && !UserObject.isAnonymous(currentUser)) && !isInScheduleMode() && message.isEdited() && !(message.messageOwner.action instanceof TLRPC.TL_messageActionChatJoinedByRequest);
             final boolean showPrivateMessageFwdOriginal = !suggestEdit && !isEphemeral && false && (currentUser == null || !UserObject.isReplyUser(currentUser) && !UserObject.isAnonymous(currentUser)) && !isInScheduleMode() && message.isForwarded() && !(message.messageOwner.action instanceof TLRPC.TL_messageActionChatJoinedByRequest);
             final boolean showSponsorInfo = !suggestEdit && !isEphemeral && selectedObject != null && selectedObject.isSponsored() && (selectedObject.sponsoredInfo != null || selectedObject.sponsoredAdditionalInfo != null || selectedObject.sponsoredUrl != null && !selectedObject.sponsoredUrl.startsWith("https://" + getMessagesController().linkPrefix));
@@ -34253,6 +34302,12 @@ public class ChatActivity extends BaseFragment implements
         }
         boolean preserveDim = false;
         switch (option) {
+            case OPTION_AYULESS_SAVE_MEDIA: { // Ayuless: decrypt only on explicit save.
+                if (selectedObject != null && getParentActivity() != null) {
+                    org.ayuless.content.ProtectedContent.saveMedia(getParentActivity(), selectedObject);
+                }
+                break;
+            }
             case OPTION_AYULESS_EDIT_HISTORY: { // Ayuless: edit history
                 org.ayuless.edits.EditHistorySheet.show(getParentActivity(), currentAccount, selectedObject);
                 break;
@@ -47045,6 +47100,21 @@ public class ChatActivity extends BaseFragment implements
             items.add(getString(R.string.WelcomeMessageRevert));
             options.add(OPTION_WELCOME_REVERT);
             icons.add(R.drawable.outline_revert_24);
+        }
+
+        // Ayuless: explicit actions for unlocked secret/timed content, preserving open behavior.
+        if (org.ayuless.content.ProtectedContent.canUnlock(currentAccount, message.messageOwner)
+                && (currentEncryptedChat != null || org.ayuless.content.RetentionConfig.timed(message.messageOwner))) {
+            if (!options.contains(OPTION_FORWARD) && message.canForwardMessage()) {
+                items.add(getString(R.string.Forward));
+                options.add(OPTION_FORWARD);
+                icons.add(R.drawable.msg_forward);
+            }
+            if (message.messageOwner.media instanceof TLRPC.TL_messageMediaPhoto || message.getDocument() != null) {
+                items.add(getString(message.isPhoto() || message.isVideo() || message.isRoundVideo() ? R.string.SaveToGallery : R.string.SaveToDownloads));
+                options.add(OPTION_AYULESS_SAVE_MEDIA);
+                icons.add(R.drawable.msg_download);
+            }
         }
 
         // Ayuless: edit history entry when previous versions are stored.

@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 package org.ayuless.content;
 
-import org.ayuless.storage.AyulessStore;
 import android.widget.Toast;
 
 import org.telegram.messenger.AccountInstance;
@@ -23,14 +22,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-/**
- * Ayuless: "restrict saving content" in groups and channels is ignored locally, so media can be
- * saved, text copied, screenshots taken and messages forwarded (as copies).
- *
- * <p>Never applies to secret chats, private chats (a person's own "disable sharing" choice),
- * chats with an auto-delete timer, or any message with a self-destruct timer / view-once media.
- * Those keep the upstream behaviour.
- */
+/** Local saving restrictions and forwarding as uploaded copies. */
 public final class ProtectedContent {
 
     /** Messages whose noforwards flag we cleared locally; forwarding them must go as a copy. */
@@ -41,45 +33,129 @@ public final class ProtectedContent {
 
     /**
      * Chat-level flag as the UI should see it. Groups/channels are unlocked unless the chat has an
-     * auto-delete timer, in which case messages are meant to disappear and stay protected.
+     * auto-delete timer and its opt-in remains disabled.
      */
-    public static boolean chatNoForwards(MessagesController controller, TLRPC.Chat chat, boolean raw) {
+    public static boolean chatNoForwards(int account, MessagesController controller, TLRPC.Chat chat, boolean raw) {
         if (!raw || chat == null) {
             return raw;
         }
         TLRPC.ChatFull full = controller.getChatFull(chat.id);
-        return full != null && full.ttl_period != 0;
+        return full != null && full.ttl_period != 0 && !RetentionConfig.enabled(account, RetentionConfig.AUTO_DELETE);
     }
 
-    /** Clears a message-level noforwards flag for unlockable group/channel messages. */
-    public static void onMessageObject(TLRPC.Message message) {
-        if (message == null || !message.noforwards || !canUnlock(message)) {
+    /** Clears a message-level restriction only when all applicable opt-ins allow it. */
+    public static void onMessageObject(int account, TLRPC.Message message) {
+        if (message == null || !message.noforwards || !canUnlock(account, message)) {
             return;
         }
         message.noforwards = false;
         unlocked.add(message);
     }
 
-    private static boolean canUnlock(TLRPC.Message message) {
+    public static boolean canUnlock(int account, TLRPC.Message message) {
+        if (message == null) return false;
         long dialogId = MessageObject.getDialogId(message);
-        if (dialogId >= 0 || DialogObject.isEncryptedDialog(dialogId)) {
+        if (DialogObject.isEncryptedDialog(dialogId) || message instanceof TLRPC.TL_message_secret) {
+            if (!RetentionConfig.enabled(account, RetentionConfig.SECRET)) return false;
+        } else if (dialogId > 0 && !RetentionConfig.enabled(account, RetentionConfig.PRIVATE)) {
             return false;
         }
-        return AyulessStore.isStorable(message);
+        if (RetentionConfig.timed(message) && !RetentionConfig.enabled(account, RetentionConfig.TTL)) return false;
+        MessagesController controller = MessagesController.getInstance(account);
+        TLRPC.ChatFull chat = dialogId < 0 ? controller.getChatFull(-dialogId) : null;
+        TLRPC.UserFull user = dialogId > 0 && !DialogObject.isEncryptedDialog(dialogId) ? controller.getUserFull(dialogId) : null;
+        return (chat == null || chat.ttl_period == 0 || RetentionConfig.enabled(account, RetentionConfig.AUTO_DELETE))
+                && (user == null || user.ttl_period == 0 || RetentionConfig.enabled(account, RetentionConfig.AUTO_DELETE));
     }
 
     /** True if the server will refuse a plain forward of this message. */
     private static boolean needsCopy(MessagesController controller, MessageObject messageObject) {
         TLRPC.Message message = messageObject.messageOwner;
-        if (message == null || !canUnlock(message)) {
+        if (message == null || !canUnlock(messageObject.currentAccount, message)) {
             return false;
         }
         if (unlocked.contains(message)) {
             return true;
         }
         long dialogId = MessageObject.getDialogId(message);
+        if (DialogObject.isEncryptedDialog(dialogId) || RetentionConfig.timed(message)) return true;
+        if (dialogId > 0) {
+            TLRPC.UserFull full = controller.getUserFull(dialogId);
+            return full != null && (full.noforwards_peer_enabled || full.noforwards_my_enabled);
+        }
         TLRPC.Chat chat = controller.getChat(-dialogId);
         return chat != null && chat.noforwards;
+    }
+
+    /** Materialize an encrypted cache file only when the user explicitly saves or shares it. */
+    public static File readableFile(int account, TLRPC.Message message) {
+        File file = !android.text.TextUtils.isEmpty(message.attachPath) ? new File(message.attachPath) : null;
+        if (file == null || !file.exists()) file = FileLoader.getInstance(account).getPathToMessage(message);
+        if (file != null && file.exists()) return file;
+        if (file == null) return null;
+        File encrypted = new File(file.getPath() + ".enc");
+        File key = new File(FileLoader.getInternalCacheDir(), file.getName() + ".enc.key");
+        if (!encrypted.exists() || !key.exists()) return null;
+        File directory = new File(ApplicationLoader.applicationContext.getCacheDir(), "ayuless_share/" + account + "/" + MessageObject.getDialogId(message) + "/" + message.id);
+        if (!directory.isDirectory() && !directory.mkdirs()) return null;
+        File target = new File(directory, file.getName());
+        try (java.io.InputStream in = new org.telegram.messenger.secretmedia.EncryptedFileInputStream(encrypted, key);
+                java.io.OutputStream out = new java.io.FileOutputStream(target)) {
+            byte[] buffer = new byte[65536];
+            int count;
+            while ((count = in.read(buffer)) != -1) out.write(buffer, 0, count);
+            return target;
+        } catch (Exception e) {
+            target.delete();
+            org.telegram.messenger.FileLog.e(e);
+            return null;
+        }
+    }
+
+    public static void saveMedia(android.content.Context context, MessageObject message) {
+        org.telegram.messenger.Utilities.globalQueue.postRunnable(() -> {
+            File file = readableFile(message.currentAccount, message.messageOwner);
+            AndroidUtilities.runOnUIThread(() -> {
+                if (file == null) {
+                    Toast.makeText(context, LocaleController.getString(R.string.AyulessProtectedForwardNeedsDownload), Toast.LENGTH_LONG).show();
+                    return;
+                }
+                boolean photo = message.isPhoto();
+                org.telegram.messenger.MediaController.saveFile(file.getPath(), context,
+                        photo ? 0 : message.isVideo() || message.isRoundVideo() ? 1 : 2,
+                        photo ? null : message.getDocumentName(), message.getDocument() == null ? null : message.getDocument().mime_type);
+            });
+        });
+    }
+
+    public static boolean sendStoryCopy(int account, org.telegram.tgnet.tl.TL_stories.StoryItem story,
+            long peer, MessageObject reply, boolean notify, long payStars, long monoForumPeer) {
+        if (!RetentionConfig.enabled(account, RetentionConfig.STORIES) || story == null) return false;
+        File file = !android.text.TextUtils.isEmpty(story.attachPath) ? new File(story.attachPath) : null;
+        if (file != null && !file.exists()) file = null;
+        if (file == null && story.media != null && story.media.document != null) {
+            file = FileLoader.getInstance(account).getPathToAttach(story.media.document);
+        } else if (file == null && story.media != null && story.media.photo != null) {
+            TLRPC.PhotoSize size = FileLoader.getClosestPhotoSizeWithSize(story.media.photo.sizes, AndroidUtilities.getPhotoSize());
+            if (size != null) {
+                file = FileLoader.getInstance(account).getPathToAttach(size, true);
+                if (!file.exists()) file = FileLoader.getInstance(account).getPathToAttach(size);
+            }
+        }
+        if (file == null || !file.exists()) {
+            Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString(R.string.AyulessProtectedForwardNeedsDownload), Toast.LENGTH_LONG).show();
+            return true;
+        }
+        SendMessagesHelper.SendingMediaInfo info = new SendMessagesHelper.SendingMediaInfo();
+        info.path = file.getAbsolutePath();
+        info.caption = story.caption;
+        info.entities = story.entities;
+        info.isVideo = story.media.document != null && MessageObject.isVideoDocument(story.media.document);
+        ArrayList<SendMessagesHelper.SendingMediaInfo> list = new ArrayList<>();
+        list.add(info);
+        SendMessagesHelper.prepareSendingMedia(AccountInstance.getInstance(account), list, peer, null, reply,
+                null, null, false, false, null, notify, 0, 0, 0, false, null, null, 0, false, payStars, monoForumPeer, null);
+        return true;
     }
 
     /**
@@ -120,7 +196,7 @@ public final class ProtectedContent {
                 skipped++;
                 continue;
             }
-            File file = FileLoader.getInstance(account).getPathToMessage(message);
+            File file = readableFile(account, message);
             if (file == null || !file.exists()) {
                 skipped++;
                 continue;

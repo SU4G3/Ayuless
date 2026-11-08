@@ -19,12 +19,11 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UniversalAdapter;
-import org.telegram.ui.Components.UniversalFragment;
 
 import java.util.ArrayList;
 
 /** Ayuless > Ghost mode. Edits either the shared profile or one account's own profile. */
-public class GhostSettingsActivity extends UniversalFragment {
+public class GhostSettingsActivity extends AyulessSettingsFragment {
 
     private static final int ID_PROFILE = 1;
     private static final int ID_USE_OWN = 2;
@@ -63,7 +62,7 @@ public class GhostSettingsActivity extends UniversalFragment {
     }
 
     @Override
-    protected void fillItems(ArrayList<UItem> items, UniversalAdapter adapter) {
+    protected void fillSettingsItems(ArrayList<UItem> items, UniversalAdapter adapter) {
         if (profile == Integer.MIN_VALUE) {
             profile = GhostConfig.activeProfile(currentAccount);
         }

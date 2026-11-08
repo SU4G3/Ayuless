@@ -30,7 +30,6 @@ import java.util.ArrayList;
  * that were already sent as scheduled (they keep their date, moved a few seconds ahead if
  * it passed). Not delayed:
  * <ul>
- * <li>secret chats (no scheduling in the secret chat protocol);</li>
  * <li>retries of messages that failed as normal sends: the failed message already lives in
  * the chat history, turning it into a scheduled one would leave a stuck local copy;</li>
  * <li>quick reply shortcuts sent into a chat ({@code messages.sendQuickReplyMessages} has
@@ -38,6 +37,7 @@ import java.util.ArrayList;
  * <li>editing quick reply and welcome message templates: these are not sends to a chat;</li>
  * <li>stories.</li>
  * </ul>
+ * Secret chats use a client-side hold instead (see EncryptedDelayedSend).
  * Works without the ghost master switch.
  */
 public final class DelayedSend {
@@ -105,7 +105,7 @@ public final class DelayedSend {
         return compute(account, dialogId, media);
     }
 
-    private static synchronized int compute(int account, long dialogId, boolean media) {
+    static synchronized int compute(int account, long dialogId, boolean media) {
         int now = ConnectionsManager.getInstance(account).getCurrentTime();
         if (account == lastAccount && dialogId == lastDialog && now - lastComputedAt <= GROUP_WINDOW && lastDate > now) {
             return lastDate;

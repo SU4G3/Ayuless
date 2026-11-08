@@ -29,17 +29,17 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UniversalAdapter;
-import org.telegram.ui.Components.UniversalFragment;
 import org.telegram.ui.UsersSelectActivity;
 
 import java.util.ArrayList;
 
 /** Ayuless > Filters: keyword / regex filters, shadow ban, hiding blocked users. */
-public class FiltersSettingsActivity extends UniversalFragment {
+public class FiltersSettingsActivity extends AyulessSettingsFragment {
 
     private static final int ID_ENABLED = 1;
     private static final int ID_PRIVATE = 2;
     private static final int ID_HIDE_BLOCKED = 3;
+    private static final int ID_REAPPLY = 6;
     private static final int ID_ADD_FILTER = 4;
     private static final int ID_ADD_USERS = 5;
     private static final int ID_FILTER_BASE = 1000;   // + filter index
@@ -51,10 +51,12 @@ public class FiltersSettingsActivity extends UniversalFragment {
     }
 
     @Override
-    protected void fillItems(ArrayList<UItem> items, UniversalAdapter adapter) {
+    protected void fillSettingsItems(ArrayList<UItem> items, UniversalAdapter adapter) {
         final boolean enabled = MessageFilters.isEnabled();
         items.add(UItem.asCheck(ID_ENABLED, getString(R.string.AyulessFiltersEnable)).setChecked(enabled));
         items.add(UItem.asShadow(getString(R.string.AyulessFiltersInfo)));
+        items.add(UItem.asCheck(ID_REAPPLY, getString(R.string.AyulessFiltersReapply)).setChecked(MessageFilters.reapplyOpenChats()));
+        items.add(UItem.asShadow(getString(R.string.AyulessFiltersReapplyInfo)));
         if (!enabled) {
             return;
         }
@@ -86,6 +88,8 @@ public class FiltersSettingsActivity extends UniversalFragment {
     protected void onClick(UItem item, View view, int position, float x, float y) {
         if (item.id == ID_ENABLED) {
             MessageFilters.setEnabled(!MessageFilters.isEnabled());
+        } else if (item.id == ID_REAPPLY) {
+            MessageFilters.setReapplyOpenChats(!MessageFilters.reapplyOpenChats());
         } else if (item.id == ID_PRIVATE) {
             MessageFilters.setPrivateChats(!MessageFilters.privateChats());
         } else if (item.id == ID_HIDE_BLOCKED) {

@@ -32,7 +32,7 @@ import java.util.ArrayList;
  * Local store for deleted messages and edit history of one account.
  *
  * <p>All database work runs on a dedicated single-thread queue; results are delivered on the
- * UI thread. Secret-chat and self-destructing messages are never written (see {@link #isStorable}).
+ * UI thread. Sensitive message categories require explicit per-feature opt-in.
  */
 public final class AyulessStore {
 
@@ -78,32 +78,16 @@ public final class AyulessStore {
 
     // ---- privacy policy ----
 
-    /**
-     * Hard privacy rule: secret chats and anything with a self-destruct / auto-delete timer is
-     * never stored.
-     */
-    public static boolean isStorable(TLRPC.Message message) {
-        if (message == null) {
-            return false;
-        }
-        long dialogId = MessageObject.getDialogId(message);
-        if (DialogObject.isEncryptedDialog(dialogId)) {
-            return false;
-        }
-        if (message.ttl != 0 || message.ttl_period != 0 || message.destroyTime != 0 || message.destroyTimeMillis != 0) {
-            return false;
-        }
-        if (message.media != null && message.media.ttl_seconds != 0) {
-            return false;
-        }
-        return !(message.action instanceof TLRPC.TL_messageEncryptedAction);
+    /** Eligibility for a specific Spy feature; all sensitive categories require opt-in. */
+    public static boolean isStorable(int account, TLRPC.Message message, String purpose) {
+        return org.ayuless.content.RetentionConfig.storable(account, message, purpose);
     }
 
     // ---- writes ----
 
     /** Save a message that was deleted on the server side. No-op for non-storable messages. */
     public void saveDeleted(TLRPC.Message message) {
-        if (!isStorable(message)) {
+        if (!isStorable(account, message, org.ayuless.content.RetentionConfig.DELETE)) {
             return;
         }
         final long dialogId = MessageObject.getDialogId(message);
@@ -146,7 +130,7 @@ public final class AyulessStore {
      * before applying the server edit.
      */
     public void saveEdit(TLRPC.Message before) {
-        if (!isStorable(before)) {
+        if (!isStorable(account, before, org.ayuless.content.RetentionConfig.EDIT)) {
             return;
         }
         final long dialogId = MessageObject.getDialogId(before);
@@ -220,8 +204,6 @@ public final class AyulessStore {
 
     // ---- export / import ----
 
-    /** Encrypted-dialog bit pattern, see DialogObject.isEncryptedDialog. Used in SQL. */
-    private static final String NOT_ENCRYPTED = "(dialog_id < 0 OR (dialog_id & 4611686018427387904) = 0)";
 
     /**
      * Copy the database to a user-chosen document. Callback gets true on success (UI thread).
@@ -248,8 +230,7 @@ public final class AyulessStore {
     }
 
     /**
-     * Merge an exported database into this one. Existing rows win; rows of secret chats are
-     * skipped. Callback gets the number of imported rows, or -1 if the file is not a valid
+     * Merge an exported database into this one. Existing rows win, including secret-chat and timed rows. Callback gets the number of imported rows, or -1 if the file is not a valid
      * Ayuless database (UI thread).
      */
     public void importFrom(Uri uri, Callback<Integer> callback) {
@@ -321,7 +302,8 @@ public final class AyulessStore {
                 added += copyTable(src, db, "deleted_messages", new String[]{"dialog_id", "msg_id", "topic_id", "date", "deleted_at", "from_id", "data"});
                 added += copyTable(src, db, "edit_history", new String[]{"dialog_id", "msg_id", "edit_date", "version", "text", "entities", "media"});
                 if (hasColumns(src, "read_outbox", "dialog_id", "min_id", "max_id", "read_at")) {
-                    added += copyTable(src, db, "read_outbox", new String[]{"dialog_id", "min_id", "max_id", "read_at"});
+                    // Read receipts are metadata, kept for secret chats too.
+                    added += copyTable(src, db, "read_outbox", new String[]{"dialog_id", "min_id", "max_id", "read_at"}, null);
                 }
                 if (hasColumns(src, "last_seen", "user_id", "seen_at")) {
                     added += mergeLastSeen(src, db);
@@ -365,8 +347,12 @@ public final class AyulessStore {
     }
 
     private static int copyTable(SQLiteDatabase src, SQLiteDatabase dst, String table, String[] columns) {
+        return copyTable(src, dst, table, columns, null);
+    }
+
+    private static int copyTable(SQLiteDatabase src, SQLiteDatabase dst, String table, String[] columns, String where) {
         int added = 0;
-        try (Cursor c = src.query(table, columns, NOT_ENCRYPTED, null, null, null, null)) {
+        try (Cursor c = src.query(table, columns, where, null, null, null, null)) {
             ContentValues values = new ContentValues();
             while (c.moveToNext()) {
                 values.clear();
@@ -405,6 +391,7 @@ public final class AyulessStore {
 
     /**
      * Records that outgoing messages in (minId, maxId] of a private dialog were read at readAt.
+     * For secret chats the range holds message dates instead of message ids.
      * Ignored when the range is empty or already covered by a newer record.
      */
     public void saveReadOutbox(long dialogId, int minId, int maxId, int readAt) {
@@ -435,7 +422,7 @@ public final class AyulessStore {
         });
     }
 
-    /** Locally recorded read time of an outgoing message, or 0 if unknown. */
+    /** Locally recorded read time of an outgoing message (by date in secret chats), or 0 if unknown. */
     public void getReadDate(long dialogId, int msgId, Callback<Integer> callback) {
         queue.postRunnable(() -> {
             int result = 0;
