@@ -39,6 +39,7 @@ class TelegramBuildAppPlugin : Plugin<Project> {
                 localizationFiles.from(
                     telegramModule.fileTree("src/main/res") {
                         include("values-*/strings.xml")
+                        // Ayuless: include translations in the same binary assets as EN.
                         include("values-*/ayuless.xml")
                     },
                     project.fileTree("src/main/res") {

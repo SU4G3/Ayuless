@@ -22,15 +22,15 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeBind;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UniversalAdapter;
-import org.telegram.ui.Components.UniversalFragment;
 
 import java.util.ArrayList;
 
 /** Settings > Ayuless: header, feature categories and project links. */
-public class AyulessSettingsActivity extends UniversalFragment {
+public class AyulessSettingsActivity extends AyulessSettingsFragment {
 
     static final String SOURCE_URL = "https://github.com/SU4G3/Ayuless";
     private static final String ISSUES_URL = SOURCE_URL + "/issues";
@@ -67,6 +67,7 @@ public class AyulessSettingsActivity extends UniversalFragment {
         }
         if (headerView != null) {
             items.add(UItem.asCustom(headerView));
+            items.add(UItem.asShadow(null));
         }
 
         items.add(UItem.asHeader(getString(R.string.AyulessCategoriesHeader)));
@@ -126,7 +127,7 @@ public class AyulessSettingsActivity extends UniversalFragment {
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setGravity(Gravity.CENTER_HORIZONTAL);
         layout.setPadding(0, dp(20), 0, dp(16));
-        layout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite, getResourceProvider()));
+        ThemeBind.backgroundColor(layout, Theme.key_windowBackgroundWhite, getResourceProvider());
 
         ImageView icon = new ImageView(context);
         icon.setImageResource(R.mipmap.ic_launcher_ayuless_round);
@@ -136,13 +137,13 @@ public class AyulessSettingsActivity extends UniversalFragment {
         name.setText(getString(R.string.AyulessLauncherName));
         name.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         name.setTypeface(AndroidUtilities.bold());
-        name.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, getResourceProvider()));
+        ThemeBind.textColor(name, Theme.key_windowBackgroundWhiteBlackText, getResourceProvider());
         layout.addView(name, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 10, 0, 0));
 
         TextView version = new TextView(context);
         version.setText(BuildVars.BUILD_VERSION_STRING);
         version.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        version.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText, getResourceProvider()));
+        ThemeBind.textColor(version, Theme.key_windowBackgroundWhiteGrayText, getResourceProvider());
         layout.addView(version, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 2, 0, 0));
         return layout;
     }
