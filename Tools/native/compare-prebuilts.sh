@@ -6,7 +6,9 @@
 # whether the set of defined global symbols matches. Exit code 1 if an archive
 # is missing or its exported symbols differ; byte differences alone are only
 # reported (host paths, archive member order and toolchain builds can change
-# bytes without changing code).
+# bytes without changing code). Rust legacy-mangled symbols end in a
+# per-build hash (17h<16 hex>E) that depends on crate metadata and paths; that
+# suffix is masked so only the actual symbol set is compared.
 
 set -Eeuo pipefail
 
@@ -31,8 +33,8 @@ while IFS= read -r path; do
         echo "IDENTICAL $path"
         continue
     fi
-    "$NM" -g --defined-only "$committed" 2>/dev/null | awk 'NF==3{print $3}' | sort -u > "$TMP/a"
-    "$NM" -g --defined-only "$built" 2>/dev/null | awk 'NF==3{print $3}' | sort -u > "$TMP/b"
+    "$NM" -g --defined-only "$committed" 2>/dev/null | awk 'NF==3{print $3}' | sed -E 's/17h[0-9a-f]{16}E$/17hE/' | sort -u > "$TMP/a"
+    "$NM" -g --defined-only "$built" 2>/dev/null | awk 'NF==3{print $3}' | sed -E 's/17h[0-9a-f]{16}E$/17hE/' | sort -u > "$TMP/b"
     if cmp -s "$TMP/a" "$TMP/b"; then
         echo "SYMBOLS=  $path ($(wc -l < "$TMP/a") symbols, bytes differ)"
     else
