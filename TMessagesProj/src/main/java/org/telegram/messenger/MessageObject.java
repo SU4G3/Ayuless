@@ -2075,6 +2075,7 @@ public class MessageObject {
 
         currentAccount = accountNum;
         messageOwner = message;
+        org.ayuless.content.ProtectedContent.onMessageObject(message); // Ayuless: unlock restricted saving in groups/channels
         replyMessageObject = replyToMessage;
         eventId = eid;
         wasUnread = !messageOwner.out && messageOwner.unread;

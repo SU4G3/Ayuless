@@ -13,6 +13,8 @@
     <string name="AyulessGhostHideStoryViews">Don\'t mark stories as viewed</string>
     <string name="AyulessGhostOfflineAfterSend">Go offline after sending</string>
     <string name="AyulessGhostInfo">Others won\'t see when you are online, typing or reading. Your own read state still updates locally.</string>
+    <string name="AyulessGhostLocked">%1$s · locked</string>
+    <string name="AyulessGhostLockHint">Long-press an option to lock its value. A locked option keeps its value when you switch ghost mode on or off.</string>
     <string name="AyulessAntiDelete">Keep deleted messages</string>
     <string name="AyulessAntiDeleteInfo">Messages deleted by others stay in the chat, marked as deleted. Messages you delete yourself are removed as usual.</string>
     <string name="AyulessEditHistory">Save edit history</string>
@@ -124,6 +126,7 @@
     <string name="AyulessSpyExceptions">Manage exceptions</string>
     <string name="AyulessSpyExceptionsNone">None</string>
     <string name="AyulessSpyExceptionsInfo">Deleted messages and edit history are not saved for the chats and users you pick here.</string>
+    <string name="AyulessProtectedForwardNeedsDownload">Some media from a protected chat was not forwarded: download it first.</string>
     <string name="AyulessAttachmentsHeader">Attachments</string>
     <string name="AyulessSaveAttachments">Save attachments</string>
     <string name="AyulessSaveAttachmentsInfo">Keeps a private copy of photos, videos and files of deleted messages if they were already downloaded. Chats from Spy exceptions, secret chats and self-destructing media are never saved.</string>

@@ -40,7 +40,7 @@ public final class ReadDates {
      * @param now         current server time
      */
     public static void onReadOutbox(int account, long userId, int previousMax, int maxId, int updateDate, int now) {
-        if (userId <= 0 || maxId <= previousMax || !isEnabled(account)) {
+        if (userId <= 0 || maxId <= previousMax || !isEnabled(account) || SpyExceptions.isExcepted(account, userId)) {
             return;
         }
         if (Math.abs(now - updateDate) >= LIVE_WINDOW) {
