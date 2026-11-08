@@ -2236,7 +2236,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         boolean forwardFromMyName,
         boolean hideCaption,
         boolean notify,
-        int scheduleDate,
+        int scheduleDateIn, // Ayuless: renamed, see delayed send below
         int scheduleRepeatPeriod,
         MessageObject replyToTopMsg,
         int video_timestamp,
@@ -2253,6 +2253,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         if (messages.isEmpty()) {
             return 0;
         }
+        final int scheduleDate = org.ayuless.ghost.DelayedSend.forwardScheduleDate(currentAccount, peer, scheduleDateIn, messages); // Ayuless: delayed send
         int sendResult = 0;
         long myId = getUserConfig().getClientUserId();
         boolean isChannel = false;
