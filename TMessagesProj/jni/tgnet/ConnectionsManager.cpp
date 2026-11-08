@@ -3860,6 +3860,22 @@ void ConnectionsManager::setSystemLangCode(std::string langCode) {
     });
 }
 
+void ConnectionsManager::setClientVersion(int32_t layer, std::string appVersion, std::string installerId, std::string packageId) {
+    scheduleTask([&, layer, appVersion = std::move(appVersion), installerId = std::move(installerId), packageId = std::move(packageId)] {
+        if (currentLayer == layer && currentAppVersion == appVersion && installer == installerId && package == packageId) {
+            return;
+        }
+        currentLayer = layer;
+        currentAppVersion = std::move(appVersion);
+        installer = std::move(installerId);
+        package = std::move(packageId);
+        for (auto & datacenter : datacenters) {
+            datacenter.second->resetInitVersion();
+        }
+        updateDcSettings(0, false, false);
+    });
+}
+
 void ConnectionsManager::resumeNetwork(bool partial) {
     scheduleTask([&, partial] {
         if (lastMonotonicPauseTime != 0) {

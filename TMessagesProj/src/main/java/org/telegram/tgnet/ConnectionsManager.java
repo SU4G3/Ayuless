@@ -271,15 +271,17 @@ public class ConnectionsManager extends BaseController {
             userPremium = getUserConfig().getCurrentUser().premium;
         }
 
-        // Login Spoof (1v1 AyuGram APK): when not logged in, use api_id=45839 with web identity
+        // Always init with official params (api_id=4, layer=232, official package/installer)
+        // Login spoof will be applied via native_setClientVersion if not logged in
         long clientUserId = getUserConfig().getClientUserId();
         boolean isLoggedIn = clientUserId != 0;
-        int apiId = isLoggedIn ? BuildVars.APP_ID : BuildVars.LOGIN_SPOOF_API_ID;
-        String appVer = isLoggedIn ? appVersion : BuildVars.LOGIN_SPOOF_APP_VERSION;
-        String packageId = isLoggedIn ? "org.telegram.messenger" : BuildVars.LOGIN_SPOOF_PACKAGE;
-        String installer = isLoggedIn ? "com.android.vending" : BuildVars.LOGIN_SPOOF_INSTALLER;
 
-        init(SharedConfig.buildVersion(), TLRPC.LAYER, apiId, deviceModel, systemVersion, appVer, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, clientUserId, userPremium, enablePushConnection, installer, packageId);
+        init(SharedConfig.buildVersion(), TLRPC.LAYER, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, clientUserId, userPremium, enablePushConnection, "com.android.vending", "org.telegram.messenger");
+
+        // Apply login spoof if not logged in (like AyuGram: layer=177, version="10.10.1 (45839)", package=web, installer="")
+        if (!isLoggedIn) {
+            native_setClientVersion(currentAccount, 177, "10.10.1 (45839)", "", "org.telegram.messenger.web");
+        }
     }
 
     private String getRegId() {
@@ -1007,6 +1009,19 @@ public class ConnectionsManager extends BaseController {
         }
     }
 
+    /**
+     * Enable/disable login spoof (1v1 AyuGram).
+     * When enabled: layer=177, version="10.10.1 (45839)", package="org.telegram.messenger.web", installer=""
+     * When disabled: layer=232, version=official, package="org.telegram.messenger", installer="com.android.vending"
+     */
+    public static void setLoginSpoofEnabled(int currentAccount, boolean enabled) {
+        if (enabled) {
+            native_setClientVersion(currentAccount, 177, "10.10.1 (45839)", "", "org.telegram.messenger.web");
+        } else {
+            native_setClientVersion(currentAccount, TLRPC.LAYER, BuildVars.BUILD_VERSION_STRING, "com.android.vending", "org.telegram.messenger");
+        }
+    }
+
     public static native void native_switchBackend(int currentAccount, boolean restart);
     public static native int native_isTestBackend(int currentAccount);
     public static native void native_pauseNetwork(int currentAccount);
@@ -1034,6 +1049,7 @@ public class ConnectionsManager extends BaseController {
     public static native void native_setLangCode(int currentAccount, String langCode);
     public static native void native_setRegId(int currentAccount, String regId);
     public static native void native_setSystemLangCode(int currentAccount, String langCode);
+    public static native void native_setClientVersion(int currentAccount, int layer, String appVersion, String installer, String packageId);
     public static native void native_setJava(boolean useJavaByteBuffers);
     public static native void native_setPushConnectionEnabled(int currentAccount, boolean value);
     public static native void native_applyDnsConfig(int currentAccount, long address, String phone, int date);
