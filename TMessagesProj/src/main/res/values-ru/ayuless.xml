@@ -92,4 +92,5 @@
     <string name="AyulessShadowBanInfo">Сообщения этих пользователей скрываются во всех чатах. Они об этом не узнают.</string>
     <string name="AyulessShadowBanRemove">Убрать</string>
     <string name="AyulessShadowBanRemoveConfirm">Снова показывать сообщения этого пользователя?</string>
+    <string name="AyulessFilteredMessage">Скрытое сообщение</string>
 </resources>
