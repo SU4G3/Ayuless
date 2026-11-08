@@ -31,12 +31,6 @@ public class BuildVars {
     public static String APP_HASH = BuildConfig.APP_HASH;
     public static String OFFICIAL_FINGERPRINT = BuildConfig.CERT_FINGERPRINT;
 
-    // Login Spoof (1v1 AyuGram) — used when not logged in to avoid detection
-    public static final int LOGIN_SPOOF_API_ID = 45839;
-    public static final String LOGIN_SPOOF_API_HASH = "014b35b6184100b085b0d0572f9b5103"; // same official hash
-    public static final String LOGIN_SPOOF_APP_VERSION = "10.10.1 (45839)";
-    public static final String LOGIN_SPOOF_PACKAGE = "org.telegram.messenger.web";
-    public static final String LOGIN_SPOOF_INSTALLER = "";
 
     // SafetyNet key for Google Identity SDK, set it to empty to disable
     public static String SAFETYNET_KEY = ""; // Ayuless: no SafetyNet credentials.

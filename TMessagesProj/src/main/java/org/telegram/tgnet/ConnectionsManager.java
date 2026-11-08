@@ -20,6 +20,7 @@ import androidx.media3.common.util.UnstableApi;
 import androidx.media3.exoplayer.upstream.DefaultBandwidthMeter;
 // Ayuless: attestation SDK removed.
 
+import org.ayuless.login.LoginSpoof;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AccountInstance;
@@ -123,6 +124,8 @@ public class ConnectionsManager extends BaseController {
 
     private long lastPauseTime = System.currentTimeMillis();
     private boolean appPaused = true;
+    private int realVersion;
+    private String realAppVersion = "";
     private boolean isUpdating;
     private int connectionState;
     private AtomicInteger lastRequestToken = new AtomicInteger(1);
@@ -271,17 +274,16 @@ public class ConnectionsManager extends BaseController {
             userPremium = getUserConfig().getCurrentUser().premium;
         }
 
-        // Always init with official params (api_id=4, layer=232, version=72379, package=web, installer="")
-        // Login spoof will be applied via native_setClientVersion if not logged in
         long clientUserId = getUserConfig().getClientUserId();
-        boolean isLoggedIn = clientUserId != 0;
+        realVersion = SharedConfig.buildVersion();
+        realAppVersion = appVersion;
 
-        // Per AyuGram: package=org.telegram.messenger.web and installer="" ALWAYS (both before and after login)
-        init(SharedConfig.buildVersion(), TLRPC.LAYER, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, clientUserId, userPremium, enablePushConnection, "", "org.telegram.messenger.web");
+        // Ayuless: package_id and installer are always the official web build values (same as AyuGram).
+        init(realVersion, TLRPC.LAYER, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, clientUserId, userPremium, enablePushConnection, LoginSpoof.INSTALLER, LoginSpoof.PACKAGE_ID);
 
-        // Apply login spoof if not logged in (like AyuGram: layer=177, version=45839, app_version="10.10.1 (45839)")
-        if (!isLoggedIn) {
-            native_setClientVersion(currentAccount, 177, 45839, "10.10.1 (45839)", "", "org.telegram.messenger.web");
+        // Ayuless: present an older official client while the account is not authorized.
+        if (clientUserId == 0) {
+            setLoginSpoofEnabled(currentAccount, true);
         }
     }
 
@@ -1011,17 +1013,23 @@ public class ConnectionsManager extends BaseController {
     }
 
     /**
-     * Enable/disable login spoof (1v1 AyuGram).
-     * When enabled: layer=177, version=45839, app_version="10.10.1 (45839)"
-     * When disabled: layer=232, version=72379, app_version=13.1.1
-     * Package/installer ALWAYS: org.telegram.messenger.web / ""
+     * Ayuless: switch the login client spoof for an account.
+     * Enabled: layer 177, version 45839, app_version "10.10.1 (45839)".
+     * Disabled: the real layer, build number and app version that init() used.
+     * The auth key is kept; native code resends initConnection on every datacenter.
      */
     public static void setLoginSpoofEnabled(int currentAccount, boolean enabled) {
+        LoginSpoof.setActive(currentAccount, enabled);
         if (enabled) {
-            native_setClientVersion(currentAccount, 177, 45839, "10.10.1 (45839)", "", "org.telegram.messenger.web");
+            native_setClientVersion(currentAccount, LoginSpoof.LAYER, LoginSpoof.VERSION, LoginSpoof.APP_VERSION, LoginSpoof.INSTALLER, LoginSpoof.PACKAGE_ID);
         } else {
-            native_setClientVersion(currentAccount, TLRPC.LAYER, 72379, BuildVars.BUILD_VERSION_STRING, "", "org.telegram.messenger.web");
+            ConnectionsManager instance = getInstance(currentAccount);
+            native_setClientVersion(currentAccount, TLRPC.LAYER, instance.realVersion, instance.realAppVersion, LoginSpoof.INSTALLER, LoginSpoof.PACKAGE_ID);
         }
+    }
+
+    public static boolean isLoginSpoofActive(int currentAccount) {
+        return LoginSpoof.isActive(currentAccount);
     }
 
     public static native void native_switchBackend(int currentAccount, boolean restart);

@@ -3862,11 +3862,11 @@ void ConnectionsManager::setSystemLangCode(std::string langCode) {
 
 void ConnectionsManager::setClientVersion(int32_t layer, int32_t version, std::string appVersion, std::string installerId, std::string packageId) {
     scheduleTask([&, layer, version, appVersion = std::move(appVersion), installerId = std::move(installerId), packageId = std::move(packageId)] {
-        if (currentLayer == layer && currentVersion == version && currentAppVersion == appVersion && installer == installerId && package == packageId) {
+        if (currentLayer == layer && currentVersion == (uint32_t) version && currentAppVersion == appVersion && installer == installerId && package == packageId) {
             return;
         }
         currentLayer = layer;
-        currentVersion = version;
+        currentVersion = (uint32_t) version;
         currentAppVersion = std::move(appVersion);
         installer = std::move(installerId);
         package = std::move(packageId);
