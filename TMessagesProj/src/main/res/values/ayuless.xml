@@ -83,7 +83,7 @@
     <string name="AyulessColorOrange">Orange</string>
     <string name="AyulessFiltersTitle">Message filters</string>
     <string name="AyulessFiltersEnable">Enable filters</string>
-    <string name="AyulessFiltersInfo">Filters hide messages by keywords or regular expressions, hide users with a shadow ban and hide messages from blocked users. Messages are only hidden, not deleted. Your own messages and secret chats are never filtered.</string>
+    <string name="AyulessFiltersInfo">Filters hide messages by keywords or regular expressions, hide users with a shadow ban and hide messages from blocked users. Messages are only hidden, not deleted. Your own messages are never filtered. Secret chats count as private chats.</string>
     <string name="AyulessFiltersMain">Main</string>
     <string name="AyulessFiltersPrivate">Apply filters in private chats</string>
     <string name="AyulessFiltersHideBlocked">Hide messages from blocked users</string>

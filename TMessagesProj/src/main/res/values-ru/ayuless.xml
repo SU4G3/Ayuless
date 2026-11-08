@@ -81,7 +81,7 @@
     <string name="AyulessColorOrange">Оранжевый</string>
     <string name="AyulessFiltersTitle">Фильтры сообщений</string>
     <string name="AyulessFiltersEnable">Включить фильтры</string>
-    <string name="AyulessFiltersInfo">Фильтры скрывают сообщения по ключевым словам или регулярным выражениям, скрывают пользователей с помощью теневого бана и прячут сообщения от заблокированных. Сообщения только скрываются, а не удаляются. Ваши сообщения и секретные чаты не фильтруются.</string>
+    <string name="AyulessFiltersInfo">Фильтры скрывают сообщения по ключевым словам или регулярным выражениям, скрывают пользователей с помощью теневого бана и прячут сообщения от заблокированных. Сообщения только скрываются, а не удаляются. Ваши сообщения не фильтруются. Секретные чаты считаются личными.</string>
     <string name="AyulessFiltersMain">Основные</string>
     <string name="AyulessFiltersPrivate">Применять фильтры в личных чатах</string>
     <string name="AyulessFiltersHideBlocked">Скрывать сообщения от пользователей в ЧС</string>

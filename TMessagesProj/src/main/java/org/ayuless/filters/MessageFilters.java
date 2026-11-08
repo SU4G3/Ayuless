@@ -28,7 +28,7 @@ import java.util.Set;
 /**
  * Message filters: hide incoming messages in chats by keyword / regular expression, by
  * sender (shadow ban), or because the sender is blocked. Display only: nothing is deleted
- * or stored, and secret chats are never filtered.
+ * or stored. Secret chats count as private chats.
  *
  * <p>Settings are app-wide. Reads come from an in-memory snapshot that is replaced on every
  * change, so the chat screen does not touch SharedPreferences per message.
@@ -205,10 +205,8 @@ public final class MessageFilters {
         if (!s.enabled || obj == null || obj.messageOwner == null || obj.isOut()) {
             return false;
         }
+        // Secret chats are filtered too; their dialog ids are positive, so they follow the private chats switch.
         long dialogId = obj.getDialogId();
-        if (DialogObject.isEncryptedDialog(dialogId)) {
-            return false;
-        }
         long fromId = obj.getFromChatId();
         if (fromId != 0 && s.shadowBan.contains(fromId)) {
             return true;
