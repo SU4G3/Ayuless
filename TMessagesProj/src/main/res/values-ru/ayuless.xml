@@ -132,4 +132,22 @@
     <string name="AyulessAttachmentsFolder">Папка вложений</string>
     <string name="AyulessAttachmentsLimit">Лимит размера вложений</string>
     <string name="AyulessAttachmentsUsage">Занято %1$s из %2$s. При достижении лимита самые старые вложения удаляются.</string>
+    <string name="AyulessRetentionHeader">Хранение содержимого</string>
+    <string name="AyulessRestrictedHeader">Контент с ограничениями</string>
+    <string name="AyulessKeepExpiringMedia">Сохранять исчезающие и одноразовые медиа</string>
+    <string name="AyulessUnlockPrivate">Игнорировать запрет сохранения в личных чатах</string>
+    <string name="AyulessUnlockAutoDelete">Разрешить сохранение в чатах с автоудалением</string>
+    <string name="AyulessUnlockTtl">Разрешить сохранение и скриншоты медиа с таймером</string>
+    <string name="AyulessUnlockSecret">Разрешить сохранение и скриншоты в секретных чатах</string>
+    <string name="AyulessUnlockStories">Сохранять и отправлять защищённые истории копией</string>
+    <string name="AyulessRetentionInfo">Параметры хранения расширяют соответствующую функцию Шпиона. Категории независимы: включите все подходящие параметры. Скачайте медиа до исчезновения. Лимиты хранилища и исключения Шпиона сохраняются. Для применения разрешений откройте чат заново.</string>
+    <string name="AyulessRetainDeletedSecret">Антиудаление: секретные чаты</string>
+    <string name="AyulessRetainDeletedTimed">Антиудаление: сообщения с таймерами</string>
+    <string name="AyulessRetainDeletedActions">Антиудаление: зашифрованные служебные действия</string>
+    <string name="AyulessRetainEditsSecret">История правок: секретные чаты</string>
+    <string name="AyulessRetainEditsTimed">История правок: сообщения с таймерами</string>
+    <string name="AyulessRetainEditsActions">История правок: зашифрованные служебные действия</string>
+    <string name="AyulessRetainAttachmentsSecret">Сохранённые вложения: секретные чаты</string>
+    <string name="AyulessRetainAttachmentsTimed">Сохранённые вложения: сообщения с таймерами</string>
+    <string name="AyulessRetainAttachmentsActions">Сохранённые вложения: зашифрованные служебные действия</string>
 </resources>

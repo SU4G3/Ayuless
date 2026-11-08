@@ -1294,6 +1294,7 @@ public class ChatActivity extends BaseFragment implements
     public final static int OPTION_VIEW_STATISTICS = 115;
     public final static int OPTION_WELCOME_REVERT = 116;
     public final static int OPTION_SEND_MONEY = 117;
+    public final static int OPTION_AYULESS_SAVE_MEDIA = 9002; // Ayuless: save unlocked timed/secret media
     public final static int OPTION_AYULESS_EDIT_HISTORY = 9001; // Ayuless: edit history
 
     private final static int[] allowedNotificationsDuringChatListAnimations = new int[]{
@@ -8723,7 +8724,7 @@ public class ChatActivity extends BaseFragment implements
         chatScrollHelper.setAnimationCallback(chatScrollHelperCallback);
 
         flagSecure = new FlagSecureReason(getParentActivity().getWindow(), () ->
-            currentEncryptedChat != null ||
+            currentEncryptedChat != null && !org.ayuless.content.RetentionConfig.enabled(currentAccount, org.ayuless.content.RetentionConfig.SECRET) || // Ayuless: opt-in secret screenshots
             isPeerNoForwards()
         );
 
@@ -16237,7 +16238,10 @@ public class ChatActivity extends BaseFragment implements
         if (messageObject == null || messageObject.isOut() || !messageObject.isSecretMedia() || messageObject.messageOwner.destroyTime != 0 || messageObject.messageOwner.ttl <= 0) {
             return null;
         }
+        // Ayuless: retained media sends only its original open receipt, including after restart.
+        if (org.ayuless.content.RetentionConfig.wasOpened(currentAccount, messageObject.messageOwner)) return null;
         if (readNow) {
+            org.ayuless.content.RetentionConfig.rememberOpen(currentAccount, messageObject.messageOwner);
             final boolean delete = messageObject.messageOwner.ttl != 0x7FFFFFFF;
             final int ttl = messageObject.messageOwner.ttl == 0x7FFFFFFF ? 0 : messageObject.messageOwner.ttl;
             messageObject.messageOwner.destroyTime = ttl + getConnectionsManager().getCurrentTime();
@@ -16249,6 +16253,8 @@ public class ChatActivity extends BaseFragment implements
             return null;
         } else {
             return () -> {
+                if (org.ayuless.content.RetentionConfig.wasOpened(currentAccount, messageObject.messageOwner)) return;
+                org.ayuless.content.RetentionConfig.rememberOpen(currentAccount, messageObject.messageOwner);
                 final boolean delete = messageObject.messageOwner.ttl != 0x7FFFFFFF;
                 final int ttl = messageObject.messageOwner.ttl == 0x7FFFFFFF ? 0 : messageObject.messageOwner.ttl;
                 messageObject.messageOwner.destroyTime = ttl + getConnectionsManager().getCurrentTime();
@@ -16266,6 +16272,8 @@ public class ChatActivity extends BaseFragment implements
         if (messageObject == null || messageObject.isOut() || !messageObject.isSecretMedia() || messageObject.messageOwner.ttl != 0x7FFFFFFF) {
             return null;
         }
+        // Ayuless: the open receipt remains upstream; only local expiry is suppressed.
+        if (org.ayuless.content.RetentionConfig.keepMedia(currentAccount, dialog_id)) return null;
         final long taskId = getMessagesController().createDeleteShowOnceTask(dialog_id, messageObject.getId());
         messageObject.forceExpired = true;
         if (messageObject.isOutOwner() || !messageObject.isRoundOnce() && !messageObject.isVoiceOnce()) {
@@ -34253,6 +34261,12 @@ public class ChatActivity extends BaseFragment implements
         }
         boolean preserveDim = false;
         switch (option) {
+            case OPTION_AYULESS_SAVE_MEDIA: { // Ayuless: decrypt only on explicit save.
+                if (selectedObject != null && getParentActivity() != null) {
+                    org.ayuless.content.ProtectedContent.saveMedia(getParentActivity(), selectedObject);
+                }
+                break;
+            }
             case OPTION_AYULESS_EDIT_HISTORY: { // Ayuless: edit history
                 org.ayuless.edits.EditHistorySheet.show(getParentActivity(), currentAccount, selectedObject);
                 break;
@@ -47045,6 +47059,21 @@ public class ChatActivity extends BaseFragment implements
             items.add(getString(R.string.WelcomeMessageRevert));
             options.add(OPTION_WELCOME_REVERT);
             icons.add(R.drawable.outline_revert_24);
+        }
+
+        // Ayuless: explicit actions for unlocked secret/timed content, preserving open behavior.
+        if (org.ayuless.content.ProtectedContent.canUnlock(currentAccount, message.messageOwner)
+                && (currentEncryptedChat != null || org.ayuless.content.RetentionConfig.timed(message.messageOwner))) {
+            if (!options.contains(OPTION_FORWARD) && message.canForwardMessage()) {
+                items.add(getString(R.string.Forward));
+                options.add(OPTION_FORWARD);
+                icons.add(R.drawable.msg_forward);
+            }
+            if (message.messageOwner.media instanceof TLRPC.TL_messageMediaPhoto || message.getDocument() != null) {
+                items.add(getString(message.isPhoto() || message.isVideo() || message.isRoundVideo() ? R.string.SaveToGallery : R.string.SaveToDownloads));
+                options.add(OPTION_AYULESS_SAVE_MEDIA);
+                icons.add(R.drawable.msg_download);
+            }
         }
 
         // Ayuless: edit history entry when previous versions are stored.

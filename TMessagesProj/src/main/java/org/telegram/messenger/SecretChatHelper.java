@@ -113,15 +113,7 @@ public class SecretChatHelper extends BaseController {
 
     protected void processPendingEncMessages() {
         if (!pendingEncMessagesToDelete.isEmpty()) {
-            ArrayList<Long> pendingEncMessagesToDeleteCopy = new ArrayList<>(pendingEncMessagesToDelete);
-            AndroidUtilities.runOnUIThread(() -> {
-                for (int a = 0; a < pendingEncMessagesToDeleteCopy.size(); a++) {
-                    MessageObject messageObject = getMessagesController().dialogMessagesByRandomIds.get(pendingEncMessagesToDeleteCopy.get(a));
-                    if (messageObject != null) {
-                        messageObject.deleted = true;
-                    }
-                }
-            });
+            // Ayuless: mark deleted only after storage applies anti-delete eligibility.
             ArrayList<Long> arr = new ArrayList<>(pendingEncMessagesToDelete);
             getMessagesStorage().markMessagesAsDeletedByRandoms(arr);
             pendingEncMessagesToDelete.clear();

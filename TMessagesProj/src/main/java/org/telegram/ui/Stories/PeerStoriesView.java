@@ -2070,7 +2070,7 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                         }
 
                         if (!unsupported && allowShare && !currentStory.isLive) {
-                            if (UserConfig.getInstance(currentAccount).isPremium()) {
+                            if (UserConfig.getInstance(currentAccount).isPremium() || org.ayuless.content.RetentionConfig.enabled(currentAccount, org.ayuless.content.RetentionConfig.STORIES)) { // Ayuless: local story saving
                                 ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_gallery, getString(R.string.SaveToGallery), false, resourcesProvider).setOnClickListener(v -> {
                                     saveToGallery();
                                     if (popupMenu != null) {
@@ -5094,7 +5094,7 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                 currentStory.set(storyItem);
                 allowShare = allowShareLink = !unsupported && currentStory.storyItem != null && !(currentStory.storyItem instanceof TL_stories.TL_storyItemDeleted) && !(currentStory.storyItem instanceof TL_stories.TL_storyItemSkipped);
                 if (allowShare) {
-                    allowShare = currentStory.allowScreenshots() && currentStory.storyItem.isPublic;
+                    allowShare = currentStory.allowScreenshots() && (currentStory.storyItem.isPublic || org.ayuless.content.RetentionConfig.enabled(currentAccount, org.ayuless.content.RetentionConfig.STORIES)); // Ayuless: share downloaded copies
                 }
                 if (allowShare) {
                     allowShare = currentStory.storyItem.pinned || !StoriesUtilities.isExpired(currentAccount, currentStory.storyItem);
@@ -7165,6 +7165,8 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
         }
 
         public boolean allowScreenshots() {
+            // Ayuless: local saving and screenshot opt-in for protected stories.
+            if (org.ayuless.content.RetentionConfig.enabled(currentAccount, org.ayuless.content.RetentionConfig.STORIES)) return true;
             if (uploadingStory != null) {
                 return uploadingStory.entry.allowScreenshots;
             }

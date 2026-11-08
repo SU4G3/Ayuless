@@ -2075,7 +2075,7 @@ public class MessageObject {
 
         currentAccount = accountNum;
         messageOwner = message;
-        org.ayuless.content.ProtectedContent.onMessageObject(message); // Ayuless: unlock restricted saving in groups/channels
+        org.ayuless.content.ProtectedContent.onMessageObject(currentAccount, message); // Ayuless: opt-in saving restrictions
         replyMessageObject = replyToMessage;
         eventId = eid;
         wasUnread = !messageOwner.out && messageOwner.unread;
@@ -11955,7 +11955,8 @@ public class MessageObject {
     public boolean canForwardMessage() {
         if (isQuickReply()) return false;
         if (type == TYPE_GIFT_STARS || type == TYPE_GIFT_THEME_UPDATE || type == TYPE_SUGGEST_BIRTHDAY || type == TYPE_GIFT_OFFER || type == TYPE_SHARING_OFFER || type == TYPE_COMMUNITY_CHANGED) return false;
-        return !(messageOwner instanceof TLRPC.TL_message_secret) && !needDrawBluredPreview() && !isLiveLocation() && type != MessageObject.TYPE_PHONE_CALL && !isSponsored() && !messageOwner.noforwards;
+        return (!(messageOwner instanceof TLRPC.TL_message_secret) && !needDrawBluredPreview() || org.ayuless.content.ProtectedContent.canUnlock(currentAccount, messageOwner)) && !isLiveLocation() // Ayuless: forward unlocked media as copies
+                && type != MessageObject.TYPE_PHONE_CALL && !isSponsored() && !messageOwner.noforwards;
     }
 
     public boolean canEditMedia() {
