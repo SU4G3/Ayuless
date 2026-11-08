@@ -62,7 +62,7 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
     }
 
     @Override
-    protected void fillItems(ArrayList<UItem> items, UniversalAdapter adapter) {
+    protected void fillSettingsItems(ArrayList<UItem> items, UniversalAdapter adapter) {
         if (profile == Integer.MIN_VALUE) {
             profile = GhostConfig.activeProfile(currentAccount);
         }

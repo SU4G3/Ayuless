@@ -17,6 +17,10 @@ Ayuless (GPL-3.0-or-later) as long as this attribution is kept.
 
 Thanks to the [AyuGram](https://github.com/AyuGram) team (Radolyn Labs). Ayuless follows AyuGram's feature set and settings layout. Ayuless is not affiliated with AyuGram or Radolyn Labs. Name idea from exteraless.
 
+The settings restyle is independently implemented from the visual measurements in
+[SETTINGS-STYLE.md](SETTINGS-STYLE.md). It imports no AyuGram or exteraGram code or
+resources; all branding in these screens belongs to Ayuless.
+
 ## Code derived from AyuGram
 
 Parts of Ayuless are based on code from [AyuGram4A](https://github.com/AyuGram/AyuGram4A), Copyright @Radolyn (Radolyn Labs). Files containing such code keep the original copyright header.
