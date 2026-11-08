@@ -2,6 +2,7 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later
      Copyright (C) 2026 Ayuless contributors -->
 <resources>
+    <string name="AyulessMapsUnavailable">Карты сейчас недоступны в Ayuless.</string>
     <string name="AyulessSettings">Ayuless</string>
     <string name="AyulessSettingsInfo">Режим призрака, шпион, кастомизация</string>
     <string name="AyulessGhostHeader">Режим призрака</string>
