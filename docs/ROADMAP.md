@@ -27,13 +27,12 @@ Nothing has been tested on a device yet. All Ayuless features are off by default
 - ✅ Read on actions (mark read when you send or react), send silently
 - ✅ Offer ghost mode before opening stories, one-time (#29)
 - ✅ Ghost button in the chat list, tap to toggle (#28)
-- ⏳ Long-press an option to lock its value against the master switch
+- ✅ Long-press an option to lock its value against the master switch
 
 ## Step 3: Spy: anti-delete and edit history ✅ (#18, #19, #22, #23, #27, #31)
 - ✅ Own SQLite DB in `org.ayuless` with size limit and cleanup
 - ✅ Server deletes keep the message, marked as deleted. Self-deletes behave normally.
 - ✅ Edit history from the message menu
-- ✅ Never store secret chats or self-destructing messages
 - ✅ Exceptions: users/chats that are never saved (#27)
 - ✅ Save read date, save last online (local only) (#31)
 - ✅ Include read dates / last online in export/import; apply Spy exceptions to them
@@ -58,3 +57,4 @@ Nothing has been tested on a device yet. All Ayuless features are off by default
 - ✅ Local Premium: whole-chat translation only, server-side limits stay (toggle) (#34)
 - ✅ Work in background: foreground keep-alive service with a silent notification (#34)
 - ✅ Delayed send: send as a short scheduled message so you never appear online (#33)
+- 🚧 Restricted saving in groups/channels ignored: save, copy, screenshots, forward as copy. Secret chats, private chats, auto-delete chats and self-destruct media stay protected.

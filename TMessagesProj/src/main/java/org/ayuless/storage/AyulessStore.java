@@ -187,6 +187,7 @@ public final class AyulessStore {
     }
 
     public void deleteDialog(long dialogId) {
+        org.ayuless.spy.SavedAttachments.clearDialog(account, dialogId);
         queue.postRunnable(() -> {
             try {
                 String[] args = {String.valueOf(dialogId)};
@@ -203,6 +204,7 @@ public final class AyulessStore {
     /** Remove all stored data and delete the database file (used on logout). */
     public void clearAll() {
         org.ayuless.spy.LastSeen.reset(account);
+        org.ayuless.spy.SavedAttachments.clear(account);
         queue.postRunnable(() -> {
             try {
                 if (helper != null) {

@@ -2231,7 +2231,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     }
 
     public int sendMessage(
-        ArrayList<MessageObject> messages,
+        ArrayList<MessageObject> messagesIn, // Ayuless: renamed, see copy fallback below
         final long peer,
         boolean forwardFromMyName,
         boolean hideCaption,
@@ -2244,7 +2244,13 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         long monoForumPeerId,
         MessageSuggestionParams suggestionParams
     ) {
-        if (messages == null || messages.isEmpty()) {
+        if (messagesIn == null || messagesIn.isEmpty()) {
+            return 0;
+        }
+        // Ayuless: messages from groups/channels with restricted saving are sent as copies.
+        final ArrayList<MessageObject> messages = new ArrayList<>(messagesIn);
+        org.ayuless.content.ProtectedContent.sendCopies(currentAccount, messages, peer, notify, scheduleDate, replyToTopMsg);
+        if (messages.isEmpty()) {
             return 0;
         }
         int sendResult = 0;
