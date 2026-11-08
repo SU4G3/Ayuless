@@ -19574,6 +19574,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     message.attachPath = "";
                 }
 
+                org.ayuless.edits.EditHistory.onServerEdit(currentAccount, message); // Ayuless: edit history
                 ImageLoader.saveMessageThumbs(message);
                 AndroidUtilities.runOnUIThread(() -> {
                     getSendMessagesHelper().onMessageEdited(message);

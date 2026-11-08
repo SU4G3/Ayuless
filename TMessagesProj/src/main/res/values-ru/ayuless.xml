@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later
+     Copyright (C) 2026 Ayuless contributors -->
+<resources>
+    <string name="AyulessSettings">Ayuless</string>
+    <string name="AyulessSettingsInfo">Режим призрака, сохранённые сообщения</string>
+    <string name="AyulessAccountInfo">Эти настройки действуют только для текущего аккаунта.</string>
+    <string name="AyulessGhostHeader">Режим призрака</string>
+    <string name="AyulessGhostEnabled">Включить режим призрака</string>
+    <string name="AyulessGhostHideOnline">Не отправлять статус «в сети»</string>
+    <string name="AyulessGhostHideRead">Не отправлять отметки о прочтении</string>
+    <string name="AyulessGhostHideTyping">Не показывать «печатает»</string>
+    <string name="AyulessGhostHideStoryViews">Не отмечать истории просмотренными</string>
+    <string name="AyulessGhostOfflineAfterSend">Уходить в офлайн после отправки</string>
+    <string name="AyulessGhostInfo">Другие не увидят, когда вы в сети, печатаете или читаете. Локально прочтение по-прежнему отмечается.</string>
+    <string name="AyulessMessagesHeader">Сохранение сообщений</string>
+    <string name="AyulessAntiDelete">Сохранять удалённые сообщения</string>
+    <string name="AyulessAntiDeleteInfo">Сообщения, удалённые собеседником, остаются в чате с пометкой. Ваши собственные удаления работают как обычно.</string>
+    <string name="AyulessEditHistory">Сохранять историю правок</string>
+    <string name="AyulessEditHistoryInfo">Прошлые версии изменённых сообщений доступны в меню сообщения. Секретные чаты и самоуничтожающиеся сообщения не сохраняются никогда.</string>
+    <string name="AyulessStorageHeader">Хранилище</string>
+    <string name="AyulessStorageUsed">Занято</string>
+    <string name="AyulessStorageLimit">Лимит размера</string>
+    <string name="AyulessStorageNoLimit">Без лимита</string>
+    <string name="AyulessStorageClear">Очистить сохранённые сообщения</string>
+    <string name="AyulessStorageClearConfirm">Удалить все сохранённые удалённые сообщения и историю правок для этого аккаунта? Это действие нельзя отменить.</string>
+    <string name="AyulessStorageCleared">Сохранённые сообщения удалены</string>
+    <string name="AyulessAboutHeader">О клиенте</string>
+    <string name="AyulessVersion">Версия</string>
+    <string name="AyulessSourceCode">Исходный код</string>
+    <string name="AyulessDisclaimer">Неофициальный клиент. Не связан с Telegram, AyuGram и Radolyn Labs.</string>
+</resources>

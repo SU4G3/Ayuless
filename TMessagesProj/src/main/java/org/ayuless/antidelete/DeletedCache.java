@@ -60,6 +60,13 @@ public final class DeletedCache {
         return s;
     }
 
+    /** Forget all cached ids for the account, e.g. after the saved data was cleared. */
+    public static void clear(int account) {
+        if (account >= 0 && account < maps.length) {
+            maps[account].clear();
+        }
+    }
+
     public static void mark(int account, long dialogId, int msgId) {
         ensureLoaded(account);
         set(account, dialogId).add(msgId);

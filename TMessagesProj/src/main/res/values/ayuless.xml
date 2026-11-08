@@ -4,4 +4,31 @@
 <resources>
     <string name="AyulessLauncherName" translatable="false">Ayuless</string>
     <string name="AyulessMapsUnavailable">Maps are currently unavailable in Ayuless.</string>
+    <string name="AyulessSettings">Ayuless</string>
+    <string name="AyulessSettingsInfo">Ghost mode, saved messages</string>
+    <string name="AyulessAccountInfo">These settings apply to the current account only.</string>
+    <string name="AyulessGhostHeader">Ghost mode</string>
+    <string name="AyulessGhostEnabled">Enable ghost mode</string>
+    <string name="AyulessGhostHideOnline">Don\'t send online status</string>
+    <string name="AyulessGhostHideRead">Don\'t send read receipts</string>
+    <string name="AyulessGhostHideTyping">Don\'t send typing status</string>
+    <string name="AyulessGhostHideStoryViews">Don\'t mark stories as viewed</string>
+    <string name="AyulessGhostOfflineAfterSend">Go offline after sending</string>
+    <string name="AyulessGhostInfo">Others won\'t see when you are online, typing or reading. Your own read state still updates locally.</string>
+    <string name="AyulessMessagesHeader">Saved messages</string>
+    <string name="AyulessAntiDelete">Keep deleted messages</string>
+    <string name="AyulessAntiDeleteInfo">Messages deleted by others stay in the chat, marked as deleted. Messages you delete yourself are removed as usual.</string>
+    <string name="AyulessEditHistory">Save edit history</string>
+    <string name="AyulessEditHistoryInfo">Previous versions of edited messages are available from the message menu. Secret chats and self-destructing messages are never saved.</string>
+    <string name="AyulessStorageHeader">Storage</string>
+    <string name="AyulessStorageUsed">Used</string>
+    <string name="AyulessStorageLimit">Size limit</string>
+    <string name="AyulessStorageNoLimit">No limit</string>
+    <string name="AyulessStorageClear">Clear saved messages</string>
+    <string name="AyulessStorageClearConfirm">Delete all saved deleted messages and edit history for this account? This cannot be undone.</string>
+    <string name="AyulessStorageCleared">Saved messages cleared</string>
+    <string name="AyulessAboutHeader">About</string>
+    <string name="AyulessVersion">Version</string>
+    <string name="AyulessSourceCode">Source code</string>
+    <string name="AyulessDisclaimer">Unofficial client. Not affiliated with Telegram, AyuGram or Radolyn Labs.</string>
 </resources>
