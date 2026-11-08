@@ -988,6 +988,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     }
 
     public void cleanup() {
+        org.ayuless.ghost.EncryptedDelayedSend.clear(currentAccount); // Ayuless: cancel local send timers
         delayedMessages.clear();
         unsentMessages.clear();
         sendingMessages.clear();
@@ -2231,12 +2232,12 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     }
 
     public int sendMessage(
-        ArrayList<MessageObject> messages,
+        ArrayList<MessageObject> messagesIn, // Ayuless: renamed, see copy fallback below
         final long peer,
         boolean forwardFromMyName,
         boolean hideCaption,
         boolean notify,
-        int scheduleDate,
+        int scheduleDateIn, // Ayuless: renamed, see delayed send below
         int scheduleRepeatPeriod,
         MessageObject replyToTopMsg,
         int video_timestamp,
@@ -2244,9 +2245,16 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         long monoForumPeerId,
         MessageSuggestionParams suggestionParams
     ) {
-        if (messages == null || messages.isEmpty()) {
+        if (messagesIn == null || messagesIn.isEmpty()) {
             return 0;
         }
+        // Ayuless: messages from groups/channels with restricted saving are sent as copies.
+        final ArrayList<MessageObject> messages = new ArrayList<>(messagesIn);
+        org.ayuless.content.ProtectedContent.sendCopies(currentAccount, messages, peer, notify, org.ayuless.ghost.DelayedSend.forwardScheduleDate(currentAccount, peer, scheduleDateIn, messages), replyToTopMsg);
+        if (messages.isEmpty()) {
+            return 0;
+        }
+        final int scheduleDate = org.ayuless.ghost.DelayedSend.forwardScheduleDate(currentAccount, peer, scheduleDateIn, messages); // Ayuless: delayed send
         int sendResult = 0;
         long myId = getUserConfig().getClientUserId();
         boolean isChannel = false;
@@ -5264,6 +5272,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 // newMsg.out = false;
                 newMsg.from_id = newMsg.peer_id;
             }
+            org.ayuless.ghost.EncryptedDelayedSend.prepare(currentAccount, newMsg, retryMessageObject != null); // Ayuless: persist secret-chat delay
             newMsg.send_state = MessageObject.MESSAGE_SEND_STATE_SENDING;
             newMsg.errorAllowedPriceStars = 0;
             newMsg.errorNewPriceStars = 0;
@@ -7616,6 +7625,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     }
 
     protected TLRPC.Message removeFromSendingMessages(int mid, boolean scheduled) {
+        org.ayuless.ghost.EncryptedDelayedSend.cancel(currentAccount, mid); // Ayuless: cancel local secret-chat hold
         TLRPC.Message message;
         if (mid > 0) {
             message = editingMessages.get(mid);

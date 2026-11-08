@@ -20,12 +20,11 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UniversalAdapter;
-import org.telegram.ui.Components.UniversalFragment;
 
 import java.util.ArrayList;
 
 /** Ayuless > Customization: how deleted messages look in chats. */
-public class AppearanceSettingsActivity extends UniversalFragment {
+public class AppearanceSettingsActivity extends AyulessSettingsFragment {
 
     private static final int ID_TRANSLUCENT = 1;
     private static final int ID_MARK_STYLE = 2;

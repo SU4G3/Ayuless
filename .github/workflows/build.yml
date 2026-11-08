@@ -4,8 +4,18 @@ name: Build
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+      - 'LICENSE*'
+      - '.github/ISSUE_TEMPLATE/**'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+      - 'LICENSE*'
+      - '.github/ISSUE_TEMPLATE/**'
   workflow_dispatch:
 
 permissions:
@@ -40,6 +50,11 @@ jobs:
       # Runner image ships the Android SDK; android-actions/setup-android@v3 fails on the removed 'tools' package.
       - name: Install SDK and NDK
         run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "platforms;android-36" "build-tools;36.0.0" "ndk;27.2.12479018" "cmake;3.22.1"
+
+      # Replace the committed prebuilt .a files with ones built from the pinned
+      # source submodules (cached by input hash). See Tools/native/.
+      - name: Native libraries from source
+        uses: ./.github/actions/native-prebuilts
 
       - uses: gradle/actions/setup-gradle@748248ddd2a24f49513d8f472f81c3a07d4d50e1 # v4.4.4
 

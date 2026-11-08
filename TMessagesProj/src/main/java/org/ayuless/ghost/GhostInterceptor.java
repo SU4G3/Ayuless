@@ -49,7 +49,8 @@ public final class GhostInterceptor {
             return false;
         }
         if (allowedOnce.remove(req)) {
-            return false;
+            // The setting may have changed while the explicit read was queued.
+            return GhostConfig.hideRead(account) && !GhostConfig.readOnAction(account);
         }
         if (org.ayuless.extras.SponsoredBlocker.shouldBlock(req)) {
             return true;
@@ -60,11 +61,18 @@ public final class GhostInterceptor {
         if (isSendRequest(req)) {
             DelayedSend.fixOnSend(account, req);
         }
-        if (!GhostConfig.isEnabled(account)) {
+        if (!GhostConfig.anyActive(account)) {
             return false;
         }
         if ((isSendRequest(req) || req instanceof TLRPC.TL_messages_sendReaction) && GhostConfig.readOnAction(account)) {
             readOnAction(account, peerOf(req));
+        }
+        if (GhostConfig.readOnAction(account)) {
+            if (req instanceof TLRPC.TL_messages_sendEncrypted) {
+                readOnEncryptedAction(account, ((TLRPC.TL_messages_sendEncrypted) req).peer);
+            } else if (req instanceof TLRPC.TL_messages_sendEncryptedFile) {
+                readOnEncryptedAction(account, ((TLRPC.TL_messages_sendEncryptedFile) req).peer);
+            }
         }
         if (req instanceof TL_account.updateStatus) {
             if (GhostConfig.hideOnline(account)) {
@@ -96,7 +104,10 @@ public final class GhostInterceptor {
                 || req instanceof TLRPC.TL_messages_readDiscussion
                 || req instanceof TLRPC.TL_messages_readMessageContents
                 || req instanceof TLRPC.TL_channels_readMessageContents
-                || req instanceof TLRPC.TL_messages_readEncryptedHistory;
+                || req instanceof TLRPC.TL_messages_readEncryptedHistory
+                || req instanceof TLRPC.TL_messages_readMentions
+                || req instanceof TLRPC.TL_messages_readReactions
+                || req instanceof TLRPC.TL_messages_readPollVotes;
     }
 
     private static boolean isSendRequest(TLObject req) {
@@ -143,6 +154,9 @@ public final class GhostInterceptor {
             return;
         }
         AndroidUtilities.runOnUIThread(() -> {
+            if (!GhostConfig.readOnAction(account)) {
+                return;
+            }
             MessagesController controller = MessagesController.getInstance(account);
             long dialogId = DialogObject.getPeerDialogId(peer);
             if (dialogId == 0 || DialogObject.isEncryptedDialog(dialogId)) {
@@ -164,6 +178,28 @@ public final class GhostInterceptor {
                 req.max_id = dialog.top_message;
                 read = req;
             }
+            allowedOnce.add(read);
+            ConnectionsManager.getInstance(account).sendRequest(read, null);
+        });
+    }
+
+    /** Secret-chat history receipts use dates; encrypted service packets must never trigger this. */
+    private static void readOnEncryptedAction(int account, TLRPC.TL_inputEncryptedChat peer) {
+        if (peer == null) {
+            return;
+        }
+        AndroidUtilities.runOnUIThread(() -> {
+            if (!GhostConfig.readOnAction(account)) {
+                return;
+            }
+            long dialogId = DialogObject.makeEncryptedDialogId(peer.chat_id);
+            TLRPC.Dialog dialog = MessagesController.getInstance(account).dialogs_dict.get(dialogId);
+            if (dialog == null || dialog.last_message_date <= 0) {
+                return;
+            }
+            TLRPC.TL_messages_readEncryptedHistory read = new TLRPC.TL_messages_readEncryptedHistory();
+            read.peer = peer;
+            read.max_date = dialog.last_message_date;
             allowedOnce.add(read);
             ConnectionsManager.getInstance(account).sendRequest(read, null);
         });

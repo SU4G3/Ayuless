@@ -18,6 +18,7 @@ import org.ayuless.antidelete.AntiDeleteConfig;
 import org.ayuless.antidelete.DeletedCache;
 import org.ayuless.edits.EditedCache;
 import org.ayuless.edits.EditsConfig;
+import org.ayuless.spy.SavedAttachments;
 import org.ayuless.spy.SpyExtrasConfig;
 import org.ayuless.spy.SpyExceptions;
 import org.ayuless.storage.AyulessStore;
@@ -28,7 +29,6 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UniversalAdapter;
-import org.telegram.ui.Components.UniversalFragment;
 import org.telegram.ui.UsersSelectActivity;
 
 import java.text.SimpleDateFormat;
@@ -37,7 +37,7 @@ import java.util.Date;
 import java.util.Locale;
 
 /** Ayuless > Spy: saving deleted messages and edit history, and the saved data itself. */
-public class SpySettingsActivity extends UniversalFragment {
+public class SpySettingsActivity extends AyulessSettingsFragment {
 
     private static final long MB = 1024L * 1024;
     private static final long[] LIMITS = {50 * MB, 100 * MB, 250 * MB, 500 * MB, 1024 * MB, 0};
@@ -55,8 +55,11 @@ public class SpySettingsActivity extends UniversalFragment {
     private static final int ID_EXPORT = 20;
     private static final int ID_IMPORT = 21;
     private static final int ID_CLEAR = 22;
+    private static final int ID_SAVE_ATTACHMENTS = 40;
+    private static final int ID_ATTACHMENTS_FOLDER = 41;
 
     private long usedBytes = -1;
+    private long attachmentsBytes = -1;
 
     @Override
     public boolean onFragmentCreate() {
@@ -81,6 +84,29 @@ public class SpySettingsActivity extends UniversalFragment {
         items.add(UItem.asButton(ID_EXCEPTIONS, R.drawable.ayuless_solar_msg_block, getString(R.string.AyulessSpyExceptions),
                 exceptions == 0 ? getString(R.string.AyulessSpyExceptionsNone) : String.valueOf(exceptions)));
         items.add(UItem.asShadow(getString(R.string.AyulessSpyExceptionsInfo)));
+
+        items.add(UItem.asHeader(getString(R.string.AyulessAttachmentsHeader)));
+        items.add(UItem.asCheck(ID_SAVE_ATTACHMENTS, getString(R.string.AyulessSaveAttachments)).setChecked(SavedAttachments.isEnabled(account)));
+        items.add(UItem.asShadow(getString(R.string.AyulessSaveAttachmentsInfo)));
+        items.add(UItem.asButton(ID_ATTACHMENTS_FOLDER, R.drawable.ayuless_solar_msg_download, getString(R.string.AyulessAttachmentsFolder), "ayuless/attachments"));
+        items.add(UItem.asHeader(getString(R.string.AyulessAttachmentsLimit)));
+        final long[] limits = SavedAttachments.LIMITS;
+        final String[] labels = new String[limits.length];
+        int chosen = 1;
+        long current = SavedAttachments.getLimitBytes();
+        for (int i = 0; i < limits.length; i++) {
+            labels[i] = limits[i] <= 0 ? "∞" : AndroidUtilities.formatFileSize(limits[i], true, false);
+            if (limits[i] == current) {
+                chosen = i;
+            }
+        }
+        items.add(UItem.asSlideView(labels, chosen, which -> {
+            SavedAttachments.setLimitBytes(limits[which]);
+            AndroidUtilities.runOnUIThread(this::refreshSize, 300);
+        }));
+        items.add(UItem.asShadow(formatString(R.string.AyulessAttachmentsUsage,
+                attachmentsBytes < 0 ? "…" : AndroidUtilities.formatFileSize(attachmentsBytes),
+                current <= 0 ? "∞" : AndroidUtilities.formatFileSize(current))));
 
         items.add(UItem.asHeader(getString(R.string.AyulessSpyAdditional)));
         items.add(UItem.asCheck(ID_SAVE_READ_DATE, getString(R.string.AyulessSaveReadDate)).setChecked(SpyExtrasConfig.get(account, SpyExtrasConfig.KEY_SAVE_READ_DATE)));
@@ -123,6 +149,14 @@ public class SpySettingsActivity extends UniversalFragment {
             case ID_EXCEPTIONS:
                 selectExceptions();
                 break;
+            case ID_SAVE_ATTACHMENTS:
+                SavedAttachments.setEnabled(account, !SavedAttachments.isEnabled(account));
+                update();
+                break;
+            case ID_ATTACHMENTS_FOLDER:
+                BulletinFactory.of(this).createSimpleBulletin(R.raw.chats_infotip,
+                        SavedAttachments.accountDir(account).getAbsolutePath()).show();
+                break;
             case ID_STORAGE_LIMIT:
                 showLimitPicker();
                 break;
@@ -164,6 +198,10 @@ public class SpySettingsActivity extends UniversalFragment {
     private void refreshSize() {
         AyulessStore.getInstance(currentAccount).sizeBytes(size -> {
             usedBytes = size == null ? 0 : size;
+            update();
+        });
+        SavedAttachments.usedBytes(bytes -> {
+            attachmentsBytes = bytes;
             update();
         });
     }

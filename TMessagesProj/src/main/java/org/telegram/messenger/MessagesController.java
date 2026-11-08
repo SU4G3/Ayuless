@@ -6678,10 +6678,10 @@ public class MessagesController extends BaseController implements NotificationCe
         if (chat.migrated_to != null) {
             TLRPC.Chat migratedTo = getChat(chat.migrated_to.channel_id);
             if (migratedTo != null) {
-                return migratedTo.noforwards;
+                return org.ayuless.content.ProtectedContent.chatNoForwards(this, migratedTo, migratedTo.noforwards); // Ayuless
             }
         }
-        return chat.noforwards;
+        return org.ayuless.content.ProtectedContent.chatNoForwards(this, chat, chat.noforwards); // Ayuless
     }
 
     public boolean isChatNoForwards(long chatId) {
@@ -19243,10 +19243,12 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                     if (Math.abs(getConnectionsManager().getCurrentTime() - date) < 30) {
                         onlinePrivacy.put(encryptedChat.user_id, date);
+                        org.ayuless.spy.LastSeen.onEncryptedTyping(currentAccount, update.chat_id, encryptedChat.user_id, date); // Ayuless: last online
                     }
                 }
             } else if (baseUpdate instanceof TL_update.TL_updateEncryptedMessagesRead) {
                 TL_update.TL_updateEncryptedMessagesRead update = (TL_update.TL_updateEncryptedMessagesRead) baseUpdate;
+                org.ayuless.spy.ReadDates.onEncryptedReadOutbox(currentAccount, update.chat_id, update.max_date, update.date, getConnectionsManager().getCurrentTime()); // Ayuless: save read date
                 if (markAsReadEncrypted == null) {
                     markAsReadEncrypted = new SparseIntArray();
                 }

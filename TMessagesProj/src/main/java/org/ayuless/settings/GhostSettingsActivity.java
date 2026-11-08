@@ -7,9 +7,11 @@ package org.ayuless.settings;
 
 import static org.telegram.messenger.LocaleController.getString;
 
+import android.view.HapticFeedbackConstants;
 import android.view.View;
 
 import org.ayuless.ghost.GhostConfig;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
@@ -17,12 +19,11 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UniversalAdapter;
-import org.telegram.ui.Components.UniversalFragment;
 
 import java.util.ArrayList;
 
 /** Ayuless > Ghost mode. Edits either the shared profile or one account's own profile. */
-public class GhostSettingsActivity extends UniversalFragment {
+public class GhostSettingsActivity extends AyulessSettingsFragment {
 
     private static final int ID_PROFILE = 1;
     private static final int ID_USE_OWN = 2;
@@ -30,6 +31,7 @@ public class GhostSettingsActivity extends UniversalFragment {
     private static final int ID_OPTION_BASE = 10; // + index in GhostConfig.GHOST_KEYS
     private static final int ID_READ_ON_ACTION = 20;
     private static final int ID_SEND_SILENTLY = 21;
+    private static final int ID_STORY_PROMPT = 23;
     private static final int ID_DELAYED_SEND = 22;
 
     private static final int[] OPTION_TITLES = {
@@ -89,13 +91,18 @@ public class GhostSettingsActivity extends UniversalFragment {
                 }));
         if (expanded) {
             for (int i = 0; i < GhostConfig.GHOST_KEYS.length; i++) {
-                items.add(UItem.asRoundCheckbox(ID_OPTION_BASE + i, getString(OPTION_TITLES[i]))
-                        .setChecked(GhostConfig.getProfile(profile, GhostConfig.GHOST_KEYS[i]))
+                final String key = GhostConfig.GHOST_KEYS[i];
+                CharSequence title = getString(OPTION_TITLES[i]);
+                if (GhostConfig.isLocked(profile, key)) {
+                    title = LocaleController.formatString(R.string.AyulessGhostLocked, title);
+                }
+                items.add(UItem.asRoundCheckbox(ID_OPTION_BASE + i, title)
+                        .setChecked(GhostConfig.getProfile(profile, key))
                         .setEnabled(inUse)
                         .setPad(1));
             }
         }
-        items.add(UItem.asShadow(getString(R.string.AyulessGhostInfo)));
+        items.add(UItem.asShadow(getString(R.string.AyulessGhostInfo) + "\n\n" + getString(R.string.AyulessGhostLockHint)));
 
         final boolean hideRead = GhostConfig.getProfile(profile, GhostConfig.KEY_HIDE_READ);
         items.add(UItem.asCheck(ID_READ_ON_ACTION, getString(R.string.AyulessGhostReadOnAction))
@@ -106,6 +113,10 @@ public class GhostSettingsActivity extends UniversalFragment {
                 .setChecked(GhostConfig.getProfile(profile, GhostConfig.KEY_SEND_SILENTLY))
                 .setEnabled(inUse));
         items.add(UItem.asShadow(getString(R.string.AyulessGhostSendSilentlyInfo)));
+        items.add(UItem.asCheck(ID_STORY_PROMPT, getString(R.string.AyulessGhostStoryPrompt))
+                .setChecked(GhostConfig.getProfile(profile, GhostConfig.KEY_STORY_PROMPT, true))
+                .setEnabled(inUse));
+        items.add(UItem.asShadow(getString(R.string.AyulessGhostStoryPromptInfo)));
         items.add(UItem.asCheck(ID_DELAYED_SEND, getString(R.string.AyulessGhostDelayedSend))
                 .setChecked(GhostConfig.getProfile(profile, GhostConfig.KEY_DELAYED_SEND))
                 .setEnabled(inUse));
@@ -141,6 +152,11 @@ public class GhostSettingsActivity extends UniversalFragment {
         } else if (item.id == ID_DELAYED_SEND) {
             key = GhostConfig.KEY_DELAYED_SEND;
         }
+        if (item.id == ID_STORY_PROMPT) {
+            GhostConfig.setProfile(profile, GhostConfig.KEY_STORY_PROMPT, !GhostConfig.getProfile(profile, GhostConfig.KEY_STORY_PROMPT, true));
+            update();
+            return;
+        }
         if (key != null) {
             GhostConfig.setProfile(profile, key, !GhostConfig.getProfile(profile, key));
             update();
@@ -149,6 +165,16 @@ public class GhostSettingsActivity extends UniversalFragment {
 
     @Override
     protected boolean onLongClick(UItem item, View view, int position, float x, float y) {
+        if (item.id >= ID_OPTION_BASE && item.id < ID_OPTION_BASE + GhostConfig.GHOST_KEYS.length && profileInUse()) {
+            final String key = GhostConfig.GHOST_KEYS[item.id - ID_OPTION_BASE];
+            GhostConfig.setLocked(profile, key, !GhostConfig.isLocked(profile, key));
+            try {
+                view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+            } catch (Exception ignore) {
+            }
+            update();
+            return true;
+        }
         return false;
     }
 

@@ -11,22 +11,34 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessageChatArguments;
 import org.telegram.messenger.SendMessagesHelper;
-import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
+
+import java.util.ArrayList;
 
 /**
  * Delayed send: a message is sent as a scheduled message a few seconds ahead instead of
  * immediately. Sending a scheduled message does not mark the account online, and the
  * server posts it on its own when the time comes.
  *
- * Only regular sends via {@link SendMessagesHelper#sendMessage(SendMessagesHelper.SendMessageParams)}
- * are delayed. Forwards, retries, quick replies, story replies, secret chats and Saved
- * Messages are sent as usual. Works without the ghost master switch.
+ * Delayed: regular sends, forwards, story replies, Saved Messages, and retries of messages
+ * that were already sent as scheduled (they keep their date, moved a few seconds ahead if
+ * it passed). Not delayed:
+ * <ul>
+ * <li>retries of messages that failed as normal sends: the failed message already lives in
+ * the chat history, turning it into a scheduled one would leave a stuck local copy;</li>
+ * <li>quick reply shortcuts sent into a chat ({@code messages.sendQuickReplyMessages} has
+ * no {@code schedule_date});</li>
+ * <li>editing quick reply and welcome message templates: these are not sends to a chat;</li>
+ * <li>stories.</li>
+ * </ul>
+ * Secret chats use a client-side hold instead (see EncryptedDelayedSend).
+ * Works without the ghost master switch.
  */
 public final class DelayedSend {
 
@@ -59,9 +71,7 @@ public final class DelayedSend {
         long dialogId = params.peer;
         if (dialogId == 0
                 || DialogObject.isEncryptedDialog(dialogId)
-                || dialogId == UserConfig.getInstance(account).getClientUserId()
                 || params.retryMessageObject != null
-                || params.replyToStoryItem != null
                 || params.sendingStory != null
                 || params.quick_reply_shortcut != null || params.quick_reply_shortcut_id != 0
                 || args.quickReplyShortcut != null || args.quickReplyShortcutId != 0
@@ -73,7 +83,29 @@ public final class DelayedSend {
         return compute(account, dialogId, media);
     }
 
-    private static synchronized int compute(int account, long dialogId, boolean media) {
+    /** Schedule date for forwarding messages to {@code dialogId}; unchanged when delayed send does not apply. */
+    public static int forwardScheduleDate(int account, long dialogId, int scheduleDate, ArrayList<MessageObject> messages) {
+        if (scheduleDate != 0 || dialogId == 0 || !GhostConfig.delayedSend(account) || DialogObject.isEncryptedDialog(dialogId)) {
+            return scheduleDate;
+        }
+        boolean media = false;
+        if (messages != null) {
+            for (int i = 0; i < messages.size(); i++) {
+                MessageObject m = messages.get(i);
+                if (m != null && (m.getQuickReplyName() != null || m.getQuickReplyId() != 0)) {
+                    return scheduleDate; // quick reply templates are not sends to a chat
+                }
+                if (m != null && m.messageOwner != null && m.messageOwner.media != null
+                        && !(m.messageOwner.media instanceof TLRPC.TL_messageMediaEmpty)
+                        && !(m.messageOwner.media instanceof TLRPC.TL_messageMediaWebPage)) {
+                    media = true;
+                }
+            }
+        }
+        return compute(account, dialogId, media);
+    }
+
+    static synchronized int compute(int account, long dialogId, boolean media) {
         int now = ConnectionsManager.getInstance(account).getCurrentTime();
         if (account == lastAccount && dialogId == lastDialog && now - lastComputedAt <= GROUP_WINDOW && lastDate > now) {
             return lastDate;
@@ -103,6 +135,9 @@ public final class DelayedSend {
             if (r.schedule_date != 0 && r.schedule_date < min) r.schedule_date = min;
         } else if (req instanceof TLRPC.TL_messages_sendMultiMedia) {
             TLRPC.TL_messages_sendMultiMedia r = (TLRPC.TL_messages_sendMultiMedia) req;
+            if (r.schedule_date != 0 && r.schedule_date < min) r.schedule_date = min;
+        } else if (req instanceof TLRPC.TL_messages_forwardMessages) {
+            TLRPC.TL_messages_forwardMessages r = (TLRPC.TL_messages_forwardMessages) req;
             if (r.schedule_date != 0 && r.schedule_date < min) r.schedule_date = min;
         }
     }

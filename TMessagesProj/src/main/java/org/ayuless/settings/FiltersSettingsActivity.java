@@ -29,13 +29,12 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UniversalAdapter;
-import org.telegram.ui.Components.UniversalFragment;
 import org.telegram.ui.UsersSelectActivity;
 
 import java.util.ArrayList;
 
 /** Ayuless > Filters: keyword / regex filters, shadow ban, hiding blocked users. */
-public class FiltersSettingsActivity extends UniversalFragment {
+public class FiltersSettingsActivity extends AyulessSettingsFragment {
 
     private static final int ID_ENABLED = 1;
     private static final int ID_PRIVATE = 2;
