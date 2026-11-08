@@ -270,7 +270,16 @@ public class ConnectionsManager extends BaseController {
         if (getUserConfig().getCurrentUser() != null) {
             userPremium = getUserConfig().getCurrentUser().premium;
         }
-        init(SharedConfig.buildVersion(), TLRPC.LAYER, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), userPremium, enablePushConnection);
+
+        // Login Spoof (1v1 AyuGram): when not logged in, pretend to be different official client
+        long clientUserId = getUserConfig().getClientUserId();
+        boolean isLoggedIn = clientUserId != 0;
+        int apiId = isLoggedIn ? BuildVars.APP_ID : BuildVars.LOGIN_SPOOF_API_ID;
+        String appVer = isLoggedIn ? appVersion : BuildVars.LOGIN_SPOOF_APP_VERSION;
+        String packageId = isLoggedIn ? "org.telegram.messenger" : BuildVars.LOGIN_SPOOF_PACKAGE;
+        String installer = isLoggedIn ? "com.android.vending" : BuildVars.LOGIN_SPOOF_INSTALLER;
+
+        init(SharedConfig.buildVersion(), TLRPC.LAYER, apiId, deviceModel, systemVersion, appVer, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, clientUserId, userPremium, enablePushConnection, installer, packageId);
     }
 
     private String getRegId() {
@@ -671,7 +680,7 @@ public class ConnectionsManager extends BaseController {
         native_setPushConnectionEnabled(currentAccount, value);
     }
 
-    public void init(int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, String regId, String cFingerprint, int timezoneOffset, long userId, boolean userPremium, boolean enablePushConnection) {
+    public void init(int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, String regId, String cFingerprint, int timezoneOffset, long userId, boolean userPremium, boolean enablePushConnection, String installer, String packageId) {
         final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
         final ProxySettings proxySettings = ProxySettings.fromSharedPreferences(preferences);
         if (preferences.getBoolean("proxy_enabled", false) && proxySettings.isValid()) {
@@ -686,8 +695,7 @@ public class ConnectionsManager extends BaseController {
         }
         // Use official Telegram client identity to avoid API_ID_PUBLISHED_FLOOD
         // Server checks package_name, installer, and certificate fingerprint
-        String installer = "com.android.vending"; // Official Play Store installer
-        String packageId = "org.telegram.messenger"; // Official Telegram package name
+        // installer and packageId are passed from caller (login spoof support)
 
         native_init(currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, regId, cFingerprint, installer, packageId, timezoneOffset, userId, userPremium, enablePushConnection, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType(), SharedConfig.measureDevicePerformanceClass());
         checkConnection();
