@@ -271,15 +271,13 @@ public class ConnectionsManager extends BaseController {
             userPremium = getUserConfig().getCurrentUser().premium;
         }
 
-        // Login Spoof (1v1 AyuGram): when not logged in, pretend to be different official client
+        // Login Spoof: when not logged in, use web client identity with same api_id=4
         long clientUserId = getUserConfig().getClientUserId();
         boolean isLoggedIn = clientUserId != 0;
-        int apiId = isLoggedIn ? BuildVars.APP_ID : BuildVars.LOGIN_SPOOF_API_ID;
+        int apiId = BuildVars.APP_ID; // always 4
         String appVer = isLoggedIn ? appVersion : BuildVars.LOGIN_SPOOF_APP_VERSION;
         String packageId = isLoggedIn ? "org.telegram.messenger" : BuildVars.LOGIN_SPOOF_PACKAGE;
         String installer = isLoggedIn ? "com.android.vending" : BuildVars.LOGIN_SPOOF_INSTALLER;
-
-        FileLog.d("LoginSpoof: account=" + currentAccount + " clientUserId=" + clientUserId + " isLoggedIn=" + isLoggedIn + " apiId=" + apiId + " packageId=" + packageId + " installer=" + installer);
 
         init(SharedConfig.buildVersion(), TLRPC.LAYER, apiId, deviceModel, systemVersion, appVer, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, clientUserId, userPremium, enablePushConnection, installer, packageId);
     }
