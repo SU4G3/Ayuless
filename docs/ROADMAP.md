@@ -15,7 +15,7 @@ Nothing has been tested on a device yet. All Ayuless features are off by default
 - ✅ New app id, name and launcher icon (#15)
 - ✅ Maps via MapLibre (#17)
 - 🚧 Push via UnifiedPush (#3)
-- 🚧 Rebuild all native libs from source in CI, drop prebuilt `.a` (#5)
+- 🚧 Rebuild all native libs from source in CI, drop prebuilt `.a` (#5). CI builds them from source and links the APK against them, see [NATIVE.md](NATIVE.md) (#26); deleting the committed `.a` files is pending.
 - ⏳ `./gradlew assembleAfatRelease` from a clean clone with no proprietary blobs
 
 ## Step 2: Ghost mode ✅ (#16, #23)

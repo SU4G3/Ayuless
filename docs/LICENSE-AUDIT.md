@@ -38,8 +38,8 @@ grep -rl "Apache License" $I . | wc -l
 
 These are not license-compatible with a fully free build and are tracked in the roadmap (step 1):
 
-- `TMessagesProj/jni/prebuild/lib/**/*.a`: 64 prebuilt static libs (204 MB). Must be rebuilt from source with the scripts in `TMessagesProj/jni/prebuild/`.
-- `TMessagesProj/libs/libgsaverification-client.aar`: closed Google binary.
+- `TMessagesProj/jni/prebuild/lib/**/*.a`: 64 prebuilt static libs (204 MB). CI now rebuilds all of them from the pinned source submodules and links the APK against those ([NATIVE.md](NATIVE.md)); the committed copies are only removed once that build has proven stable.
+- ~~`TMessagesProj/libs/libgsaverification-client.aar`~~: closed Google binary, removed in #14 (`Tools/check_degoogle.py` fails the build if it comes back).
 - Gradle deps: `com.google.android.gms:*`, `com.google.firebase:*`, `com.google.mlkit:*`, `com.google.android.play:integrity`, `com.android.billingclient:billing`, `androidx.credentials:credentials-play-services-auth`.
 
 ## New code
