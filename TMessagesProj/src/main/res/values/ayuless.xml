@@ -42,7 +42,7 @@
     <string name="AyulessGhostUseOwn">Use own settings for this account</string>
     <string name="AyulessGhostUseOwnInfo">When off, this account follows the settings for all accounts.</string>
     <string name="AyulessGhostReadOnAction">Read on actions</string>
-    <string name="AyulessGhostReadOnActionInfo">Mark a chat as read when you send a message or a reaction there. Requires \u00ABDon\'t send read receipts\u00BB.</string>
+    <string name="AyulessGhostReadOnActionInfo">Mark a chat as read when you send a message or a reaction there, including in secret chats. Requires \u00ABDon\'t send read receipts\u00BB. When off, sending does not allow read receipts.</string>
     <string name="AyulessGhostSendSilently">Send silently</string>
     <string name="AyulessGhostSendSilentlyInfo">Send all messages without notification sound. Works even when ghost mode is off.</string>
     <string name="AyulessGhostDelayedSend">Delayed send</string>
@@ -83,7 +83,7 @@
     <string name="AyulessColorOrange">Orange</string>
     <string name="AyulessFiltersTitle">Message filters</string>
     <string name="AyulessFiltersEnable">Enable filters</string>
-    <string name="AyulessFiltersInfo">Filters hide messages by keywords or regular expressions, hide users with a shadow ban and hide messages from blocked users. Messages are only hidden, not deleted. Your own messages and secret chats are never filtered.</string>
+    <string name="AyulessFiltersInfo">Filters hide messages by keywords or regular expressions, hide users with a shadow ban and hide messages from blocked users. Messages are only hidden, not deleted. Your own messages are never filtered. Secret chats count as private chats.</string>
     <string name="AyulessFiltersMain">Main</string>
     <string name="AyulessFiltersPrivate">Apply filters in private chats</string>
     <string name="AyulessFiltersHideBlocked">Hide messages from blocked users</string>
