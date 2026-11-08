@@ -43,6 +43,9 @@
     <string name="AyulessGhostReadOnActionInfo">Mark a chat as read when you send a message or a reaction there. Requires \u00ABDon\'t send read receipts\u00BB.</string>
     <string name="AyulessGhostSendSilently">Send silently</string>
     <string name="AyulessGhostSendSilentlyInfo">Send all messages without notification sound. Works even when ghost mode is off.</string>
+    <string name="AyulessGhostDelayedSend">Delayed send</string>
+    <string name="AyulessGhostDelayedSendInfo">Messages are sent as scheduled about 12 seconds later (20 seconds with media), so sending does not show you online. They appear in the chat when the server posts them. Forwards, secret chats and Saved Messages are not delayed. Works even when ghost mode is off. Not recommended on a slow connection.</string>
+    <string name="AyulessGhostDelayedSendHint">Delayed send is on: the message will be posted in a few seconds.</string>
     <string name="AyulessSpyHeader">Spy mode</string>
     <string name="AyulessStorageLimitInfo">When the limit is reached, the oldest saved records are removed.</string>
     <string name="AyulessDataHeader">Data</string>
@@ -100,4 +103,7 @@
     <string name="AyulessGhostTurnedOn">Ghost mode on</string>
     <string name="AyulessGhostTurnedOff">Ghost mode off</string>
     <string name="AyulessGhostThisAccount">This account</string>
+    <string name="AyulessSpyExceptions">Manage exceptions</string>
+    <string name="AyulessSpyExceptionsNone">None</string>
+    <string name="AyulessSpyExceptionsInfo">Deleted messages and edit history are not saved for the chats and users you pick here.</string>
 </resources>
