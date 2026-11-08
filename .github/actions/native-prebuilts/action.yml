@@ -1,0 +1,41 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: Native prebuilts from source
+description: >
+  Build TMessagesProj/jni/prebuild/lib/<abi>/*.a and the generated headers from
+  the pinned source submodules (Tools/native/build-prebuilts.sh), with a cache
+  keyed on every build input. Overwrites the committed archives in the checkout.
+outputs:
+  cache-hit:
+    description: Whether the archives came from the cache
+    value: ${{ steps.cache.outputs.cache-hit }}
+runs:
+  using: composite
+  steps:
+    - name: Compute native cache key
+      id: key
+      shell: bash
+      run: echo "hash=$(Tools/native/build-prebuilts.sh --print-key | sha256sum | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+
+    - name: Restore native prebuilts
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          TMessagesProj/jni/prebuild/lib
+          TMessagesProj/jni/prebuild/include
+        key: native-prebuilts-${{ runner.os }}-${{ steps.key.outputs.hash }}
+
+    - name: Install native build tools
+      if: steps.cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        sudo apt-get update -q
+        sudo apt-get install -y -q --no-install-recommends nasm meson ninja-build gperf pkg-config patch
+
+    - name: Build native prebuilts from source
+      if: steps.cache.outputs.cache-hit != 'true'
+      shell: bash
+      env:
+        ANDROID_NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/27.2.12479018
+        ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
+      run: Tools/native/build-prebuilts.sh

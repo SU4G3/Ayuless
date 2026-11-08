@@ -9,7 +9,7 @@ Work goes in this order. Each step is one or more PRs, with a manual test checkl
 - Load `APP_ID` / `APP_HASH` from the `API_KEYS` file via `BuildConfig`, not hardcoded in `BuildVars`.
 - Remove Play Services, Firebase, ML Kit, Play Integrity, Billing, SafetyNet, `libgsaverification-client.aar`.
 - Push via UnifiedPush; maps via MapLibre.
-- Rebuild all native libs from source in CI (no prebuilt `.a`).
+- Rebuild all native libs from source in CI (no prebuilt `.a`). Source build wired into CI, see [NATIVE.md](NATIVE.md); deleting the committed `.a` files is pending.
 - New app id, name and adaptive icon from `branding/`.
 - `./gradlew assembleAfatRelease` works from a clean clone.
 
