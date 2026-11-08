@@ -53,7 +53,7 @@
     <string name="AyulessDataHeader">Data</string>
     <string name="AyulessExport">Export database</string>
     <string name="AyulessImport">Import database</string>
-    <string name="AyulessDataInfo">Spy settings and saved data are per account. Import adds records from an exported file to the current account and keeps existing ones. Secret chats are skipped.</string>
+    <string name="AyulessDataInfo">Spy settings and saved data are per account. Import adds records from an exported file to the current account and keeps existing ones. Secret chats are skipped, except read dates.</string>
     <string name="AyulessExportDone">Database exported</string>
     <string name="AyulessExportFailed">Export failed</string>
     <string name="AyulessImportDone">Imported records: %1$d</string>

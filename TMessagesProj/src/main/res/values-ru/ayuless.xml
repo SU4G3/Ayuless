@@ -51,7 +51,7 @@
     <string name="AyulessDataHeader">Данные</string>
     <string name="AyulessExport">Экспорт базы данных</string>
     <string name="AyulessImport">Импорт базы данных</string>
-    <string name="AyulessDataInfo">Настройки шпиона и сохранённые данные свои у каждого аккаунта. Импорт добавляет записи из экспортированного файла в текущий аккаунт, существующие записи сохраняются. Секретные чаты пропускаются.</string>
+    <string name="AyulessDataInfo">Настройки шпиона и сохранённые данные свои у каждого аккаунта. Импорт добавляет записи из экспортированного файла в текущий аккаунт, существующие записи сохраняются. Секретные чаты пропускаются, кроме дат прочтения.</string>
     <string name="AyulessExportDone">База данных экспортирована</string>
     <string name="AyulessExportFailed">Не удалось экспортировать</string>
     <string name="AyulessImportDone">Импортировано записей: %1$d</string>

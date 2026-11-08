@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>Recorded from exact statuses (online / offline with a time) and from live activity the
  * client already treats as "online" for users with a hidden last seen: incoming messages,
  * typing and reading our messages. Shown instead of "last seen recently / within a week /
- * within a month" when the user's real time is hidden. Secret-chat activity is not recorded.
+ * within a month" when the user's real time is hidden. Secret-chat typing counts too.
  */
 public final class LastSeen {
 
