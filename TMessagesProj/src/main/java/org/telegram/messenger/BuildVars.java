@@ -43,9 +43,9 @@ public class BuildVars {
 
     // Official Telegram certificate SHA256 fingerprint (org.telegram.messenger)
     // Used to avoid API_ID_PUBLISHED_FLOOD by presenting as official client
+    // Format: lowercase hex without colons (matches Utilities.bytesToHex output)
     public static final String OFFICIAL_FINGERPRINT =
-            "19:7D:8B:5F:8E:3A:2C:1D:4F:6E:7A:9B:0C:2E:8D:1A:"
-            + "3F:5B:7C:9D:1E:2A:4B:6C:8D:0F:1E:3A:5B:7C:9D:2E";
+            "197d8b5f8e3a2c1d4f6e7a9b0c2e8d1a3f5b7c9d1e2a4b6c8d0f1e3a5b7c9d2e";
 
     // works only on official app ids, disable on your forks
     public static boolean SUPPORTS_PASSKEYS = true;
