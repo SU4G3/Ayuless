@@ -279,6 +279,8 @@ public class ConnectionsManager extends BaseController {
         String packageId = isLoggedIn ? "org.telegram.messenger" : BuildVars.LOGIN_SPOOF_PACKAGE;
         String installer = isLoggedIn ? "com.android.vending" : BuildVars.LOGIN_SPOOF_INSTALLER;
 
+        FileLog.d("LoginSpoof: account=" + currentAccount + " clientUserId=" + clientUserId + " isLoggedIn=" + isLoggedIn + " apiId=" + apiId + " packageId=" + packageId + " installer=" + installer);
+
         init(SharedConfig.buildVersion(), TLRPC.LAYER, apiId, deviceModel, systemVersion, appVer, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, clientUserId, userPremium, enablePushConnection, installer, packageId);
     }
 
