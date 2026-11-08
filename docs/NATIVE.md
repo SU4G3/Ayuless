@@ -44,7 +44,7 @@ source submodules, installs the Rust toolchains (wallet-engine's pinned 1.96.1 a
 - The **Native libraries** workflow (manual, or on PRs touching native inputs)
   builds them, runs `compare-prebuilts.sh` and uploads the archives as an artifact.
 
-First CI run (all four ABIs): 35 of 64 archives are byte-identical to the
+CI build (all four ABIs): 34 of 64 archives are byte-identical to the
 committed ones (BoringSSL, libvpx, opus, WAMR, tdlib, swscale, most openh264).
 The rest differ in bytes but export the same global symbols; for the Rust
 wallet-engine only the per-build hash suffix of mangled names differs, which
