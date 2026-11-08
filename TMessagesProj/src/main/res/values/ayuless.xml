@@ -94,4 +94,10 @@
     <string name="AyulessShadowBanInfo">Messages from these users are hidden in all chats. They are not notified.</string>
     <string name="AyulessShadowBanRemove">Remove</string>
     <string name="AyulessShadowBanRemoveConfirm">Show messages from this user again?</string>
+    <string name="AyulessGhostStoryPrompt">Offer ghost mode for stories</string>
+    <string name="AyulessGhostStoryPromptInfo">Before opening stories, asks whether to view them without being counted as a viewer. Not shown while "Don\'t mark stories as viewed" is on.</string>
+    <string name="AyulessStoryPromptTitle">View in ghost mode?</string>
+    <string name="AyulessStoryPromptText">The author will not see you in the viewers list of these stories.</string>
+    <string name="AyulessStoryPromptGhost">Ghost mode</string>
+    <string name="AyulessStoryPromptNormal">Open normally</string>
 </resources>

@@ -33,6 +33,8 @@ public final class GhostConfig {
     public static final String KEY_OFFLINE_AFTER_SEND = "offlineAfterSend";
     public static final String KEY_READ_ON_ACTION = "readOnAction";
     public static final String KEY_SEND_SILENTLY = "sendSilently";
+    /** Ask before opening stories whether to view them in ghost mode. On by default. */
+    public static final String KEY_STORY_PROMPT = "storyPrompt";
     /** Per-account flag: use the account's own profile instead of the shared one. */
     public static final String KEY_OVERRIDE = "override";
 
@@ -81,6 +83,10 @@ public final class GhostConfig {
         return ready() && profilePrefs(profile).getBoolean(key, false);
     }
 
+    public static boolean getProfile(int profile, String key, boolean def) {
+        return ready() ? profilePrefs(profile).getBoolean(key, def) : def;
+    }
+
     public static void setProfile(int profile, String key, boolean value) {
         profilePrefs(profile).edit().putBoolean(key, value).apply();
     }
@@ -122,8 +128,19 @@ public final class GhostConfig {
         return getGhost(account, KEY_HIDE_TYPING);
     }
 
+    /** Story views are hidden by the settings or by ghost mode chosen in the story prompt. */
     public static boolean hideStoryViews(int account) {
+        return hideStoryViewsStored(account) || StoryGhostPrompt.sessionActive(account);
+    }
+
+    /** Story views are hidden by the stored settings alone. */
+    public static boolean hideStoryViewsStored(int account) {
         return getGhost(account, KEY_HIDE_STORY_VIEWS);
+    }
+
+    /** Whether to offer ghost mode before opening stories. Independent of the master switch. */
+    public static boolean storyPrompt(int account) {
+        return getProfile(activeProfile(account), KEY_STORY_PROMPT, true);
     }
 
     public static boolean offlineAfterSend(int account) {

@@ -92,4 +92,10 @@
     <string name="AyulessShadowBanInfo">Сообщения этих пользователей скрываются во всех чатах. Они об этом не узнают.</string>
     <string name="AyulessShadowBanRemove">Убрать</string>
     <string name="AyulessShadowBanRemoveConfirm">Снова показывать сообщения этого пользователя?</string>
+    <string name="AyulessGhostStoryPrompt">Предлагать призрака для сторис</string>
+    <string name="AyulessGhostStoryPromptInfo">Перед открытием историй спрашивает, смотреть ли их незаметно. Не показывается, если включено «Не отмечать истории просмотренными».</string>
+    <string name="AyulessStoryPromptTitle">Смотреть в режиме призрака?</string>
+    <string name="AyulessStoryPromptText">Автор не увидит вас в списке просмотревших эти истории.</string>
+    <string name="AyulessStoryPromptGhost">Призрак</string>
+    <string name="AyulessStoryPromptNormal">Открыть как обычно</string>
 </resources>
