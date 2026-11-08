@@ -94,4 +94,7 @@
     <string name="AyulessShadowBanInfo">Messages from these users are hidden in all chats. They are not notified.</string>
     <string name="AyulessShadowBanRemove">Remove</string>
     <string name="AyulessShadowBanRemoveConfirm">Show messages from this user again?</string>
+    <string name="AyulessSpyExceptions">Manage exceptions</string>
+    <string name="AyulessSpyExceptionsNone">None</string>
+    <string name="AyulessSpyExceptionsInfo">Deleted messages and edit history are not saved for the chats and users you pick here.</string>
 </resources>
