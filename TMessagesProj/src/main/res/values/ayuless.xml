@@ -124,4 +124,5 @@
     <string name="AyulessSpyExceptions">Manage exceptions</string>
     <string name="AyulessSpyExceptionsNone">None</string>
     <string name="AyulessSpyExceptionsInfo">Deleted messages and edit history are not saved for the chats and users you pick here.</string>
+    <string name="AyulessProtectedForwardNeedsDownload">Some media from a protected chat was not forwarded: download it first.</string>
 </resources>

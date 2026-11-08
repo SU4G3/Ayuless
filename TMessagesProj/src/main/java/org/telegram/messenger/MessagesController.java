@@ -6678,10 +6678,10 @@ public class MessagesController extends BaseController implements NotificationCe
         if (chat.migrated_to != null) {
             TLRPC.Chat migratedTo = getChat(chat.migrated_to.channel_id);
             if (migratedTo != null) {
-                return migratedTo.noforwards;
+                return org.ayuless.content.ProtectedContent.chatNoForwards(this, migratedTo, migratedTo.noforwards); // Ayuless
             }
         }
-        return chat.noforwards;
+        return org.ayuless.content.ProtectedContent.chatNoForwards(this, chat, chat.noforwards); // Ayuless
     }
 
     public boolean isChatNoForwards(long chatId) {
