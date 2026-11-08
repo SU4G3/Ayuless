@@ -60,6 +60,17 @@ public final class DeletedCache {
         return s;
     }
 
+    /** Reload cached ids from the database, e.g. after an import. */
+    public static void reload(int account) {
+        if (account < 0 || account >= maps.length) {
+            return;
+        }
+        synchronized (loadedFor) {
+            loadedFor[account] = 0;
+        }
+        ensureLoaded(account);
+    }
+
     /** Forget all cached ids for the account, e.g. after the saved data was cleared. */
     public static void clear(int account) {
         if (account >= 0 && account < maps.length) {

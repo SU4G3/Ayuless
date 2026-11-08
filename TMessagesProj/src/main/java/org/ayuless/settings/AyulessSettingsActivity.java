@@ -5,56 +5,46 @@
 
 package org.ayuless.settings;
 
+import static org.telegram.messenger.AndroidUtilities.dp;
 import static org.telegram.messenger.LocaleController.getString;
 
+import android.content.Context;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import org.ayuless.antidelete.AntiDeleteConfig;
-import org.ayuless.antidelete.DeletedCache;
-import org.ayuless.edits.EditedCache;
-import org.ayuless.edits.EditsConfig;
 import org.ayuless.ghost.GhostConfig;
-import org.ayuless.storage.AyulessStore;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.R;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.Components.BulletinFactory;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UniversalAdapter;
 import org.telegram.ui.Components.UniversalFragment;
 
 import java.util.ArrayList;
 
-/** Settings > Ayuless: all Ayuless toggles for the current account in one place. */
+/** Settings > Ayuless: header, feature categories and project links. */
 public class AyulessSettingsActivity extends UniversalFragment {
 
-    private static final String SOURCE_URL = "https://github.com/SU4G3/Ayuless";
-    private static final long MB = 1024L * 1024;
-    private static final long[] LIMITS = {50 * MB, 100 * MB, 250 * MB, 500 * MB, 0};
+    static final String SOURCE_URL = "https://github.com/SU4G3/Ayuless";
+    private static final String ISSUES_URL = SOURCE_URL + "/issues";
+    private static final String DOCS_URL = SOURCE_URL + "#readme";
 
     private static final int ID_GHOST = 1;
-    private static final int ID_HIDE_ONLINE = 2;
-    private static final int ID_HIDE_READ = 3;
-    private static final int ID_HIDE_TYPING = 4;
-    private static final int ID_HIDE_STORIES = 5;
-    private static final int ID_OFFLINE_AFTER_SEND = 6;
-    private static final int ID_ANTI_DELETE = 10;
-    private static final int ID_EDIT_HISTORY = 11;
-    private static final int ID_STORAGE_USED = 20;
-    private static final int ID_STORAGE_LIMIT = 21;
-    private static final int ID_STORAGE_CLEAR = 22;
-    private static final int ID_VERSION = 30;
-    private static final int ID_SOURCE = 31;
+    private static final int ID_SPY = 2;
+    private static final int ID_FILTERS = 3;
+    private static final int ID_CUSTOMIZATION = 4;
+    private static final int ID_SOURCE = 10;
+    private static final int ID_ISSUES = 11;
+    private static final int ID_DOCS = 12;
 
-    private long usedBytes = -1;
-
-    @Override
-    public boolean onFragmentCreate() {
-        refreshSize();
-        return super.onFragmentCreate();
-    }
+    private View headerView;
 
     @Override
     protected CharSequence getTitle() {
@@ -62,83 +52,66 @@ public class AyulessSettingsActivity extends UniversalFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        // Category values (e.g. ghost mode on/off) may have changed in a sub-screen.
+        if (listView != null && listView.adapter != null) {
+            listView.adapter.update(false);
+        }
+    }
+
+    @Override
     protected void fillItems(ArrayList<UItem> items, UniversalAdapter adapter) {
-        final int account = currentAccount;
-        final boolean ghost = GhostConfig.isEnabled(account);
+        if (headerView == null && getParentActivity() != null) {
+            headerView = createHeader(getParentActivity());
+        }
+        if (headerView != null) {
+            items.add(UItem.asCustom(headerView));
+        }
 
-        items.add(UItem.asHeader(getString(R.string.AyulessGhostHeader)));
-        items.add(UItem.asCheck(ID_GHOST, getString(R.string.AyulessGhostEnabled)).setChecked(ghost));
-        items.add(UItem.asCheck(ID_HIDE_ONLINE, getString(R.string.AyulessGhostHideOnline)).setChecked(GhostConfig.hideOnline(account)).setEnabled(ghost));
-        items.add(UItem.asCheck(ID_HIDE_READ, getString(R.string.AyulessGhostHideRead)).setChecked(GhostConfig.hideRead(account)).setEnabled(ghost));
-        items.add(UItem.asCheck(ID_HIDE_TYPING, getString(R.string.AyulessGhostHideTyping)).setChecked(GhostConfig.hideTyping(account)).setEnabled(ghost));
-        items.add(UItem.asCheck(ID_HIDE_STORIES, getString(R.string.AyulessGhostHideStoryViews)).setChecked(GhostConfig.hideStoryViews(account)).setEnabled(ghost));
-        items.add(UItem.asCheck(ID_OFFLINE_AFTER_SEND, getString(R.string.AyulessGhostOfflineAfterSend)).setChecked(GhostConfig.offlineAfterSend(account)).setEnabled(ghost));
-        items.add(UItem.asShadow(getString(R.string.AyulessGhostInfo)));
+        items.add(UItem.asHeader(getString(R.string.AyulessCategoriesHeader)));
+        String ghostState = GhostConfig.isEnabled(currentAccount)
+                ? GhostConfig.countEnabled(GhostConfig.activeProfile(currentAccount)) + "/" + GhostConfig.GHOST_KEYS.length
+                : getString(R.string.AyulessOff);
+        items.add(UItem.asButton(ID_GHOST, R.drawable.ayuless_solar_ghost, getString(R.string.AyulessGhostHeader), ghostState));
+        items.add(UItem.asButton(ID_SPY, R.drawable.ayuless_solar_msg_stories_stealth, getString(R.string.AyulessSpy)));
+        items.add(UItem.asButton(ID_FILTERS, R.drawable.ayuless_solar_msg_filter, getString(R.string.AyulessFilters), getString(R.string.AyulessSoon)));
+        items.add(UItem.asButton(ID_CUSTOMIZATION, R.drawable.ayuless_solar_menu_edit_appearance, getString(R.string.AyulessCustomization)));
+        items.add(UItem.asShadow(null));
 
-        items.add(UItem.asHeader(getString(R.string.AyulessMessagesHeader)));
-        items.add(UItem.asCheck(ID_ANTI_DELETE, getString(R.string.AyulessAntiDelete)).setChecked(AntiDeleteConfig.isEnabled(account)));
-        items.add(UItem.asShadow(getString(R.string.AyulessAntiDeleteInfo)));
-        items.add(UItem.asCheck(ID_EDIT_HISTORY, getString(R.string.AyulessEditHistory)).setChecked(EditsConfig.isEnabled(account)));
-        items.add(UItem.asShadow(getString(R.string.AyulessEditHistoryInfo)));
-
-        items.add(UItem.asHeader(getString(R.string.AyulessStorageHeader)));
-        items.add(UItem.asButton(ID_STORAGE_USED, getString(R.string.AyulessStorageUsed), usedBytes < 0 ? "…" : AndroidUtilities.formatFileSize(usedBytes)));
-        items.add(UItem.asButton(ID_STORAGE_LIMIT, getString(R.string.AyulessStorageLimit), limitLabel(AyulessStore.getLimitBytes())));
-        items.add(UItem.asButton(ID_STORAGE_CLEAR, getString(R.string.AyulessStorageClear)).red());
-        items.add(UItem.asShadow(getString(R.string.AyulessAccountInfo)));
-
-        items.add(UItem.asHeader(getString(R.string.AyulessAboutHeader)));
-        items.add(UItem.asButton(ID_VERSION, getString(R.string.AyulessVersion), BuildVars.BUILD_VERSION_STRING));
-        items.add(UItem.asButton(ID_SOURCE, getString(R.string.AyulessSourceCode), "GitHub"));
+        items.add(UItem.asHeader(getString(R.string.AyulessLinksHeader)));
+        items.add(UItem.asButton(ID_SOURCE, R.drawable.ayuless_solar_msg_link2, getString(R.string.AyulessSourceCode), "GitHub"));
+        items.add(UItem.asButton(ID_ISSUES, R.drawable.ayuless_solar_msg_ask_question, getString(R.string.AyulessIssues)));
+        items.add(UItem.asButton(ID_DOCS, R.drawable.ayuless_solar_msg_info, getString(R.string.AyulessDocs)));
         items.add(UItem.asShadow(getString(R.string.AyulessDisclaimer)));
     }
 
     @Override
     protected void onClick(UItem item, View view, int position, float x, float y) {
-        final int account = currentAccount;
         switch (item.id) {
             case ID_GHOST:
-                GhostConfig.setEnabled(account, !GhostConfig.isEnabled(account));
+                presentFragment(new GhostSettingsActivity());
                 break;
-            case ID_HIDE_ONLINE:
-                if (!item.enabled) return;
-                GhostConfig.setHideOnline(account, !GhostConfig.hideOnline(account));
+            case ID_SPY:
+                presentFragment(new SpySettingsActivity());
                 break;
-            case ID_HIDE_READ:
-                if (!item.enabled) return;
-                GhostConfig.setHideRead(account, !GhostConfig.hideRead(account));
+            case ID_FILTERS:
+                org.telegram.ui.Components.BulletinFactory.of(this)
+                        .createSimpleBulletin(R.raw.info, getString(R.string.AyulessFiltersSoon)).show();
                 break;
-            case ID_HIDE_TYPING:
-                if (!item.enabled) return;
-                GhostConfig.setHideTyping(account, !GhostConfig.hideTyping(account));
+            case ID_CUSTOMIZATION:
+                presentFragment(new AppearanceSettingsActivity());
                 break;
-            case ID_HIDE_STORIES:
-                if (!item.enabled) return;
-                GhostConfig.setHideStoryViews(account, !GhostConfig.hideStoryViews(account));
-                break;
-            case ID_OFFLINE_AFTER_SEND:
-                if (!item.enabled) return;
-                GhostConfig.setOfflineAfterSend(account, !GhostConfig.offlineAfterSend(account));
-                break;
-            case ID_ANTI_DELETE:
-                AntiDeleteConfig.setEnabled(account, !AntiDeleteConfig.isEnabled(account));
-                break;
-            case ID_EDIT_HISTORY:
-                EditsConfig.setEnabled(account, !EditsConfig.isEnabled(account));
-                break;
-            case ID_STORAGE_LIMIT:
-                showLimitPicker();
-                return;
-            case ID_STORAGE_CLEAR:
-                confirmClear();
-                return;
             case ID_SOURCE:
                 Browser.openUrl(getParentActivity(), SOURCE_URL);
-                return;
-            default:
-                return;
+                break;
+            case ID_ISSUES:
+                Browser.openUrl(getParentActivity(), ISSUES_URL);
+                break;
+            case ID_DOCS:
+                Browser.openUrl(getParentActivity(), DOCS_URL);
+                break;
         }
-        update();
     }
 
     @Override
@@ -146,55 +119,29 @@ public class AyulessSettingsActivity extends UniversalFragment {
         return false;
     }
 
-    private void update() {
-        if (listView != null && listView.adapter != null) {
-            listView.adapter.update(true);
-        }
-    }
+    private View createHeader(Context context) {
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setGravity(Gravity.CENTER_HORIZONTAL);
+        layout.setPadding(0, dp(20), 0, dp(16));
+        layout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite, getResourceProvider()));
 
-    private void refreshSize() {
-        AyulessStore.getInstance(currentAccount).sizeBytes(size -> {
-            usedBytes = size == null ? 0 : size;
-            update();
-        });
-    }
+        ImageView icon = new ImageView(context);
+        icon.setImageResource(R.mipmap.ic_launcher_ayuless_round);
+        layout.addView(icon, LayoutHelper.createLinear(80, 80));
 
-    private String limitLabel(long bytes) {
-        return bytes <= 0 ? getString(R.string.AyulessStorageNoLimit) : AndroidUtilities.formatFileSize(bytes);
-    }
+        TextView name = new TextView(context);
+        name.setText(getString(R.string.AyulessLauncherName));
+        name.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+        name.setTypeface(AndroidUtilities.bold());
+        name.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, getResourceProvider()));
+        layout.addView(name, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 10, 0, 0));
 
-    private void showLimitPicker() {
-        if (getParentActivity() == null) return;
-        final CharSequence[] labels = new CharSequence[LIMITS.length];
-        for (int i = 0; i < LIMITS.length; i++) {
-            labels[i] = limitLabel(LIMITS[i]);
-        }
-        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity(), getResourceProvider());
-        builder.setTitle(getString(R.string.AyulessStorageLimit));
-        builder.setItems(labels, (dialog, which) -> {
-            AyulessStore.setLimitBytes(LIMITS[which]);
-            update();
-        });
-        showDialog(builder.create());
-    }
-
-    private void confirmClear() {
-        if (getParentActivity() == null) return;
-        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity(), getResourceProvider());
-        builder.setTitle(getString(R.string.AyulessStorageClear));
-        builder.setMessage(getString(R.string.AyulessStorageClearConfirm));
-        builder.setPositiveButton(getString(R.string.Delete), (dialog, which) -> {
-            AyulessStore.getInstance(currentAccount).clearAll();
-            DeletedCache.clear(currentAccount);
-            EditedCache.clear(currentAccount);
-            usedBytes = 0;
-            update();
-            BulletinFactory.of(this).createSimpleBulletin(R.raw.ic_delete, getString(R.string.AyulessStorageCleared)).show();
-            AndroidUtilities.runOnUIThread(this::refreshSize, 500);
-        });
-        builder.setNegativeButton(getString(R.string.Cancel), null);
-        AlertDialog dialog = builder.create();
-        showDialog(dialog);
-        dialog.redPositive();
+        TextView version = new TextView(context);
+        version.setText(BuildVars.BUILD_VERSION_STRING);
+        version.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        version.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText, getResourceProvider()));
+        layout.addView(version, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 2, 0, 0));
+        return layout;
     }
 }

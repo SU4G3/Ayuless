@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -21,6 +22,10 @@ import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 /**
@@ -201,6 +206,152 @@ public final class AyulessStore {
                 FileLog.e(e);
             }
         });
+    }
+
+    // ---- export / import ----
+
+    /** Encrypted-dialog bit pattern, see DialogObject.isEncryptedDialog. Used in SQL. */
+    private static final String NOT_ENCRYPTED = "(dialog_id < 0 OR (dialog_id & 4611686018427387904) = 0)";
+
+    /**
+     * Copy the database to a user-chosen document. Callback gets true on success (UI thread).
+     */
+    public void exportTo(Uri uri, Callback<Boolean> callback) {
+        queue.postRunnable(() -> {
+            boolean ok = false;
+            try {
+                SQLiteDatabase db = db();
+                db.rawQuery("PRAGMA wal_checkpoint(TRUNCATE)", null).close();
+                try (InputStream in = new FileInputStream(dbFile());
+                     OutputStream out = ApplicationLoader.applicationContext.getContentResolver().openOutputStream(uri, "wt")) {
+                    if (out != null) {
+                        copy(in, out);
+                        ok = true;
+                    }
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            final boolean r = ok;
+            AndroidUtilities.runOnUIThread(() -> callback.run(r));
+        });
+    }
+
+    /**
+     * Merge an exported database into this one. Existing rows win; rows of secret chats are
+     * skipped. Callback gets the number of imported rows, or -1 if the file is not a valid
+     * Ayuless database (UI thread).
+     */
+    public void importFrom(Uri uri, Callback<Integer> callback) {
+        queue.postRunnable(() -> {
+            int imported = -1;
+            File tmp = new File(ApplicationLoader.applicationContext.getCacheDir(), "ayuless_import_" + account + ".db");
+            try {
+                try (InputStream in = ApplicationLoader.applicationContext.getContentResolver().openInputStream(uri);
+                     OutputStream out = new FileOutputStream(tmp)) {
+                    if (in == null) {
+                        throw new IllegalStateException("cannot open " + uri);
+                    }
+                    copy(in, out);
+                }
+                if (isValidExport(tmp)) {
+                    imported = merge(tmp);
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            } finally {
+                SQLiteDatabase.deleteDatabase(tmp);
+            }
+            final int r = imported;
+            AndroidUtilities.runOnUIThread(() -> callback.run(r));
+        });
+    }
+
+    private static boolean isValidExport(File file) {
+        try (SQLiteDatabase db = SQLiteDatabase.openDatabase(file.getPath(), null, SQLiteDatabase.OPEN_READONLY)) {
+            int version = db.getVersion();
+            if (version < 1 || version > AyulessDbHelper.DB_VERSION) {
+                return false;
+            }
+            return hasColumns(db, "deleted_messages", "dialog_id", "msg_id", "topic_id", "date", "deleted_at", "from_id", "data")
+                    && hasColumns(db, "edit_history", "dialog_id", "msg_id", "edit_date", "version", "text", "entities", "media");
+        } catch (Exception e) {
+            FileLog.e(e);
+            return false;
+        }
+    }
+
+    private static boolean hasColumns(SQLiteDatabase db, String table, String... columns) {
+        java.util.HashSet<String> present = new java.util.HashSet<>();
+        try (Cursor c = db.rawQuery("PRAGMA table_info(" + table + ")", null)) {
+            int nameIndex = c.getColumnIndex("name");
+            while (c.moveToNext()) {
+                present.add(c.getString(nameIndex));
+            }
+        }
+        for (String column : columns) {
+            if (!present.contains(column)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Copies rows row by row instead of ATTACH: Android disables WAL for a database once
+     * anything is attached to it.
+     */
+    private int merge(File file) {
+        SQLiteDatabase db = db();
+        int added = 0;
+        try (SQLiteDatabase src = SQLiteDatabase.openDatabase(file.getPath(), null, SQLiteDatabase.OPEN_READONLY)) {
+            db.beginTransaction();
+            try {
+                added += copyTable(src, db, "deleted_messages", new String[]{"dialog_id", "msg_id", "topic_id", "date", "deleted_at", "from_id", "data"});
+                added += copyTable(src, db, "edit_history", new String[]{"dialog_id", "msg_id", "edit_date", "version", "text", "entities", "media"});
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+        }
+        return added;
+    }
+
+    private static int copyTable(SQLiteDatabase src, SQLiteDatabase dst, String table, String[] columns) {
+        int added = 0;
+        try (Cursor c = src.query(table, columns, NOT_ENCRYPTED, null, null, null, null)) {
+            ContentValues values = new ContentValues();
+            while (c.moveToNext()) {
+                values.clear();
+                for (int i = 0; i < columns.length; i++) {
+                    switch (c.getType(i)) {
+                        case Cursor.FIELD_TYPE_NULL:
+                            break;
+                        case Cursor.FIELD_TYPE_INTEGER:
+                            values.put(columns[i], c.getLong(i));
+                            break;
+                        case Cursor.FIELD_TYPE_BLOB:
+                            values.put(columns[i], c.getBlob(i));
+                            break;
+                        default:
+                            values.put(columns[i], c.getString(i));
+                            break;
+                    }
+                }
+                if (dst.insertWithOnConflict(table, null, values, SQLiteDatabase.CONFLICT_IGNORE) != -1) {
+                    added++;
+                }
+            }
+        }
+        return added;
+    }
+
+    private static void copy(InputStream in, OutputStream out) throws java.io.IOException {
+        byte[] buffer = new byte[64 * 1024];
+        int n;
+        while ((n = in.read(buffer)) > 0) {
+            out.write(buffer, 0, n);
+        }
     }
 
     // ---- reads ----

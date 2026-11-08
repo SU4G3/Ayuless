@@ -117,4 +117,6 @@ Code and licensing rules: [CONTRIBUTING.md](CONTRIBUTING.md). No code is copied 
 
 Ayuless as a whole is distributed under **GPL-3.0-or-later** ([LICENSE](LICENSE)). Upstream sources are "GPL v2 or later" ([LICENSE.GPL-2.0](LICENSE.GPL-2.0)), which permits this. Details and third-party compatibility: [docs/LICENSE-AUDIT.md](docs/LICENSE-AUDIT.md).
 
+Icons: [Solar Icons Set](https://www.figma.com/community/file/1166831539721848736/solar-icons-set) by 480 Design and R4IN80W, licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Full credits: [docs/CREDITS.md](docs/CREDITS.md).
+
 Original upstream README: [docs/UPSTREAM_README.md](docs/UPSTREAM_README.md).

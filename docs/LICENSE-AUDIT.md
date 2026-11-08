@@ -31,6 +31,7 @@ grep -rl "Apache License" $I . | wc -l
 - **Header-less files.** The upstream repo ships the plain GPLv2 text as `LICENSE`, while every file that has a header says "v2 or later". We treat header-less upstream files the same way (this is also how Telegram-FOSS and other forks have treated them). Kept upstream license text as `LICENSE.GPL-2.0`.
 - **Apache-2.0** code is compatible with GPLv3 (but not GPLv2-only), so moving to v3 is fine.
 - **BSD** code is compatible with both.
+- **CC BY 4.0** artwork: the Solar icons (`TMessagesProj/src/main/res/drawable/ayuless_solar_*.xml`) are licensed under CC BY 4.0, which is one-way compatible with GPLv3 (CC BY 4.0 material may be included in a GPLv3 work). Attribution is kept in [CREDITS.md](CREDITS.md) and in each file's header comment.
 - **Native submodules** (BoringSSL, FFmpeg, libvpx, dav1d, opus, openh264, tdlib, abseil, WAMR, ...) are under permissive or LGPL licenses. All GPLv3-compatible. FFmpeg must be built without `--enable-nonfree`.
 
 ## Proprietary parts to remove
