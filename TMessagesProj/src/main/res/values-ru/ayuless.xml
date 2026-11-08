@@ -93,4 +93,7 @@
     <string name="AyulessShadowBanRemove">Убрать</string>
     <string name="AyulessShadowBanRemoveConfirm">Снова показывать сообщения этого пользователя?</string>
     <string name="AyulessFilteredMessage">Скрытое сообщение</string>
+    <string name="AyulessSpyExceptions">Управление исключениями</string>
+    <string name="AyulessSpyExceptionsNone">Нет</string>
+    <string name="AyulessSpyExceptionsInfo">Для выбранных здесь чатов и пользователей удалённые сообщения и история правок не сохраняются.</string>
 </resources>
