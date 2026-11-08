@@ -25,6 +25,7 @@ Nothing has been tested on a device yet. All Ayuless features are off by default
 - ✅ Go offline right after sending
 - ✅ Global profile plus per-account overrides, "N/5" master switch
 - ✅ Read on actions (mark read when you send or react), send silently
+- ✅ Replying does not send a read receipt while "Don't read messages" is on: every client-side read request (including the ones fired after sending) is filtered; "Read on actions" is the explicit opt-in
 - ✅ Offer ghost mode before opening stories, one-time (#29)
 - ✅ Ghost button in the chat list, tap to toggle (#28)
 - ⏳ Long-press an option to lock its value against the master switch
@@ -56,4 +57,4 @@ Nothing has been tested on a device yet. All Ayuless features are off by default
 - ✅ Hide sponsored messages (toggle) (#34)
 - ✅ Local Premium: whole-chat translation only, server-side limits stay (toggle) (#34)
 - ✅ Work in background: foreground keep-alive service with a silent notification (#34)
-- ✅ Delayed send: send as a short scheduled message so you never appear online (#33)
+- ✅ Delayed send: send as a short scheduled message so you never appear online (#33); also forwards, story replies and Saved Messages. Not delayed: secret chats, quick reply shortcuts (no `schedule_date` in `messages.sendQuickReplyMessages`), retries of messages that failed as normal sends

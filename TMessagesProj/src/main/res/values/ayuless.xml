@@ -44,7 +44,7 @@
     <string name="AyulessGhostSendSilently">Send silently</string>
     <string name="AyulessGhostSendSilentlyInfo">Send all messages without notification sound. Works even when ghost mode is off.</string>
     <string name="AyulessGhostDelayedSend">Delayed send</string>
-    <string name="AyulessGhostDelayedSendInfo">Messages are sent as scheduled about 12 seconds later (20 seconds with media), so sending does not show you online. They appear in the chat when the server posts them. Forwards, secret chats and Saved Messages are not delayed. Works even when ghost mode is off. Not recommended on a slow connection.</string>
+    <string name="AyulessGhostDelayedSendInfo">Messages are sent as scheduled about 12 seconds later (20 seconds with media), so sending does not show you online. They appear in the chat when the server posts them. Forwards, story replies and Saved Messages are delayed too; secret chats and quick reply shortcuts are not. Works even when ghost mode is off. Not recommended on a slow connection.</string>
     <string name="AyulessGhostDelayedSendHint">Delayed send is on: the message will be posted in a few seconds.</string>
     <string name="AyulessSpyHeader">Spy mode</string>
     <string name="AyulessStorageLimitInfo">When the limit is reached, the oldest saved records are removed.</string>
