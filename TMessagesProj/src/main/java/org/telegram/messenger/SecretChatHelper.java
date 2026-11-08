@@ -594,7 +594,12 @@ public class SecretChatHelper extends BaseController {
         if (req == null || chat.auth_key == null || chat instanceof TLRPC.TL_encryptedChatRequested || chat instanceof TLRPC.TL_encryptedChatWaiting) {
             return;
         }
+        // Ayuless: hold user messages locally before encryption and sequence allocation.
         getSendMessagesHelper().putToSendingMessages(newMsgObj, false);
+        if (org.ayuless.ghost.EncryptedDelayedSend.hold(currentAccount, newMsgObj,
+                () -> performSendEncryptedRequest(req, newMsgObj, chat, encryptedFile, originalPath, newMsg))) {
+            return;
+        }
         Utilities.stageQueue.postRunnable(() -> {
             try {
                 TLObject toEncryptObject;

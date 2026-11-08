@@ -153,6 +153,21 @@ public class MessagePrivateSeenView extends FrameLayout {
         loadingView.setAlpha(1f);
         premiumTextView.setVisibility(View.VISIBLE);
 
+        if (org.telegram.messenger.DialogObject.isEncryptedDialog(dialogId)) {
+            // Ayuless: secret chats have no server read date; read receipts are stored by message date.
+            org.ayuless.spy.ReadDates.get(currentAccount, dialogId, sent_date, localDate -> {
+                if (localDate > 0) {
+                    TLRPC.TL_outboxReadDate local = new TLRPC.TL_outboxReadDate();
+                    local.date = localDate;
+                    onReadDate(local, null, true);
+                } else {
+                    TLRPC.TL_error unknown = new TLRPC.TL_error();
+                    unknown.text = "USER_PRIVACY_RESTRICTED";
+                    onReadDate(null, unknown, false);
+                }
+            });
+            return;
+        }
         TLRPC.TL_messages_getOutboxReadDate req = new TLRPC.TL_messages_getOutboxReadDate();
         req.peer = MessagesController.getInstance(currentAccount).getInputPeer(dialogId);
         req.msg_id = messageId;

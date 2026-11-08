@@ -5,6 +5,12 @@
 package org.ayuless.spy;
 
 import org.ayuless.storage.AyulessStore;
+import org.telegram.SQLite.SQLiteCursor;
+import org.telegram.messenger.DialogObject;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.MessagesStorage;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 
@@ -16,8 +22,8 @@ import org.telegram.messenger.R;
  * time, so it is stored for the range of messages it newly covers. The date is shown in the
  * message menu when the server does not provide one (hidden read dates or an old message).
  *
- * <p>Only private chats with users are recorded. Secret chats use a different update and are
- * never recorded.
+ * <p>Private chats with users and secret chats are recorded. Secret chats report reads by
+ * message date (updateEncryptedMessagesRead), so their ranges hold dates instead of ids.
  */
 public final class ReadDates {
 
@@ -49,6 +55,48 @@ public final class ReadDates {
         AyulessStore.getInstance(account).saveReadOutbox(userId, previousMax, maxId, updateDate);
     }
 
+    /**
+     * Called for updateEncryptedMessagesRead: our outgoing messages with date &lt;= maxDate in
+     * the secret chat were read at readDate. The lower bound is the newest outgoing message
+     * that was already marked read before this update.
+     */
+    public static void onEncryptedReadOutbox(int account, int chatId, int maxDate, int readDate, int now) {
+        if (maxDate <= 0 || readDate <= 0 || !isEnabled(account) || Math.abs(now - readDate) >= LIVE_WINDOW) {
+            return;
+        }
+        long dialogId = DialogObject.makeEncryptedDialogId(chatId);
+        if (SpyExceptions.isExcepted(account, dialogId)) {
+            return;
+        }
+        TLRPC.EncryptedChat chat = MessagesController.getInstance(account).getEncryptedChatDB(chatId, true);
+        if (chat != null && SpyExceptions.isExcepted(account, chat.user_id)) {
+            return;
+        }
+        // Runs on the storage queue before upstream marks these messages as read.
+        MessagesStorage storage = MessagesStorage.getInstance(account);
+        storage.getStorageQueue().postRunnable(() -> {
+            int lowerDate = 0;
+            SQLiteCursor cursor = null;
+            try {
+                cursor = storage.getDatabase().queryFinalized("SELECT MAX(date) FROM messages_v2 WHERE uid = ? AND out = 1 AND (read_state & 1) != 0", dialogId);
+                if (cursor.next() && !cursor.isNull(0)) {
+                    lowerDate = cursor.intValue(0);
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+                return;
+            } finally {
+                if (cursor != null) {
+                    cursor.dispose();
+                }
+            }
+            if (lowerDate < maxDate) {
+                AyulessStore.getInstance(account).saveReadOutbox(dialogId, lowerDate, maxDate, readDate);
+            }
+        });
+    }
+
+    /** @param msgId message id, or message date in secret chats */
     public static void get(int account, long dialogId, int msgId, AyulessStore.Callback<Integer> callback) {
         AyulessStore.getInstance(account).getReadDate(dialogId, msgId, callback);
     }
