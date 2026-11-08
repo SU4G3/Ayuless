@@ -13,6 +13,8 @@
     <string name="AyulessGhostHideStoryViews">Don\'t mark stories as viewed</string>
     <string name="AyulessGhostOfflineAfterSend">Go offline after sending</string>
     <string name="AyulessGhostInfo">Others won\'t see when you are online, typing or reading. Your own read state still updates locally.</string>
+    <string name="AyulessGhostLocked">%1$s · locked</string>
+    <string name="AyulessGhostLockHint">Long-press an option to lock its value. A locked option keeps its value when you switch ghost mode on or off.</string>
     <string name="AyulessAntiDelete">Keep deleted messages</string>
     <string name="AyulessAntiDeleteInfo">Messages deleted by others stay in the chat, marked as deleted. Messages you delete yourself are removed as usual.</string>
     <string name="AyulessEditHistory">Save edit history</string>

@@ -17,7 +17,8 @@ import org.telegram.messenger.ApplicationLoader;
  * account, and one profile per account. An account uses its own profile only after
  * "use own settings" is turned on for it; otherwise the shared profile applies.
  *
- * <p>The ghost toggles only have effect while the master switch of the active profile is on.
+ * <p>The ghost toggles only have effect while the master switch of the active profile is on,
+ * unless a toggle is locked: a locked toggle keeps its own value whatever the master switch says.
  * "Send silently" is independent of the master switch.
  */
 public final class GhostConfig {
@@ -38,6 +39,8 @@ public final class GhostConfig {
     public static final String KEY_DELAYED_SEND = "delayedSend";
     /** Per-account flag: use the account's own profile instead of the shared one. */
     public static final String KEY_OVERRIDE = "override";
+    /** Suffix of the per-toggle lock flag, e.g. "hideReadLocked". */
+    private static final String LOCK_SUFFIX = "Locked";
 
     /** The five toggles behind the master switch, in display order. */
     public static final String[] GHOST_KEYS = {
@@ -92,6 +95,15 @@ public final class GhostConfig {
         profilePrefs(profile).edit().putBoolean(key, value).apply();
     }
 
+    /** Whether one of the five ghost toggles is locked in a profile. */
+    public static boolean isLocked(int profile, String key) {
+        return getProfile(profile, key + LOCK_SUFFIX);
+    }
+
+    public static void setLocked(int profile, String key, boolean locked) {
+        setProfile(profile, key + LOCK_SUFFIX, locked);
+    }
+
     /** Number of the five ghost toggles that are on in a profile. */
     public static int countEnabled(int profile) {
         int n = 0;
@@ -110,11 +122,34 @@ public final class GhostConfig {
             return false;
         }
         SharedPreferences p = profilePrefs(activeProfile(account));
+        if (p.getBoolean(key + LOCK_SUFFIX, false)) {
+            return p.getBoolean(key, false);
+        }
         return p.getBoolean(KEY_ENABLED, false) && p.getBoolean(key, false);
     }
 
     public static boolean isEnabled(int account) {
         return getProfile(activeProfile(account), KEY_ENABLED);
+    }
+
+    /**
+     * Whether any ghost behaviour can apply to an account right now: the master switch is on,
+     * a locked toggle is on, or ghost mode was chosen in the story prompt.
+     */
+    public static boolean anyActive(int account) {
+        if (!ready()) {
+            return false;
+        }
+        if (isEnabled(account) || StoryGhostPrompt.sessionActive(account)) {
+            return true;
+        }
+        int profile = activeProfile(account);
+        for (String key : GHOST_KEYS) {
+            if (isLocked(profile, key) && getProfile(profile, key)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean hideOnline(int account) {
@@ -150,7 +185,7 @@ public final class GhostConfig {
 
     /** Mark a chat as read when sending a message or a reaction there, despite hidden reads. */
     public static boolean readOnAction(int account) {
-        return getGhost(account, KEY_HIDE_READ) && getGhost(account, KEY_READ_ON_ACTION);
+        return getGhost(account, KEY_HIDE_READ) && getProfile(activeProfile(account), KEY_READ_ON_ACTION);
     }
 
     /** Send every message without notification sound. Works without the master switch. */
