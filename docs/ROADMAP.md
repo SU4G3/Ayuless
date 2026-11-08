@@ -27,7 +27,7 @@ Nothing has been tested on a device yet. All Ayuless features are off by default
 - ✅ Read on actions (mark read when you send or react), send silently
 - ✅ Offer ghost mode before opening stories, one-time (#29)
 - ✅ Ghost button in the chat list, tap to toggle (#28)
-- ⏳ Long-press an option to lock its value against the master switch
+- ✅ Long-press an option to lock its value against the master switch
 
 ## Step 3: Spy: anti-delete and edit history ✅ (#18, #19, #22, #23, #27, #31)
 - ✅ Own SQLite DB in `org.ayuless` with size limit and cleanup

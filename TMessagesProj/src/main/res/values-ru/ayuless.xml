@@ -11,6 +11,8 @@
     <string name="AyulessGhostHideStoryViews">Не отмечать истории просмотренными</string>
     <string name="AyulessGhostOfflineAfterSend">Уходить в офлайн после отправки</string>
     <string name="AyulessGhostInfo">Другие не увидят, когда вы в сети, печатаете или читаете. Локально прочтение по-прежнему отмечается.</string>
+    <string name="AyulessGhostLocked">%1$s · закреплено</string>
+    <string name="AyulessGhostLockHint">Зажмите опцию, чтобы закрепить её значение. Закреплённая опция не меняется при включении и выключении режима призрака.</string>
     <string name="AyulessAntiDelete">Сохранять удалённые сообщения</string>
     <string name="AyulessAntiDeleteInfo">Сообщения, удалённые собеседником, остаются в чате с пометкой. Ваши собственные удаления работают как обычно.</string>
     <string name="AyulessEditHistory">Сохранять историю правок</string>

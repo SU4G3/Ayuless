@@ -60,7 +60,7 @@ public final class GhostInterceptor {
         if (isSendRequest(req)) {
             DelayedSend.fixOnSend(account, req);
         }
-        if (!GhostConfig.isEnabled(account)) {
+        if (!GhostConfig.anyActive(account)) {
             return false;
         }
         if ((isSendRequest(req) || req instanceof TLRPC.TL_messages_sendReaction) && GhostConfig.readOnAction(account)) {

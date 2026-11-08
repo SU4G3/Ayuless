@@ -7,9 +7,11 @@ package org.ayuless.settings;
 
 import static org.telegram.messenger.LocaleController.getString;
 
+import android.view.HapticFeedbackConstants;
 import android.view.View;
 
 import org.ayuless.ghost.GhostConfig;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
@@ -90,13 +92,18 @@ public class GhostSettingsActivity extends UniversalFragment {
                 }));
         if (expanded) {
             for (int i = 0; i < GhostConfig.GHOST_KEYS.length; i++) {
-                items.add(UItem.asRoundCheckbox(ID_OPTION_BASE + i, getString(OPTION_TITLES[i]))
-                        .setChecked(GhostConfig.getProfile(profile, GhostConfig.GHOST_KEYS[i]))
+                final String key = GhostConfig.GHOST_KEYS[i];
+                CharSequence title = getString(OPTION_TITLES[i]);
+                if (GhostConfig.isLocked(profile, key)) {
+                    title = LocaleController.formatString(R.string.AyulessGhostLocked, title);
+                }
+                items.add(UItem.asRoundCheckbox(ID_OPTION_BASE + i, title)
+                        .setChecked(GhostConfig.getProfile(profile, key))
                         .setEnabled(inUse)
                         .setPad(1));
             }
         }
-        items.add(UItem.asShadow(getString(R.string.AyulessGhostInfo)));
+        items.add(UItem.asShadow(getString(R.string.AyulessGhostInfo) + "\n\n" + getString(R.string.AyulessGhostLockHint)));
 
         final boolean hideRead = GhostConfig.getProfile(profile, GhostConfig.KEY_HIDE_READ);
         items.add(UItem.asCheck(ID_READ_ON_ACTION, getString(R.string.AyulessGhostReadOnAction))
@@ -159,6 +166,16 @@ public class GhostSettingsActivity extends UniversalFragment {
 
     @Override
     protected boolean onLongClick(UItem item, View view, int position, float x, float y) {
+        if (item.id >= ID_OPTION_BASE && item.id < ID_OPTION_BASE + GhostConfig.GHOST_KEYS.length && profileInUse()) {
+            final String key = GhostConfig.GHOST_KEYS[item.id - ID_OPTION_BASE];
+            GhostConfig.setLocked(profile, key, !GhostConfig.isLocked(profile, key));
+            try {
+                view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+            } catch (Exception ignore) {
+            }
+            update();
+            return true;
+        }
         return false;
     }
 
