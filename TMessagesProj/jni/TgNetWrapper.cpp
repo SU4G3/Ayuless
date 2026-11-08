@@ -518,12 +518,12 @@ void setJava(JNIEnv *env, jclass c, jboolean useJavaByteBuffers) {
     }
 }
 
-void setClientVersion(JNIEnv *env, jclass c, jint instanceNum, jint layer, jstring appVersion, jstring installerId, jstring packageId) {
+void setClientVersion(JNIEnv *env, jclass c, jint instanceNum, jint layer, jint version, jstring appVersion, jstring installerId, jstring packageId) {
     const char *appVersionStr = appVersion ? env->GetStringUTFChars(appVersion, 0) : nullptr;
     const char *installerIdStr = installerId ? env->GetStringUTFChars(installerId, 0) : nullptr;
     const char *packageIdStr = packageId ? env->GetStringUTFChars(packageId, 0) : nullptr;
 
-    ConnectionsManager::getInstance(instanceNum).setClientVersion((int32_t) layer,
+    ConnectionsManager::getInstance(instanceNum).setClientVersion((int32_t) layer, (int32_t) version,
         appVersionStr ? std::string(appVersionStr) : std::string(),
         installerIdStr ? std::string(installerIdStr) : std::string(),
         packageIdStr ? std::string(packageIdStr) : std::string());
@@ -578,7 +578,7 @@ static JNINativeMethod ConnectionsManagerMethods[] = {
         {"native_receivedIntegrityCheckClassic", "(IILjava/lang/String;Ljava/lang/String;)V", (void *) receivedIntegrityCheckClassic},
         {"native_receivedCaptchaResult", "(IIILjava/lang/String;)V", (void *) receivedCaptchaResult},
         {"native_isGoodPrime", "([BI)Z", (void *) isGoodPrime},
-        {"native_setClientVersion", "(IILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", (void *) setClientVersion},
+        {"native_setClientVersion", "(IIILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", (void *) setClientVersion},
 };
 
 
