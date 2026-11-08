@@ -163,6 +163,10 @@ public class SecretChatHelper extends BaseController {
     }
 
     public void sendMessagesReadMessage(TLRPC.EncryptedChat encryptedChat, ArrayList<Long> random_ids, TLRPC.Message resendMessage) {
+        // Ayuless: encrypted content receipts must be blocked before encryption (including resends).
+        if (org.ayuless.ghost.GhostConfig.hideRead(currentAccount)) {
+            return;
+        }
         if (!(encryptedChat instanceof TLRPC.TL_encryptedChat)) {
             return;
         }
@@ -594,7 +598,12 @@ public class SecretChatHelper extends BaseController {
         if (req == null || chat.auth_key == null || chat instanceof TLRPC.TL_encryptedChatRequested || chat instanceof TLRPC.TL_encryptedChatWaiting) {
             return;
         }
+        // Ayuless: hold user messages locally before encryption and sequence allocation.
         getSendMessagesHelper().putToSendingMessages(newMsgObj, false);
+        if (org.ayuless.ghost.EncryptedDelayedSend.hold(currentAccount, newMsgObj,
+                () -> performSendEncryptedRequest(req, newMsgObj, chat, encryptedFile, originalPath, newMsg))) {
+            return;
+        }
         Utilities.stageQueue.postRunnable(() -> {
             try {
                 TLObject toEncryptObject;

@@ -29,7 +29,6 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UniversalAdapter;
-import org.telegram.ui.Components.UniversalFragment;
 import org.telegram.ui.UsersSelectActivity;
 
 import java.text.SimpleDateFormat;
@@ -38,7 +37,7 @@ import java.util.Date;
 import java.util.Locale;
 
 /** Ayuless > Spy: saving deleted messages and edit history, and the saved data itself. */
-public class SpySettingsActivity extends UniversalFragment {
+public class SpySettingsActivity extends AyulessSettingsFragment {
 
     private static final long MB = 1024L * 1024;
     private static final long[] LIMITS = {50 * MB, 100 * MB, 250 * MB, 500 * MB, 1024 * MB, 0};

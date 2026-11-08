@@ -28,7 +28,7 @@ import java.util.Set;
 /**
  * Message filters: hide incoming messages in chats by keyword / regular expression, by
  * sender (shadow ban), or because the sender is blocked. Display only: nothing is deleted
- * or stored, and secret chats are never filtered.
+ * or stored. Secret chats count as private chats.
  *
  * <p>Settings are app-wide. Reads come from an in-memory snapshot that is replaced on every
  * change, so the chat screen does not touch SharedPreferences per message.
@@ -218,18 +218,23 @@ public final class MessageFilters {
         if (!s.enabled || obj == null || obj.messageOwner == null || obj.isOut()) {
             return false;
         }
+        // Secret chats share the private-chat regex switch and use the other participant for sender rules.
         long dialogId = obj.getDialogId();
-        if (DialogObject.isEncryptedDialog(dialogId)) {
-            return false;
-        }
         long fromId = obj.getFromChatId();
+        if (fromId == 0 && DialogObject.isEncryptedDialog(dialogId)) {
+            TLRPC.EncryptedChat chat = MessagesController.getInstance(account).getEncryptedChat(DialogObject.getEncryptedChatId(dialogId));
+            if (chat != null) {
+                long selfId = UserConfig.getInstance(account).getClientUserId();
+                fromId = chat.admin_id == selfId ? chat.participant_id : chat.admin_id;
+            }
+        }
         if (fromId != 0 && s.shadowBan.contains(fromId)) {
             return true;
         }
         if (s.hideBlocked && fromId != 0 && MessagesController.getInstance(account).blockePeers.indexOfKey(fromId) >= 0) {
             return true;
         }
-        if (s.filters.isEmpty() || (dialogId > 0 && !s.privateChats) || obj.messageOwner instanceof TLRPC.TL_messageService) {
+        if (s.filters.isEmpty() || ((DialogObject.isUserDialog(dialogId) || DialogObject.isEncryptedDialog(dialogId)) && !s.privateChats) || obj.messageOwner instanceof TLRPC.TL_messageService) {
             return false;
         }
         String text = obj.messageOwner.message;
