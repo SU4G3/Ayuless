@@ -130,6 +130,7 @@ public final class AntiDelete {
         AyulessStore store = AyulessStore.getInstance(account);
         for (TLRPC.Message m : kept) {
             store.saveDeleted(m);
+            org.ayuless.spy.SavedAttachments.onKept(account, m);
             DeletedCache.mark(account, m.dialog_id, m.id);
         }
         AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(account)
