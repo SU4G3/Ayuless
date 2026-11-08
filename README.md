@@ -66,6 +66,10 @@ cp API_KEYS.example API_KEYS   # впиши свои APP_ID / APP_HASH с https:
 
 Правила кода и лицензирования: [CONTRIBUTING.md](CONTRIBUTING.md). Код из AyuGram4A, exteraGram и AyuGramDesktop не копируется — логика реализуется самостоятельно.
 
+### Благодарности
+
+Спасибо команде [AyuGram](https://github.com/AyuGram) (Radolyn Labs): их клиент вдохновил Ayuless, набор функций и устройство настроек взяты у них за образец. Код AyuGram в Ayuless не копировался. Спасибо [exteraless](https://github.com/exteraless) за идею названия. Остальные авторы и лицензии: [docs/CREDITS.md](docs/CREDITS.md).
+
 ---
 
 ## English
@@ -108,6 +112,10 @@ cp API_KEYS.example API_KEYS   # put your own APP_ID / APP_HASH from https://my.
 ### Contributing
 
 Code and licensing rules: [CONTRIBUTING.md](CONTRIBUTING.md). No code is copied from AyuGram4A, exteraGram or AyuGramDesktop; behaviour is reimplemented independently.
+
+### Thanks
+
+Thanks to the [AyuGram](https://github.com/AyuGram) team (Radolyn Labs): their client inspired Ayuless, and its feature set and settings layout served as the model. No AyuGram code was copied into Ayuless. Thanks to [exteraless](https://github.com/exteraless) for the name idea. Other authors and licenses: [docs/CREDITS.md](docs/CREDITS.md).
 
 ---
 
