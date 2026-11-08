@@ -124,4 +124,10 @@
     <string name="AyulessSpyExceptions">Manage exceptions</string>
     <string name="AyulessSpyExceptionsNone">None</string>
     <string name="AyulessSpyExceptionsInfo">Deleted messages and edit history are not saved for the chats and users you pick here.</string>
+    <string name="AyulessAttachmentsHeader">Attachments</string>
+    <string name="AyulessSaveAttachments">Save attachments</string>
+    <string name="AyulessSaveAttachmentsInfo">Keeps a private copy of photos, videos and files of deleted messages if they were already downloaded. Chats from Spy exceptions, secret chats and self-destructing media are never saved.</string>
+    <string name="AyulessAttachmentsFolder">Attachments folder</string>
+    <string name="AyulessAttachmentsLimit">Attachments size limit</string>
+    <string name="AyulessAttachmentsUsage">%1$s of %2$s used. When the limit is reached, the oldest attachments are removed.</string>
 </resources>
