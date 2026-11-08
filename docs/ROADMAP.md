@@ -48,8 +48,8 @@ Nothing has been tested on a device yet. All Ayuless features are off by default
 - ✅ Export / import / clear the local DB (#23)
 - 🚧 Decide whether #12 needs more than that
 
-## Step 7: Extras 🚧
-- 🚧 Hide sponsored messages (toggle)
-- 🚧 Local Premium: client-side cosmetic features only, server-side limits stay (toggle)
-- 🚧 Work in background (keep-alive toggle)
-- 🚧 Delayed send: send as a short scheduled message so you never appear online
+## Step 7: Extras ✅ (#33, #34)
+- ✅ Hide sponsored messages (toggle) (#34)
+- ✅ Local Premium: whole-chat translation only, server-side limits stay (toggle) (#34)
+- ✅ Work in background: foreground keep-alive service with a silent notification (#34)
+- ✅ Delayed send: send as a short scheduled message so you never appear online (#33)

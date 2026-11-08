@@ -157,6 +157,30 @@ public class MessagePrivateSeenView extends FrameLayout {
         req.peer = MessagesController.getInstance(currentAccount).getInputPeer(dialogId);
         req.msg_id = messageId;
         ConnectionsManager.getInstance(currentAccount).sendRequest(req, (res, err) -> AndroidUtilities.runOnUIThread(() -> {
+            // Ayuless: fall back to the locally saved read date when the server has none for us
+            if (err != null && org.ayuless.spy.ReadDates.isEnabled(currentAccount)) {
+                org.ayuless.spy.ReadDates.get(currentAccount, dialogId, messageId, localDate -> {
+                    if (localDate > 0) {
+                        TLRPC.TL_outboxReadDate local = new TLRPC.TL_outboxReadDate();
+                        local.date = localDate;
+                        onReadDate(local, null, true);
+                    } else if ("YOUR_PRIVACY_RESTRICTED".equals(err.text)) {
+                        onReadDate(null, err, false);
+                    } else {
+                        // Nothing saved and the server has no date (hidden or too old): show "unknown" instead of an error.
+                        TLRPC.TL_error unknown = new TLRPC.TL_error();
+                        unknown.text = "USER_PRIVACY_RESTRICTED";
+                        onReadDate(null, unknown, false);
+                    }
+                });
+                return;
+            }
+            onReadDate(res, err, false);
+        }));
+    }
+
+    private void onReadDate(org.telegram.tgnet.TLObject res, TLRPC.TL_error err, boolean localDate) { // Ayuless: extracted from request() callback
+        {
             if (err != null) {
                 if ("USER_PRIVACY_RESTRICTED".equals(err.text)) {
                     valueTextView.setText(LocaleController.getString(R.string.PmReadUnknown));
@@ -172,7 +196,7 @@ public class MessagePrivateSeenView extends FrameLayout {
                 }
             } else if (res instanceof TLRPC.TL_outboxReadDate) {
                 TLRPC.TL_outboxReadDate r = (TLRPC.TL_outboxReadDate) res;
-                valueTextView.setText(LocaleController.formatPmSeenDate(r.date));
+                valueTextView.setText(localDate ? org.ayuless.spy.ReadDates.formatLocal(r.date) : LocaleController.formatPmSeenDate(r.date)); // Ayuless
                 premiumTextView.setVisibility(View.GONE);
             }
             valueLayout.animate().alpha(1f).setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT).setDuration(320).start();
@@ -185,7 +209,7 @@ public class MessagePrivateSeenView extends FrameLayout {
                 setBackground(null);
                 setOnClickListener(null);
             }
-        }));
+        }
     }
 
     public boolean isPremiumLocked = false;

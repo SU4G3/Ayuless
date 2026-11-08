@@ -65,6 +65,11 @@
     <string name="AyulessDeletedMarkColor">Mark color</string>
     <string name="AyulessDeletedMark">deleted</string>
     <string name="AyulessDeletedAppearanceInfo">Changes apply to messages as they are shown again.</string>
+    <string name="AyulessHideSponsored">Hide sponsored messages</string>
+    <string name="AyulessLocalPremium">Local Premium</string>
+    <string name="AyulessWorkInBackground">Work in background</string>
+    <string name="AyulessWorkInBackgroundNotification">Ayuless is running in the background</string>
+    <string name="AyulessUsefulFeaturesInfo">Hide sponsored messages: ads in channels, bots, videos and search are not loaded. Local Premium: unlocks whole-chat translation on this device only; Premium limits stay as they are. Work in background: keeps the connection open with a silent notification, so messages arrive without Google push.</string>
     <string name="AyulessColorDefault">Default</string>
     <string name="AyulessColorGrey">Grey</string>
     <string name="AyulessColorRed">Red</string>
@@ -103,6 +108,13 @@
     <string name="AyulessStoryPromptText">The author will not see you in the viewers list of these stories.</string>
     <string name="AyulessStoryPromptGhost">Ghost mode</string>
     <string name="AyulessStoryPromptNormal">Open normally</string>
+    <string name="AyulessSpyAdditional">Additional</string>
+    <string name="AyulessSaveReadDate">Save read date</string>
+    <string name="AyulessSaveReadDateInfo">Saves when your messages in private chats are read, and shows it in the message menu when the server does not (hidden read time or an old message). The time is when this device got the update.</string>
+    <string name="AyulessSaveLastSeen">Save last online</string>
+    <string name="AyulessSaveLastSeenInfo">Saves the last known online time of people, also when they hide it (from their messages, typing and reading). Very approximate.</string>
+    <string name="AyulessSavedLocally">%1$s (saved locally)</string>
+    <string name="AyulessFilteredMessage">Filtered message</string>
     <string name="AyulessUsefulHeader">Useful features</string>
     <string name="AyulessGhostInDialogs">Ghost status in chat list</string>
     <string name="AyulessGhostInDialogsInfo">Shows a ghost button in the chat list when ghost options are selected. Tap it to turn ghost mode on or off.</string>
