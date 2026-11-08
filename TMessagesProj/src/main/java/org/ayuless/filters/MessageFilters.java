@@ -35,6 +35,10 @@ import java.util.Set;
  */
 public final class MessageFilters {
 
+    // NotificationCenter uses positive upstream IDs; reserve a negative ID for this Ayuless event.
+    public static final int SETTINGS_CHANGED = -0x415955;
+
+    private static final String KEY_REAPPLY = "reapplyOpenChats";
     private static final String KEY_ENABLED = "enabled";
     private static final String KEY_PRIVATE = "privateChats";
     private static final String KEY_HIDE_BLOCKED = "hideBlocked";
@@ -125,16 +129,25 @@ public final class MessageFilters {
                 .putString(KEY_SHADOW_BAN, TextUtils.join(",", shadowBan))
                 .apply();
         snapshot = new Snapshot(enabled, privateChats, hideBlocked, new ArrayList<>(filters), new LinkedHashSet<>(shadowBan));
-        AndroidUtilities.runOnUIThread(MessageFilters::refreshDialogLists);
+        AndroidUtilities.runOnUIThread(MessageFilters::notifySettingsChanged);
     }
 
-    /** Redraws chat list previews so they follow the new filter settings. */
-    private static void refreshDialogLists() {
+    /** Settings are global, so notify every activated account on the UI thread. */
+    private static void notifySettingsChanged() {
         for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
             if (UserConfig.getInstance(a).isClientActivated()) {
-                NotificationCenter.getInstance(a).postNotificationName(NotificationCenter.updateInterfaces, MessagesController.UPDATE_MASK_ALL);
+                NotificationCenter.getInstance(a).postNotificationName(SETTINGS_CHANGED);
             }
         }
+    }
+
+    public static boolean reapplyOpenChats() {
+        return prefs().getBoolean(KEY_REAPPLY, false);
+    }
+
+    public static void setReapplyOpenChats(boolean value) {
+        prefs().edit().putBoolean(KEY_REAPPLY, value).apply();
+        AndroidUtilities.runOnUIThread(MessageFilters::notifySettingsChanged);
     }
 
     // ---- settings API ----

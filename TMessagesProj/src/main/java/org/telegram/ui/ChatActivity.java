@@ -2842,6 +2842,7 @@ public class ChatActivity extends BaseFragment implements
         }
 
         observersGroup = getNotificationCenter().createObserversGroup(this);
+        observersGroup.add(org.ayuless.filters.MessageFilters.SETTINGS_CHANGED); // Ayuless: reapply message filters
 
         getNotificationCenter().addPostponeNotificationsCallback(postponeNotificationsWhileLoadingCallback);
         getNotificationCenter().addWeakObserver(this, NotificationCenter.closeChats);
@@ -21319,7 +21320,11 @@ public class ChatActivity extends BaseFragment implements
 
     @Override
     public void didReceivedNotification(int id, int account, final Object... args) {
-        if (id == NotificationCenter.messagesDidLoad) {
+        if (id == org.ayuless.filters.MessageFilters.SETTINGS_CHANGED) { // Ayuless: reapply message filters
+            if (org.ayuless.filters.MessageFilters.reapplyOpenChats()) {
+                reloadForMessageFilters();
+            }
+        } else if (id == NotificationCenter.messagesDidLoad) {
             didReceivedNotification_messagesDidLoad(id, account, args);
         } else {
             didReceivedNotification2(id, account, args);
@@ -21328,6 +21333,42 @@ public class ChatActivity extends BaseFragment implements
             didReceivedNotification5(id, account, args);
             didReceivedNotification6(id, account, args);
             didReceivedNotification7(id, account, args);
+        }
+    }
+
+    // Ayuless: use the upstream history loading/reset path, not the already filtered messages list.
+    private void reloadForMessageFilters() {
+        if (currentEncryptedChat != null || chatListView == null || chatLayoutManager == null || chatAdapter == null) {
+            return;
+        }
+        org.ayuless.filters.FilterReloadAnchor anchor = null;
+        if (!(forwardEndReached[0] && chatLayoutManager.findFirstVisibleItemPosition() == 0)) {
+            anchor = org.ayuless.filters.FilterReloadAnchor.capture(currentAccount, chatListView, this::getScrollingOffsetForView);
+        }
+        int anchorId = anchor != null ? anchor.messageId : 0;
+        long anchorDialog = anchor != null ? anchor.dialogId : dialog_id;
+        resetForReload(); // Cancels stale requests and storage tasks; gives the reload a fresh GUID.
+        clearChatData(true);
+        historyPreloaded = false;
+        startLoadFromDate = 0;
+        first_unread_id = 0;
+        scrollToMessage = null;
+        loadingForward = false;
+        postponedScrollToLastMessageQueryIndex = 0;
+        clearOnLoadAndScrollMessageId = anchorId > 0 ? anchorId : -1;
+        clearOnLoadAndScrollOffset = anchor != null ? anchor.offset : 0;
+        if (anchorId > 0 && chatMode != MODE_SEARCH) {
+            startLoadFromMessageId = anchorId;
+            firstMessagesLoaded = true;
+            waitingForLoad.add(lastLoadIndex);
+            getMessagesController().loadMessages(anchorDialog, anchorDialog == dialog_id ? mergeDialogId : 0,
+                    loadInfo, initialMessagesSize, anchorId, 0, true, 0, classGuid,
+                    MessagesController.LOAD_AROUND_MESSAGE, 0, chatMode, threadMessageId, replyMaxReadId, lastLoadIndex++, isTopic);
+        } else {
+            if (chatMode == MODE_SEARCH) {
+                HashtagSearchController.getInstance(currentAccount).clearSearchResults(searchType);
+            }
+            firstLoadMessages();
         }
     }
 
