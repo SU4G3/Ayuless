@@ -60,6 +60,12 @@
     <string name="AyulessDeletedMarkColor">Цвет метки</string>
     <string name="AyulessDeletedMark">удалено</string>
     <string name="AyulessDeletedAppearanceInfo">Изменения применяются к сообщениям при следующем показе.</string>
+    <string name="AyulessUsefulFeatures">Полезные функции</string>
+    <string name="AyulessHideSponsored">Отключить рекламу</string>
+    <string name="AyulessLocalPremium">Локальный Premium</string>
+    <string name="AyulessWorkInBackground">Работать в фоне</string>
+    <string name="AyulessWorkInBackgroundNotification">Ayuless работает в фоне</string>
+    <string name="AyulessUsefulFeaturesInfo">Отключить рекламу: реклама в каналах, ботах, видео и поиске не загружается. Локальный Premium: открывает перевод всего чата только на этом устройстве, лимиты Premium не меняются. Работать в фоне: соединение остаётся открытым с тихим уведомлением, поэтому сообщения приходят без пушей Google.</string>
     <string name="AyulessColorDefault">По умолчанию</string>
     <string name="AyulessColorGrey">Серый</string>
     <string name="AyulessColorRed">Красный</string>

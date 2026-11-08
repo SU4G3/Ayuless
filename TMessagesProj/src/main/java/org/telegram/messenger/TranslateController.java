@@ -91,7 +91,7 @@ public class TranslateController extends BaseController {
     }
 
     public boolean isFeatureAvailable() {
-        return isChatTranslateEnabled() && UserConfig.getInstance(currentAccount).isPremium();
+        return isChatTranslateEnabled() && org.ayuless.extras.LocalPremium.isPremium(currentAccount); // Ayuless: local premium
     }
 
     public boolean isFeatureAvailable(long dialogId) {
@@ -100,7 +100,7 @@ public class TranslateController extends BaseController {
         }
         final TLRPC.Chat chat = getMessagesController().getChat(-dialogId);
         return (
-            UserConfig.getInstance(currentAccount).isPremium() ||
+            org.ayuless.extras.LocalPremium.isPremium(currentAccount) || // Ayuless: local premium
             chat != null && chat.autotranslation
         );
     }

@@ -51,6 +51,9 @@ public final class GhostInterceptor {
         if (allowedOnce.remove(req)) {
             return false;
         }
+        if (org.ayuless.extras.SponsoredBlocker.shouldBlock(req)) {
+            return true;
+        }
         if (isSendRequest(req) && GhostConfig.sendSilently(account)) {
             makeSilent(req);
         }
