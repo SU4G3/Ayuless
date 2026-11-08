@@ -52,7 +52,7 @@ print_key() {
         git ls-tree HEAD "${SUBMODULES[@]}" TMessagesProj/jni/gram-wallet
         find TMessagesProj/jni/prebuild -maxdepth 1 -name '*.sh' -print0 | sort -z | xargs -0 sha256sum
         find TMessagesProj/jni/prebuild/patches -type f -print0 | sort -z | xargs -0 sha256sum
-        sha256sum Tools/native/build-prebuilts.sh
+        sha256sum Tools/native/build-prebuilts.sh Tools/native/check-prebuilts.sh
         echo "NDK=${NDK_VERSION:-27.2.12479018} TLOTTIE_RUST=$TLOTTIE_RUST_TOOLCHAIN ABIS=${ABIS:-all}"
     )
 }
@@ -89,6 +89,8 @@ echo "==> Building prebuilt libraries (this takes a while)"
 # build_all.sh rewrites build_env.txt with host paths and a timestamp; keep the
 # committed copy so a source build does not leave a dirty tree.
 git -C "$ROOT" checkout -- TMessagesProj/jni/prebuild/build_env.txt 2>/dev/null || true
+
+"$ROOT/Tools/native/check-prebuilts.sh"
 
 echo "==> Produced archives"
 find "$PREBUILD/lib" -name '*.a' -print0 | sort -z | xargs -0 ls -l

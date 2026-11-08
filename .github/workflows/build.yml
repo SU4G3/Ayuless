@@ -51,8 +51,8 @@ jobs:
       - name: Install SDK and NDK
         run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "platforms;android-36" "build-tools;36.0.0" "ndk;27.2.12479018" "cmake;3.22.1"
 
-      # Replace the committed prebuilt .a files with ones built from the pinned
-      # source submodules (cached by input hash). See Tools/native/.
+      # Build native libraries from pinned source submodules (cached by input hash).
+      # No native archives are stored in Git. See Tools/native/.
       - name: Native libraries from source
         uses: ./.github/actions/native-prebuilts
 

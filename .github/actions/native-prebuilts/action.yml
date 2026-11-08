@@ -3,7 +3,7 @@ name: Native prebuilts from source
 description: >
   Build TMessagesProj/jni/prebuild/lib/<abi>/*.a and the generated headers from
   the pinned source submodules (Tools/native/build-prebuilts.sh), with a cache
-  keyed on every build input. Overwrites the committed archives in the checkout.
+  keyed on every build input. Validates both built and cached outputs.
 outputs:
   cache-hit:
     description: Whether the archives came from the cache
@@ -40,3 +40,7 @@ runs:
         export ANDROID_SDK_ROOT="$ANDROID_HOME"
         export ANDROID_NDK_HOME="$ANDROID_HOME/ndk/27.2.12479018"
         Tools/native/build-prebuilts.sh
+
+    - name: Validate native libraries and generated headers
+      shell: bash
+      run: Tools/native/check-prebuilts.sh
