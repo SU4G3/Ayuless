@@ -2,7 +2,7 @@
 
 Each step is one or more PRs, with a manual test checklist on a test account in the PR description.
 
-Status: ✅ done (merged to `main`) · 🚧 in progress · ⏳ planned · ❌ not planned
+Status: ✅ done (merged to `main`) · 🚧 in progress · ⏳ planned
 
 Nothing has been tested on a device yet. All Ayuless features are off by default and live in **Settings → Ayuless**.
 
@@ -48,5 +48,8 @@ Nothing has been tested on a device yet. All Ayuless features are off by default
 - ✅ Export / import / clear the local DB (#23)
 - 🚧 Decide whether #12 needs more than that
 
-## Not planned ❌
-- Local Telegram Premium, ad blocking, keep-alive "work in background", delayed send
+## Step 7: Extras 🚧
+- 🚧 Hide sponsored messages (toggle)
+- 🚧 Local Premium: client-side cosmetic features only, server-side limits stay (toggle)
+- 🚧 Work in background (keep-alive toggle)
+- 🚧 Delayed send: send as a short scheduled message so you never appear online
