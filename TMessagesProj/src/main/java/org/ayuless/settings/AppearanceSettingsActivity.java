@@ -13,6 +13,8 @@ import android.text.style.ForegroundColorSpan;
 import android.view.View;
 
 import org.ayuless.appearance.AppearanceConfig;
+import org.ayuless.extras.ExtrasConfig;
+import org.ayuless.extras.KeepAliveService;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
@@ -29,6 +31,9 @@ public class AppearanceSettingsActivity extends UniversalFragment {
     private static final int ID_MARK_STYLE = 2;
     private static final int ID_MARK_COLOR = 3;
     private static final int ID_GHOST_IN_DIALOGS = 4;
+    private static final int ID_HIDE_SPONSORED = 10;
+    private static final int ID_LOCAL_PREMIUM = 11;
+    private static final int ID_WORK_IN_BACKGROUND = 12;
 
     /** Names for AppearanceConfig.PALETTE, same order. */
     private static final int[] COLOR_NAMES = {
@@ -58,6 +63,10 @@ public class AppearanceSettingsActivity extends UniversalFragment {
         items.add(UItem.asHeader(getString(R.string.AyulessUsefulHeader)));
         items.add(UItem.asCheck(ID_GHOST_IN_DIALOGS, getString(R.string.AyulessGhostInDialogs)).setChecked(AppearanceConfig.ghostInDialogs()));
         items.add(UItem.asShadow(getString(R.string.AyulessGhostInDialogsInfo)));
+        items.add(UItem.asCheck(ID_HIDE_SPONSORED, getString(R.string.AyulessHideSponsored)).setChecked(ExtrasConfig.hideSponsored()));
+        items.add(UItem.asCheck(ID_LOCAL_PREMIUM, getString(R.string.AyulessLocalPremium)).setChecked(ExtrasConfig.localPremium()));
+        items.add(UItem.asCheck(ID_WORK_IN_BACKGROUND, getString(R.string.AyulessWorkInBackground)).setChecked(ExtrasConfig.workInBackground()));
+        items.add(UItem.asShadow(getString(R.string.AyulessUsefulFeaturesInfo)));
     }
 
     @Override
@@ -76,6 +85,19 @@ public class AppearanceSettingsActivity extends UniversalFragment {
                 break;
             case ID_MARK_COLOR:
                 showColorPicker();
+                break;
+            case ID_HIDE_SPONSORED:
+                ExtrasConfig.set(ExtrasConfig.KEY_HIDE_SPONSORED, !ExtrasConfig.hideSponsored());
+                update();
+                break;
+            case ID_LOCAL_PREMIUM:
+                ExtrasConfig.set(ExtrasConfig.KEY_LOCAL_PREMIUM, !ExtrasConfig.localPremium());
+                update();
+                break;
+            case ID_WORK_IN_BACKGROUND:
+                ExtrasConfig.set(ExtrasConfig.KEY_WORK_IN_BACKGROUND, !ExtrasConfig.workInBackground());
+                KeepAliveService.apply();
+                update();
                 break;
         }
     }

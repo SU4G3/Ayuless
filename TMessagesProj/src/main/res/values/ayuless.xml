@@ -65,6 +65,11 @@
     <string name="AyulessDeletedMarkColor">Mark color</string>
     <string name="AyulessDeletedMark">deleted</string>
     <string name="AyulessDeletedAppearanceInfo">Changes apply to messages as they are shown again.</string>
+    <string name="AyulessHideSponsored">Hide sponsored messages</string>
+    <string name="AyulessLocalPremium">Local Premium</string>
+    <string name="AyulessWorkInBackground">Work in background</string>
+    <string name="AyulessWorkInBackgroundNotification">Ayuless is running in the background</string>
+    <string name="AyulessUsefulFeaturesInfo">Hide sponsored messages: ads in channels, bots, videos and search are not loaded. Local Premium: unlocks whole-chat translation on this device only; Premium limits stay as they are. Work in background: keeps the connection open with a silent notification, so messages arrive without Google push.</string>
     <string name="AyulessColorDefault">Default</string>
     <string name="AyulessColorGrey">Grey</string>
     <string name="AyulessColorRed">Red</string>
