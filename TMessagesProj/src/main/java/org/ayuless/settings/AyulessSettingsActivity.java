@@ -40,6 +40,7 @@ public class AyulessSettingsActivity extends UniversalFragment {
     private static final int ID_SPY = 2;
     private static final int ID_FILTERS = 3;
     private static final int ID_CUSTOMIZATION = 4;
+    private static final int ID_NOTIFICATIONS = 5;
     private static final int ID_SOURCE = 10;
     private static final int ID_ISSUES = 11;
     private static final int ID_DOCS = 12;
@@ -80,6 +81,8 @@ public class AyulessSettingsActivity extends UniversalFragment {
                 : getString(R.string.AyulessOff);
         items.add(UItem.asButton(ID_FILTERS, R.drawable.ayuless_solar_msg_filter, getString(R.string.AyulessFilters), filtersState));
         items.add(UItem.asButton(ID_CUSTOMIZATION, R.drawable.ayuless_solar_menu_edit_appearance, getString(R.string.AyulessCustomization)));
+        items.add(UItem.asButton(ID_NOTIFICATIONS, R.drawable.ayuless_solar_msg_notifications, getString(R.string.AyulessNotifications),
+                getString(org.ayuless.push.UnifiedPushProvider.isRegistered() ? R.string.AyulessPushUnifiedPush : R.string.AyulessPushBackground)));
         items.add(UItem.asShadow(null));
 
         items.add(UItem.asHeader(getString(R.string.AyulessLinksHeader)));
@@ -103,6 +106,9 @@ public class AyulessSettingsActivity extends UniversalFragment {
                 break;
             case ID_CUSTOMIZATION:
                 presentFragment(new AppearanceSettingsActivity());
+                break;
+            case ID_NOTIFICATIONS:
+                presentFragment(new org.ayuless.push.PushSettingsActivity());
                 break;
             case ID_SOURCE:
                 Browser.openUrl(getParentActivity(), SOURCE_URL);

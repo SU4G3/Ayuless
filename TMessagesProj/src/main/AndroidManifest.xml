@@ -477,6 +477,14 @@
             android:exported="true"
             android:foregroundServiceType="mediaPlayback"
         />
+        <!-- Ayuless: UnifiedPush events from the distributor (connector library binds to it). -->
+        <service
+            android:name="org.ayuless.push.AyulessPushService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.unifiedpush.android.connector.PUSH_EVENT" />
+            </intent-filter>
+        </service>
         <service
             android:name=".NotificationsService"
             android:enabled="true"
