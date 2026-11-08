@@ -18030,6 +18030,7 @@ public class MessagesController extends BaseController implements NotificationCe
             }
             if (!updates.out && user != null && user.status != null && user.status.expires <= 0 && Math.abs(getConnectionsManager().getCurrentTime() - updates.date) < 30) {
                 onlinePrivacy.put(user.id, updates.date);
+                org.ayuless.spy.LastSeen.record(currentAccount, user.id, updates.date); // Ayuless: last online
                 updateStatus = true;
             }
 
@@ -18649,6 +18650,7 @@ public class MessagesController extends BaseController implements NotificationCe
                             }
                             if (!message.out && a == 1 && user.status != null && user.status.expires <= 0 && Math.abs(getConnectionsManager().getCurrentTime() - message.date) < 30) {
                                 onlinePrivacy.put(userId, message.date);
+                                org.ayuless.spy.LastSeen.record(currentAccount, userId, message.date); // Ayuless: last online
                                 interfaceUpdateMask |= UPDATE_MASK_STATUS;
                             }
                         }
@@ -18887,12 +18889,16 @@ public class MessagesController extends BaseController implements NotificationCe
                     TLRPC.User user = getUser(update.peer.user_id);
                     if (user != null && user.status != null && user.status.expires <= 0 && Math.abs(getConnectionsManager().getCurrentTime() - date) < 30) {
                         onlinePrivacy.put(update.peer.user_id, date);
+                        org.ayuless.spy.LastSeen.record(currentAccount, update.peer.user_id, date); // Ayuless: last online
                         interfaceUpdateMask |= UPDATE_MASK_STATUS;
                     }
                 }
                 Integer value = dialogs_read_outbox_max.get(dialogId);
                 if (value == null) {
                     value = getMessagesStorage().getDialogReadMax(true, dialogId);
+                }
+                if (update.peer.chat_id == 0) { // Ayuless: save read date
+                    org.ayuless.spy.ReadDates.onReadOutbox(currentAccount, dialogId, value, update.max_id, date, getConnectionsManager().getCurrentTime());
                 }
                 dialogs_read_outbox_max.put(dialogId, Math.max(value, update.max_id));
             } else if (baseUpdate instanceof TL_update.TL_updateDeleteMessages) {
@@ -19073,6 +19079,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                     if (Math.abs(getConnectionsManager().getCurrentTime() - date) < 30) {
                         onlinePrivacy.put(userId, date);
+                        org.ayuless.spy.LastSeen.record(currentAccount, userId, date); // Ayuless: last online
                     }
                 }
             } else if (baseUpdate instanceof TL_update.TL_updateChatParticipants) {
@@ -20025,6 +20032,11 @@ public class MessagesController extends BaseController implements NotificationCe
                         if (currentUser != null) {
                             currentUser.id = update.user_id;
                             currentUser.status = update.status;
+                        }
+                        if (update.status instanceof TLRPC.TL_userStatusOnline) { // Ayuless: last online
+                            org.ayuless.spy.LastSeen.record(currentAccount, update.user_id, getConnectionsManager().getCurrentTime());
+                        } else if (update.status instanceof TLRPC.TL_userStatusOffline) {
+                            org.ayuless.spy.LastSeen.record(currentAccount, update.user_id, update.status.expires); // offline: expires holds was_online
                         }
                         TLRPC.User toDbUser = new TLRPC.TL_user();
                         toDbUser.id = update.user_id;

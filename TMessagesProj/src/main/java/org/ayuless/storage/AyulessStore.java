@@ -187,6 +187,7 @@ public final class AyulessStore {
                 SQLiteDatabase db = db();
                 db.delete("deleted_messages", "dialog_id = ?", args);
                 db.delete("edit_history", "dialog_id = ?", args);
+                db.delete("read_outbox", "dialog_id = ?", args);
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -195,6 +196,7 @@ public final class AyulessStore {
 
     /** Remove all stored data and delete the database file (used on logout). */
     public void clearAll() {
+        org.ayuless.spy.LastSeen.reset(account);
         queue.postRunnable(() -> {
             try {
                 if (helper != null) {
@@ -352,6 +354,86 @@ public final class AyulessStore {
         while ((n = in.read(buffer)) > 0) {
             out.write(buffer, 0, n);
         }
+    }
+
+    // ---- read dates and last online (Spy > Additional) ----
+
+    /**
+     * Records that outgoing messages in (minId, maxId] of a private dialog were read at readAt.
+     * Ignored when the range is empty or already covered by a newer record.
+     */
+    public void saveReadOutbox(long dialogId, int minId, int maxId, int readAt) {
+        if (dialogId <= 0 || maxId <= minId || readAt <= 0) {
+            return;
+        }
+        queue.postRunnable(() -> {
+            try {
+                SQLiteDatabase db = db();
+                int lastMax = 0;
+                try (Cursor c = db.rawQuery("SELECT MAX(max_id) FROM read_outbox WHERE dialog_id = ?", new String[]{String.valueOf(dialogId)})) {
+                    if (c.moveToFirst() && !c.isNull(0)) {
+                        lastMax = c.getInt(0);
+                    }
+                }
+                if (maxId <= lastMax) {
+                    return;
+                }
+                ContentValues v = new ContentValues();
+                v.put("dialog_id", dialogId);
+                v.put("min_id", Math.max(minId, lastMax));
+                v.put("max_id", maxId);
+                v.put("read_at", readAt);
+                db.insertWithOnConflict("read_outbox", null, v, SQLiteDatabase.CONFLICT_IGNORE);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+    }
+
+    /** Locally recorded read time of an outgoing message, or 0 if unknown. */
+    public void getReadDate(long dialogId, int msgId, Callback<Integer> callback) {
+        queue.postRunnable(() -> {
+            int result = 0;
+            try (Cursor c = db().rawQuery("SELECT read_at FROM read_outbox WHERE dialog_id = ? AND min_id < ? AND max_id >= ? ORDER BY max_id ASC LIMIT 1",
+                    new String[]{String.valueOf(dialogId), String.valueOf(msgId), String.valueOf(msgId)})) {
+                if (c.moveToFirst()) {
+                    result = c.getInt(0);
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            final int r = result;
+            AndroidUtilities.runOnUIThread(() -> callback.run(r));
+        });
+    }
+
+    /** Stores the last time a user was seen online. Callers only pass newer values. */
+    public void saveLastSeen(long userId, int seenAt) {
+        queue.postRunnable(() -> {
+            try {
+                ContentValues v = new ContentValues();
+                v.put("user_id", userId);
+                v.put("seen_at", seenAt);
+                db().insertWithOnConflict("last_seen", null, v, SQLiteDatabase.CONFLICT_REPLACE);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+    }
+
+    /** All stored last-online times, user id to unix time. Runs the callback on the UI thread. */
+    public void loadLastSeen(Callback<java.util.HashMap<Long, Integer>> callback) {
+        queue.postRunnable(() -> {
+            java.util.HashMap<Long, Integer> result = new java.util.HashMap<>();
+            try (Cursor c = db().rawQuery("SELECT user_id, seen_at FROM last_seen", null)) {
+                while (c.moveToNext()) {
+                    result.put(c.getLong(0), c.getInt(1));
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            AndroidUtilities.runOnUIThread(() -> callback.run(result));
+        });
     }
 
     // ---- reads ----

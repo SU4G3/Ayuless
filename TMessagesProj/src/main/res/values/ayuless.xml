@@ -94,4 +94,10 @@
     <string name="AyulessShadowBanInfo">Messages from these users are hidden in all chats. They are not notified.</string>
     <string name="AyulessShadowBanRemove">Remove</string>
     <string name="AyulessShadowBanRemoveConfirm">Show messages from this user again?</string>
+    <string name="AyulessSpyAdditional">Additional</string>
+    <string name="AyulessSaveReadDate">Save read date</string>
+    <string name="AyulessSaveReadDateInfo">Saves when your messages in private chats are read, and shows it in the message menu when the server does not (hidden read time or an old message). The time is when this device got the update.</string>
+    <string name="AyulessSaveLastSeen">Save last online</string>
+    <string name="AyulessSaveLastSeenInfo">Saves the last known online time of people, also when they hide it (from their messages, typing and reading). Very approximate.</string>
+    <string name="AyulessSavedLocally">%1$s (saved locally)</string>
 </resources>
