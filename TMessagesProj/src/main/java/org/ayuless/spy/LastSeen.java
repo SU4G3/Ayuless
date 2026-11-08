@@ -6,6 +6,7 @@ package org.ayuless.spy;
 
 import org.ayuless.storage.AyulessStore;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
@@ -29,12 +30,22 @@ public final class LastSeen {
     @SuppressWarnings("unchecked")
     private static final ConcurrentHashMap<Long, Integer>[] caches = new ConcurrentHashMap[UserConfig.MAX_ACCOUNT_COUNT];
     private static final boolean[] loading = new boolean[UserConfig.MAX_ACCOUNT_COUNT];
+    @SuppressWarnings("unchecked")
+    private static final HashMap<Long, Integer>[] pendingRecords = new HashMap[UserConfig.MAX_ACCOUNT_COUNT];
+    private static final int[] generations = new int[UserConfig.MAX_ACCOUNT_COUNT];
 
     private LastSeen() {
     }
 
     public static boolean isEnabled(int account) {
         return SpyExtrasConfig.get(account, SpyExtrasConfig.KEY_SAVE_LAST_SEEN);
+    }
+
+    /** Called for live secret-chat typing; both dialog and user exceptions apply. */
+    public static void onEncryptedTyping(int account, int chatId, long userId, int date) {
+        if (!SpyExceptions.isExcepted(account, DialogObject.makeEncryptedDialogId(chatId))) {
+            record(account, userId, date);
+        }
     }
 
     /** Cache for an account, or null while it is still loading from disk. */
@@ -51,10 +62,19 @@ public final class LastSeen {
             return;
         }
         loading[account] = true;
+        int generation = generations[account];
         AyulessStore.getInstance(account).loadLastSeen((HashMap<Long, Integer> stored) -> {
+            if (generation != generations[account]) {
+                return;
+            }
             ConcurrentHashMap<Long, Integer> c = new ConcurrentHashMap<>(stored);
             caches[account] = c;
             loading[account] = false;
+            HashMap<Long, Integer> pending = pendingRecords[account];
+            pendingRecords[account] = null;
+            if (pending != null) {
+                pending.forEach((userId, time) -> record(account, userId, time));
+            }
         });
     }
 
@@ -65,6 +85,18 @@ public final class LastSeen {
         }
         ConcurrentHashMap<Long, Integer> c = cache(account);
         if (c == null) {
+            // Keep the first live activity while the disk cache is loading.
+            AndroidUtilities.runOnUIThread(() -> {
+                if (caches[account] != null) {
+                    record(account, userId, time);
+                    return;
+                }
+                if (pendingRecords[account] == null) {
+                    pendingRecords[account] = new HashMap<>();
+                }
+                pendingRecords[account].merge(userId, time, Math::max);
+                startLoad(account);
+            });
             return;
         }
         Integer old = c.get(userId);
@@ -92,6 +124,11 @@ public final class LastSeen {
 
     /** Drops the in-memory cache (after the database was cleared). */
     public static void reset(int account) {
-        caches[account] = null;
+        AndroidUtilities.runOnUIThread(() -> {
+            generations[account]++;
+            loading[account] = false;
+            pendingRecords[account] = null;
+            caches[account] = null;
+        });
     }
 }

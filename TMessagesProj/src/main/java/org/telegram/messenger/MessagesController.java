@@ -19243,9 +19243,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                     if (Math.abs(getConnectionsManager().getCurrentTime() - date) < 30) {
                         onlinePrivacy.put(encryptedChat.user_id, date);
-                        if (!org.ayuless.spy.SpyExceptions.isExcepted(currentAccount, uid)) {
-                            org.ayuless.spy.LastSeen.record(currentAccount, encryptedChat.user_id, date); // Ayuless: last online (secret-chat typing)
-                        }
+                        org.ayuless.spy.LastSeen.onEncryptedTyping(currentAccount, update.chat_id, encryptedChat.user_id, date); // Ayuless: last online
                     }
                 }
             } else if (baseUpdate instanceof TL_update.TL_updateEncryptedMessagesRead) {

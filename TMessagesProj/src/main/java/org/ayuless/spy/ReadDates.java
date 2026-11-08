@@ -68,7 +68,7 @@ public final class ReadDates {
         if (SpyExceptions.isExcepted(account, dialogId)) {
             return;
         }
-        TLRPC.EncryptedChat chat = MessagesController.getInstance(account).getEncryptedChat(chatId);
+        TLRPC.EncryptedChat chat = MessagesController.getInstance(account).getEncryptedChatDB(chatId, true);
         if (chat != null && SpyExceptions.isExcepted(account, chat.user_id)) {
             return;
         }
