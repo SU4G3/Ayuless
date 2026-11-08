@@ -122,6 +122,7 @@
     <string name="AyulessSpyExceptions">Управление исключениями</string>
     <string name="AyulessSpyExceptionsNone">Нет</string>
     <string name="AyulessSpyExceptionsInfo">Для выбранных здесь чатов и пользователей удалённые сообщения и история правок не сохраняются.</string>
+    <string name="AyulessProtectedForwardNeedsDownload">Часть медиа из защищённого чата не переслана: сначала скачайте его.</string>
     <string name="AyulessAttachmentsHeader">Вложения</string>
     <string name="AyulessSaveAttachments">Сохранять вложения</string>
     <string name="AyulessSaveAttachmentsInfo">Хранит личную копию фото, видео и файлов удалённых сообщений, если они уже были загружены. Чаты из исключений Шпиона, секретные чаты и самоуничтожающиеся медиа не сохраняются.</string>

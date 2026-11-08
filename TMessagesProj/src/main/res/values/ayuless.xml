@@ -124,6 +124,7 @@
     <string name="AyulessSpyExceptions">Manage exceptions</string>
     <string name="AyulessSpyExceptionsNone">None</string>
     <string name="AyulessSpyExceptionsInfo">Deleted messages and edit history are not saved for the chats and users you pick here.</string>
+    <string name="AyulessProtectedForwardNeedsDownload">Some media from a protected chat was not forwarded: download it first.</string>
     <string name="AyulessAttachmentsHeader">Attachments</string>
     <string name="AyulessSaveAttachments">Save attachments</string>
     <string name="AyulessSaveAttachmentsInfo">Keeps a private copy of photos, videos and files of deleted messages if they were already downloaded. Chats from Spy exceptions, secret chats and self-destructing media are never saved.</string>

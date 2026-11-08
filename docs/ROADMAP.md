@@ -57,3 +57,4 @@ Nothing has been tested on a device yet. All Ayuless features are off by default
 - ✅ Local Premium: whole-chat translation only, server-side limits stay (toggle) (#34)
 - ✅ Work in background: foreground keep-alive service with a silent notification (#34)
 - ✅ Delayed send: send as a short scheduled message so you never appear online (#33)
+- 🚧 Restricted saving in groups/channels ignored: save, copy, screenshots, forward as copy. Secret chats, private chats, auto-delete chats and self-destruct media stay protected.
