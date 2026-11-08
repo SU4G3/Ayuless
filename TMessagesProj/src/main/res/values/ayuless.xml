@@ -103,6 +103,7 @@
     <string name="AyulessSaveLastSeen">Save last online</string>
     <string name="AyulessSaveLastSeenInfo">Saves the last known online time of people, also when they hide it (from their messages, typing and reading). Very approximate.</string>
     <string name="AyulessSavedLocally">%1$s (saved locally)</string>
+    <string name="AyulessFilteredMessage">Filtered message</string>
     <string name="AyulessUsefulHeader">Useful features</string>
     <string name="AyulessGhostInDialogs">Ghost status in chat list</string>
     <string name="AyulessGhostInDialogsInfo">Shows a ghost button in the chat list when ghost options are selected. Tap it to turn ghost mode on or off.</string>

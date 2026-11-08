@@ -101,6 +101,7 @@
     <string name="AyulessSaveLastSeen">Сохранять последний онлайн</string>
     <string name="AyulessSaveLastSeenInfo">Сохраняет последний известный онлайн людей, в том числе со скрытым временем посещения (по их сообщениям, наборам текста и прочтениям). Очень приблизительно.</string>
     <string name="AyulessSavedLocally">%1$s (сохранено локально)</string>
+    <string name="AyulessFilteredMessage">Скрытое сообщение</string>
     <string name="AyulessUsefulHeader">Полезные функции</string>
     <string name="AyulessGhostInDialogs">Статус призрака в списке чатов</string>
     <string name="AyulessGhostInDialogsInfo">Показывает кнопку призрака в списке чатов, если выбраны опции режима призрака. Нажмите, чтобы включить или выключить режим.</string>

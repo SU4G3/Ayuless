@@ -1137,7 +1137,8 @@ public class NotificationsController extends BaseController implements Notificat
                 if (messageObject.messageOwner != null && (messageObject.isImportedForward() ||
                         messageObject.messageOwner.action instanceof TLRPC.TL_messageActionSetMessagesTTL ||
                         messageObject.messageOwner.silent && (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionContactSignUp || messageObject.messageOwner.action instanceof TLRPC.TL_messageActionUserJoined)) ||
-                        MessageObject.isTopicActionMessage(messageObject)) {
+                        MessageObject.isTopicActionMessage(messageObject) ||
+                        org.ayuless.filters.MessageFilters.isHiddenSafe(currentAccount, messageObject)) { // Ayuless: message filters
                     if (BuildVars.LOGS_ENABLED) {
                         FileLog.d("skipped message because 1");
                     }
