@@ -84,11 +84,13 @@
     <string name="AyulessFiltersTitle">Message filters</string>
     <string name="AyulessFiltersEnable">Enable filters</string>
     <string name="AyulessFiltersInfo">Filters hide messages by keywords or regular expressions, hide users with a shadow ban and hide messages from blocked users. Messages are only hidden, not deleted. Your own messages and secret chats are never filtered.</string>
+    <string name="AyulessFiltersReapply">Refresh open chats</string>
+    <string name="AyulessFiltersReapplyInfo">Reload open chats when filter settings change, keeping the current position when possible.</string>
     <string name="AyulessFiltersMain">Main</string>
     <string name="AyulessFiltersPrivate">Apply filters in private chats</string>
     <string name="AyulessFiltersHideBlocked">Hide messages from blocked users</string>
     <string name="AyulessFiltersShared">Shared filters</string>
-    <string name="AyulessFiltersSharedInfo">Shared filters apply in groups and channels, and in private chats if enabled above. Changes apply when a chat is opened again.</string>
+    <string name="AyulessFiltersSharedInfo">Shared filters apply in groups and channels, and in private chats if enabled above. Enable refresh above to apply changes to open chats.</string>
     <string name="AyulessFiltersAdd">Add filter</string>
     <string name="AyulessFilterEdit">Edit filter</string>
     <string name="AyulessFilterExpression">Expression</string>

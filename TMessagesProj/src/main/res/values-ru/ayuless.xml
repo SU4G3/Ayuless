@@ -82,11 +82,13 @@
     <string name="AyulessFiltersTitle">Фильтры сообщений</string>
     <string name="AyulessFiltersEnable">Включить фильтры</string>
     <string name="AyulessFiltersInfo">Фильтры скрывают сообщения по ключевым словам или регулярным выражениям, скрывают пользователей с помощью теневого бана и прячут сообщения от заблокированных. Сообщения только скрываются, а не удаляются. Ваши сообщения и секретные чаты не фильтруются.</string>
+    <string name="AyulessFiltersReapply">Обновлять открытые чаты</string>
+    <string name="AyulessFiltersReapplyInfo">Перезагружать открытые чаты при изменении фильтров, по возможности сохраняя текущую позицию.</string>
     <string name="AyulessFiltersMain">Основные</string>
     <string name="AyulessFiltersPrivate">Применять фильтры в личных чатах</string>
     <string name="AyulessFiltersHideBlocked">Скрывать сообщения от пользователей в ЧС</string>
     <string name="AyulessFiltersShared">Общие фильтры</string>
-    <string name="AyulessFiltersSharedInfo">Общие фильтры действуют в группах и каналах, а в личных чатах, если это включено выше. Изменения применяются при следующем открытии чата.</string>
+    <string name="AyulessFiltersSharedInfo">Общие фильтры действуют в группах и каналах, а в личных чатах, если это включено выше. Включите обновление выше, чтобы применять изменения к открытым чатам.</string>
     <string name="AyulessFiltersAdd">Добавить фильтр</string>
     <string name="AyulessFilterEdit">Изменить фильтр</string>
     <string name="AyulessFilterExpression">Выражение</string>
