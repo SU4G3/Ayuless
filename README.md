@@ -5,7 +5,7 @@
 <h1 align="center">Ayuless</h1>
 
 <p align="center">
-  A fully open-source unofficial Android messenger client with ghost mode, anti-delete and edit history.<br>
+  A fully open-source unofficial Android messenger client with ghost mode, anti-delete, edit history and message filters.<br>
   <a href="#русский">Русский</a> · <a href="#english">English</a>
 </p>
 
@@ -21,7 +21,7 @@
 > **Unofficial client. Not affiliated with Telegram, AyuGram or Radolyn Labs. Name idea from exteraless.**
 
 > [!WARNING]
-> Pre-alpha. No releases yet. Features below are the plan for v0.1, not shipped functionality. See [docs/ROADMAP.md](docs/ROADMAP.md).
+> Pre-alpha. No releases yet, nothing tested on a device. Features below are merged to `main` but unreleased. See [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ---
 
@@ -35,12 +35,19 @@ Ayuless — неофициальный Android-клиент с функциям�
 
 ### Функции v0.1 (в разработке)
 
-Все функции включаются отдельными переключателями в разделе настроек **Ayuless** (по аккаунтам, где это уместно). Путь: **Настройки → Ayuless**. По умолчанию всё выключено.
+Все функции включаются отдельными переключателями в разделе настроек **Ayuless** (по аккаунтам, где это уместно). Путь: **Настройки → Ayuless**. По умолчанию всё выключено. На устройстве пока ничего не тестировалось.
 
-- **Ghost mode** — не отправлять статус «онлайн», «прочитано», «печатает», не отмечать просмотры историй; опция «уйти в офлайн сразу после отправки».
-- **Анти-удаление** — сообщение, удалённое собеседником или сервером, остаётся в чате и выделяется серым. Удаление самим пользователем работает как обычно.
-- **История правок** — все прошлые версии изменённого сообщения доступны из меню сообщения.
-- **Бэкап** локальной истории удалённых и изменённых сообщений (опционально).
+- **Ghost mode** — не отправлять «онлайн», «прочитано», «печатает», просмотры историй; уходить в офлайн сразу после отправки. Профили (общий и по аккаунтам), переключатель «N/5», закрепление отдельных опций, кнопка в списке чатов, предложение ghost mode перед просмотром историй.
+- **Отложенная отправка** — сообщения, пересылки, ответы на истории уходят с задержкой.
+- **Анти-удаление** — сообщение, удалённое собеседником или сервером, остаётся в чате с пометкой. Сохраняются и вложения (с лимитом размера). Удаление самим пользователем работает как обычно.
+- **История правок** — все прошлые версии изменённого сообщения из меню сообщения.
+- **Шпион** — локально сохраняет дату прочтения твоих сообщений и время последнего онлайна; исключения для выбранных чатов.
+- **Фильтры** — ключевые слова и regex, теневой бан, скрытие сообщений заблокированных; работают и в превью списка чатов, и в уведомлениях.
+- **Запрет сохранения** — в группах и каналах можно сохранять, копировать и пересылать копией.
+- **Дополнительно** — скрытие спонсорских сообщений, локальный Premium (перевод чата), работа в фоне.
+- **Бэкап** — экспорт, импорт и очистка локальной базы.
+
+В работе (открытые PR): секретные чаты, TTL и «посмотреть один раз» (#43, #44, #45), новый вид настроек (#42), вход с подменой клиента (#35). Подробно: [ROADMAP](docs/ROADMAP.md).
 
 ### Открытость
 
@@ -82,12 +89,19 @@ All Ayuless code lives in the `org.ayuless` package. Edits to upstream files are
 
 ### v0.1 features (in progress)
 
-Every feature has its own toggle in the **Ayuless** settings section (per account where it makes sense). Path: **Settings → Ayuless**. Everything is off by default.
+Every feature has its own toggle in the **Ayuless** settings section (per account where it makes sense). Path: **Settings → Ayuless**. Everything is off by default. Nothing has been tested on a device yet.
 
-- **Ghost mode** — don't send online status, read receipts, typing status or story views; optional "go offline right after sending".
-- **Anti-delete** — messages deleted by the other side or the server stay in the chat, greyed out. Deleting your own messages works as usual.
-- **Edit history** — all previous versions of an edited message, available from the message menu.
-- **Backup** of the local deleted/edited history (optional).
+- **Ghost mode** — don't send online status, read receipts, typing or story views; go offline right after sending. Profiles (global and per account), "N/5" master switch, lockable options, a chat list button, ghost prompt before opening stories.
+- **Delayed send** — messages, forwards and story replies are sent after a delay.
+- **Anti-delete** — messages deleted by the other side or the server stay in the chat, marked. Attachments are kept too (with a size limit). Deleting your own messages works as usual.
+- **Edit history** — all previous versions of an edited message, from the message menu.
+- **Spy** — locally saves when your messages were read and users' last online time; exceptions for chosen chats.
+- **Filters** — keywords and regex, shadow ban, hide blocked users; also in chat list previews and notifications.
+- **Restricted saving** — save, copy and forward as copy in groups and channels.
+- **Extras** — hide sponsored messages, local Premium (chat translation), work in background.
+- **Backup** — export, import and clear the local database.
+
+In progress (open PRs): secret chats, TTL and view-once (#43, #44, #45), new settings look (#42), login with client spoof (#35). Details: [ROADMAP](docs/ROADMAP.md).
 
 ### Openness
 
