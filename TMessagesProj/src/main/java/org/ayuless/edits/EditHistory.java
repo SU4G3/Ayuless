@@ -36,7 +36,7 @@ public final class EditHistory {
             return;
         }
         final long dialogId = MessageObject.getDialogId(edited);
-        if (DialogObject.isEncryptedDialog(dialogId) || SpyExceptions.isExcepted(account, dialogId)) {
+        if (SpyExceptions.isExcepted(account, dialogId)) {
             return;
         }
         final int msgId = edited.id;
