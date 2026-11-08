@@ -35,6 +35,7 @@ public final class GhostConfig {
     public static final String KEY_SEND_SILENTLY = "sendSilently";
     /** Ask before opening stories whether to view them in ghost mode. On by default. */
     public static final String KEY_STORY_PROMPT = "storyPrompt";
+    public static final String KEY_DELAYED_SEND = "delayedSend";
     /** Per-account flag: use the account's own profile instead of the shared one. */
     public static final String KEY_OVERRIDE = "override";
 
@@ -155,5 +156,10 @@ public final class GhostConfig {
     /** Send every message without notification sound. Works without the master switch. */
     public static boolean sendSilently(int account) {
         return getProfile(activeProfile(account), KEY_SEND_SILENTLY);
+    }
+
+    /** Send messages as scheduled a few seconds ahead (see DelayedSend). Works without the master switch. */
+    public static boolean delayedSend(int account) {
+        return getProfile(activeProfile(account), KEY_DELAYED_SEND);
     }
 }

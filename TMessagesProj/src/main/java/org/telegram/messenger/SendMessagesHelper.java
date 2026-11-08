@@ -4464,7 +4464,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         TLRPC.ReplyMarkup replyMarkup = sendMessageParams.replyMarkup;
         HashMap<String, String> params = sendMessageParams.params;
         boolean notify = sendMessageParams.notify;
-        int scheduleDate = sendMessageParams.scheduleDate;
+        int scheduleDate = org.ayuless.ghost.DelayedSend.scheduleDate(currentAccount, sendMessageParams); // Ayuless: delayed send
         int scheduleRepeatPeriod = sendMessageParams.scheduleRepeatPeriod;
         int ttl = sendMessageParams.ttl;
         Object parentObject = sendMessageParams.parentObject;
