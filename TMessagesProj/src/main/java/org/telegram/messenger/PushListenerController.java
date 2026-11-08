@@ -31,11 +31,13 @@ import java.util.concurrent.CountDownLatch;
 @Keep
 public class PushListenerController {
     public static final int PUSH_TYPE_FIREBASE = 2,
+        PUSH_TYPE_WEBPUSH = 10, // Ayuless: UnifiedPush endpoint registered as Web Push
         PUSH_TYPE_HUAWEI = 13;
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({
             PUSH_TYPE_FIREBASE,
+            PUSH_TYPE_WEBPUSH, // Ayuless
             PUSH_TYPE_HUAWEI
     })
     public @interface PushType {}
@@ -91,7 +93,7 @@ public class PushListenerController {
     }
 
     public static void processRemoteMessage(@PushType int pushType, String data, long time) {
-        String tag = pushType == PUSH_TYPE_FIREBASE ? "FCM" : "HCM";
+        String tag = pushType == PUSH_TYPE_WEBPUSH ? "UP" : pushType == PUSH_TYPE_FIREBASE ? "FCM" : "HCM"; // Ayuless: UP tag
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d(tag + " PRE START PROCESSING");
         }
@@ -112,6 +114,9 @@ public class PushListenerController {
                 String loc_key = null;
                 String jsonString = null;
                 try {
+                    if (pushType == PUSH_TYPE_WEBPUSH && data != null && data.startsWith("{")) { // Ayuless: UnifiedPush already delivers decrypted JSON
+                        jsonString = data;
+                    } else {
                     byte[] bytes = Base64.decode(data, Base64.URL_SAFE);
                     NativeByteBuffer buffer = new NativeByteBuffer(bytes.length);
                     buffer.writeBytes(bytes);
@@ -151,6 +156,7 @@ public class PushListenerController {
                     byte[] strBytes = new byte[len];
                     buffer.readBytes(strBytes, true);
                     jsonString = new String(strBytes);
+                    } // Ayuless: end of MTProto-encrypted payload branch
                     JSONObject json = new JSONObject(jsonString);
 
                     if (ApplicationLoader.applicationLoaderInstance != null && ApplicationLoader.applicationLoaderInstance.consumePush(currentAccount, json)) {

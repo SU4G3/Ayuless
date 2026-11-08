@@ -94,4 +94,16 @@
     <string name="AyulessShadowBanInfo">Messages from these users are hidden in all chats. They are not notified.</string>
     <string name="AyulessShadowBanRemove">Remove</string>
     <string name="AyulessShadowBanRemoveConfirm">Show messages from this user again?</string>
+    <!-- Notifications / UnifiedPush -->
+    <string name="AyulessNotifications">Notifications</string>
+    <string name="AyulessPushUnifiedPush">UnifiedPush</string>
+    <string name="AyulessPushBackground">Background connection</string>
+    <string name="AyulessPushDistributor">Push distributor</string>
+    <string name="AyulessPushNone">None (background connection)</string>
+    <string name="AyulessPushStatusRegistered">Push notifications are delivered through UnifiedPush.</string>
+    <string name="AyulessPushStatusPending">Waiting for the distributor to register. If this does not change, open the distributor app and check it is connected.</string>
+    <string name="AyulessPushStatusNoDistributors">No UnifiedPush distributor is installed. Notifications use a background connection, which uses more battery.</string>
+    <string name="AyulessPushStatusFallback">Notifications use a background connection, which uses more battery.</string>
+    <string name="AyulessPushInfo">Ayuless has no Google services. To get push notifications without a permanent background connection, install a UnifiedPush distributor app (for example ntfy or Sunup) and select it here.</string>
+    <string name="AyulessPushLearnMore">About UnifiedPush distributors</string>
 </resources>

@@ -114,7 +114,8 @@ public class ApplicationLoader extends Application {
     }
 
     protected PushListenerController.IPushListenerServiceProvider onCreatePushProvider() {
-        return PushListenerController.GooglePushListenerServiceProvider.INSTANCE;
+        // Ayuless: push via a UnifiedPush distributor, keep-alive connection as fallback.
+        return org.ayuless.push.UnifiedPushProvider.INSTANCE;
     }
 
     public static String getApplicationId() {
