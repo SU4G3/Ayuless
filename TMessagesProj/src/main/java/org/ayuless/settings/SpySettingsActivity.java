@@ -18,6 +18,7 @@ import org.ayuless.antidelete.AntiDeleteConfig;
 import org.ayuless.antidelete.DeletedCache;
 import org.ayuless.edits.EditedCache;
 import org.ayuless.edits.EditsConfig;
+import org.ayuless.spy.SpyExtrasConfig;
 import org.ayuless.spy.SpyExceptions;
 import org.ayuless.storage.AyulessStore;
 import org.telegram.messenger.AndroidUtilities;
@@ -46,6 +47,8 @@ public class SpySettingsActivity extends UniversalFragment {
 
     private static final int ID_ANTI_DELETE = 1;
     private static final int ID_EDIT_HISTORY = 2;
+    private static final int ID_SAVE_READ_DATE = 30;
+    private static final int ID_SAVE_LAST_SEEN = 31;
     private static final int ID_EXCEPTIONS = 3;
     private static final int ID_STORAGE_USED = 10;
     private static final int ID_STORAGE_LIMIT = 11;
@@ -79,6 +82,12 @@ public class SpySettingsActivity extends UniversalFragment {
                 exceptions == 0 ? getString(R.string.AyulessSpyExceptionsNone) : String.valueOf(exceptions)));
         items.add(UItem.asShadow(getString(R.string.AyulessSpyExceptionsInfo)));
 
+        items.add(UItem.asHeader(getString(R.string.AyulessSpyAdditional)));
+        items.add(UItem.asCheck(ID_SAVE_READ_DATE, getString(R.string.AyulessSaveReadDate)).setChecked(SpyExtrasConfig.get(account, SpyExtrasConfig.KEY_SAVE_READ_DATE)));
+        items.add(UItem.asShadow(getString(R.string.AyulessSaveReadDateInfo)));
+        items.add(UItem.asCheck(ID_SAVE_LAST_SEEN, getString(R.string.AyulessSaveLastSeen)).setChecked(SpyExtrasConfig.get(account, SpyExtrasConfig.KEY_SAVE_LAST_SEEN)));
+        items.add(UItem.asShadow(getString(R.string.AyulessSaveLastSeenInfo)));
+
         items.add(UItem.asHeader(getString(R.string.AyulessStorageHeader)));
         items.add(UItem.asButton(ID_STORAGE_USED, getString(R.string.AyulessStorageUsed), usedBytes < 0 ? "…" : AndroidUtilities.formatFileSize(usedBytes)));
         items.add(UItem.asButton(ID_STORAGE_LIMIT, getString(R.string.AyulessStorageLimit), limitLabel(AyulessStore.getLimitBytes())));
@@ -101,6 +110,14 @@ public class SpySettingsActivity extends UniversalFragment {
                 break;
             case ID_EDIT_HISTORY:
                 EditsConfig.setEnabled(account, !EditsConfig.isEnabled(account));
+                update();
+                break;
+            case ID_SAVE_READ_DATE:
+                SpyExtrasConfig.set(account, SpyExtrasConfig.KEY_SAVE_READ_DATE, !SpyExtrasConfig.get(account, SpyExtrasConfig.KEY_SAVE_READ_DATE));
+                update();
+                break;
+            case ID_SAVE_LAST_SEEN:
+                SpyExtrasConfig.set(account, SpyExtrasConfig.KEY_SAVE_LAST_SEEN, !SpyExtrasConfig.get(account, SpyExtrasConfig.KEY_SAVE_LAST_SEEN));
                 update();
                 break;
             case ID_EXCEPTIONS:

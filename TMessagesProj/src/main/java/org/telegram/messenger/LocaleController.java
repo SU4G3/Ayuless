@@ -2982,6 +2982,12 @@ public class LocaleController {
                 }
                 return getString("Online", R.string.Online);
             } else {
+                if (user.status.expires <= -100) { // Ayuless: locally saved last online for hidden statuses
+                    String local = org.ayuless.spy.LastSeen.formatHidden(currentAccount, user.id);
+                    if (local != null) {
+                        return local;
+                    }
+                }
                 if (user.status.expires == -1) {
                     return getString("Invisible", R.string.Invisible);
                 } else if (user.status.expires == -100 || user.status.expires == -1000) {

@@ -95,6 +95,12 @@
     <string name="AyulessShadowBanInfo">Сообщения этих пользователей скрываются во всех чатах. Они об этом не узнают.</string>
     <string name="AyulessShadowBanRemove">Убрать</string>
     <string name="AyulessShadowBanRemoveConfirm">Снова показывать сообщения этого пользователя?</string>
+    <string name="AyulessSpyAdditional">Дополнительно</string>
+    <string name="AyulessSaveReadDate">Сохранять дату чтения</string>
+    <string name="AyulessSaveReadDateInfo">Сохраняет, когда прочитаны ваши сообщения в личных чатах, и показывает это в меню сообщения, если сервер дату не даёт (скрыто время чтения или сообщение старое). Время — момент, когда устройство получило обновление.</string>
+    <string name="AyulessSaveLastSeen">Сохранять последний онлайн</string>
+    <string name="AyulessSaveLastSeenInfo">Сохраняет последний известный онлайн людей, в том числе со скрытым временем посещения (по их сообщениям, наборам текста и прочтениям). Очень приблизительно.</string>
+    <string name="AyulessSavedLocally">%1$s (сохранено локально)</string>
     <string name="AyulessFilteredMessage">Скрытое сообщение</string>
     <string name="AyulessUsefulHeader">Полезные функции</string>
     <string name="AyulessGhostInDialogs">Статус призрака в списке чатов</string>
