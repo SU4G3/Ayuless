@@ -30,6 +30,7 @@ public class GhostSettingsActivity extends UniversalFragment {
     private static final int ID_OPTION_BASE = 10; // + index in GhostConfig.GHOST_KEYS
     private static final int ID_READ_ON_ACTION = 20;
     private static final int ID_SEND_SILENTLY = 21;
+    private static final int ID_DELAYED_SEND = 22;
 
     private static final int[] OPTION_TITLES = {
             R.string.AyulessGhostHideRead,
@@ -105,6 +106,10 @@ public class GhostSettingsActivity extends UniversalFragment {
                 .setChecked(GhostConfig.getProfile(profile, GhostConfig.KEY_SEND_SILENTLY))
                 .setEnabled(inUse));
         items.add(UItem.asShadow(getString(R.string.AyulessGhostSendSilentlyInfo)));
+        items.add(UItem.asCheck(ID_DELAYED_SEND, getString(R.string.AyulessGhostDelayedSend))
+                .setChecked(GhostConfig.getProfile(profile, GhostConfig.KEY_DELAYED_SEND))
+                .setEnabled(inUse));
+        items.add(UItem.asShadow(getString(R.string.AyulessGhostDelayedSendInfo)));
     }
 
     @Override
@@ -133,6 +138,8 @@ public class GhostSettingsActivity extends UniversalFragment {
             key = GhostConfig.KEY_READ_ON_ACTION;
         } else if (item.id == ID_SEND_SILENTLY) {
             key = GhostConfig.KEY_SEND_SILENTLY;
+        } else if (item.id == ID_DELAYED_SEND) {
+            key = GhostConfig.KEY_DELAYED_SEND;
         }
         if (key != null) {
             GhostConfig.setProfile(profile, key, !GhostConfig.getProfile(profile, key));

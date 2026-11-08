@@ -41,6 +41,9 @@
     <string name="AyulessGhostReadOnActionInfo">Отмечать чат прочитанным, когда вы отправляете в него сообщение или реакцию. Работает вместе с «Не отправлять отметки о прочтении».</string>
     <string name="AyulessGhostSendSilently">Отправлять без звука</string>
     <string name="AyulessGhostSendSilentlyInfo">Все сообщения отправляются без звука уведомления. Работает и при выключенном режиме призрака.</string>
+    <string name="AyulessGhostDelayedSend">Использовать отложку</string>
+    <string name="AyulessGhostDelayedSendInfo">Сообщения отправляются как отложенные примерно через 12 секунд (с вложениями — через 20), поэтому при отправке вы не появляетесь в сети. В чате они появятся, когда сервер их опубликует. Пересылки, секретные чаты и Избранное не откладываются. Работает и при выключенном режиме призрака. Не рекомендуется на слабом интернете.</string>
+    <string name="AyulessGhostDelayedSendHint">Включена отложка: сообщение отправится через несколько секунд.</string>
     <string name="AyulessSpyHeader">Режим шпиона</string>
     <string name="AyulessStorageLimitInfo">При достижении лимита самые старые записи удаляются.</string>
     <string name="AyulessDataHeader">Данные</string>
@@ -92,4 +95,13 @@
     <string name="AyulessShadowBanInfo">Сообщения этих пользователей скрываются во всех чатах. Они об этом не узнают.</string>
     <string name="AyulessShadowBanRemove">Убрать</string>
     <string name="AyulessShadowBanRemoveConfirm">Снова показывать сообщения этого пользователя?</string>
+    <string name="AyulessUsefulHeader">Полезные функции</string>
+    <string name="AyulessGhostInDialogs">Статус призрака в списке чатов</string>
+    <string name="AyulessGhostInDialogsInfo">Показывает кнопку призрака в списке чатов, если выбраны опции режима призрака. Нажмите, чтобы включить или выключить режим.</string>
+    <string name="AyulessGhostTurnedOn">Режим призрака включён</string>
+    <string name="AyulessGhostTurnedOff">Режим призрака выключен</string>
+    <string name="AyulessGhostThisAccount">Этот аккаунт</string>
+    <string name="AyulessSpyExceptions">Управление исключениями</string>
+    <string name="AyulessSpyExceptionsNone">Нет</string>
+    <string name="AyulessSpyExceptionsInfo">Для выбранных здесь чатов и пользователей удалённые сообщения и история правок не сохраняются.</string>
 </resources>
