@@ -2805,6 +2805,13 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             FileLog.e(e);
         }
 
+        // Ayuless: message filters, don't show a filtered last message in the chat list
+        if (message != null && TextUtils.isEmpty(typingString) && org.ayuless.filters.MessageFilters.isHiddenSafe(currentAccount, message)) {
+            messageString = LocaleController.getString(R.string.AyulessFilteredMessage);
+            messageNameString = null;
+            thumbsCount = 0;
+        }
+
         try {
             CharSequence messageStringFinal;
             // Removing links and bold spans to get rid of underlining and boldness

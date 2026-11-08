@@ -95,6 +95,7 @@
     <string name="AyulessShadowBanInfo">Сообщения этих пользователей скрываются во всех чатах. Они об этом не узнают.</string>
     <string name="AyulessShadowBanRemove">Убрать</string>
     <string name="AyulessShadowBanRemoveConfirm">Снова показывать сообщения этого пользователя?</string>
+    <string name="AyulessFilteredMessage">Скрытое сообщение</string>
     <string name="AyulessUsefulHeader">Полезные функции</string>
     <string name="AyulessGhostInDialogs">Статус призрака в списке чатов</string>
     <string name="AyulessGhostInDialogsInfo">Показывает кнопку призрака в списке чатов, если выбраны опции режима призрака. Нажмите, чтобы включить или выключить режим.</string>

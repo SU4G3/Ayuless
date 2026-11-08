@@ -9,11 +9,14 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import org.json.JSONArray;
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 
 import java.util.ArrayList;
@@ -122,6 +125,16 @@ public final class MessageFilters {
                 .putString(KEY_SHADOW_BAN, TextUtils.join(",", shadowBan))
                 .apply();
         snapshot = new Snapshot(enabled, privateChats, hideBlocked, new ArrayList<>(filters), new LinkedHashSet<>(shadowBan));
+        AndroidUtilities.runOnUIThread(MessageFilters::refreshDialogLists);
+    }
+
+    /** Redraws chat list previews so they follow the new filter settings. */
+    private static void refreshDialogLists() {
+        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+            if (UserConfig.getInstance(a).isClientActivated()) {
+                NotificationCenter.getInstance(a).postNotificationName(NotificationCenter.updateInterfaces, MessagesController.UPDATE_MASK_ALL);
+            }
+        }
     }
 
     // ---- settings API ----
@@ -172,6 +185,19 @@ public final class MessageFilters {
     }
 
     // ---- matching ----
+
+    /**
+     * {@link #isHidden} for callers off the UI thread (notifications) or in drawing code: never
+     * throws, a failed check means "not hidden".
+     */
+    public static boolean isHiddenSafe(int account, MessageObject obj) {
+        try {
+            return isHidden(account, obj);
+        } catch (Exception e) {
+            FileLog.e(e);
+            return false;
+        }
+    }
 
     /** Whether an incoming message must be hidden from the chat list of messages. */
     public static boolean isHidden(int account, MessageObject obj) {
