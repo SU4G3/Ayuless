@@ -302,7 +302,8 @@ public final class AyulessStore {
                 added += copyTable(src, db, "deleted_messages", new String[]{"dialog_id", "msg_id", "topic_id", "date", "deleted_at", "from_id", "data"});
                 added += copyTable(src, db, "edit_history", new String[]{"dialog_id", "msg_id", "edit_date", "version", "text", "entities", "media"});
                 if (hasColumns(src, "read_outbox", "dialog_id", "min_id", "max_id", "read_at")) {
-                    added += copyTable(src, db, "read_outbox", new String[]{"dialog_id", "min_id", "max_id", "read_at"});
+                    // Read receipts are metadata, kept for secret chats too.
+                    added += copyTable(src, db, "read_outbox", new String[]{"dialog_id", "min_id", "max_id", "read_at"}, null);
                 }
                 if (hasColumns(src, "last_seen", "user_id", "seen_at")) {
                     added += mergeLastSeen(src, db);
@@ -346,8 +347,12 @@ public final class AyulessStore {
     }
 
     private static int copyTable(SQLiteDatabase src, SQLiteDatabase dst, String table, String[] columns) {
+        return copyTable(src, dst, table, columns, null);
+    }
+
+    private static int copyTable(SQLiteDatabase src, SQLiteDatabase dst, String table, String[] columns, String where) {
         int added = 0;
-        try (Cursor c = src.query(table, columns, null, null, null, null, null)) {
+        try (Cursor c = src.query(table, columns, where, null, null, null, null)) {
             ContentValues values = new ContentValues();
             while (c.moveToNext()) {
                 values.clear();
@@ -386,6 +391,7 @@ public final class AyulessStore {
 
     /**
      * Records that outgoing messages in (minId, maxId] of a private dialog were read at readAt.
+     * For secret chats the range holds message dates instead of message ids.
      * Ignored when the range is empty or already covered by a newer record.
      */
     public void saveReadOutbox(long dialogId, int minId, int maxId, int readAt) {
@@ -416,7 +422,7 @@ public final class AyulessStore {
         });
     }
 
-    /** Locally recorded read time of an outgoing message, or 0 if unknown. */
+    /** Locally recorded read time of an outgoing message (by date in secret chats), or 0 if unknown. */
     public void getReadDate(long dialogId, int msgId, Callback<Integer> callback) {
         queue.postRunnable(() -> {
             int result = 0;
