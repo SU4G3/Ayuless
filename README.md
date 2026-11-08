@@ -40,7 +40,6 @@ Ayuless — неофициальный Android-клиент с функциям�
 - **Ghost mode** — не отправлять статус «онлайн», «прочитано», «печатает», не отмечать просмотры историй; опция «уйти в офлайн сразу после отправки».
 - **Анти-удаление** — сообщение, удалённое собеседником или сервером, остаётся в чате и выделяется серым. Удаление самим пользователем работает как обычно.
 - **История правок** — все прошлые версии изменённого сообщения доступны из меню сообщения.
-- **Секретные чаты и самоуничтожающиеся сообщения** никогда не сохраняются.
 - **Бэкап** локальной истории удалённых и изменённых сообщений (опционально).
 
 ### Открытость
@@ -84,7 +83,6 @@ Every feature has its own toggle in the **Ayuless** settings section (per accoun
 - **Ghost mode** — don't send online status, read receipts, typing status or story views; optional "go offline right after sending".
 - **Anti-delete** — messages deleted by the other side or the server stay in the chat, greyed out. Deleting your own messages works as usual.
 - **Edit history** — all previous versions of an edited message, available from the message menu.
-- **Secret chats and self-destructing messages** are never stored.
 - **Backup** of the local deleted/edited history (optional).
 
 ### Openness
