@@ -40,7 +40,7 @@
     <string name="AyulessGhostUseOwn">Свои настройки для этого аккаунта</string>
     <string name="AyulessGhostUseOwnInfo">Если выключено, аккаунт использует общие настройки для всех аккаунтов.</string>
     <string name="AyulessGhostReadOnAction">Читать при действиях</string>
-    <string name="AyulessGhostReadOnActionInfo">Отмечать чат прочитанным, когда вы отправляете в него сообщение или реакцию. Работает вместе с «Не отправлять отметки о прочтении».</string>
+    <string name="AyulessGhostReadOnActionInfo">Отмечать чат прочитанным, когда вы отправляете в него сообщение или реакцию, в том числе в секретных чатах. Работает вместе с «Не отправлять отметки о прочтении». Если выключено, отправка сообщения не разрешает отметки о прочтении.</string>
     <string name="AyulessGhostSendSilently">Отправлять без звука</string>
     <string name="AyulessGhostSendSilentlyInfo">Все сообщения отправляются без звука уведомления. Работает и при выключенном режиме призрака.</string>
     <string name="AyulessGhostDelayedSend">Использовать отложку</string>

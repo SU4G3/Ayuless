@@ -42,7 +42,7 @@
     <string name="AyulessGhostUseOwn">Use own settings for this account</string>
     <string name="AyulessGhostUseOwnInfo">When off, this account follows the settings for all accounts.</string>
     <string name="AyulessGhostReadOnAction">Read on actions</string>
-    <string name="AyulessGhostReadOnActionInfo">Mark a chat as read when you send a message or a reaction there. Requires \u00ABDon\'t send read receipts\u00BB.</string>
+    <string name="AyulessGhostReadOnActionInfo">Mark a chat as read when you send a message or a reaction there, including in secret chats. Requires \u00ABDon\'t send read receipts\u00BB. When off, sending does not allow read receipts.</string>
     <string name="AyulessGhostSendSilently">Send silently</string>
     <string name="AyulessGhostSendSilentlyInfo">Send all messages without notification sound. Works even when ghost mode is off.</string>
     <string name="AyulessGhostDelayedSend">Delayed send</string>

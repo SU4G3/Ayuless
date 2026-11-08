@@ -205,16 +205,23 @@ public final class MessageFilters {
         if (!s.enabled || obj == null || obj.messageOwner == null || obj.isOut()) {
             return false;
         }
-        // Secret chats are filtered too; their dialog ids are positive, so they follow the private chats switch.
+        // Secret chats share the private-chat regex switch and use the other participant for sender rules.
         long dialogId = obj.getDialogId();
         long fromId = obj.getFromChatId();
+        if (fromId == 0 && DialogObject.isEncryptedDialog(dialogId)) {
+            TLRPC.EncryptedChat chat = MessagesController.getInstance(account).getEncryptedChat(DialogObject.getEncryptedChatId(dialogId));
+            if (chat != null) {
+                long selfId = UserConfig.getInstance(account).getClientUserId();
+                fromId = chat.admin_id == selfId ? chat.participant_id : chat.admin_id;
+            }
+        }
         if (fromId != 0 && s.shadowBan.contains(fromId)) {
             return true;
         }
         if (s.hideBlocked && fromId != 0 && MessagesController.getInstance(account).blockePeers.indexOfKey(fromId) >= 0) {
             return true;
         }
-        if (s.filters.isEmpty() || (dialogId > 0 && !s.privateChats) || obj.messageOwner instanceof TLRPC.TL_messageService) {
+        if (s.filters.isEmpty() || ((DialogObject.isUserDialog(dialogId) || DialogObject.isEncryptedDialog(dialogId)) && !s.privateChats) || obj.messageOwner instanceof TLRPC.TL_messageService) {
             return false;
         }
         String text = obj.messageOwner.message;

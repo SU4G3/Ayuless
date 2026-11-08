@@ -163,6 +163,10 @@ public class SecretChatHelper extends BaseController {
     }
 
     public void sendMessagesReadMessage(TLRPC.EncryptedChat encryptedChat, ArrayList<Long> random_ids, TLRPC.Message resendMessage) {
+        // Ayuless: encrypted content receipts must be blocked before encryption (including resends).
+        if (org.ayuless.ghost.GhostConfig.hideRead(currentAccount)) {
+            return;
+        }
         if (!(encryptedChat instanceof TLRPC.TL_encryptedChat)) {
             return;
         }
