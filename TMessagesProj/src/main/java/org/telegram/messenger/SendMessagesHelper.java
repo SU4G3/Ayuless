@@ -2249,7 +2249,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         }
         // Ayuless: messages from groups/channels with restricted saving are sent as copies.
         final ArrayList<MessageObject> messages = new ArrayList<>(messagesIn);
-        org.ayuless.content.ProtectedContent.sendCopies(currentAccount, messages, peer, notify, scheduleDate, replyToTopMsg);
+        org.ayuless.content.ProtectedContent.sendCopies(currentAccount, messages, peer, notify, org.ayuless.ghost.DelayedSend.forwardScheduleDate(currentAccount, peer, scheduleDateIn, messages), replyToTopMsg);
         if (messages.isEmpty()) {
             return 0;
         }

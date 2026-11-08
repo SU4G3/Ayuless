@@ -1,6 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-# Builds all native static libraries from source and compares them with the
-# archives currently committed under TMessagesProj/jni/prebuild/lib.
+# Builds and validates all native static libraries from pinned sources.
 name: Native libraries
 
 on:
@@ -20,6 +19,9 @@ on:
       - 'TMessagesProj/jni/third_party/openh264'
       - 'TMessagesProj/jni/third_party/wamr'
       - 'TMessagesProj/jni/third_party/xiph/opus'
+      - 'TMessagesProj/jni/**/CMakeLists.txt'
+      - 'TMessagesProj/jni/**/Android.mk'
+      - '.gitmodules'
       - 'Tools/native/**'
       - '.github/actions/native-prebuilts/**'
       - '.github/workflows/native.yml'
@@ -52,15 +54,10 @@ jobs:
 
       - uses: ./.github/actions/native-prebuilts
 
-      - name: Compare with committed archives
-        shell: bash
-        run: ANDROID_NDK_HOME="$ANDROID_HOME/ndk/27.2.12479018" Tools/native/compare-prebuilts.sh | tee native-compare.txt
-
       - uses: actions/upload-artifact@v4
         with:
           name: native-prebuilts
           path: |
             TMessagesProj/jni/prebuild/lib
             TMessagesProj/jni/prebuild/include
-            native-compare.txt
           if-no-files-found: error

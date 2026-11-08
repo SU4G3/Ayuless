@@ -6,7 +6,10 @@ BoringSSL (`libcrypto`, `libssl`), FFmpeg (`libavcodec`, `libavformat`, `libavut
 `libtdutils`), tlottie, wallet-engine and WAMR (`libiwasm`).
 
 Upstream commits these as prebuilt `.a` files (about 204 MB). Ayuless builds them
-from source in CI instead.
+from pinned sources in CI and locally instead. No `.a` files are stored in Git.
+The two unused Linux host archives bundled with Breakpad (gflags and glog) are
+also removed; the Android Breakpad targets compile their client sources directly
+and do not link those archives.
 
 ## Sources
 
@@ -23,10 +26,14 @@ fixes). FFmpeg is configured without `--enable-nonfree`.
 sudo apt-get install cmake ninja-build make nasm meson pkg-config gperf python3 perl patch
 # Rust via https://rustup.rs (the script installs the pinned toolchains and Android targets)
 
-export ANDROID_SDK_ROOT=~/Android/Sdk   # needs ndk;27.2.12479018
+export ANDROID_SDK_ROOT=~/Android/Sdk
+# Install SDK/NDK components with the Android SDK command-line tools:
+"$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" \
+  "platforms;android-36" "build-tools;36.0.0" "ndk;27.2.12479018" "cmake;3.22.1"
 Tools/native/build-prebuilts.sh                    # all four ABIs
-ABIS=arm64-v8a Tools/native/build-prebuilts.sh     # one ABI, faster
-Tools/native/compare-prebuilts.sh                  # compare with the committed archives
+Tools/native/check-prebuilts.sh                    # validates all expected outputs
+cp API_KEYS.example API_KEYS                      # fill in APP_ID / APP_HASH
+./gradlew assembleAfatRelease
 ```
 
 `build-prebuilts.sh` is a thin wrapper around upstream's
@@ -34,24 +41,28 @@ Tools/native/compare-prebuilts.sh                  # compare with the committed 
 source submodules, installs the Rust toolchains (wallet-engine's pinned 1.96.1 and
 1.98.0 for tlottie, which upstream leaves at `stable`) and runs the build.
 
+`assembleAfatRelease` needs all four ABIs; do not restrict `ABIS` for this build.
+For a build configured for only one ABI, use e.g.
+`ABIS=arm64-v8a Tools/native/build-prebuilts.sh`. Each invocation cleans previous
+native outputs, including other ABIs. Run from the repository root. CMake checks
+for the required archives and generated headers and points to the source build
+command if any are missing. Generated `.a` files are ignored by Git.
+Re-run the source build after changing native inputs; local outputs are not
+automatically rebuilt by Gradle. The CI cache uses the same output directories.
+
 ## CI
 
 - `.github/actions/native-prebuilts` builds the libraries and caches them under a
   key derived from the submodule commits, build scripts, patches and toolchain
   versions (`Tools/native/build-prebuilts.sh --print-key`).
-- The **Build** workflow runs it before Gradle, so the APK is linked against
-  libraries built from source, not the committed ones.
+- Both cache hits and source builds must pass `Tools/native/check-prebuilts.sh`,
+  which requires all 64 archives and the generated FFmpeg and wallet headers.
+- The **Build** workflow runs the action before Gradle, so the APK links libraries
+  built from pinned sources or restored from that cache.
 - The **Native libraries** workflow (manual, or on PRs touching native inputs)
-  builds them, runs `compare-prebuilts.sh` and uploads the archives as an artifact.
+  uses the same action and uploads the validated archives and headers.
+- The Gradle guard against proprietary dependencies remains enabled for APK builds.
 
-CI build (all four ABIs): 34 of 64 archives are byte-identical to the
-committed ones (BoringSSL, libvpx, opus, WAMR, tdlib, swscale, most openh264).
-The rest differ in bytes but export the same global symbols; for the Rust
-wallet-engine only the per-build hash suffix of mangled names differs, which
-`compare-prebuilts.sh` masks. The APK built in CI links against these.
-
-## Status
-
-The committed `.a` files are still in the tree while the source build proves
-itself in CI. Removing them is the last step of
-[#5](https://github.com/SU4G3/Ayuless/issues/5).
+For historical audits only, `Tools/native/compare-prebuilts.sh <git-ref>` compares
+fresh outputs with archives in a pre-removal commit. It fails if the reference
+contains no archives; normal builds never need a historical binary baseline.

@@ -58,12 +58,14 @@ Ayuless — неофициальный Android-клиент с функциям�
 
 > Пока идёт этап отвязки от Google-зависимостей, инструкция может не работать полностью. Статус: [ROADMAP](docs/ROADMAP.md).
 
-Нужно: JDK 17, Android SDK 36, NDK 27.2.12479018.
+Нужно: JDK 17, Android SDK 36, NDK 27.2.12479018. Перед Gradle собери native-библиотеки для всех четырёх ABI; инструменты и подробности — в [docs/NATIVE.md](docs/NATIVE.md). Готовые `.a` в Git не хранятся.
 
 ```bash
 git clone --recursive --shallow-submodules https://github.com/SU4G3/Ayuless.git
 cd Ayuless
 cp API_KEYS.example API_KEYS   # впиши свои APP_ID / APP_HASH с https://my.telegram.org/apps
+export ANDROID_SDK_ROOT=~/Android/Sdk
+Tools/native/build-prebuilts.sh
 ./gradlew assembleAfatRelease
 ```
 
@@ -112,12 +114,14 @@ In progress (open PRs): secret chats, TTL and view-once (#43, #44, #45), new set
 
 > De-Googling is in progress, so these steps may not fully work yet. Status: [ROADMAP](docs/ROADMAP.md).
 
-Requires JDK 17, Android SDK 36, NDK 27.2.12479018.
+Requires JDK 17, Android SDK 36, NDK 27.2.12479018. Build native libraries for all four ABIs before Gradle; host tools and details are in [docs/NATIVE.md](docs/NATIVE.md). No `.a` archives are stored in Git.
 
 ```bash
 git clone --recursive --shallow-submodules https://github.com/SU4G3/Ayuless.git
 cd Ayuless
 cp API_KEYS.example API_KEYS   # put your own APP_ID / APP_HASH from https://my.telegram.org/apps
+export ANDROID_SDK_ROOT=~/Android/Sdk
+Tools/native/build-prebuilts.sh
 ./gradlew assembleAfatRelease
 ```
 
