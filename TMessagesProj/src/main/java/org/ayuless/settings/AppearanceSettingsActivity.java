@@ -30,6 +30,7 @@ public class AppearanceSettingsActivity extends UniversalFragment {
     private static final int ID_TRANSLUCENT = 1;
     private static final int ID_MARK_STYLE = 2;
     private static final int ID_MARK_COLOR = 3;
+    private static final int ID_GHOST_IN_DIALOGS = 4;
     private static final int ID_HIDE_SPONSORED = 10;
     private static final int ID_LOCAL_PREMIUM = 11;
     private static final int ID_WORK_IN_BACKGROUND = 12;
@@ -59,8 +60,9 @@ public class AppearanceSettingsActivity extends UniversalFragment {
         items.add(UItem.asButton(ID_MARK_STYLE, R.drawable.ayuless_solar_msg_delete, getString(R.string.AyulessDeletedMarkStyle), styleName(AppearanceConfig.markStyle())));
         items.add(UItem.asButton(ID_MARK_COLOR, getString(R.string.AyulessDeletedMarkColor), colorLabel(indexOfColor(AppearanceConfig.markColor()))));
         items.add(UItem.asShadow(getString(R.string.AyulessDeletedAppearanceInfo)));
-
-        items.add(UItem.asHeader(getString(R.string.AyulessUsefulFeatures)));
+        items.add(UItem.asHeader(getString(R.string.AyulessUsefulHeader)));
+        items.add(UItem.asCheck(ID_GHOST_IN_DIALOGS, getString(R.string.AyulessGhostInDialogs)).setChecked(AppearanceConfig.ghostInDialogs()));
+        items.add(UItem.asShadow(getString(R.string.AyulessGhostInDialogsInfo)));
         items.add(UItem.asCheck(ID_HIDE_SPONSORED, getString(R.string.AyulessHideSponsored)).setChecked(ExtrasConfig.hideSponsored()));
         items.add(UItem.asCheck(ID_LOCAL_PREMIUM, getString(R.string.AyulessLocalPremium)).setChecked(ExtrasConfig.localPremium()));
         items.add(UItem.asCheck(ID_WORK_IN_BACKGROUND, getString(R.string.AyulessWorkInBackground)).setChecked(ExtrasConfig.workInBackground()));
@@ -72,6 +74,10 @@ public class AppearanceSettingsActivity extends UniversalFragment {
         switch (item.id) {
             case ID_TRANSLUCENT:
                 AppearanceConfig.setTranslucentDeleted(!AppearanceConfig.translucentDeleted());
+                update();
+                break;
+            case ID_GHOST_IN_DIALOGS:
+                AppearanceConfig.setGhostInDialogs(!AppearanceConfig.ghostInDialogs());
                 update();
                 break;
             case ID_MARK_STYLE:

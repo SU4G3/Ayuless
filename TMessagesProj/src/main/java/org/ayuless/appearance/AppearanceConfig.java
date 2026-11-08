@@ -15,6 +15,7 @@ public final class AppearanceConfig {
     public static final String KEY_TRANSLUCENT_DELETED = "translucentDeleted";
     public static final String KEY_MARK_STYLE = "deletedMarkStyle";
     public static final String KEY_MARK_COLOR = "deletedMarkColor";
+    public static final String KEY_GHOST_IN_DIALOGS = "ghostInDialogs";
 
     /** Deleted mark: trash icon. */
     public static final int MARK_ICON = 0;
@@ -69,5 +70,14 @@ public final class AppearanceConfig {
 
     public static void setMarkColor(int color) {
         prefs().edit().putInt(KEY_MARK_COLOR, color).apply();
+    }
+
+    /** Ghost button in the chat list action bar. On by default. */
+    public static boolean ghostInDialogs() {
+        return !ready() || prefs().getBoolean(KEY_GHOST_IN_DIALOGS, true);
+    }
+
+    public static void setGhostInDialogs(boolean value) {
+        prefs().edit().putBoolean(KEY_GHOST_IN_DIALOGS, value).apply();
     }
 }

@@ -502,6 +502,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private ValueAnimator contactsAlphaAnimator;
     private ViewPage[] viewPages;
     private ActionBarMenuItem passcodeItem;
+    private ActionBarMenuItem ayulessGhostItem; // Ayuless: ghost button
     private ActionBarMenuItem downloadsItem;
     private DownloadProgressIcon downloadProgressIcon;
     private boolean downloadsItemVisible;
@@ -3190,6 +3191,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
             passcodeItem = menu.addItem(1, R.drawable.outline_header_lock_24);
             passcodeItem.setContentDescription(getString(R.string.AccDescrPasscodeLock));
+            ayulessGhostItem = org.ayuless.ghost.GhostBadge.create(menu); // Ayuless: ghost button
 
             downloadsItem = menu.addItem(3, new ColorDrawable(Color.TRANSPARENT));
             downloadsItem.addView(downloadProgressIcon = new DownloadProgressIcon(currentAccount, context));
@@ -3790,6 +3792,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             public void onItemClick(int id) {
                 if ((id == SearchViewPager.forwardItemId || id == SearchViewPager.gotoItemId || id == SearchViewPager.deleteItemId || id == SearchViewPager.speedItemId) && searchViewPager != null) {
                     searchViewPager.onActionBarItemClick(id);
+                    return;
+                }
+                if (id == org.ayuless.ghost.GhostBadge.ITEM_ID) { // Ayuless: ghost button
+                    org.ayuless.ghost.GhostBadge.toggle(DialogsActivity.this, currentAccount, ayulessGhostItem);
                     return;
                 }
                 if (id == -1) {
@@ -6942,6 +6948,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     @Override
     public void onResume() {
         super.onResume();
+        checkUi_itemPasscodeVisibility(); // Ayuless: refresh ghost button after settings changes
         if (dialogStoriesCell != null) {
             dialogStoriesCell.onResume();
         }
@@ -13767,6 +13774,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         final float factor3 = 1f - animatorDoneButtonVisible.getFloatValue();
         final float factor = factor0 * factor1 * factor2 * factor3;
         FragmentFloatingButton.setAnimatedVisibility(passcodeItem, factor);
+        if (ayulessGhostItem != null) { // Ayuless: ghost button follows the same search/animation state
+            final float ghostFactor = (org.ayuless.ghost.GhostBadge.shouldShow(currentAccount) ? 1 : 0) * factor1 * factor2 * factor3;
+            FragmentFloatingButton.setAnimatedVisibility(ayulessGhostItem, ghostFactor);
+            org.ayuless.ghost.GhostBadge.updateIcon(ayulessGhostItem, currentAccount);
+        }
     }
 
     private void checkUi_itemDownloadsVisibility() {
