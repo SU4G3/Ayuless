@@ -4,10 +4,7 @@
  */
 package org.ayuless.antidelete;
 
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 
 import org.ayuless.storage.AyulessStore;
 import org.telegram.SQLite.SQLiteCursor;
@@ -35,9 +32,6 @@ import androidx.collection.LongSparseArray;
  * Deletions made by this client are left alone (see {@link LocalDeletes}).
  */
 public final class AntiDelete {
-
-    private static final String LABEL = "deleted";
-    private static final int LABEL_COLOR = 0xFF9E9E9E;
 
     private AntiDelete() {
     }
@@ -142,16 +136,8 @@ public final class AntiDelete {
         return result.size() == 0 ? null : result;
     }
 
-    /** Prefixes the time label of a kept message with a grey "deleted" mark. */
+    /** Prefixes the time label of a kept message with the deleted mark (see DeletedStyle). */
     public static CharSequence decorateTime(int account, MessageObject messageObject, CharSequence time) {
-        if (messageObject == null || messageObject.messageOwner == null || messageObject.scheduled) {
-            return time;
-        }
-        if (!DeletedCache.isDeleted(account, messageObject.getDialogId(), messageObject.getId())) {
-            return time;
-        }
-        SpannableString label = new SpannableString(LABEL + " ");
-        label.setSpan(new ForegroundColorSpan(LABEL_COLOR), 0, label.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return TextUtils.concat(label, time);
+        return org.ayuless.appearance.DeletedStyle.decorateTime(account, messageObject, time);
     }
 }

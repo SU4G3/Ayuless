@@ -23600,6 +23600,16 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
     }
 
+    // Ayuless: translucent messages kept by anti-delete.
+    @Override
+    public void draw(Canvas canvas) {
+        final int ayulessRestore = org.ayuless.appearance.DeletedStyle.beginDraw(currentAccount, currentMessageObject, canvas, getWidth(), getHeight());
+        super.draw(canvas);
+        if (ayulessRestore >= 0) {
+            canvas.restoreToCount(ayulessRestore);
+        }
+    }
+
     @Override
     public float getAlpha() {
         if (ALPHA_PROPERTY_WORKAROUND) {
