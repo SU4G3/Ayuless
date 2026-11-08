@@ -323,7 +323,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         listView = new UniversalRecyclerView(this, this::fillItems, this::onClick, this::onLongClick);
         listView.setCaptureSectionsDecoratorAllowed(true);
         listView.adapter.setApplyBackground(false);
-        listView.setSections();
+        // Ayuless: reference card geometry; use matching predicates at viewport boundaries.
+        listView.setSections(
+                view -> view.getParent() == listView && !UniversalAdapter.isShadow(
+                        listView.getChildViewHolder(view).getItemViewType()),
+                viewType -> !UniversalAdapter.isShadow(viewType), dp(12), dp(20), false);
         listView.setSectionsDrawBackground(true);
         BaseFragmentSimpleGlass.setListViewParams(listView, 0, 0, dp(12), additionNavigationBarHeight);
         listView.setClipToPadding(false);
@@ -724,7 +728,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         items.add(UItem.asCustomShadow(topView, 200 - 12));
 
         // Ayuless: a dedicated first section directly below the profile block.
-        items.add(SettingCell.Factory.of(900, 0, 0, R.drawable.ayuless_settings_logo, getString(R.string.AyulessSettings), getString(R.string.AyulessSettingsInfo)));
+        items.add(org.ayuless.settings.AyulessSettingsEntry.Factory.of(900, getString(R.string.AyulessSettings)));
         items.add(UItem.asShadow(null));
 
         accountNumbers.clear();

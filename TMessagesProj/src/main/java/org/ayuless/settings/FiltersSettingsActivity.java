@@ -50,7 +50,7 @@ public class FiltersSettingsActivity extends AyulessSettingsFragment {
     }
 
     @Override
-    protected void fillItems(ArrayList<UItem> items, UniversalAdapter adapter) {
+    protected void fillSettingsItems(ArrayList<UItem> items, UniversalAdapter adapter) {
         final boolean enabled = MessageFilters.isEnabled();
         items.add(UItem.asCheck(ID_ENABLED, getString(R.string.AyulessFiltersEnable)).setChecked(enabled));
         items.add(UItem.asShadow(getString(R.string.AyulessFiltersInfo)));

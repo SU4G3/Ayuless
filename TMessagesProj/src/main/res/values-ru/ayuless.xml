@@ -5,6 +5,7 @@
     <string name="AyulessMapsUnavailable">Карты сейчас недоступны в Ayuless.</string>
     <string name="AyulessSettings">Ayuless</string>
     <string name="AyulessSettingsInfo">Режим призрака, шпион, кастомизация</string>
+    <string name="AyulessSettingsVersion">%1$s (%2$d)</string>
     <string name="AyulessGhostHeader">Режим призрака</string>
     <string name="AyulessGhostHideOnline">Не отправлять статус «в сети»</string>
     <string name="AyulessGhostHideRead">Не отправлять отметки о прочтении</string>

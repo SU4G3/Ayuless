@@ -73,7 +73,7 @@ public class SpySettingsActivity extends AyulessSettingsFragment {
     }
 
     @Override
-    protected void fillItems(ArrayList<UItem> items, UniversalAdapter adapter) {
+    protected void fillSettingsItems(ArrayList<UItem> items, UniversalAdapter adapter) {
         final int account = currentAccount;
         items.add(UItem.asHeader(getString(R.string.AyulessSpyHeader)));
         items.add(UItem.asCheck(ID_ANTI_DELETE, getString(R.string.AyulessAntiDelete)).setChecked(AntiDeleteConfig.isEnabled(account)));

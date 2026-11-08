@@ -6,6 +6,7 @@
     <string name="AyulessMapsUnavailable">Maps are currently unavailable in Ayuless.</string>
     <string name="AyulessSettings">Ayuless</string>
     <string name="AyulessSettingsInfo">Ghost mode, spy, customization</string>
+    <string name="AyulessSettingsVersion">%1$s (%2$d)</string>
     <string name="AyulessGhostHeader">Ghost mode</string>
     <string name="AyulessGhostHideOnline">Don\'t send online status</string>
     <string name="AyulessGhostHideRead">Don\'t send read receipts</string>
