@@ -21903,6 +21903,9 @@ public class ChatActivity extends BaseFragment implements
             if (obj.type < 0 || loadIndex == 1 && action instanceof TLRPC.TL_messageActionChatMigrateTo) {
                 continue;
             }
+            if (org.ayuless.filters.MessageFilters.isHidden(currentAccount, obj)) { // Ayuless: message filters
+                continue;
+            }
 
             if (currentChat != null && currentChat.creator && (action instanceof TLRPC.TL_messageActionChatCreate || dropPhotoAction != null && action == dropPhotoAction)) {
                 continue;
@@ -26457,6 +26460,9 @@ public class ChatActivity extends BaseFragment implements
                 if (obj.type < 0 || messagesDict[0].indexOfKey(messageId) >= 0) {
                     continue;
                 }
+                if (org.ayuless.filters.MessageFilters.isHidden(currentAccount, obj)) { // Ayuless: message filters
+                    continue;
+                }
                 if (currentChat != null && currentChat.creator && (!ChatObject.isChannel(currentChat) || currentChat.megagroup) && (action instanceof TLRPC.TL_messageActionChatCreate || action instanceof TLRPC.TL_messageActionChatEditPhoto && messages.size() < 2)) {
                     continue;
                 }
@@ -26591,6 +26597,9 @@ public class ChatActivity extends BaseFragment implements
                     avatarContainer.setTime(action.encryptedAction.ttl_seconds, true);
                 }
                 if (obj.type < 0 || messagesDict[0].indexOfKey(messageId) >= 0) {
+                    continue;
+                }
+                if (org.ayuless.filters.MessageFilters.isHidden(currentAccount, obj)) { // Ayuless: message filters
                     continue;
                 }
                 if (currentChat != null && currentChat.creator && (!ChatObject.isChannel(currentChat) || currentChat.megagroup) && (action instanceof TLRPC.TL_messageActionChatCreate || action instanceof TLRPC.TL_messageActionChatEditPhoto && messages.size() < 2)) {

@@ -32,8 +32,6 @@
     <string name="AyulessIssues">Сообщить о проблеме</string>
     <string name="AyulessDocs">Документация</string>
     <string name="AyulessOff">Выкл.</string>
-    <string name="AyulessSoon">Скоро</string>
-    <string name="AyulessFiltersSoon">Фильтры сообщений появятся в одной из следующих версий.</string>
     <string name="AyulessGhostProfile">Профиль</string>
     <string name="AyulessGhostProfileAll">Все аккаунты</string>
     <string name="AyulessGhostProfileAllInfo">Эти настройки действуют для всех аккаунтов, у которых нет своих.</string>
@@ -71,4 +69,27 @@
     <string name="AyulessColorBlue">Синий</string>
     <string name="AyulessColorGreen">Зелёный</string>
     <string name="AyulessColorOrange">Оранжевый</string>
+    <string name="AyulessFiltersTitle">Фильтры сообщений</string>
+    <string name="AyulessFiltersEnable">Включить фильтры</string>
+    <string name="AyulessFiltersInfo">Фильтры скрывают сообщения по ключевым словам или регулярным выражениям, скрывают пользователей с помощью теневого бана и прячут сообщения от заблокированных. Сообщения только скрываются, а не удаляются. Ваши сообщения и секретные чаты не фильтруются.</string>
+    <string name="AyulessFiltersMain">Основные</string>
+    <string name="AyulessFiltersPrivate">Применять фильтры в личных чатах</string>
+    <string name="AyulessFiltersHideBlocked">Скрывать сообщения от пользователей в ЧС</string>
+    <string name="AyulessFiltersShared">Общие фильтры</string>
+    <string name="AyulessFiltersSharedInfo">Общие фильтры действуют в группах и каналах, а в личных чатах, если это включено выше. Изменения применяются при следующем открытии чата.</string>
+    <string name="AyulessFiltersAdd">Добавить фильтр</string>
+    <string name="AyulessFilterEdit">Изменить фильтр</string>
+    <string name="AyulessFilterExpression">Выражение</string>
+    <string name="AyulessFilterEnabled">Включить фильтр</string>
+    <string name="AyulessFilterCaseInsensitive">Без учёта регистра</string>
+    <string name="AyulessFilterInverse">Обратный фильтр (скрывать всё, что не совпадает)</string>
+    <string name="AyulessFilterInvalid">Некорректное регулярное выражение</string>
+    <string name="AyulessFilterOn">Вкл.</string>
+    <string name="AyulessFilterInverseShort">обратный</string>
+    <string name="AyulessFilterInvalidShort">ошибка</string>
+    <string name="AyulessShadowBan">Теневой бан</string>
+    <string name="AyulessShadowBanAdd">Добавить пользователей</string>
+    <string name="AyulessShadowBanInfo">Сообщения этих пользователей скрываются во всех чатах. Они об этом не узнают.</string>
+    <string name="AyulessShadowBanRemove">Убрать</string>
+    <string name="AyulessShadowBanRemoveConfirm">Снова показывать сообщения этого пользователя?</string>
 </resources>

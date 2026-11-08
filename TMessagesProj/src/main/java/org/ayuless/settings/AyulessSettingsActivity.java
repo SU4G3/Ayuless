@@ -75,7 +75,10 @@ public class AyulessSettingsActivity extends UniversalFragment {
                 : getString(R.string.AyulessOff);
         items.add(UItem.asButton(ID_GHOST, R.drawable.ayuless_solar_ghost, getString(R.string.AyulessGhostHeader), ghostState));
         items.add(UItem.asButton(ID_SPY, R.drawable.ayuless_solar_msg_stories_stealth, getString(R.string.AyulessSpy)));
-        items.add(UItem.asButton(ID_FILTERS, R.drawable.ayuless_solar_msg_filter, getString(R.string.AyulessFilters), getString(R.string.AyulessSoon)));
+        String filtersState = org.ayuless.filters.MessageFilters.isEnabled()
+                ? String.valueOf(org.ayuless.filters.MessageFilters.getFilters().size() + org.ayuless.filters.MessageFilters.getShadowBan().size())
+                : getString(R.string.AyulessOff);
+        items.add(UItem.asButton(ID_FILTERS, R.drawable.ayuless_solar_msg_filter, getString(R.string.AyulessFilters), filtersState));
         items.add(UItem.asButton(ID_CUSTOMIZATION, R.drawable.ayuless_solar_menu_edit_appearance, getString(R.string.AyulessCustomization)));
         items.add(UItem.asShadow(null));
 
@@ -96,8 +99,7 @@ public class AyulessSettingsActivity extends UniversalFragment {
                 presentFragment(new SpySettingsActivity());
                 break;
             case ID_FILTERS:
-                org.telegram.ui.Components.BulletinFactory.of(this)
-                        .createSimpleBulletin(R.raw.info, getString(R.string.AyulessFiltersSoon)).show();
+                presentFragment(new FiltersSettingsActivity());
                 break;
             case ID_CUSTOMIZATION:
                 presentFragment(new AppearanceSettingsActivity());
