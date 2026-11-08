@@ -64,11 +64,11 @@ cp API_KEYS.example API_KEYS   # впиши свои APP_ID / APP_HASH с https:
 
 ### Участие
 
-Правила кода и лицензирования: [CONTRIBUTING.md](CONTRIBUTING.md). Код из AyuGram4A, exteraGram и AyuGramDesktop не копируется — логика реализуется самостоятельно.
+Правила кода и лицензирования: [CONTRIBUTING.md](CONTRIBUTING.md). Код из exteraGram не используется. Части кода основаны на AyuGram4A (© Radolyn Labs), с сохранением их копирайтов; список файлов в [docs/CREDITS.md](docs/CREDITS.md).
 
 ### Благодарности
 
-Спасибо команде [AyuGram](https://github.com/AyuGram) (Radolyn Labs): их клиент вдохновил Ayuless, набор функций и устройство настроек взяты у них за образец. Код AyuGram в Ayuless не копировался. Спасибо [exteraless](https://github.com/exteraless) за идею названия. Остальные авторы и лицензии: [docs/CREDITS.md](docs/CREDITS.md).
+Спасибо команде [AyuGram](https://github.com/AyuGram) (Radolyn Labs): их клиент вдохновил Ayuless, набор функций и устройство настроек взяты у них за образец. Части кода Ayuless основаны на коде AyuGram4A, авторство сохранено. Спасибо [exteraless](https://github.com/exteraless) за идею названия. Остальные авторы и лицензии: [docs/CREDITS.md](docs/CREDITS.md).
 
 ---
 
@@ -111,11 +111,11 @@ cp API_KEYS.example API_KEYS   # put your own APP_ID / APP_HASH from https://my.
 
 ### Contributing
 
-Code and licensing rules: [CONTRIBUTING.md](CONTRIBUTING.md). No code is copied from AyuGram4A, exteraGram or AyuGramDesktop; behaviour is reimplemented independently.
+Code and licensing rules: [CONTRIBUTING.md](CONTRIBUTING.md). No exteraGram code is used. Parts of the code are based on AyuGram4A (© Radolyn Labs) with their copyright notices kept; the file list is in [docs/CREDITS.md](docs/CREDITS.md).
 
 ### Thanks
 
-Thanks to the [AyuGram](https://github.com/AyuGram) team (Radolyn Labs): their client inspired Ayuless, and its feature set and settings layout served as the model. No AyuGram code was copied into Ayuless. Thanks to [exteraless](https://github.com/exteraless) for the name idea. Other authors and licenses: [docs/CREDITS.md](docs/CREDITS.md).
+Thanks to the [AyuGram](https://github.com/AyuGram) team (Radolyn Labs): their client inspired Ayuless, and its feature set and settings layout served as the model. Parts of Ayuless are based on AyuGram4A code, with authorship kept. Thanks to [exteraless](https://github.com/exteraless) for the name idea. Other authors and licenses: [docs/CREDITS.md](docs/CREDITS.md).
 
 ---
 

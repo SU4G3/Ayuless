@@ -2,13 +2,16 @@
 
 ## Rules
 
-1. **No copied code** from AyuGram4A, exteraGram or AyuGramDesktop. Reimplement behaviour from its description. Telegram-FOSS and Mercurygram may be read to understand an approach, not copied.
+1. **Code from other clients.** Code taken from AyuGram4A or AyuGramDesktop (© Radolyn Labs) is allowed only if:
+   - the original copyright header is kept (e.g. `Copyright @Radolyn, 2023`) and the file gets the SPDX identifier of the source license (AyuGramDesktop: `GPL-3.0-or-later` compatible; AyuGram4A ships the GPL v2 text without "or later", so mark it `GPL-2.0-or-later` only once the authors confirm, see [docs/CREDITS.md](docs/CREDITS.md));
+   - the file is listed in [docs/CREDITS.md](docs/CREDITS.md) under "Code derived from AyuGram".
+   Do not copy code from exteraGram. AyuGram4A is based on exteraGram, so check that a piece you take is AyuGram's own code (`com.radolyn.ayugram`), not exteraGram's.
 2. **Isolation.** New code goes in `org.ayuless` (`TMessagesProj/src/main/java/org/ayuless/`). Upstream files get the smallest possible hook, marked with a comment:
    ```java
    // Ayuless: <short reason>
    ```
    This keeps `git rebase upstream/master` manageable.
-3. **License header.** Every new file starts with:
+3. **License header.** Every new file written for Ayuless starts with:
    ```java
    /*
     * SPDX-License-Identifier: GPL-3.0-or-later
