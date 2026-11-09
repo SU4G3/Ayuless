@@ -154,11 +154,9 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
 
     @Override
     public View createView(Context context) {
-        logoDrawable = context.getResources().getDrawable(R.drawable.telegram_logo).mutate();
-        logoDrawable.setBounds(0, dp(8.666f), dp(115), dp(35));
-        SpannableStringBuilder ssb = new SpannableStringBuilder(LocaleController.getString(R.string.Page1Title));
-        ssb.setSpan(new ImageSpan(logoDrawable), 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        titles[0] = ssb;
+        // Ayuless: retain the localized app title instead of Telegram's wordmark.
+        logoDrawable = context.getResources().getDrawable(R.drawable.ayuless_settings_logo).mutate();
+        titles[0] = LocaleController.getString(R.string.Page1Title);
 
 
         actionBar.setAddToContainer(false);
@@ -792,10 +790,18 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
             loadTexture(R.drawable.intro_powerful_star, 18);
             loadTexture(R.drawable.intro_private_door, 19);
             loadTexture(R.drawable.intro_private_screw, 20);
-            loadTexture(R.drawable.intro_tg_plane, 21);
+            // Ayuless: rasterize the vector into the existing intro animation texture.
+            loadTexture(v -> {
+                int size = dp(ICON_HEIGHT_DP);
+                Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+                Drawable mark = getParentActivity().getResources().getDrawable(R.drawable.ayuless_mark).mutate();
+                mark.setBounds(0, 0, size, size);
+                mark.draw(new Canvas(bitmap));
+                return bitmap;
+            }, 21);
             loadTexture(v -> {
                 Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                paint.setColor(ThemeColors.TELEGRAM_COLOR); // It's logo color, it should not be colored by the theme
+                paint.setColor(0xFF251D41); // Ayuless: brand background from branding/generate.py.
                 int size = dp(ICON_HEIGHT_DP);
                 Bitmap bm = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
                 Canvas c = new Canvas(bm);
