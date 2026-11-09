@@ -20,9 +20,11 @@ Ayuless (GPL-3.0-or-later) as long as this attribution is kept.
 
 Thanks to the [AyuGram](https://github.com/AyuGram) team (Radolyn Labs). Ayuless follows AyuGram's feature set and settings layout. Ayuless is not affiliated with AyuGram or Radolyn Labs. Name idea from exteraless.
 
-The settings restyle is independently implemented from the visual measurements in
-[SETTINGS-STYLE.md](SETTINGS-STYLE.md). It imports no AyuGram or exteraGram code or
-resources; all branding in these screens belongs to Ayuless.
+The original settings restyle was independently implemented from the visual
+measurements in [SETTINGS-STYLE.md](SETTINGS-STYLE.md). The parity port below adapts
+Radolyn settings structure, behavior and EN/RU wording using Telegram UI classes.
+No exteraGram code, UI components or preferences framework is included; all
+Ayuless branding remains its own.
 
 ## Code derived from AyuGram
 
@@ -30,9 +32,62 @@ Parts of Ayuless are based on code from [AyuGram4A](https://github.com/AyuGram/A
 
 License note: the AyuGram4A repository ships the GNU GPL version 2 text and its file headers say "We do not and cannot prevent the use of our code, but be respectful and credit the original author", without "or later". Ayuless as a whole is GPL-3.0-or-later; permission to use this code under GPLv3 is being confirmed with the authors.
 
-Files:
+Reference revision: `7013145676d36d82ee13c02a89f72097b7490dcd`. The original GPLv2 text is preserved in
+[LICENSE-AYUGRAM.txt](LICENSE-AYUGRAM.txt). See [AYUGRAM-PARITY.md](AYUGRAM-PARITY.md)
+for exact behavior changes, retained implementations and exclusions.
 
-- _(to be listed)_
+Source mapping: settings/text dialogs and marks derive from `AyuConfig`,
+`AyuGramPreferencesActivity`, `MessageSavingPreferencesActivity`, `AyuUi` and
+`AyuConstants`; capture policies and history derive from `AyuMessagesController`,
+`AyuMessageHistory` and `AyuMessageCell`; ghost/request/context/launcher hooks
+adapt `AyuGhostUtils`, `AyuState`, `AyuForwarder`, `AyuUtils` and the AyuGram-marked
+Telegram hooks. Sync derives from `sync/*`, `sync/models/*` and
+`AyuSyncPreferencesActivity`, replacing its networking libraries with existing
+Ayuless dependencies. Resource wording derives from `values/ayu.xml` and
+`values-ru/ayu.xml`. The test harness and parity inventory are original Ayuless
+verification/documentation, not copied reference code.
+
+Derived files (each keeps the original Radolyn header):
+
+- `TMessagesProj/src/main/java/org/ayuless/appearance/AppearanceConfig.java`
+- `TMessagesProj/src/main/java/org/ayuless/appearance/DeletedStyle.java`
+- `TMessagesProj/src/main/java/org/ayuless/content/ProtectedContent.java`
+- `TMessagesProj/src/main/java/org/ayuless/content/RetentionConfig.java`
+- `TMessagesProj/src/main/java/org/ayuless/edits/DeletedMessageActions.java`
+- `TMessagesProj/src/main/java/org/ayuless/edits/EditHistory.java`
+- `TMessagesProj/src/main/java/org/ayuless/edits/EditHistoryActivity.java`
+- `TMessagesProj/src/main/java/org/ayuless/edits/EditHistorySheet.java`
+- `TMessagesProj/src/main/java/org/ayuless/extras/ExtrasConfig.java`
+- `TMessagesProj/src/main/java/org/ayuless/extras/LocalPremium.java`
+- `TMessagesProj/src/main/java/org/ayuless/ghost/DelayedSend.java`
+- `TMessagesProj/src/main/java/org/ayuless/ghost/GhostConfig.java`
+- `TMessagesProj/src/main/java/org/ayuless/ghost/GhostInterceptor.java`
+- `TMessagesProj/src/main/java/org/ayuless/ghost/GhostMenu.java`
+- `TMessagesProj/src/main/java/org/ayuless/ghost/GhostShortcut.java`
+- `TMessagesProj/src/main/java/org/ayuless/settings/AppearanceSettingsActivity.java`
+- `TMessagesProj/src/main/java/org/ayuless/settings/AyulessSettingsActivity.java`
+- `TMessagesProj/src/main/java/org/ayuless/settings/ChatFeaturesSettingsActivity.java`
+- `TMessagesProj/src/main/java/org/ayuless/settings/MessageSavingSettingsActivity.java`
+- `TMessagesProj/src/main/java/org/ayuless/settings/SettingsTextDialog.java`
+- `TMessagesProj/src/main/java/org/ayuless/settings/SpySettingsActivity.java`
+- `TMessagesProj/src/main/java/org/ayuless/settings/SyncSettingsActivity.java`
+- `TMessagesProj/src/main/java/org/ayuless/spy/MessageSavingConfig.java`
+- `TMessagesProj/src/main/java/org/ayuless/spy/SavedAttachments.java`
+- `TMessagesProj/src/main/java/org/ayuless/storage/AyulessStore.java`
+- `TMessagesProj/src/main/java/org/ayuless/sync/SyncConfig.java`
+- `TMessagesProj/src/main/java/org/ayuless/sync/SyncController.java`
+- `TMessagesProj/src/main/java/org/telegram/messenger/ApplicationLoader.java`
+- `TMessagesProj/src/main/java/org/telegram/messenger/MediaDataController.java`
+- `TMessagesProj/src/main/java/org/telegram/messenger/MessagesController.java`
+- `TMessagesProj/src/main/java/org/telegram/messenger/SendMessagesHelper.java`
+- `TMessagesProj/src/main/java/org/telegram/messenger/UserConfig.java`
+- `TMessagesProj/src/main/java/org/telegram/tgnet/ConnectionsManager.java`
+- `TMessagesProj/src/main/java/org/telegram/ui/Cells/ChatMessageCell.java`
+- `TMessagesProj/src/main/java/org/telegram/ui/ChatActivity.java`
+- `TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java`
+- `TMessagesProj/src/main/java/org/telegram/ui/LaunchActivity.java`
+- `TMessagesProj/src/main/res/values/ayuless.xml` (ported EN/RU wording)
+- `TMessagesProj/src/main/res/values-ru/ayuless.xml` (ported EN/RU wording)
 
 ## Upstream
 

@@ -1,4 +1,13 @@
 /*
+ * This is the source code of AyuGram for Android.
+ *
+ * We do not and cannot prevent the use of our code,
+ * but be respectful and credit the original author.
+ *
+ * Copyright @Radolyn, 2023
+ */
+
+/*
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (C) 2026 Ayuless contributors
  */
@@ -37,6 +46,43 @@ public final class GhostInterceptor {
     /** Requests built by ghost mode itself that must pass the filter once (read on action). */
     private static final Set<TLObject> allowedOnce = Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap<>()));
 
+    private static final Set<TLObject> explicitReads = Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap<>()));
+
+    public static void readUntil(int account, org.telegram.messenger.MessageObject message, RequestDelegate callback) {
+        if (message == null || message.messageOwner == null || !org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_READ_UNTIL)) return;
+        long did = message.getDialogId();
+        MessagesController controller = MessagesController.getInstance(account);
+        TLObject request;
+        if (DialogObject.isEncryptedDialog(did)) {
+            TLRPC.EncryptedChat chat = controller.getEncryptedChat(DialogObject.getEncryptedChatId(did));
+            if (chat == null) return;
+            TLRPC.TL_messages_readEncryptedHistory read = new TLRPC.TL_messages_readEncryptedHistory();
+            read.peer = new TLRPC.TL_inputEncryptedChat();
+            read.peer.chat_id = chat.id;
+            read.peer.access_hash = chat.access_hash;
+            read.max_date = message.messageOwner.date;
+            request = read;
+        } else if (message.messageOwner.peer_id.channel_id != 0) {
+            TLRPC.TL_channels_readHistory read = new TLRPC.TL_channels_readHistory();
+            read.channel = controller.getInputChannel(message.messageOwner.peer_id.channel_id);
+            read.max_id = message.getId();
+            request = read;
+        } else {
+            TLRPC.TL_messages_readHistory read = new TLRPC.TL_messages_readHistory();
+            read.peer = controller.getInputPeer(did);
+            read.max_id = message.getId();
+            request = read;
+        }
+        explicitReads.add(request);
+        ConnectionsManager.getInstance(account).sendRequest(request, (response, error) -> {
+            if (response instanceof TLRPC.TL_messages_affectedMessages) {
+                TLRPC.TL_messages_affectedMessages result = (TLRPC.TL_messages_affectedMessages) response;
+                controller.processNewDifferenceParams(-1, result.pts, -1, result.pts_count);
+            }
+            if (callback != null) callback.run(response, error);
+        });
+    }
+
     private GhostInterceptor() {
     }
 
@@ -48,6 +94,7 @@ public final class GhostInterceptor {
         if (req == null) {
             return false;
         }
+        if (explicitReads.remove(req)) return false;
         if (allowedOnce.remove(req)) {
             // The setting may have changed while the explicit read was queued.
             return GhostConfig.hideRead(account) && !GhostConfig.readOnAction(account);
@@ -64,25 +111,18 @@ public final class GhostInterceptor {
         if (!GhostConfig.anyActive(account)) {
             return false;
         }
-        if ((isSendRequest(req) || req instanceof TLRPC.TL_messages_sendReaction) && GhostConfig.readOnAction(account)) {
-            readOnAction(account, peerOf(req));
-        }
-        if (GhostConfig.readOnAction(account)) {
-            if (req instanceof TLRPC.TL_messages_sendEncrypted) {
-                readOnEncryptedAction(account, ((TLRPC.TL_messages_sendEncrypted) req).peer);
-            } else if (req instanceof TLRPC.TL_messages_sendEncryptedFile) {
-                readOnEncryptedAction(account, ((TLRPC.TL_messages_sendEncryptedFile) req).peer);
-            }
-        }
         if (req instanceof TL_account.updateStatus) {
             if (GhostConfig.hideOnline(account)) {
                 // Keep the request so the caller's state machine still completes,
                 // but tell the server we are offline.
                 ((TL_account.updateStatus) req).offline = true;
+            } else if (!((TL_account.updateStatus) req).offline && GhostConfig.offlineAfterSend(account)) {
+                scheduleOffline(account);
             }
             return false;
         }
         if (isReadRequest(req)) {
+            if (GhostConfig.hideRead(account)) org.ayuless.sync.SyncController.onBlockedRead(account, req);
             return GhostConfig.hideRead(account);
         }
         if (req instanceof TLRPC.TL_messages_setTyping || req instanceof TLRPC.TL_messages_setEncryptedTyping) {
@@ -95,6 +135,19 @@ public final class GhostInterceptor {
             scheduleOffline(account);
         }
         return false;
+    }
+
+    public static void onSuccessfulRequest(int account, TLObject req) {
+        if ((isSendRequest(req) || req instanceof TLRPC.TL_messages_sendReaction) && GhostConfig.readOnAction(account)) {
+            readOnAction(account, peerOf(req));
+        }
+        if (GhostConfig.readOnAction(account)) {
+            if (req instanceof TLRPC.TL_messages_sendEncrypted) {
+                readOnEncryptedAction(account, ((TLRPC.TL_messages_sendEncrypted) req).peer);
+            } else if (req instanceof TLRPC.TL_messages_sendEncryptedFile) {
+                readOnEncryptedAction(account, ((TLRPC.TL_messages_sendEncryptedFile) req).peer);
+            }
+        }
     }
 
     /** Same policy for content receipts, encrypted read service packets and local expiry. */

@@ -1,4 +1,13 @@
 /*
+ * This is the source code of AyuGram for Android.
+ *
+ * We do not and cannot prevent the use of our code,
+ * but be respectful and credit the original author.
+ *
+ * Copyright @Radolyn, 2023
+ */
+
+/*
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (C) 2026 Ayuless contributors
  */
@@ -50,6 +59,7 @@ public class SpySettingsActivity extends AyulessSettingsFragment {
     private static final int ID_SAVE_READ_DATE = 30;
     private static final int ID_SAVE_LAST_SEEN = 31;
     private static final int ID_EXCEPTIONS = 3;
+    private static final int ID_SAVING = 4;
     private static final int ID_STORAGE_USED = 10;
     private static final int ID_STORAGE_LIMIT = 11;
     private static final int ID_EXPORT = 20;
@@ -82,6 +92,7 @@ public class SpySettingsActivity extends AyulessSettingsFragment {
         int exceptions = SpyExceptions.get(account).size();
         items.add(UItem.asButton(ID_EXCEPTIONS, getString(R.string.AyulessSpyExceptions),
                 exceptions == 0 ? getString(R.string.AyulessSpyExceptionsNone) : String.valueOf(exceptions)));
+        items.add(UItem.asButton(ID_SAVING, getString(R.string.AyulessMessageSaving)));
         items.add(UItem.asCheck(ID_EDIT_HISTORY, getString(R.string.AyulessEditHistory)).setChecked(EditsConfig.isEnabled(account)));
         items.add(UItem.asShadow(null));
 
@@ -124,6 +135,9 @@ public class SpySettingsActivity extends AyulessSettingsFragment {
     protected void onClick(UItem item, View view, int position, float x, float y) {
         final int account = currentAccount;
         switch (item.id) {
+            case ID_SAVING:
+                presentFragment(new MessageSavingSettingsActivity());
+                break;
             case ID_ANTI_DELETE:
                 AntiDeleteConfig.setEnabled(account, !AntiDeleteConfig.isEnabled(account));
                 update();
