@@ -105,11 +105,11 @@ public final class DeletedMessageActions {
                 TLRPC.TL_updates updates = new TLRPC.TL_updates();
                 updates.date = ConnectionsManager.getInstance(account).getCurrentTime();
                 if (channelId != 0) {
-                    TLRPC.TL_updateDeleteChannelMessages update = new TLRPC.TL_updateDeleteChannelMessages();
+                    org.telegram.tgnet.tl.TL_update.TL_updateDeleteChannelMessages update = new org.telegram.tgnet.tl.TL_update.TL_updateDeleteChannelMessages();
                     update.channel_id = channelId; update.messages.add(object.getId());
                     update.pts = affected.pts; update.pts_count = affected.pts_count; updates.updates.add(update);
                 } else {
-                    TLRPC.TL_updateDeleteMessages update = new TLRPC.TL_updateDeleteMessages();
+                    org.telegram.tgnet.tl.TL_update.TL_updateDeleteMessages update = new org.telegram.tgnet.tl.TL_update.TL_updateDeleteMessages();
                     update.messages.add(object.getId()); update.pts = affected.pts; update.pts_count = affected.pts_count; updates.updates.add(update);
                 }
                 controller.processUpdates(updates, false);

@@ -31,7 +31,6 @@ public final class GhostShortcut {
         Context context = ApplicationLoader.applicationContext;
         try {
             if (ExtrasConfig.get(ExtrasConfig.KEY_GHOST_SHORTCUT)) {
-                ShortcutManagerCompat.enableShortcuts(context, Collections.singletonList(ID));
                 Intent intent = new Intent(context, LaunchActivity.class).setAction(ACTION);
                 ShortcutManagerCompat.addDynamicShortcuts(context, Collections.singletonList(new ShortcutInfoCompat.Builder(context, ID)
                         .setShortLabel(getString(R.string.AyulessGhostShortcut))
