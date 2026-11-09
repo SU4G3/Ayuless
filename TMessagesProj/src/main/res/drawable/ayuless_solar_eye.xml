@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Eye adapted in the Solar Linear style (480 Design / R4IN80W, CC BY 4.0).
+     See docs/CREDITS.md. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <path android:pathData="M2,12C2,12 5.5,5 12,5C18.5,5 22,12 22,12C22,12 18.5,19 12,19C5.5,19 2,12 2,12Z"
+        android:strokeColor="#FFFFFFFF" android:strokeWidth="1.5"
+        android:strokeLineCap="round" android:strokeLineJoin="round" />
+    <path android:pathData="M15,12A3,3 0,1 1,9 12A3,3 0,1 1,15 12Z"
+        android:strokeColor="#FFFFFFFF" android:strokeWidth="1.5" />
+</vector>

@@ -2903,6 +2903,7 @@ public class ChatActivity extends BaseFragment implements
             .add(NotificationCenter.userIsPremiumBlockedUpadted)
             .add(NotificationCenter.didLoadSendAsPeers)
             .add(NotificationCenter.closeChatActivity)
+            .add(NotificationCenter.ayulessMessagesKept) // Ayuless: live anti-delete refresh
             .add(NotificationCenter.messagesDeleted)
             .add(NotificationCenter.historyCleared)
             .add(NotificationCenter.messageReceivedByServer)
@@ -16239,6 +16240,8 @@ public class ChatActivity extends BaseFragment implements
         if (messageObject == null || messageObject.isOut() || !messageObject.isSecretMedia() || messageObject.messageOwner.destroyTime != 0 || messageObject.messageOwner.ttl <= 0) {
             return null;
         }
+        // Ayuless: a blocked receipt must never start local expiry or consume the first open.
+        if (org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount)) return null;
         // Ayuless: retained media sends only its original open receipt, including after restart.
         if (org.ayuless.content.RetentionConfig.wasOpened(currentAccount, messageObject.messageOwner)) return null;
         if (readNow) {
@@ -16254,6 +16257,8 @@ public class ChatActivity extends BaseFragment implements
             return null;
         } else {
             return () -> {
+                // Ayuless: ghost mode may change while the viewer opens.
+                if (org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount)) return;
                 if (org.ayuless.content.RetentionConfig.wasOpened(currentAccount, messageObject.messageOwner)) return;
                 org.ayuless.content.RetentionConfig.rememberOpen(currentAccount, messageObject.messageOwner);
                 final boolean delete = messageObject.messageOwner.ttl != 0x7FFFFFFF;
@@ -16273,6 +16278,8 @@ public class ChatActivity extends BaseFragment implements
         if (messageObject == null || messageObject.isOut() || !messageObject.isSecretMedia() || messageObject.messageOwner.ttl != 0x7FFFFFFF) {
             return null;
         }
+        // Ayuless: blocked opens cannot schedule view-once deletion.
+        if (org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount)) return null;
         // Ayuless: the open receipt remains upstream; only local expiry is suppressed.
         if (org.ayuless.content.RetentionConfig.keepMedia(currentAccount, dialog_id)) return null;
         final long taskId = getMessagesController().createDeleteShowOnceTask(dialog_id, messageObject.getId());
@@ -23143,6 +23150,17 @@ public class ChatActivity extends BaseFragment implements
             removeUnreadPlane(true);
             if (updated && chatAdapter != null) {
                 chatAdapter.notifyDataSetChanged(false);
+            }
+        } else if (id == NotificationCenter.ayulessMessagesKept) {
+            // Ayuless: keep the live object (playback, edits and grouping) and rebuild its time label.
+            long did = (long) args[0];
+            if (did == dialog_id || did == mergeDialogId) {
+                ArrayList<Integer> ids = (ArrayList<Integer>) args[1];
+                for (Integer mid : ids) {
+                    MessageObject kept = messagesDict[did == dialog_id ? 0 : 1].get(mid);
+                    if (kept != null) kept.forceUpdate = true;
+                }
+                updateVisibleRows();
             }
         } else if (id == NotificationCenter.messagesDeleted) {
             boolean scheduled = (Boolean) args[2];

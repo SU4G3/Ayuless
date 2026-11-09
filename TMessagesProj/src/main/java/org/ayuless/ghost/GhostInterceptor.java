@@ -97,6 +97,11 @@ public final class GhostInterceptor {
         return false;
     }
 
+    /** Same policy for content receipts, encrypted read service packets and local expiry. */
+    public static boolean blocksMediaRead(int account) {
+        return GhostConfig.hideRead(account);
+    }
+
     private static boolean isReadRequest(TLObject req) {
         return req instanceof TLRPC.TL_messages_readHistory
                 || req instanceof TLRPC.TL_channels_readHistory
