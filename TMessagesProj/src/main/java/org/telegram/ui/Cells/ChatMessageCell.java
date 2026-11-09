@@ -4838,7 +4838,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         PinchToZoomHelper pinchToZoomHelper = delegate == null ? null : delegate.getPinchToZoomHelper();
         if (currentMessageObject == null || !photoImage.hasNotThumb() || pinchToZoomHelper == null || currentMessageObject.isSticker() ||
                 currentMessageObject.isAnimatedEmoji() || (currentMessageObject.isVideo() && !autoPlayingMedia) ||
-                isRoundVideo || currentMessageObject.isAnimatedSticker() || (currentMessageObject.isDocument() && !currentMessageObject.isGif()) || currentMessageObject.needDrawBluredPreview()) {
+                isRoundVideo || currentMessageObject.isAnimatedSticker() || (currentMessageObject.isDocument() && !currentMessageObject.isGif()) || org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject)) { // Ayuless: retained TTL preview
             return false;
         }
         return pinchToZoomHelper.checkPinchToZoom(ev, this, photoImage, null, null, currentMessageObject, mediaSpoilerEffect2 == null ? 0 : mediaSpoilerEffect2.getAttachIndex(this));
@@ -5071,7 +5071,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             AnimatedFileDrawable animation = photoImage.getAnimation();
             if (animation != null) {
                 duration = currentMessageObject.audioPlayerDuration = animation.getDurationMs() / 1000;
-                if (currentMessageObject.messageOwner.ttl > 0 && currentMessageObject.messageOwner.destroyTime == 0 && !currentMessageObject.needDrawBluredPreview() && currentMessageObject.isVideo() && animation.hasBitmap()) {
+                if (!org.ayuless.content.RetainedMedia.showPreview(currentMessageObject) && currentMessageObject.messageOwner.ttl > 0 && currentMessageObject.messageOwner.destroyTime == 0 && !org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject) && currentMessageObject.isVideo() && animation.hasBitmap()) { // Ayuless: retained TTL preview
                     delegate.didStartVideoStream(currentMessageObject);
                 }
             }
@@ -5444,7 +5444,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     void didClickedImage() {
-        if (currentMessageObject.hasMediaSpoilers() && !currentMessageObject.needDrawBluredPreview() && !currentMessageObject.isMediaSpoilersRevealed) {
+        if (currentMessageObject.hasMediaSpoilers() && !org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject) && !currentMessageObject.isMediaSpoilersRevealed) { // Ayuless: retained TTL preview
             if (delegate != null && currentMessageObject.isSensitive()) {
                 delegate.didPressRevealSensitiveContent(this);
                 return;
@@ -5547,7 +5547,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     private void updateSecretTimeText(MessageObject messageObject) {
-        if (messageObject == null || !messageObject.needDrawBluredPreview()) {
+        if (messageObject == null || !org.ayuless.content.RetainedMedia.blurredPreview(messageObject)) { // Ayuless: retained TTL preview
             return;
         }
         CharSequence str = messageObject.getSecretTimeString();
@@ -8630,7 +8630,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     photoImage.setAllowStartAnimation(messageObject.gifState == 0);
                 }
 
-                photoImage.setForcePreview(messageObject.needDrawBluredPreview());
+                photoImage.setForcePreview(org.ayuless.content.RetainedMedia.blurredPreview(messageObject)); // Ayuless: retained TTL preview
                 if (messageObject.type == MessageObject.TYPE_FILE) {
                     if (currentPosition == null) {
                         backgroundWidth = messageObject.getMaxMessageTextWidth();
@@ -9219,7 +9219,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     }
 
                     if (needQualityPreview) {
-                        if (!messageObject.needDrawBluredPreview() && (currentPhotoObject == null || currentPhotoObject == currentPhotoObjectThumb) && (currentPhotoObjectThumb == null || !"m".equals(currentPhotoObjectThumb.type))) {
+                        if (!org.ayuless.content.RetainedMedia.blurredPreview(messageObject) && (currentPhotoObject == null || currentPhotoObject == currentPhotoObjectThumb) && (currentPhotoObjectThumb == null || !"m".equals(currentPhotoObjectThumb.type))) { // Ayuless: retained TTL preview
                             photoImage.setNeedsQualityThumb(true);
                             photoImage.setShouldGenerateQualityThumb(true);
                         }
@@ -9306,7 +9306,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         }
                         photoImage.setRoundRadius(w / 2);
                         canChangeRadius = false;
-                    } else if (messageObject.needDrawBluredPreview() && !messageObject.hasExtendedMediaPreview()) {
+                    } else if (org.ayuless.content.RetainedMedia.blurredPreview(messageObject) && !messageObject.hasExtendedMediaPreview()) { // Ayuless: retained TTL preview
                         if (AndroidUtilities.isTablet()) {
                             w = (int) (AndroidUtilities.getMinTabletSide() * 0.6f);
                         } else {
@@ -9447,7 +9447,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         currentCaption = messageObject.caption;
 
                         int minCaptionWidth = currentMessageObject.getMaxMessageTextWidth();
-                        if (!messageObject.needDrawBluredPreview() && (currentCaption != null || (!reactionsLayoutInBubble.isEmpty && !reactionsLayoutInBubble.isSmall)) && photoWidth < minCaptionWidth) {
+                        if (!org.ayuless.content.RetainedMedia.blurredPreview(messageObject) && (currentCaption != null || (!reactionsLayoutInBubble.isEmpty && !reactionsLayoutInBubble.isSmall)) && photoWidth < minCaptionWidth) { // Ayuless: retained TTL preview
                             widthForCaption = minCaptionWidth;
                             fixPhotoWidth = true;
                         } else {
@@ -9592,7 +9592,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             messageObject.type == MessageObject.TYPE_GIF ||
                             messageObject.type == MessageObject.TYPE_ROUND_VIDEO
                         ) {
-                            if (messageObject.needDrawBluredPreview()) {
+                            if (org.ayuless.content.RetainedMedia.blurredPreview(messageObject)) { // Ayuless: retained TTL preview
                                 photoImage.setColorFilter(getFancyBlurFilter());
                                 if (!messageObject.isRoundOnce()) {
                                     currentPhotoFilter += "_b2";
@@ -9608,7 +9608,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         }
                     } else {
                         String filterNew = String.format(Locale.US, "%d_%d", (int) (w / AndroidUtilities.density), (int) (h / AndroidUtilities.density));
-                        if (!messageObject.needDrawBluredPreview() && !filterNew.equals(currentPhotoFilter)) {
+                        if (!org.ayuless.content.RetainedMedia.blurredPreview(messageObject) && !filterNew.equals(currentPhotoFilter)) { // Ayuless: retained TTL preview
                             ImageLocation location = ImageLocation.getForObject(currentPhotoObject, photoParentObject);
                             if (location != null) {
                                 String key = location.getKey(photoParentObject, null, false) + "@" + currentPhotoFilter;
@@ -9618,7 +9618,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                                     currentPhotoFilter = filterNew;
                                 }
                             }
-                        } else if (messageObject.needDrawBluredPreview()) {
+                        } else if (org.ayuless.content.RetainedMedia.blurredPreview(messageObject)) { // Ayuless: retained TTL preview
                             photoImage.setColorFilter(getFancyBlurFilter());
                         }
                     }
@@ -9634,7 +9634,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         currentPhotoObjectThumb.size = -1;
                     }
 
-                    if (!currentMessageObject.isHiddenSensitive() && SharedConfig.isAutoplayVideo() && (!currentMessageObject.hasVideoCover() || currentMessageObject.isLivePhoto()) && !currentMessageObject.isRepostPreview && (!currentMessageObject.hasMediaSpoilers() || currentMessageObject.isMediaSpoilersRevealed || currentMessageObject.revealingMediaSpoilers) && (messageObject.type == MessageObject.TYPE_VIDEO /*|| messageObject.type == MessageObject.TYPE_STORY && messageObject.getDocument() != null*/) && !messageObject.needDrawBluredPreview() &&
+                    if (!org.ayuless.content.RetainedMedia.showPreview(currentMessageObject) && !currentMessageObject.isHiddenSensitive() && SharedConfig.isAutoplayVideo() && (!currentMessageObject.hasVideoCover() || currentMessageObject.isLivePhoto()) && !currentMessageObject.isRepostPreview && (!currentMessageObject.hasMediaSpoilers() || currentMessageObject.isMediaSpoilersRevealed || currentMessageObject.revealingMediaSpoilers) && (messageObject.type == MessageObject.TYPE_VIDEO /*|| messageObject.type == MessageObject.TYPE_STORY && messageObject.getDocument() != null*/) && !org.ayuless.content.RetainedMedia.blurredPreview(messageObject) && // Ayuless: retained TTL preview
                             ((currentMessageObject.mediaExists || currentMessageObject.attachPathExists) || messageObject.canStreamVideo() && DownloadController.getInstance(currentAccount).canDownloadMedia(currentMessageObject))
                     ) {
                         if (currentPosition != null) {
@@ -9738,7 +9738,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         }
                         TLRPC.VideoSize videoSize = MessageObject.getDocumentVideoThumb(document);
                         if (((MessageObject.isGifDocument(document, messageObject.hasValidGroupId()) && messageObject.videoEditedInfo == null) || (!messageObject.isSending() && !messageObject.isEditing())) && (localFile != 0 || FileLoader.getInstance(currentAccount).isLoadingFile(fileName) || autoDownload)) {
-                            if (localFile != 1 && !messageObject.needDrawBluredPreview() && (localFile != 0 || messageObject.canStreamVideo() && autoDownload)) {
+                            if (!org.ayuless.content.RetainedMedia.showPreview(messageObject) && localFile != 1 && !org.ayuless.content.RetainedMedia.blurredPreview(messageObject) && (localFile != 0 || messageObject.canStreamVideo() && autoDownload)) { // Ayuless: retained TTL preview
                                 autoPlayingMedia = true;
                                 if (!messageIdChanged) {
                                     photoImage.setCrossfadeWithOldImage(true);
@@ -9763,11 +9763,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                                 }
                             }
                         } else {
-                            if (messageObject.videoEditedInfo != null && messageObject.type == MessageObject.TYPE_ROUND_VIDEO && !currentMessageObject.needDrawBluredPreview()) {
+                            if (messageObject.videoEditedInfo != null && messageObject.type == MessageObject.TYPE_ROUND_VIDEO && !org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject)) { // Ayuless: retained TTL preview
                                 photoImage.setImage(ImageLocation.getForPath(messageObject.videoEditedInfo.originalPath), currentPhotoFilter, ImageLocation.getForObject(currentPhotoObjectThumb, photoParentObject), currentPhotoFilterThumb, currentPhotoObjectThumbStripped, 0, null, messageObject, 0);
                                 photoImage.setMediaStartEndTime(currentMessageObject.videoEditedInfo.startTime / 1000, currentMessageObject.videoEditedInfo.endTime / 1000);
                             } else {
-                                if (!messageIdChanged && !currentMessageObject.needDrawBluredPreview()) {
+                                if (!messageIdChanged && !org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject)) { // Ayuless: retained TTL preview
                                     photoImage.setCrossfadeWithOldImage(true);
                                     photoImage.setCrossfadeDuration(250);
                                 }
@@ -9775,11 +9775,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             }
                         }
                     } else {
-                        if (messageObject.videoEditedInfo != null && messageObject.type == MessageObject.TYPE_ROUND_VIDEO && !currentMessageObject.needDrawBluredPreview()) {
+                        if (messageObject.videoEditedInfo != null && messageObject.type == MessageObject.TYPE_ROUND_VIDEO && !org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject)) { // Ayuless: retained TTL preview
                             photoImage.setImage(ImageLocation.getForPath(messageObject.videoEditedInfo.originalPath), currentPhotoFilter, ImageLocation.getForObject(currentPhotoObjectThumb, photoParentObject), currentPhotoFilterThumb, currentPhotoObjectThumbStripped, 0, null, messageObject, cacheType);
                             photoImage.setMediaStartEndTime(currentMessageObject.videoEditedInfo.startTime / 1000, currentMessageObject.videoEditedInfo.endTime / 1000);
                         } else {
-                            if (!messageIdChanged && !currentMessageObject.needDrawBluredPreview()) {
+                            if (!messageIdChanged && !org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject)) { // Ayuless: retained TTL preview
                                 photoImage.setCrossfadeWithOldImage(true);
                                 photoImage.setCrossfadeDuration(250);
                             }
@@ -10436,7 +10436,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 translationLoadingDrawable = null;
             }
             if (timerParticlesAlpha != null) {
-                timerParticlesAlpha.set(currentMessageObject != null && currentMessageObject.needDrawBluredPreview() && currentMessageObject.messageOwner != null && currentMessageObject.messageOwner.destroyTime != 0 && MediaController.getInstance().isPlayingMessage(currentMessageObject), true);
+                timerParticlesAlpha.set(currentMessageObject != null && org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject) && currentMessageObject.messageOwner != null && currentMessageObject.messageOwner.destroyTime != 0 && MediaController.getInstance().isPlayingMessage(currentMessageObject), true); // Ayuless: retained TTL preview
             }
             transitionParams.lastStatusDrawableParams = -1;
             statusDrawableAnimationInProgress = false;
@@ -11271,7 +11271,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             return 0;
         } else if (MessageObject.isVideoDocument(documentAttach)) {
             documentAttachType = DOCUMENT_ATTACH_TYPE_VIDEO;
-            if (!messageObject.needDrawBluredPreview()) {
+            if (!org.ayuless.content.RetainedMedia.blurredPreview(messageObject)) { // Ayuless: retained TTL preview
                 updatePlayingMessageProgress();
                 String str;
                 str = String.format("%s", AndroidUtilities.formatFileSize(documentAttach.size));
@@ -11322,7 +11322,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             return durationWidth;
         } else if (MessageObject.isGifDocument(documentAttach, messageObject.hasValidGroupId())) {
             documentAttachType = DOCUMENT_ATTACH_TYPE_GIF;
-            if (!messageObject.needDrawBluredPreview()) {
+            if (!org.ayuless.content.RetainedMedia.blurredPreview(messageObject)) { // Ayuless: retained TTL preview
 
                 String str = getString("AttachGif", R.string.AttachGif);
                 infoWidth = (int) Math.ceil(Theme.chat_infoPaint.measureText(str));
@@ -13004,7 +13004,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
         }
         if (documentAttachType == DOCUMENT_ATTACH_TYPE_GIF && !isCompactMode()) {
-            if (drawPhotoImage && !currentMessageObject.isRepostPreview && !currentMessageObject.isSponsored() && photoImage.getVisible() && !hasGamePreview && !currentMessageObject.needDrawBluredPreview() && !currentMessageObject.preview && !isSmallImage && !currentMessageObject.isSponsored()) {
+            if (drawPhotoImage && !currentMessageObject.isRepostPreview && !currentMessageObject.isSponsored() && photoImage.getVisible() && !hasGamePreview && !org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject) && !currentMessageObject.preview && !isSmallImage && !currentMessageObject.isSponsored()) { // Ayuless: retained TTL preview
                 int oldAlpha = ((BitmapDrawable) Theme.chat_msgMediaMenuDrawable).getPaint().getAlpha();
                 Theme.chat_msgMediaMenuDrawable.setAlpha((int) (oldAlpha * controlsAlpha));
                 setDrawableBounds(Theme.chat_msgMediaMenuDrawable, otherX = (int) (photoImage.getImageX() + photoImage.getImageWidth() - dp(14)), otherY = (int) (photoImage.getImageY() + dp(8.1f)));
@@ -13449,7 +13449,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             canvas.clipPath(mediaSpoilerPath, Region.Op.DIFFERENCE);
         }
 
-        if (currentMessageObject.needDrawBluredPreview()) {
+        if (org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject)) { // Ayuless: retained TTL preview
             photoImage.draw(canvas);
         } else {
             blurredPhotoImage.setImageCoords(photoImage.getImageX(), photoImage.getImageY(), photoImage.getImageWidth(), photoImage.getImageHeight());
@@ -14408,7 +14408,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 } else if (buttonState == -1) {
                     if (documentAttachType == DOCUMENT_ATTACH_TYPE_DOCUMENT) {
                         return (drawPhotoImage && (currentPhotoObject != null || currentPhotoObjectThumb != null) && (photoImage.hasBitmapImage() || currentMessageObject.mediaExists() || currentMessageObject.attachPathExists)) ? MediaActionDrawable.ICON_NONE : MediaActionDrawable.ICON_FILE;
-                    } else if (currentMessageObject.needDrawBluredPreview()) {
+                    } else if (org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject)) { // Ayuless: retained TTL preview
                         return MediaActionDrawable.ICON_FIRE;
                     } else if (hasEmbed) {
                         return MediaActionDrawable.ICON_PLAY;
@@ -14569,7 +14569,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
              documentAttachType == DOCUMENT_ATTACH_TYPE_GIF && autoDownload
             ) &&
             currentMessageObject.canStreamVideo() &&
-            !currentMessageObject.needDrawBluredPreview()
+            !org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject) // Ayuless: retained TTL preview
         );
         if (
             SharedConfig.streamMedia &&
@@ -14846,7 +14846,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     }
                     drawVideoImageButton = false;
                     drawVideoSize = false;
-                    if (currentMessageObject.needDrawBluredPreview()) {
+                    if (org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject)) { // Ayuless: retained TTL preview
                         buttonState = -1;
                     } else {
                         if (documentAttachType == DOCUMENT_ATTACH_TYPE_GIF && currentMessageObject.gifState == 1) {
@@ -14980,7 +14980,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     void didPressButton(boolean animated, boolean video) {
-        if (delegate != null && currentMessageObject.isSensitive() && currentMessageObject.hasMediaSpoilers() && !currentMessageObject.needDrawBluredPreview() && !currentMessageObject.isMediaSpoilersRevealed) {
+        if (delegate != null && currentMessageObject.isSensitive() && currentMessageObject.hasMediaSpoilers() && !org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject) && !currentMessageObject.isMediaSpoilersRevealed) { // Ayuless: retained TTL preview
             delegate.didPressRevealSensitiveContent(this);
             return;
         }
@@ -15210,7 +15210,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             } else {
                 radialProgress.setProgress(1, true);
             }
-            if (!currentMessageObject.needDrawBluredPreview() && !autoPlayingMedia && documentAttach != null) {
+            if (!org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject) && !autoPlayingMedia && documentAttach != null) { // Ayuless: retained TTL preview
                 if (documentAttachType == DOCUMENT_ATTACH_TYPE_ROUND) {
                     photoImage.setImage(ImageLocation.getForDocument(documentAttach), ImageLoader.AUTOPLAY_FILTER, ImageLocation.getForObject(currentPhotoObject, photoParentObject), currentPhotoObject instanceof TLRPC.TL_photoStrippedSize || currentPhotoObject != null && "s".equals(currentPhotoObject.type) ? currentPhotoFilterThumb : currentPhotoFilter, ImageLocation.getForObject(currentPhotoObjectThumb, photoParentObject), currentPhotoFilterThumb, currentPhotoObjectThumbStripped, documentAttach.size, null, currentMessageObject, 0);
                     photoImage.setAllowStartAnimation(true);
@@ -15635,7 +15635,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         } else {
             currentTimeString = timeString;
         }
-        // Ayuless: anti-delete mark next to the time.
+        // Ayuless: retained media badge and anti-delete mark next to the time.
+        currentTimeString = org.ayuless.content.RetainedMedia.decorateTime(currentMessageObject, currentTimeString);
         currentTimeString = org.ayuless.antidelete.AntiDelete.decorateTime(currentAccount, currentMessageObject, currentTimeString);
         if (currentMessageObject.isStakedDice()) {
             currentTimeString = TextUtils.concat("💎", StarsIntroActivity.formatTON(currentMessageObject.getStakedDiceAmount()), "  ", currentTimeString);
@@ -15666,7 +15667,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 currentTimeString = TextUtils.concat(formatString(R.string.MessageScheduledRepeatSeconds, period), ", ", currentTimeString);
             }
         }
-        timeTextWidth = timeWidth = (int) Math.ceil(Theme.chat_timePaint.measureText(currentTimeString, 0, currentTimeString == null ? 0 : currentTimeString.length()));
+        // Ayuless: measure icon spans as well as text so TTL/deleted badges cannot overlap the time.
+        timeTextWidth = timeWidth = currentTimeString == null ? 0 : (int) Math.ceil(Layout.getDesiredWidth(currentTimeString, Theme.chat_timePaint));
         if (currentMessageObject.scheduled && currentMessageObject.messageOwner.date == 0x7FFFFFFE || currentMessageObject.notime) {
             timeWidth -= dp(8);
         }
@@ -21457,7 +21459,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     rectPath.addRoundRect(rect, r, r, Path.Direction.CW);
                     canvas.save();
                     canvas.clipPath(rectPath);
-                    ImageReceiver imageReceiver = currentMessageObject.needDrawBluredPreview() ? photoImage : blurredPhotoImage;
+                    ImageReceiver imageReceiver = org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject) ? photoImage : blurredPhotoImage; // Ayuless: retained TTL preview
                     float wasAlpha = imageReceiver.getAlpha();
                     imageReceiver.setAlpha(.5f * wasAlpha);
                     imageReceiver.draw(canvas);
@@ -22318,7 +22320,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         closeExplanationX = -1;
         closeExplanationY = -1;
 
-        if (currentMessageObject.hadAnimationNotReadyLoading && photoImage.getVisible() && !currentMessageObject.needDrawBluredPreview() && (documentAttachType == DOCUMENT_ATTACH_TYPE_ROUND || documentAttachType == DOCUMENT_ATTACH_TYPE_VIDEO || documentAttachType == DOCUMENT_ATTACH_TYPE_GIF)) {
+        if (currentMessageObject.hadAnimationNotReadyLoading && photoImage.getVisible() && !org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject) && (documentAttachType == DOCUMENT_ATTACH_TYPE_ROUND || documentAttachType == DOCUMENT_ATTACH_TYPE_VIDEO || documentAttachType == DOCUMENT_ATTACH_TYPE_GIF)) { // Ayuless: retained TTL preview
             AnimatedFileDrawable animation = photoImage.getAnimation();
             if (animation != null && animation.hasBitmap()) {
                 currentMessageObject.hadAnimationNotReadyLoading = false;
@@ -22343,7 +22345,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             Theme.chat_livePhoto.draw(canvas);
         } else if (currentMessageObject.type == MessageObject.TYPE_VIDEO || currentMessageObject.type == MessageObject.TYPE_PHOTO || currentMessageObject.type == MessageObject.TYPE_EXTENDED_MEDIA_PREVIEW || documentAttachType == DOCUMENT_ATTACH_TYPE_VIDEO || documentAttachType == DOCUMENT_ATTACH_TYPE_GIF) {
             if (photoImage.getVisible() && !currentMessageObject.isRepostPreview) {
-                if (!currentMessageObject.needDrawBluredPreview() && !currentMessageObject.isSponsored() && !currentMessageObject.isRepostPreview && !currentMessageObject.preview && !isSmallImage) {
+                if (!org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject) && !currentMessageObject.isSponsored() && !currentMessageObject.isRepostPreview && !currentMessageObject.preview && !isSmallImage) { // Ayuless: retained TTL preview
                     if (documentAttachType == DOCUMENT_ATTACH_TYPE_VIDEO && !isCompactMode()) {
                         int oldAlpha = ((BitmapDrawable) Theme.chat_msgMediaMenuDrawable).getPaint().getAlpha();
                         if (drawMediaCheckBox) {
@@ -22369,7 +22371,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     int mask = MessageObject.POSITION_FLAG_LEFT | MessageObject.POSITION_FLAG_RIGHT;
                     fullWidth = (currentPosition.flags & mask) == mask;
                 }
-                if (((documentAttachType == DOCUMENT_ATTACH_TYPE_VIDEO || documentAttachType == DOCUMENT_ATTACH_TYPE_GIF) && (buttonState == 1 || buttonState == 2 || buttonState == 0 || buttonState == 3 || buttonState == -1) || currentMessageObject.needDrawBluredPreview()) && !currentMessageObject.isRepostVideoPreview) {
+                if (((documentAttachType == DOCUMENT_ATTACH_TYPE_VIDEO || documentAttachType == DOCUMENT_ATTACH_TYPE_GIF) && (buttonState == 1 || buttonState == 2 || buttonState == 0 || buttonState == 3 || buttonState == -1) || org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject)) && !currentMessageObject.isRepostVideoPreview) { // Ayuless: retained TTL preview
                     if (autoPlayingMedia) {
                         updatePlayingMessageProgress();
                     }
@@ -22387,7 +22389,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             drawLoadingProgress = (buttonState == 1 || miniButtonState == 1 || animatingLoadingProgressProgress != 0) && !currentMessageObject.isSecretMedia() &&
                                     (documentAttachType == DOCUMENT_ATTACH_TYPE_VIDEO || documentAttachType == DOCUMENT_ATTACH_TYPE_GIF || documentAttachType == DOCUMENT_ATTACH_TYPE_DOCUMENT);
                             if (currentMessageObject.type == MessageObject.TYPE_VIDEO || currentMessageObject.type == MessageObject.TYPE_GIF || documentAttachType == DOCUMENT_ATTACH_TYPE_VIDEO) {
-                                alpha = currentMessageObject.needDrawBluredPreview() && docTitleLayout == null ? 0 : animatingDrawVideoImageButtonProgress;
+                                alpha = org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject) && docTitleLayout == null ? 0 : animatingDrawVideoImageButtonProgress; // Ayuless: retained TTL preview
                             }
                             drawDocTitleLayout = alpha > 0 && docTitleLayout != null;
                             if (!drawDocTitleLayout && (drawLoadingProgress || infoLayout == null)) {
@@ -22432,11 +22434,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
                             canvas.save();
                             int oldAlpha = getThemedPaint(Theme.key_paint_chatTimeBackground).getAlpha();
-                            getThemedPaint(Theme.key_paint_chatTimeBackground).setAlpha((int) (oldAlpha * controlsAlpha * loadingProgressAlpha * (currentMessageObject.needDrawBluredPreview() ? .4f : 1f)));
+                            getThemedPaint(Theme.key_paint_chatTimeBackground).setAlpha((int) (oldAlpha * controlsAlpha * loadingProgressAlpha * (org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject) ? .4f : 1f))); // Ayuless: retained TTL preview
                             rect.set(x1, y1, x1 + w, y1 + dp(16.5f + 15.5f * alpha));
                             int[] rad = photoImage.getRoundRadius();
                             int r = Math.min(dp(8), Math.max(rad[0], rad[1]));
-                            if (currentMessageObject.needDrawBluredPreview()) {
+                            if (org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject)) { // Ayuless: retained TTL preview
                                 rectPath.reset();
                                 rectPath.addRoundRect(rect, r, r, Path.Direction.CW);
                                 canvas.save();
@@ -22587,11 +22589,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
             if (
                 (!isRoundVideo || !hasLinkPreview) &&
-                (!currentMessageObject.needDrawBluredPreview() || !MediaController.getInstance().isPlayingMessage(currentMessageObject)) &&
+                (!org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject) || !MediaController.getInstance().isPlayingMessage(currentMessageObject)) && // Ayuless: retained TTL preview
                 !(currentMessageObject.hasMediaSpoilers() && (!currentMessageObject.isMediaSpoilersRevealed || !currentMessageObject.revealingMediaSpoilers) && SharedConfig.isAutoplayVideo() && !currentMessageObject.isRepostPreview && currentMessagesGroup == null && (radialProgress.getIcon() == MediaActionDrawable.ICON_PLAY || radialProgress.getIcon() == MediaActionDrawable.ICON_NONE)) &&
                 !currentMessageObject.isHiddenSensitive()
             ) {
-                if (currentMessageObject.needDrawBluredPreview()) {
+                if (org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject)) { // Ayuless: retained TTL preview
                     radialProgress.overrideCircleAlpha = 0f;
                 } else if (isRoundVideo && !on) {
                     radialProgress.overrideCircleAlpha = .25f + .75f * (1f - getVideoTranscriptionProgress());
@@ -22603,7 +22605,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if (!currentMessageObject.isRoundOnce() && (!SharedConfig.isAutoplayVideo() || currentMessagesGroup != null) && currentMessageObject.hasMediaSpoilers() && !currentMessageObject.isMediaSpoilersRevealed && radialProgress.getIcon() == MediaActionDrawable.ICON_PLAY) {
                     canvas.restore();
                 }
-                if (currentMessageObject.needDrawBluredPreview() || isRoundVideo && !on) {
+                if (org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject) || isRoundVideo && !on) { // Ayuless: retained TTL preview
                     radialProgress.overrideCircleAlpha = 1f;
                 }
             }
@@ -22611,7 +22613,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 canvas.restore();
             }
         }
-        boolean drawCountdown = buttonState == -1 && currentMessageObject != null && currentMessageObject.needDrawBluredPreview() && !MediaController.getInstance().isPlayingMessage(currentMessageObject) && currentMessageObject.messageOwner.destroyTime != 0;
+        boolean drawCountdown = buttonState == -1 && currentMessageObject != null && org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject) && !MediaController.getInstance().isPlayingMessage(currentMessageObject) && currentMessageObject.messageOwner.destroyTime != 0; // Ayuless: retained TTL preview
         if (drawCountdown && timerParticlesAlpha == null) {
             timerParticlesAlpha = new AnimatedFloat(0, this, 150, 120, CubicBezierInterpolator.EASE_OUT);
         }
@@ -22930,7 +22932,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
         }
 
-        if (currentMessageObject.needDrawBluredPreview()) {
+        if (org.ayuless.content.RetainedMedia.blurredPreview(currentMessageObject)) { // Ayuless: retained TTL preview
             drawPhotoBlurRect(canvas, radialProgress.getProgressRect());
         }
         radialProgress.iconScale = 1f;
