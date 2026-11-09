@@ -21,7 +21,7 @@ First test build: [v0.1.0-alpha.1](https://github.com/SU4G3/Ayuless/releases/tag
 - ✅ New app id, name and launcher icon (#15)
 - ✅ Maps via MapLibre (#17)
 - 🚧 Push via UnifiedPush (#3): draft #30, needs a device test (blocked by the login issue above)
-- ✅ Rebuild all native libs from source in CI, drop prebuilt `.a` (#5). CI builds them from source and links the APK against them, see [NATIVE.md](NATIVE.md) (#26); deleting the committed `.a` files is pending.
+- ✅ Rebuild all native libs from source in CI, drop prebuilt `.a` (#5). CI builds them from source and links the APK against them, see [NATIVE.md](NATIVE.md) (#26); committed `.a` files removed (#47).
 - ⏳ `./gradlew assembleAfatRelease` from a clean clone with no proprietary blobs
 
 ## Step 2: Ghost mode ✅ (#16, #23, #28, #29, #33)
