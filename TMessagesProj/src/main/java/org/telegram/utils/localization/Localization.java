@@ -35,18 +35,24 @@ public class Localization {
     }
 
     public String getByResId(Context context, @StringRes int resId) {
-        if (context == null || resId == 0) {
+        // Ayuless: share the asset binding with branding; discarded strings have no resource entry name.
+        final int hash = getStringResHash(context, resId);
+        if (hash == 0) {
             return null;
+        }
+        return get(hash);
+    }
+
+    // Ayuless: resolve IDs through string_resource_ids.bin, never through Android's resource table.
+    public static int getStringResHash(Context context, @StringRes int resId) {
+        if (context == null || resId == 0) {
+            return 0;
         }
 
         if (rawResBindings == null) {
             rawResBindings = loadStringResBindings(context);
         }
-        final int hash = rawResBindings.get(resId);
-        if (hash == 0) {
-            return null;
-        }
-        return get(hash);
+        return rawResBindings.get(resId);
     }
 
     public String getByResName(String resName) {

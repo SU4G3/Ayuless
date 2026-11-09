@@ -1667,7 +1667,15 @@ public class LocaleController {
             if (res != 0) {
                 // a broken language pack string (bad placeholders): show the built-in one instead of LOC_ERR
                 try {
-                    return String.format(ApplicationLoader.applicationContext.getString(res), args);
+                    // Ayuless: the built-in fallback also lives in binary assets, not Android Resources.
+                    LocaleController controller = getInstance();
+                    controller.checkLocalizationInternal();
+                    String builtIn = controller.localizationInternalDefault.getByResNameOrResId(
+                            ApplicationLoader.applicationContext, key, res);
+                    if (builtIn != null) {
+                        int keyHash = key != null ? key.hashCode() : Localization.getStringResHash(ApplicationLoader.applicationContext, res);
+                        return String.format(org.ayuless.branding.AppBranding.localize(keyHash, builtIn), args);
+                    }
                 } catch (Exception ignore) {}
             }
             return "LOC_ERR: " + key;
@@ -4787,12 +4795,9 @@ public class LocaleController {
 
     @Nullable
     private String getStringV2(String key, @StringRes int stringRes, String fallback) {
-        // Ayuless: process only allowlisted templates, before any caller arguments.
-        String resourceKey = key;
-        if (stringRes != 0) {
-            resourceKey = ApplicationLoader.applicationContext.getResources().getResourceEntryName(stringRes);
-        }
-        return org.ayuless.branding.AppBranding.localize(resourceKey, getUnbrandedStringV2(key, stringRes, fallback));
+        // Ayuless: binary-only strings have no Android resource entry, even though R.string IDs exist.
+        int keyHash = key != null ? key.hashCode() : Localization.getStringResHash(ApplicationLoader.applicationContext, stringRes);
+        return org.ayuless.branding.AppBranding.localize(keyHash, getUnbrandedStringV2(key, stringRes, fallback));
     }
 
     private String getUnbrandedStringV2(String key, @StringRes int stringRes, String fallback) {
