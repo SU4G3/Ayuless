@@ -36,7 +36,7 @@ import java.util.Set;
  * upstream rendering works unchanged.
  *
  * <p>Files are named {@code <dialogId>_<msgId>_<attachFileName>}, so a lookup needs no database.
- * Sensitive message categories require their own opt-in; Spy exceptions are never saved. Oldest files are
+ * All message categories are supported; Spy exceptions are never saved. Oldest files are
  * removed first when the total size exceeds the limit.
  */
 public final class SavedAttachments {

@@ -13,14 +13,9 @@ import org.telegram.messenger.ApplicationLoader;
 public final class AppearanceConfig {
 
     public static final String KEY_TRANSLUCENT_DELETED = "translucentDeleted";
-    public static final String KEY_MARK_STYLE = "deletedMarkStyle";
+    public static final String KEY_MARK_EMOJI = "deletedMarkEmoji";
     public static final String KEY_MARK_COLOR = "deletedMarkColor";
     public static final String KEY_GHOST_IN_DIALOGS = "ghostInDialogs";
-
-    /** Deleted mark: trash icon. */
-    public static final int MARK_ICON = 0;
-    /** Deleted mark: the word "deleted". */
-    public static final int MARK_TEXT = 1;
 
     /** Mark color 0 means "same as the message time". */
     public static final int COLOR_DEFAULT = 0;
@@ -56,12 +51,13 @@ public final class AppearanceConfig {
         prefs().edit().putBoolean(KEY_TRANSLUCENT_DELETED, value).apply();
     }
 
-    public static int markStyle() {
-        return ready() ? prefs().getInt(KEY_MARK_STYLE, MARK_ICON) : MARK_ICON;
+    /** One emoji, or an empty string to hide the mark. Replaces the old icon/text preference. */
+    public static String markEmoji() {
+        return ready() ? prefs().getString(KEY_MARK_EMOJI, "🗑️") : "🗑️";
     }
 
-    public static void setMarkStyle(int style) {
-        prefs().edit().putInt(KEY_MARK_STYLE, style).apply();
+    public static void setMarkEmoji(String emoji) {
+        prefs().edit().putString(KEY_MARK_EMOJI, emoji).apply();
     }
 
     public static int markColor() {

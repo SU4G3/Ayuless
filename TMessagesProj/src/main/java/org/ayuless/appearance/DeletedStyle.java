@@ -8,24 +8,19 @@ import android.graphics.Canvas;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.text.style.ReplacementSpan;
 
 import org.ayuless.antidelete.DeletedCache;
-import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.R;
-import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.ColoredImageSpan;
 
 /** How messages kept by anti-delete look in a chat. */
 public final class DeletedStyle {
 
     /** Opacity of a deleted message when "translucent deleted messages" is on. */
     private static final float DELETED_ALPHA = 0.55f;
-    private static final int TEXT_FALLBACK_COLOR = 0xFF9E9E9E;
-    /** Placeholder the icon span is drawn over; the time width is measured from text. */
-    private static final String ICON_PLACEHOLDER = "🗑";
-
     private DeletedStyle() {
     }
 
@@ -39,21 +34,38 @@ public final class DeletedStyle {
         if (!isDeleted(account, messageObject)) {
             return time;
         }
-        final int color = AppearanceConfig.markColor();
-        if (AppearanceConfig.markStyle() == AppearanceConfig.MARK_TEXT) {
-            SpannableString label = new SpannableString(LocaleController.getString(R.string.AyulessDeletedMark) + " ");
-            label.setSpan(new ForegroundColorSpan(color != AppearanceConfig.COLOR_DEFAULT ? color : TEXT_FALLBACK_COLOR),
-                    0, label.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            return TextUtils.concat(label, time);
+        return decorateTimeLabel(time);
+    }
+
+    /** Shared by real messages and the live settings preview. */
+    public static CharSequence decorateTimeLabel(CharSequence time) {
+        String emoji = AppearanceConfig.markEmoji();
+        if (TextUtils.isEmpty(emoji)) return time;
+        SpannableString mark = new SpannableString(emoji + " ");
+        mark.setSpan(new EmojiMarkSpan(), 0, emoji.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return TextUtils.concat(mark, time);
+    }
+
+    /** Tint the emoji layer, including color fonts, without changing the timestamp color. */
+    private static final class EmojiMarkSpan extends ReplacementSpan {
+        @Override
+        public int getSize(Paint paint, CharSequence text, int start, int end, Paint.FontMetricsInt fm) {
+            if (fm != null) paint.getFontMetricsInt(fm);
+            return (int) Math.ceil(paint.measureText(text, start, end));
         }
-        SpannableString icon = new SpannableString(ICON_PLACEHOLDER + " ");
-        ColoredImageSpan span = new ColoredImageSpan(R.drawable.ayuless_solar_msg_delete);
-        span.setRelativeSize(Theme.chat_timePaint.getFontMetricsInt());
-        if (color != AppearanceConfig.COLOR_DEFAULT) {
-            span.setOverrideColor(color);
+
+        @Override
+        public void draw(Canvas canvas, CharSequence text, int start, int end, float x,
+                         int top, int y, int bottom, Paint paint) {
+            Paint tint = new Paint();
+            int color = AppearanceConfig.markColor();
+            tint.setColorFilter(new PorterDuffColorFilter(
+                    color == AppearanceConfig.COLOR_DEFAULT ? paint.getColor() : color, PorterDuff.Mode.SRC_IN));
+            float width = paint.measureText(text, start, end);
+            int save = canvas.saveLayer(x, top, x + width, bottom, tint);
+            canvas.drawText(text, start, end, x, y, paint);
+            canvas.restoreToCount(save);
         }
-        icon.setSpan(span, 0, ICON_PLACEHOLDER.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return TextUtils.concat(icon, time);
     }
 
     /**

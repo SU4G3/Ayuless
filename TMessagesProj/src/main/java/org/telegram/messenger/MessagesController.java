@@ -6678,10 +6678,10 @@ public class MessagesController extends BaseController implements NotificationCe
         if (chat.migrated_to != null) {
             TLRPC.Chat migratedTo = getChat(chat.migrated_to.channel_id);
             if (migratedTo != null) {
-                return org.ayuless.content.ProtectedContent.chatNoForwards(currentAccount, this, migratedTo, migratedTo.noforwards); // Ayuless: account-specific restrictions
+                return org.ayuless.content.ProtectedContent.chatNoForwards(currentAccount, this, migratedTo, migratedTo.noforwards); // Ayuless: allow local saving in all chats.
             }
         }
-        return org.ayuless.content.ProtectedContent.chatNoForwards(currentAccount, this, chat, chat.noforwards); // Ayuless: account-specific restrictions
+        return org.ayuless.content.ProtectedContent.chatNoForwards(currentAccount, this, chat, chat.noforwards); // Ayuless: allow local saving in all chats.
     }
 
     public boolean isChatNoForwards(long chatId) {
@@ -6701,10 +6701,7 @@ public class MessagesController extends BaseController implements NotificationCe
             return false;
         }
 
-        // Ayuless: private protection and auto-delete protection are separate opt-ins.
-        if (org.ayuless.content.RetentionConfig.enabled(currentAccount, org.ayuless.content.RetentionConfig.PRIVATE)
-                && (userFull.ttl_period == 0 || org.ayuless.content.RetentionConfig.enabled(currentAccount, org.ayuless.content.RetentionConfig.AUTO_DELETE))) return false;
-        return userFull.noforwards_peer_enabled || userFull.noforwards_my_enabled;
+        return false; // Ayuless: allow local saving in all private chats.
     }
 
     public TLRPC.User getUser(Long id) {
@@ -14529,6 +14526,11 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void markMessageAsRead2(long dialogId, int mid, TLRPC.InputChannel inputChannel, int ttl, long taskId, boolean createDeleteTask) {
+        // Ayuless: do not create a local TTL task for a receipt ghost mode blocks.
+        if (org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount)) {
+            if (taskId != 0) getMessagesStorage().removePendingTask(taskId);
+            return;
+        }
         if (mid == 0 || ttl < 0) {
             return;
         }
@@ -14586,6 +14588,8 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void markMessageAsRead(long dialogId, long randomId, int ttl) {
+        // Ayuless: encrypted content receipts and their local tasks share the ghost policy.
+        if (org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount)) return;
         if (randomId == 0 || dialogId == 0 || ttl <= 0 && ttl != Integer.MIN_VALUE) {
             return;
         }
@@ -14830,7 +14834,8 @@ public class MessagesController extends BaseController implements NotificationCe
                     getNotificationsController().processDialogsUpdateRead(dialogsToUpdate);
                 }));
 
-                if (chat != null && chat.ttl > 0) {
+                // Ayuless: blocked readEncryptedHistory must not start secret-chat TTL locally.
+                if (chat != null && chat.ttl > 0 && !org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount)) {
                     int serverTime = Math.max(getConnectionsManager().getCurrentTime(), maxDate);
                     getMessagesStorage().createTaskForSecretChat(chat.id, maxDate, serverTime, 0, null);
                 }

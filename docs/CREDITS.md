@@ -10,6 +10,9 @@ The icons were converted to Android vector drawables; colors may be adjusted.
 
 Files: `TMessagesProj/src/main/res/drawable/ayuless_solar_*.xml`.
 
+`ayuless_solar_eye.xml` is an eye adaptation drawn in the Solar Linear style
+for the retained TTL media badge, with the same CC BY 4.0 attribution above.
+
 CC BY 4.0 is one-way compatible with GPLv3: the icons can be distributed as part of
 Ayuless (GPL-3.0-or-later) as long as this attribution is kept.
 

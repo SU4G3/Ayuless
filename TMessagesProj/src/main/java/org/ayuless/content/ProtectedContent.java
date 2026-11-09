@@ -31,19 +31,12 @@ public final class ProtectedContent {
     private ProtectedContent() {
     }
 
-    /**
-     * Chat-level flag as the UI should see it. Groups/channels are unlocked unless the chat has an
-     * auto-delete timer and its opt-in remains disabled.
-     */
+    /** Local saving and screenshots are available in every chat. */
     public static boolean chatNoForwards(int account, MessagesController controller, TLRPC.Chat chat, boolean raw) {
-        if (!raw || chat == null) {
-            return raw;
-        }
-        TLRPC.ChatFull full = controller.getChatFull(chat.id);
-        return full != null && full.ttl_period != 0 && !RetentionConfig.enabled(account, RetentionConfig.AUTO_DELETE);
+        return false;
     }
 
-    /** Clears a message-level restriction only when all applicable opt-ins allow it. */
+    /** Clears a message-level restriction locally for saving and forwarding as a copy. */
     public static void onMessageObject(int account, TLRPC.Message message) {
         if (message == null || !message.noforwards || !canUnlock(account, message)) {
             return;
@@ -53,19 +46,7 @@ public final class ProtectedContent {
     }
 
     public static boolean canUnlock(int account, TLRPC.Message message) {
-        if (message == null) return false;
-        long dialogId = MessageObject.getDialogId(message);
-        if (DialogObject.isEncryptedDialog(dialogId) || message instanceof TLRPC.TL_message_secret) {
-            if (!RetentionConfig.enabled(account, RetentionConfig.SECRET)) return false;
-        } else if (dialogId > 0 && !RetentionConfig.enabled(account, RetentionConfig.PRIVATE)) {
-            return false;
-        }
-        if (RetentionConfig.timed(message) && !RetentionConfig.enabled(account, RetentionConfig.TTL)) return false;
-        MessagesController controller = MessagesController.getInstance(account);
-        TLRPC.ChatFull chat = dialogId < 0 ? controller.getChatFull(-dialogId) : null;
-        TLRPC.UserFull user = dialogId > 0 && !DialogObject.isEncryptedDialog(dialogId) ? controller.getUserFull(dialogId) : null;
-        return (chat == null || chat.ttl_period == 0 || RetentionConfig.enabled(account, RetentionConfig.AUTO_DELETE))
-                && (user == null || user.ttl_period == 0 || RetentionConfig.enabled(account, RetentionConfig.AUTO_DELETE));
+        return message != null;
     }
 
     /** True if the server will refuse a plain forward of this message. */
@@ -130,7 +111,7 @@ public final class ProtectedContent {
 
     public static boolean sendStoryCopy(int account, org.telegram.tgnet.tl.TL_stories.StoryItem story,
             long peer, MessageObject reply, boolean notify, long payStars, long monoForumPeer) {
-        if (!RetentionConfig.enabled(account, RetentionConfig.STORIES) || story == null) return false;
+        if (story == null) return false;
         File file = !android.text.TextUtils.isEmpty(story.attachPath) ? new File(story.attachPath) : null;
         if (file != null && !file.exists()) file = null;
         if (file == null && story.media != null && story.media.document != null) {

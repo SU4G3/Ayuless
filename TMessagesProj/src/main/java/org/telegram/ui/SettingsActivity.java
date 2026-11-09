@@ -728,7 +728,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         items.add(UItem.asCustomShadow(topView, 200 - 12));
 
         // Ayuless: a dedicated first section directly below the profile block.
-        items.add(org.ayuless.settings.AyulessSettingsEntry.Factory.of(900, getString(R.string.AyulessSettings)));
+        items.add(SettingCell.Factory.of(900, IconBackgroundColors.PURPLE.top, IconBackgroundColors.PURPLE.bottom,
+                R.drawable.ayuless_settings_logo, getString(R.string.AyulessSettings), getString(R.string.AyulessSettingsInfo)));
         items.add(UItem.asShadow(null));
 
         accountNumbers.clear();

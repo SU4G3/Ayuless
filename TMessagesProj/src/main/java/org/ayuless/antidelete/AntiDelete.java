@@ -12,7 +12,6 @@ import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
@@ -133,8 +132,7 @@ public final class AntiDelete {
             org.ayuless.spy.SavedAttachments.onKept(account, m);
             DeletedCache.mark(account, m.dialog_id, m.id);
         }
-        AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(account)
-                .postNotificationName(NotificationCenter.updateInterfaces, MessagesController.UPDATE_MASK_AVATAR));
+        notifyKept(account, kept);
         return result.size() == 0 ? null : result;
     }
 
@@ -147,7 +145,28 @@ public final class AntiDelete {
         AyulessStore.getInstance(account).saveDeleted(message);
         org.ayuless.spy.SavedAttachments.onKept(account, message);
         DeletedCache.mark(account, message.dialog_id, message.id);
+        ArrayList<TLRPC.Message> kept = new ArrayList<>();
+        kept.add(message);
+        notifyKept(account, kept);
         return true;
+    }
+
+    private static void notifyKept(int account, ArrayList<TLRPC.Message> messages) {
+        LongSparseArray<ArrayList<Integer>> idsByDialog = new LongSparseArray<>();
+        for (TLRPC.Message message : messages) {
+            long dialogId = MessageObject.getDialogId(message);
+            ArrayList<Integer> ids = idsByDialog.get(dialogId);
+            if (ids == null) idsByDialog.put(dialogId, ids = new ArrayList<>());
+            ids.add(message.id);
+        }
+        AndroidUtilities.runOnUIThread(() -> {
+            NotificationCenter center = NotificationCenter.getInstance(account);
+            for (int i = 0; i < idsByDialog.size(); i++) {
+                center.postNotificationName(NotificationCenter.ayulessMessagesKept,
+                        idsByDialog.keyAt(i), idsByDialog.valueAt(i));
+            }
+            center.postNotificationName(NotificationCenter.dialogsNeedReload);
+        });
     }
 
     /** Prefixes the time label of a kept message with the deleted mark (see DeletedStyle). */

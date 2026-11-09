@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import org.ayuless.spy.SpyExceptions;
 import org.ayuless.storage.AyulessStore;
 import org.telegram.SQLite.SQLiteCursor;
-import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesStorage;
@@ -36,7 +35,7 @@ public final class EditHistory {
             return;
         }
         final long dialogId = MessageObject.getDialogId(edited);
-        if (DialogObject.isEncryptedDialog(dialogId) || SpyExceptions.isExcepted(account, dialogId)) {
+        if (SpyExceptions.isExcepted(account, dialogId)) {
             return;
         }
         final int msgId = edited.id;

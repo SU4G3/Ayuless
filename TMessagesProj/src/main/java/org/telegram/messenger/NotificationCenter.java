@@ -41,6 +41,8 @@ public class NotificationCenter {
     public static final int closeChats = totalEvents++;
     public static final int closeChatActivity = totalEvents++;
     public static final int closeProfileActivity = totalEvents++;
+    // Ayuless: retained deletions update live objects without replacing their content.
+    public static final int ayulessMessagesKept = totalEvents++;
     public static final int messagesDeleted = totalEvents++;
     public static final int historyCleared = totalEvents++;
     public static final int messagesRead = totalEvents++;

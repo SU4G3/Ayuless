@@ -650,7 +650,9 @@ public class MessageObject {
     }
 
     public boolean hasMediaSpoilers() {
-        return !isRepostPreview && (messageOwner.media != null && messageOwner.media.spoiler || needDrawBluredPreview()) || isHiddenSensitive();
+        // Ayuless: retained TTL previews do not imply a spoiler; explicit spoilers still apply.
+        return !isRepostPreview && (messageOwner.media != null && messageOwner.media.spoiler
+                || needDrawBluredPreview() && !org.ayuless.content.RetainedMedia.showPreview(this)) || isHiddenSensitive();
     }
 
     public Boolean isSensitiveCached;
