@@ -70,9 +70,13 @@ Remote session app names are preserved.
   Telegram notification bitmaps. Existing notification callers use it without per-call changes.
 - `drawable/ic_launcher_dr.xml`: Ayuless identity for Android account/contact/phone-account icons and
   fallback notification person icons, replacing five density-specific Telegram launcher bitmaps.
-- `drawable/tg_splash_320.xml`: Ayuless vector replaces Telegram's animated Android 12 splash.
-- `IntroActivity`: localized Ayuless title replaces Telegram's wordmark; the Ayuless mark is rasterized
-  into the existing OpenGL intro texture and uses the brand background #251D41. Other slides retain
+- `drawable/tg_splash_320.xml`: rounded Ayuless vector replaces Telegram's animated Android 12 splash,
+  retaining the final upstream 200×200dp bounds centered in the 320×320dp canvas (60dp margins).
+- `IntroActivity`: localized Ayuless title replaces Telegram's wordmark; the full rounded vector from
+  `ayuless_settings_logo` is rasterized at device density into the centered 150×150dp OpenGL sphere.
+  The upstream 200×150dp TextureView, layout and slide transitions are unchanged. The 82×74 plane
+  with its (6, −5) anchor and its circular clipping mask use empty textures, so they cannot distort,
+  shift or crop the square artwork. Brand colors are fixed in both themes; other slides retain
   their existing generic animations.
 - `DialogsActivity`: localized Ayuless text replaces the Telegram wordmark in the main header.
 - `BlockingUpdateView`: existing Ayuless settings logo replaces the Telegram update animation.

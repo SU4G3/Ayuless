@@ -25,7 +25,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.SurfaceTexture;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -657,16 +656,9 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
         private float maxRefreshRate;
         private long lastDrawFrame;
 
-        private final GenericProvider<Void, Bitmap> telegramMaskProvider = v -> {
-            int size = dp(ICON_HEIGHT_DP);
-            Bitmap bm = Bitmap.createBitmap(dp(ICON_WIDTH_DP), size, Bitmap.Config.ARGB_8888);
-            Canvas c = new Canvas(bm);
-            c.drawColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-            c.drawCircle(bm.getWidth() / 2f, bm.getHeight() / 2f, size / 2f, paint);
-            return bm;
-        };
+        // Ayuless: the complete rounded logo needs neither the offset plane nor its circular mask.
+        private final GenericProvider<Void, Bitmap> telegramMaskProvider = v ->
+                Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
 
         public EGLThread(SurfaceTexture surface) {
             super("EGLThread");
@@ -790,23 +782,17 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
             loadTexture(R.drawable.intro_powerful_star, 18);
             loadTexture(R.drawable.intro_private_door, 19);
             loadTexture(R.drawable.intro_private_screw, 20);
-            // Ayuless: rasterize the vector into the existing intro animation texture.
+            // Ayuless: leave the 82x74 plane (anchor 6,-5) empty; it distorts square artwork.
+            loadTexture(telegramMaskProvider, 21);
+            // Ayuless: render the branding vector at device density into the centered 150x150
+            // sphere, preserving upstream bounds, vertical placement and slide transitions.
             loadTexture(v -> {
                 int size = dp(ICON_HEIGHT_DP);
                 Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-                Drawable mark = getParentActivity().getResources().getDrawable(R.drawable.ayuless_mark).mutate();
-                mark.setBounds(0, 0, size, size);
-                mark.draw(new Canvas(bitmap));
+                Drawable logo = getParentActivity().getResources().getDrawable(R.drawable.ayuless_settings_logo).mutate();
+                logo.setBounds(0, 0, size, size);
+                logo.draw(new Canvas(bitmap));
                 return bitmap;
-            }, 21);
-            loadTexture(v -> {
-                Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                paint.setColor(0xFF251D41); // Ayuless: brand background from branding/generate.py.
-                int size = dp(ICON_HEIGHT_DP);
-                Bitmap bm = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-                Canvas c = new Canvas(bm);
-                c.drawCircle(size / 2f, size / 2f, size / 2f, paint);
-                return bm;
             }, 22);
             loadTexture(telegramMaskProvider, 23);
 
