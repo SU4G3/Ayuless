@@ -58,19 +58,8 @@ public class SpySettingsActivity extends AyulessSettingsFragment {
     private static final int ID_SAVE_ATTACHMENTS = 40;
     private static final int ID_ATTACHMENTS_FOLDER = 41;
 
-    private static final String[] RETENTION_KEYS = {
-        "retainDeletedSecret", "retainDeletedTimed", "retainDeletedActions",
-        "retainEditsSecret", "retainEditsTimed", "retainEditsActions",
-        "retainAttachmentsSecret", "retainAttachmentsTimed", "retainAttachmentsActions",
-        "keepExpiringMedia", "unlockPrivate", "unlockAutoDelete", "unlockTtl", "unlockSecret", "unlockStories"
-    };
-    private static final int[] RETENTION_LABELS = {
-        R.string.AyulessRetainDeletedSecret, R.string.AyulessRetainDeletedTimed, R.string.AyulessRetainDeletedActions,
-        R.string.AyulessRetainEditsSecret, R.string.AyulessRetainEditsTimed, R.string.AyulessRetainEditsActions,
-        R.string.AyulessRetainAttachmentsSecret, R.string.AyulessRetainAttachmentsTimed, R.string.AyulessRetainAttachmentsActions,
-        R.string.AyulessKeepExpiringMedia, R.string.AyulessUnlockPrivate, R.string.AyulessUnlockAutoDelete,
-        R.string.AyulessUnlockTtl, R.string.AyulessUnlockSecret, R.string.AyulessUnlockStories
-    };
+    private static final int ID_ATTACHMENTS_LIMIT = 42;
+    private org.telegram.ui.Cells.TextDetailSettingsCell attachmentLimitCell;
 
     private long usedBytes = -1;
     private long attachmentsBytes = -1;
@@ -89,52 +78,31 @@ public class SpySettingsActivity extends AyulessSettingsFragment {
     @Override
     protected void fillSettingsItems(ArrayList<UItem> items, UniversalAdapter adapter) {
         final int account = currentAccount;
-        items.add(UItem.asHeader(getString(R.string.AyulessSpyHeader)));
         items.add(UItem.asCheck(ID_ANTI_DELETE, getString(R.string.AyulessAntiDelete)).setChecked(AntiDeleteConfig.isEnabled(account)));
-        items.add(UItem.asShadow(getString(R.string.AyulessAntiDeleteInfo)));
-        items.add(UItem.asCheck(ID_EDIT_HISTORY, getString(R.string.AyulessEditHistory)).setChecked(EditsConfig.isEnabled(account)));
-        items.add(UItem.asShadow(getString(R.string.AyulessEditHistoryInfo)));
         int exceptions = SpyExceptions.get(account).size();
-        items.add(UItem.asButton(ID_EXCEPTIONS, R.drawable.ayuless_solar_msg_block, getString(R.string.AyulessSpyExceptions),
+        items.add(UItem.asButton(ID_EXCEPTIONS, getString(R.string.AyulessSpyExceptions),
                 exceptions == 0 ? getString(R.string.AyulessSpyExceptionsNone) : String.valueOf(exceptions)));
-        items.add(UItem.asShadow(getString(R.string.AyulessSpyExceptionsInfo)));
+        items.add(UItem.asCheck(ID_EDIT_HISTORY, getString(R.string.AyulessEditHistory)).setChecked(EditsConfig.isEnabled(account)));
+        items.add(UItem.asShadow(null));
 
-        items.add(UItem.asHeader(getString(R.string.AyulessAttachmentsHeader)));
         items.add(UItem.asCheck(ID_SAVE_ATTACHMENTS, getString(R.string.AyulessSaveAttachments)).setChecked(SavedAttachments.isEnabled(account)));
-        items.add(UItem.asShadow(getString(R.string.AyulessSaveAttachmentsInfo)));
-        items.add(UItem.asButton(ID_ATTACHMENTS_FOLDER, R.drawable.ayuless_solar_msg_download, getString(R.string.AyulessAttachmentsFolder), "ayuless/attachments"));
-        items.add(UItem.asHeader(getString(R.string.AyulessAttachmentsLimit)));
-        final long[] limits = SavedAttachments.LIMITS;
-        final String[] labels = new String[limits.length];
-        int chosen = 1;
-        long current = SavedAttachments.getLimitBytes();
-        for (int i = 0; i < limits.length; i++) {
-            labels[i] = limits[i] <= 0 ? "∞" : AndroidUtilities.formatFileSize(limits[i], true, false);
-            if (limits[i] == current) {
-                chosen = i;
-            }
+        items.add(UItem.asButton(ID_ATTACHMENTS_FOLDER, getString(R.string.AyulessAttachmentsFolder), "ayuless/attachments"));
+        if (attachmentLimitCell == null && getParentActivity() != null) {
+            attachmentLimitCell = new org.telegram.ui.Cells.TextDetailSettingsCell(getParentActivity());
+            attachmentLimitCell.setMultilineDetail(true);
         }
-        items.add(UItem.asSlideView(labels, chosen, which -> {
-            SavedAttachments.setLimitBytes(limits[which]);
-            AndroidUtilities.runOnUIThread(this::refreshSize, 300);
-        }));
-        items.add(UItem.asShadow(formatString(R.string.AyulessAttachmentsUsage,
-                attachmentsBytes < 0 ? "…" : AndroidUtilities.formatFileSize(attachmentsBytes),
-                current <= 0 ? "∞" : AndroidUtilities.formatFileSize(current))));
+        if (attachmentLimitCell != null) {
+            attachmentLimitCell.setTextAndValue(getString(R.string.AyulessAttachmentsLimit) + " · " + limitLabel(SavedAttachments.getLimitBytes()),
+                    formatString(R.string.AyulessAttachmentsUsage,
+                            attachmentsBytes < 0 ? "…" : AndroidUtilities.formatFileSize(attachmentsBytes)), false);
+            items.add(UItem.asCustom(ID_ATTACHMENTS_LIMIT, attachmentLimitCell));
+        }
+        items.add(UItem.asShadow(null));
 
         items.add(UItem.asHeader(getString(R.string.AyulessSpyAdditional)));
         items.add(UItem.asCheck(ID_SAVE_READ_DATE, getString(R.string.AyulessSaveReadDate)).setChecked(SpyExtrasConfig.get(account, SpyExtrasConfig.KEY_SAVE_READ_DATE)));
-        items.add(UItem.asShadow(getString(R.string.AyulessSaveReadDateInfo)));
         items.add(UItem.asCheck(ID_SAVE_LAST_SEEN, getString(R.string.AyulessSaveLastSeen)).setChecked(SpyExtrasConfig.get(account, SpyExtrasConfig.KEY_SAVE_LAST_SEEN)));
-        items.add(UItem.asShadow(getString(R.string.AyulessSaveLastSeenInfo)));
-
-        items.add(UItem.asHeader(getString(R.string.AyulessRetentionHeader)));
-        for (int i = 0; i < RETENTION_KEYS.length; i++) {
-            if (i == 10) items.add(UItem.asHeader(getString(R.string.AyulessRestrictedHeader)));
-            items.add(UItem.asCheck(100 + i, getString(RETENTION_LABELS[i]))
-                    .setChecked(SpyExtrasConfig.get(account, RETENTION_KEYS[i])));
-        }
-        items.add(UItem.asShadow(getString(R.string.AyulessRetentionInfo)));
+        items.add(UItem.asShadow(getString(R.string.AyulessSpyAdditionalInfo)));
 
         items.add(UItem.asHeader(getString(R.string.AyulessStorageHeader)));
         items.add(UItem.asButton(ID_STORAGE_USED, getString(R.string.AyulessStorageUsed), usedBytes < 0 ? "…" : AndroidUtilities.formatFileSize(usedBytes)));
@@ -146,17 +114,15 @@ public class SpySettingsActivity extends AyulessSettingsFragment {
         items.add(UItem.asButton(ID_IMPORT, R.drawable.ayuless_solar_msg_download, getString(R.string.AyulessImport)));
         items.add(UItem.asButton(ID_CLEAR, R.drawable.ayuless_solar_msg_delete, getString(R.string.AyulessStorageClear)).red());
         items.add(UItem.asShadow(getString(R.string.AyulessDataInfo)));
+        for (UItem item : items) {
+            if (item.id == ID_ANTI_DELETE || item.id == ID_EXCEPTIONS || item.id == ID_EDIT_HISTORY
+                    || item.id == ID_SAVE_ATTACHMENTS || item.id == ID_ATTACHMENTS_FOLDER) item.hideDivider = true;
+        }
     }
 
     @Override
     protected void onClick(UItem item, View view, int position, float x, float y) {
         final int account = currentAccount;
-        if (item.id >= 100 && item.id < 100 + RETENTION_KEYS.length) {
-            String key = RETENTION_KEYS[item.id - 100];
-            SpyExtrasConfig.set(account, key, !SpyExtrasConfig.get(account, key));
-            update();
-            return;
-        }
         switch (item.id) {
             case ID_ANTI_DELETE:
                 AntiDeleteConfig.setEnabled(account, !AntiDeleteConfig.isEnabled(account));
@@ -184,6 +150,9 @@ public class SpySettingsActivity extends AyulessSettingsFragment {
             case ID_ATTACHMENTS_FOLDER:
                 BulletinFactory.of(this).createSimpleBulletin(R.raw.chats_infotip,
                         SavedAttachments.accountDir(account).getAbsolutePath()).show();
+                break;
+            case ID_ATTACHMENTS_LIMIT:
+                showAttachmentLimitPicker();
                 break;
             case ID_STORAGE_LIMIT:
                 showLimitPicker();
@@ -235,7 +204,22 @@ public class SpySettingsActivity extends AyulessSettingsFragment {
     }
 
     private String limitLabel(long bytes) {
-        return bytes <= 0 ? getString(R.string.AyulessStorageNoLimit) : AndroidUtilities.formatFileSize(bytes);
+        return bytes <= 0 ? getString(R.string.AyulessStorageNoLimit)
+                : bytes >= 1024 * MB && bytes % (1024 * MB) == 0
+                ? (bytes / (1024 * MB)) + " GB" : (bytes / MB) + " MB";
+    }
+
+    private void showAttachmentLimitPicker() {
+        if (getParentActivity() == null) return;
+        CharSequence[] labels = new CharSequence[SavedAttachments.LIMITS.length];
+        for (int i = 0; i < labels.length; i++) labels[i] = limitLabel(SavedAttachments.LIMITS[i]);
+        showDialog(new AlertDialog.Builder(getParentActivity(), getResourceProvider())
+                .setTitle(getString(R.string.AyulessAttachmentsLimit))
+                .setItems(labels, (dialog, which) -> {
+                    SavedAttachments.setLimitBytes(SavedAttachments.LIMITS[which]);
+                    refreshSize();
+                    update();
+                }).create());
     }
 
     private void showLimitPicker() {

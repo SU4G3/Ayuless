@@ -2070,40 +2070,13 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                         }
 
                         if (!unsupported && allowShare && !currentStory.isLive) {
-                            if (UserConfig.getInstance(currentAccount).isPremium() || org.ayuless.content.RetentionConfig.enabled(currentAccount, org.ayuless.content.RetentionConfig.STORIES)) { // Ayuless: local story saving
-                                ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_gallery, getString(R.string.SaveToGallery), false, resourcesProvider).setOnClickListener(v -> {
-                                    saveToGallery();
-                                    if (popupMenu != null) {
-                                        popupMenu.dismiss();
-                                    }
-                                });
-                            } else if (!MessagesController.getInstance(currentAccount).premiumFeaturesBlocked()) {
-                                Drawable lockIcon = ContextCompat.getDrawable(context, R.drawable.msg_gallery_locked2);
-                                lockIcon.setColorFilter(new PorterDuffColorFilter(ColorUtils.blendARGB(Color.WHITE, Color.BLACK, 0.5f), PorterDuff.Mode.MULTIPLY));
-                                CombinedDrawable combinedDrawable = new CombinedDrawable(
-                                        ContextCompat.getDrawable(context, R.drawable.msg_gallery_locked1),
-                                        lockIcon
-                                ) {
-                                    @Override
-                                    public void setColorFilter(ColorFilter colorFilter) {
-
-                                    }
-                                };
-                                ActionBarMenuSubItem item = ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_gallery, getString(R.string.SaveToGallery), false, resourcesProvider);
-                                item.setIcon(combinedDrawable);
-                                item.setOnClickListener(v -> {
-                                    item.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
-                                    BulletinFactory bulletinFactory = BulletinFactory.global();
-                                    if (bulletinFactory != null) {
-                                        bulletinFactory.createSimpleBulletin(R.raw.ic_save_to_gallery, AndroidUtilities.replaceSingleTag(
-                                                getString(R.string.SaveStoryToGalleryPremiumHint),
-                                                () -> {
-                                                    PremiumFeatureBottomSheet sheet = new PremiumFeatureBottomSheet(storyViewer.fragment, PremiumPreviewFragment.PREMIUM_FEATURE_STORIES, false);
-                                                    delegate.showDialog(sheet);
-                                                })).show();
-                                    }
-                                });
-                            }
+                            // Ayuless: local story saving is available for every account.
+                            ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_gallery, getString(R.string.SaveToGallery), false, resourcesProvider).setOnClickListener(v -> {
+                                saveToGallery();
+                                if (popupMenu != null) {
+                                    popupMenu.dismiss();
+                                }
+                            });
                         }
 
                         if (!MessagesController.getInstance(currentAccount).premiumFeaturesBlocked() && !isChannel) {
@@ -5093,9 +5066,7 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                 storyAreasView.set(preload ? null : storyItem, emojiAnimationsOverlay);
                 currentStory.set(storyItem);
                 allowShare = allowShareLink = !unsupported && currentStory.storyItem != null && !(currentStory.storyItem instanceof TL_stories.TL_storyItemDeleted) && !(currentStory.storyItem instanceof TL_stories.TL_storyItemSkipped);
-                if (allowShare) {
-                    allowShare = currentStory.allowScreenshots() && (currentStory.storyItem.isPublic || org.ayuless.content.RetentionConfig.enabled(currentAccount, org.ayuless.content.RetentionConfig.STORIES)); // Ayuless: share downloaded copies
-                }
+                // Ayuless: protected stories can be shared as downloaded copies.
                 if (allowShare) {
                     allowShare = currentStory.storyItem.pinned || !StoriesUtilities.isExpired(currentAccount, currentStory.storyItem);
                 }
@@ -7165,24 +7136,7 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
         }
 
         public boolean allowScreenshots() {
-            // Ayuless: local saving and screenshot opt-in for protected stories.
-            if (org.ayuless.content.RetentionConfig.enabled(currentAccount, org.ayuless.content.RetentionConfig.STORIES)) return true;
-            if (uploadingStory != null) {
-                return uploadingStory.entry.allowScreenshots;
-            }
-            if (storyItem != null) {
-                if (storyItem.noforwards) {
-                    return false;
-                }
-                if (storyItem.pinned) {
-                    final long did = storyItem.dialogId;
-                    final TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-did);
-                    if (chat != null && chat.noforwards) {
-                        return false;
-                    }
-                }
-            }
-            return true;
+            return true; // Ayuless: local saving and screenshots are always available.
         }
     }
 

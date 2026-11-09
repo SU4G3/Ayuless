@@ -32,7 +32,7 @@ import java.util.ArrayList;
  * Local store for deleted messages and edit history of one account.
  *
  * <p>All database work runs on a dedicated single-thread queue; results are delivered on the
- * UI thread. Sensitive message categories require explicit per-feature opt-in.
+ * UI thread. All message categories follow the main feature switches and chat exceptions.
  */
 public final class AyulessStore {
 
@@ -78,7 +78,7 @@ public final class AyulessStore {
 
     // ---- privacy policy ----
 
-    /** Eligibility for a specific Spy feature; all sensitive categories require opt-in. */
+    /** Eligibility for a Spy feature, controlled by its main switch and chat exceptions. */
     public static boolean isStorable(int account, TLRPC.Message message, String purpose) {
         return org.ayuless.content.RetentionConfig.storable(account, message, purpose);
     }

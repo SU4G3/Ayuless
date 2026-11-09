@@ -15,7 +15,7 @@ translations and existing Solar icons; no exteraGram code or assets are copied.
 | Dividers / selection | **1 physical pixel**, `divider`; navigation divider start **68** with icon / **20** without, extending to the end edge. Switch divider start **21**. No divider after the last row of a card. Selection uses the theme list selector (`settings_listSelector` in Ayuless's Telegram base). |
 | Switches | Layout **37 × 20**, end margin **22**, ordinary label **16**, row **50**. The default `newSwitchStyle` is enabled: drawn track **42.25 × 26**, radius **13**, off-state outline **1.625**; thumb diameter **13** off / **19.5** on, center travel **16.25**. Drawing extends outside the layout box; the row disables child clipping. These are the Material-style dimensions **52 × 32**, outline **2**, thumb **16 / 24**, travel **20**, scaled by **0.8125**. Track keys `switchTrack` / `switchTrackChecked`; on thumb `windowBackgroundWhite` (Monet: `switchTrackBlueThumbChecked`). Off colors derive from `switchTrack` in Lab: fill L* **90 / 22** on light/dark surfaces; thumb L* **50 / 60**, chroma capped at **32**. Non-Monet thumb/outline blends fill toward that thumb tone by **0.55 / 0.8**. The optional classic reference style is **31 × 14**, thumb **20**; Ayuless follows the default modern appearance. |
 | Branded top header | Full-width block on the gray screen background, custom-shadow item height **198**. Centered **72 × 72** logo with default shape radius **18**; top margin **28**. Name **20**, bold, `windowBackgroundWhiteBlackText`, top gap **16**, horizontal margins **50**. Version + installed version code **15**, bold, `windowBackgroundWhiteGrayText`, top gap **2**, horizontal margins **60**, bottom margin **28**, extra line spacing **2**. No separate white card behind the banner. |
-| Main Settings entry | A **50**-high single-line row, regular **16**, `windowBackgroundWhiteBlackText`, no subtitle/value. Icon tile **28 × 28**, with **24 × 24** foreground, start margin **18** and **20** gap before the text; trailing text inset **20**. Reference has a flat branded purple tile; Ayuless instead renders its complete, untinted `ayuless_settings_logo` at **28 × 28**. |
+| Main Settings entry | The upstream `SettingsActivity.SettingCell.Factory`, exactly as for Account and Notifications: **60** high with a **16** title and **13** subtitle, upstream padding and divider behavior. Own section immediately under the profile block. Upstream purple **28 × 28** rounded tile with the complete, untinted **24 × 24** Ayuless rounded logo inside. No separate entry cell implementation. |
 
 Evidence (paths relative to `/tmp/ayugram-apk`):
 
@@ -52,5 +52,35 @@ Implementation: independent classes under `org.ayuless.settings`, reusing the
 existing Telegram cells, switches and rounded section decoration. The decoration
 gets **12 / 20** with matching positive predicates for visible and off-screen rows;
 header factories count as spacers, so labels cannot join adjacent cards. The main
-Settings list uses the same radius. Settings behavior and defaults are unchanged;
-this restyle adds no feature flag or new functional setting.
+Settings list uses the same radius. The rounded logo is converted from Ayuless's
+own `branding/ayuless-icon-rounded.svg`; no reference artwork is imported.
+
+Device feedback refinements:
+
+- Ghost profile selection lives only in the action bar, as a round avatar and
+  ellipsized account-name chip. It opens the existing shared/per-account picker.
+- Spy card A: Save deleted messages, Exceptions, Edit history. Card B: Save
+  attachments, Attachments folder, Limit. Neither card has internal dividers.
+  The Limit row contains the used-space description; its picker uses exact whole
+  MB/GB values, computed from the binary limits without decimal formatting.
+- Customization starts with a live incoming bubble preview. The preview and
+  actual chat timestamps share the emoji mark renderer and apply the selected
+  color and deleted-message opacity. The mark is a single emoji or absent; the
+  old icon/text preference is retired. Colors are accessible inline circles with
+  a selected ring and checkmark, scrollable on narrow displays.
+- Ghost status in chat list shares the Useful features card with the other
+  toggles. Its footer identifies the chat-list header as the indicator location.
+- Restricted-content and retention categories are removed. Local saving,
+  forwarding as copies and screenshots apply to every content category. Automatic
+  retention still follows the main anti-delete, edit-history and attachment
+  switches (off by default), chat exceptions, and storage limits. Old category
+  preferences are ignored. Import remains an explicit per-account action.
+
+Verification after these refinements: Java syntax parsing, EN/RU resource keys
+and format placeholders, XML parsing, and an isolated retention-policy harness
+(888 assertions over feature switches, accounts, exceptions and message types).
+The offline Gradle compile could not reach project compilation in the restricted
+workspace: the wrapper cache is read-only; direct Gradle with a writable temporary
+home fails to determine a usable wildcard IP. On-device rendering, scrolling,
+account switching and end-to-end secret/TTL/view-once retention still require a
+device build.

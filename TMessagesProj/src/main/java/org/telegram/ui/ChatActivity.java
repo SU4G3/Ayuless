@@ -8724,10 +8724,8 @@ public class ChatActivity extends BaseFragment implements
         });
         chatScrollHelper.setAnimationCallback(chatScrollHelperCallback);
 
-        flagSecure = new FlagSecureReason(getParentActivity().getWindow(), () ->
-            currentEncryptedChat != null && !org.ayuless.content.RetentionConfig.enabled(currentAccount, org.ayuless.content.RetentionConfig.SECRET) || // Ayuless: opt-in secret screenshots
-            isPeerNoForwards()
-        );
+        // Ayuless: screenshots are available in every chat.
+        flagSecure = new FlagSecureReason(getParentActivity().getWindow(), () -> false);
 
         if (oldMessage != null) {
             chatActivityEnterView.setFieldText(oldMessage);

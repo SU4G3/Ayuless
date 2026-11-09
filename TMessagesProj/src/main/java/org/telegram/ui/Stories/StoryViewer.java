@@ -2888,7 +2888,7 @@ public class StoryViewer implements NotificationCenter.NotificationCenterDelegat
         if (BuildVars.DEBUG_PRIVATE_VERSION) {
             return;
         }
-        allowScreenshots = !isShowing || allowScreenshots || org.ayuless.content.RetentionConfig.enabled(currentAccount, org.ayuless.content.RetentionConfig.STORIES); // Ayuless: protected stories
+        allowScreenshots = true; // Ayuless: screenshots are available for every story.
         if (this.allowScreenshots != allowScreenshots) {
             this.allowScreenshots = allowScreenshots;
 

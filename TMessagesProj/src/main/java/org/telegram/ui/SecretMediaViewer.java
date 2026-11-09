@@ -965,12 +965,8 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
                 WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR |
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                 WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
-        // Ayuless: screenshots require the restricted-media opt-in.
-        if (!org.ayuless.content.RetentionConfig.enabled(currentAccount, org.ayuless.content.RetentionConfig.TTL)) {
-            windowLayoutParams.flags |= WindowManager.LayoutParams.FLAG_SECURE;
-        } else {
-            windowLayoutParams.flags &= ~WindowManager.LayoutParams.FLAG_SECURE;
-        }
+        // Ayuless: screenshots are available for timed and view-once media.
+        windowLayoutParams.flags &= ~WindowManager.LayoutParams.FLAG_SECURE;
         AndroidUtilities.logFlagSecure();
         centerImage.setParentView(containerView);
         centerImage.setForceCrossfade(true);
@@ -1488,12 +1484,8 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.didCreatedNewDeleteTask);
         currentDialogId = MessageObject.getPeerId(messageObject.messageOwner.peer_id);
         currentMessageObject = messageObject;
-        // Ayuless: evaluate media restrictions each time this viewer is opened.
-        boolean allowCapture = org.ayuless.content.RetentionConfig.enabled(currentAccount, org.ayuless.content.RetentionConfig.TTL)
-                || org.telegram.messenger.DialogObject.isEncryptedDialog(messageObject.getDialogId())
-                && org.ayuless.content.RetentionConfig.enabled(currentAccount, org.ayuless.content.RetentionConfig.SECRET);
-        if (allowCapture) windowLayoutParams.flags &= ~WindowManager.LayoutParams.FLAG_SECURE;
-        else windowLayoutParams.flags |= WindowManager.LayoutParams.FLAG_SECURE;
+        // Ayuless: keep screenshots available on every opening.
+        windowLayoutParams.flags &= ~WindowManager.LayoutParams.FLAG_SECURE;
         TLRPC.Document document = messageObject.getDocument();
         if (currentThumb != null) {
             currentThumb.release();

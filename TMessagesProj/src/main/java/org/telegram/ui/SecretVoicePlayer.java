@@ -239,15 +239,8 @@ public class SecretVoicePlayer extends Dialog {
             WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR |
             WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
             WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
-        // Ayuless: allow screenshots for the enabled media/chat category.
-        boolean allowCapture = messageObject != null && (
-                org.ayuless.content.RetentionConfig.enabled(messageObject.currentAccount, org.ayuless.content.RetentionConfig.TTL)
-                || org.telegram.messenger.DialogObject.isEncryptedDialog(messageObject.getDialogId())
-                && org.ayuless.content.RetentionConfig.enabled(messageObject.currentAccount, org.ayuless.content.RetentionConfig.SECRET));
-        if (!BuildVars.DEBUG_PRIVATE_VERSION && !allowCapture) {
-            params.flags |= WindowManager.LayoutParams.FLAG_SECURE;
-            AndroidUtilities.logFlagSecure();
-        }
+        // Ayuless: screenshots are available for secret and view-once audio.
+        params.flags &= ~WindowManager.LayoutParams.FLAG_SECURE;
         params.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
         params.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
         window.setAttributes(params);

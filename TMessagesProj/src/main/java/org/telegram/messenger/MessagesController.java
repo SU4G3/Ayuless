@@ -6678,10 +6678,10 @@ public class MessagesController extends BaseController implements NotificationCe
         if (chat.migrated_to != null) {
             TLRPC.Chat migratedTo = getChat(chat.migrated_to.channel_id);
             if (migratedTo != null) {
-                return org.ayuless.content.ProtectedContent.chatNoForwards(currentAccount, this, migratedTo, migratedTo.noforwards); // Ayuless: account-specific restrictions
+                return org.ayuless.content.ProtectedContent.chatNoForwards(currentAccount, this, migratedTo, migratedTo.noforwards); // Ayuless: allow local saving in all chats.
             }
         }
-        return org.ayuless.content.ProtectedContent.chatNoForwards(currentAccount, this, chat, chat.noforwards); // Ayuless: account-specific restrictions
+        return org.ayuless.content.ProtectedContent.chatNoForwards(currentAccount, this, chat, chat.noforwards); // Ayuless: allow local saving in all chats.
     }
 
     public boolean isChatNoForwards(long chatId) {
@@ -6701,10 +6701,7 @@ public class MessagesController extends BaseController implements NotificationCe
             return false;
         }
 
-        // Ayuless: private protection and auto-delete protection are separate opt-ins.
-        if (org.ayuless.content.RetentionConfig.enabled(currentAccount, org.ayuless.content.RetentionConfig.PRIVATE)
-                && (userFull.ttl_period == 0 || org.ayuless.content.RetentionConfig.enabled(currentAccount, org.ayuless.content.RetentionConfig.AUTO_DELETE))) return false;
-        return userFull.noforwards_peer_enabled || userFull.noforwards_my_enabled;
+        return false; // Ayuless: allow local saving in all private chats.
     }
 
     public TLRPC.User getUser(Long id) {

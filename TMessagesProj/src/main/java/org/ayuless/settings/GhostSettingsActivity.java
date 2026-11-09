@@ -5,10 +5,16 @@
 
 package org.ayuless.settings;
 
+import static org.telegram.messenger.AndroidUtilities.dp;
 import static org.telegram.messenger.LocaleController.getString;
 
+import android.content.Context;
+import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.ayuless.ghost.GhostConfig;
 import org.telegram.messenger.LocaleController;
@@ -17,6 +23,12 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.SimpleActionBarMenuItem;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeBind;
+import org.telegram.ui.Components.AvatarDrawable;
+import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UniversalAdapter;
 
@@ -44,6 +56,47 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
 
     private int profile = Integer.MIN_VALUE;
     private boolean expanded = true;
+    private BackupImageView profileAvatar;
+    private TextView profileLabel;
+    private SimpleActionBarMenuItem profileChip;
+
+    @Override
+    public View createView(Context context) {
+        View result = super.createView(context);
+        profileChip = simpleActionBar.createMenu().addItemWithWidth(ID_PROFILE, 0, dp(120));
+        LinearLayout chip = new LinearLayout(context);
+        chip.setGravity(Gravity.CENTER_VERTICAL);
+        chip.setPadding(dp(6), 0, dp(8), 0);
+        profileAvatar = new BackupImageView(context);
+        profileAvatar.setRoundRadius(dp(14));
+        chip.addView(profileAvatar, LayoutHelper.createLinear(28, 28));
+        profileLabel = new TextView(context);
+        profileLabel.setTextSize(13);
+        profileLabel.setSingleLine(true);
+        profileLabel.setEllipsize(TextUtils.TruncateAt.END);
+        ThemeBind.textColor(profileLabel, Theme.key_actionBarDefaultTitle, getResourceProvider());
+        chip.addView(profileLabel, LayoutHelper.createLinear(0, LayoutHelper.WRAP_CONTENT, 1f,
+                Gravity.CENTER_VERTICAL, 7, 0, 0, 0));
+        profileChip.addView(chip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        profileChip.setOnClickListener(v -> showProfilePicker());
+        refreshProfileChip();
+        return result;
+    }
+
+    private void refreshProfileChip() {
+        if (profileAvatar == null) return;
+        TLRPC.User user = profile == GhostConfig.PROFILE_ALL ? null : UserConfig.getInstance(profile).getCurrentUser();
+        AvatarDrawable avatar = new AvatarDrawable();
+        if (user == null) {
+            avatar.setAvatarType(AvatarDrawable.AVATAR_TYPE_FILTER_GROUPS);
+            profileAvatar.setImageDrawable(avatar);
+        } else {
+            avatar.setInfo(profile, user);
+            profileAvatar.setForUserOrChat(user, avatar);
+        }
+        profileLabel.setText(user != null ? UserObject.getFirstName(user) : profileName(profile));
+        profileChip.setContentDescription(getString(R.string.AyulessGhostProfile) + ": " + profileName(profile));
+    }
 
     @Override
     public boolean onFragmentCreate() {
@@ -68,12 +121,9 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
         }
         final boolean inUse = profileInUse();
 
-        items.add(UItem.asButton(ID_PROFILE, R.drawable.ayuless_solar_msg_contacts, getString(R.string.AyulessGhostProfile), profileName(profile)));
         if (profile != GhostConfig.PROFILE_ALL) {
             items.add(UItem.asCheck(ID_USE_OWN, getString(R.string.AyulessGhostUseOwn)).setChecked(inUse));
             items.add(UItem.asShadow(getString(R.string.AyulessGhostUseOwnInfo)));
-        } else {
-            items.add(UItem.asShadow(getString(R.string.AyulessGhostProfileAllInfo)));
         }
 
         final boolean master = GhostConfig.getProfile(profile, GhostConfig.KEY_ENABLED);
@@ -102,21 +152,18 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
                         .setPad(1));
             }
         }
-        items.add(UItem.asShadow(getString(R.string.AyulessGhostInfo) + "\n\n" + getString(R.string.AyulessGhostLockHint)));
+        items.add(UItem.asShadow(getString(R.string.AyulessGhostLockHint)));
 
         final boolean hideRead = GhostConfig.getProfile(profile, GhostConfig.KEY_HIDE_READ);
         items.add(UItem.asCheck(ID_READ_ON_ACTION, getString(R.string.AyulessGhostReadOnAction))
                 .setChecked(GhostConfig.getProfile(profile, GhostConfig.KEY_READ_ON_ACTION))
                 .setEnabled(inUse && hideRead));
-        items.add(UItem.asShadow(getString(R.string.AyulessGhostReadOnActionInfo)));
         items.add(UItem.asCheck(ID_SEND_SILENTLY, getString(R.string.AyulessGhostSendSilently))
                 .setChecked(GhostConfig.getProfile(profile, GhostConfig.KEY_SEND_SILENTLY))
                 .setEnabled(inUse));
-        items.add(UItem.asShadow(getString(R.string.AyulessGhostSendSilentlyInfo)));
         items.add(UItem.asCheck(ID_STORY_PROMPT, getString(R.string.AyulessGhostStoryPrompt))
                 .setChecked(GhostConfig.getProfile(profile, GhostConfig.KEY_STORY_PROMPT, true))
                 .setEnabled(inUse));
-        items.add(UItem.asShadow(getString(R.string.AyulessGhostStoryPromptInfo)));
         items.add(UItem.asCheck(ID_DELAYED_SEND, getString(R.string.AyulessGhostDelayedSend))
                 .setChecked(GhostConfig.getProfile(profile, GhostConfig.KEY_DELAYED_SEND))
                 .setEnabled(inUse));
@@ -179,6 +226,7 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
     }
 
     private void update() {
+        refreshProfileChip();
         if (listView != null && listView.adapter != null) {
             listView.adapter.update(true);
         }
