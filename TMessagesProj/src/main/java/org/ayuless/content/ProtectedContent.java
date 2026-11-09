@@ -1,3 +1,12 @@
+/*
+ * This is the source code of AyuGram for Android.
+ *
+ * We do not and cannot prevent the use of our code,
+ * but be respectful and credit the original author.
+ *
+ * Copyright @Radolyn, 2023
+ */
+
 // SPDX-License-Identifier: GPL-3.0-or-later
 package org.ayuless.content;
 
@@ -55,6 +64,8 @@ public final class ProtectedContent {
         if (message == null || !canUnlock(messageObject.currentAccount, message)) {
             return false;
         }
+        if (org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_LOCAL_RESEND)
+                && org.ayuless.antidelete.DeletedCache.isDeleted(messageObject.currentAccount, messageObject.getDialogId(), messageObject.getId())) return true;
         if (unlocked.contains(message)) {
             return true;
         }

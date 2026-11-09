@@ -1,4 +1,13 @@
 /*
+ * This is the source code of AyuGram for Android.
+ *
+ * We do not and cannot prevent the use of our code,
+ * but be respectful and credit the original author.
+ *
+ * Copyright @Radolyn, 2023
+ */
+
+/*
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (C) 2026 Ayuless contributors
  */
@@ -52,6 +61,7 @@ public final class EditHistory {
                 return;
             }
             AyulessStore.getInstance(account).saveEdit(old);
+            org.ayuless.spy.SavedAttachments.onKept(account, old);
             EditedCache.mark(account, dialogId, msgId);
         });
     }
@@ -89,7 +99,7 @@ public final class EditHistory {
             return true;
         }
         long oldMediaId = mediaId(old.media);
-        return oldMediaId != 0 && newMediaId != 0 && oldMediaId != newMediaId;
+        return oldMediaId != newMediaId;
     }
 
     private static String nonNull(String s) {

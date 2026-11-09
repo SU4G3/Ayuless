@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SPDX-License-Identifier: GPL-3.0-or-later
      Copyright (C) 2026 Ayuless contributors -->
+<!--
+ This is the source code of AyuGram for Android.
+
+ We do not and cannot prevent the use of our code,
+ but be respectful and credit the original author.
+
+ Copyright @Radolyn, 2023
+ AyuGram wording adapted for Ayuless; see docs/CREDITS.md.
+-->
 <resources>
     <string name="AyulessMapsUnavailable">Карты сейчас недоступны в Ayuless.</string>
     <string name="AyulessSettings">Ayuless</string>
@@ -11,7 +20,7 @@
     <string name="AyulessGhostHideRead">Не отправлять отметки о прочтении</string>
     <string name="AyulessGhostHideTyping">Не показывать «печатает»</string>
     <string name="AyulessGhostHideStoryViews">Не отмечать истории просмотренными</string>
-    <string name="AyulessGhostOfflineAfterSend">Уходить в офлайн после отправки</string>
+    <string name="AyulessGhostOfflineAfterSend">Автоматический «офлайн»</string>
     <string name="AyulessGhostLocked">%1$s · закреплено</string>
     <string name="AyulessGhostLockHint">Зажмите пункт, чтобы сохранить его значение при переключении режима призрака.</string>
     <string name="AyulessAntiDelete">Сохранять удалённые сообщения</string>
@@ -37,7 +46,7 @@
     <string name="AyulessGhostProfileAll">Все аккаунты</string>
     <string name="AyulessGhostUseOwn">Свои настройки для этого аккаунта</string>
     <string name="AyulessGhostUseOwnInfo">Если выключено, аккаунт использует общие настройки для всех аккаунтов.</string>
-    <string name="AyulessGhostReadOnAction">Читать при действиях</string>
+    <string name="AyulessGhostReadOnAction">Читать после ответа</string>
     <string name="AyulessGhostSendSilently">Отправлять без звука</string>
     <string name="AyulessGhostDelayedSend">Использовать отложку</string>
     <string name="AyulessGhostDelayedSendInfo">Задержка отправки: около 12 с для текста и 20 с для медиа. Для секретных чатов приложение должно оставаться открытым. Работает и без режима призрака.</string>
@@ -240,4 +249,82 @@
     <string name="NotificationHiddenName">Ayuless</string>
     <string name="NotificationHiddenChatName">Ayuless</string>
     <string name="SecretChatName">Ayuless</string>
+
+    <!-- AyuGram preferences, message actions and synchronization. -->
+    <string name="AyulessGhostEssentials">Режим призрака</string>
+    <string name="AyulessSpyEssentials">Режим шпиона</string>
+    <string name="AyulessGhostProfiles">Профили и дополнительные настройки призрака</string>
+    <string name="AyulessMessageSaving">Настройки сохранения сообщений</string>
+    <string name="AyulessSpyStorage">Исключения, хранилище и сохранённые данные</string>
+    <string name="AyulessChatsMessages">Чаты и сообщения</string>
+    <string name="AyulessMessageAppearance">Оформление сообщений</string>
+    <string name="AyulessCustomMarks">Использовать текстовые метки</string>
+    <string name="AyulessDeletedText">Метка удалённого</string>
+    <string name="AyulessEditedText">Метка изменённого</string>
+    <string name="AyulessGhostMenu">Переключатель режима призрака в меню</string>
+    <string name="AyulessKillMenu">Кнопка закрытия приложения в меню</string>
+    <string name="AyulessEnableGhost">Включить Призрака</string>
+    <string name="AyulessDisableGhost">Выключить Призрака</string>
+    <string name="AyulessKillApp">Закрыть Приложение</string>
+    <string name="AyulessGhostShortcut">Войти с Призраком</string>
+    <string name="AyulessSaveMedia">Сохранять файлы</string>
+    <string name="AyulessSaveMediaInfo">Сохранять загруженные вложения удалённых сообщений и предыдущих версий. Файлы, которые не были загружены, восстановить невозможно.</string>
+    <string name="AyulessCustomSaving">Настроить сохранение сообщений</string>
+    <string name="AyulessCustomSavingInfo">Когда выключено, сохраняется прежнее поведение: форматирование, реакции, диалоги с ботами и все категории файлов. Изменения применяются к новым сохранённым копиям.</string>
+    <string name="AyulessMediaCategories">Ограничить сохранение файлов по типу чата</string>
+    <string name="AyulessChooseMediaCategories">Выбрать типы чатов</string>
+    <string name="AyulessMediaPrivateChats">…в личных чатах</string>
+    <string name="AyulessMediaPublicChannels">…в открытых каналах</string>
+    <string name="AyulessMediaPrivateChannels">…в приватных каналах</string>
+    <string name="AyulessMediaPublicGroups">…в открытых группах</string>
+    <string name="AyulessMediaPrivateGroups">…в приватных группах</string>
+    <string name="AyulessSaveFormatting">Сохранять форматирование</string>
+    <string name="AyulessSaveReactions">Сохранять реакции</string>
+    <string name="AyulessSaveBots">Сохранять в диалогах с ботами</string>
+    <string name="AyulessReadUntilSetting">Показывать «Прочитать до» в меню сообщения</string>
+    <string name="AyulessReadUntil">Прочитать до</string>
+    <string name="AyulessReadSent">Статус прочтения отправлен</string>
+    <string name="AyulessLocalResend">Пересылать удалённые сообщения и цитировать ответы на них</string>
+    <string name="AyulessKeepLocalSetting">Показывать «Сохранить локально» при удалении</string>
+    <string name="AyulessKeepLocally">Сохранить локально</string>
+    <string name="AyulessKeepLocallyConfirm">Удалить это сообщение у всех и оставить удалённую копию в этом чате?</string>
+    <string name="AyulessDeleteDateSetting">Показывать дату удаления в меню сообщения</string>
+    <string name="AyulessDeleteDate">Дата удаления</string>
+    <string name="AyulessChatFeaturesInfo">«Прочитать до» явно отправляет статус прочтения даже в режиме призрака. Для «Сохранить локально» нужно включить сохранение удалённых сообщений; действие доступно в облачных чатах. Для пересылки файлов нужна загруженная копия.</string>
+    <string name="AyulessEditsHistoryTitle">История редактирования</string>
+    <string name="AyulessEditsHistoryMenu">История</string>
+    <string name="AyulessHistoryCurrent">Текущая версия</string>
+    <string name="AyulessHistoryOriginal">Оригинал</string>
+    <string name="AyulessHistoryVersion">Версия %1$d</string>
+    <string name="AyulessHistoryEmpty">(пусто)</string>
+    <string name="AyulessHistoryHint">Нажмите на сообщение, чтобы скопировать текст или открыть загруженный файл. Удерживайте, чтобы скопировать текст.</string>
+    <string name="AyulessSyncHeader">AyuSync</string>
+    <string name="AyulessSyncStatus">Статус синхронизации</string>
+    <string name="AyulessSyncEnable">Включить синхронизацию</string>
+    <string name="AyulessSyncServer">URL сервера</string>
+    <string name="AyulessSyncToken">Токен доступа</string>
+    <string name="AyulessSyncSecure">Использовать HTTPS и WSS</string>
+    <string name="AyulessSyncForce">Принудительная синхронизация</string>
+    <string name="AyulessSyncProfile">Открыть профиль</string>
+    <string name="AyulessSyncDevice">ID устройства</string>
+    <string name="AyulessSyncLastSent">Последний отправленный пакет</string>
+    <string name="AyulessSyncLastReceived">Последний полученный пакет</string>
+    <string name="AyulessSyncRegisterCode">Статус регистрации</string>
+    <string name="AyulessSyncIdCopied">Идентификатор скопирован в буфер обмена.</string>
+    <string name="AyulessSyncNever">никогда</string>
+    <string name="AyulessSyncDisabled">выключена</string>
+    <string name="AyulessSyncConnecting">подключение</string>
+    <string name="AyulessSyncConnected">подключен</string>
+    <string name="AyulessSyncDisconnected">отключен</string>
+    <string name="AyulessSyncNoToken">нет токена</string>
+    <string name="AyulessSyncNoServer">не указан сервер</string>
+    <string name="AyulessSyncInvalidToken">неверный токен</string>
+    <string name="AyulessSyncNoMvp">нет MVP</string>
+    <string name="AyulessSyncInvalidServer">Введите имя сервера и, при необходимости, порт, без пути и параметров.</string>
+    <string name="AyulessSyncInfo">Синхронизация локальных статусов прочтения между совместимыми клиентами без отправки статуса в Telegram. Нужны совместимый сервер AyuSync и токен доступа; оригинальный сервис требует MVP. Указанный сервер получает ID устройства, ID аккаунтов и статусы прочтения. История правок не синхронизируется.</string>
+    <string name="AyulessMaintenance">Обслуживание</string>
+    <string name="AyulessMaintenanceTools">Показывать инструменты обслуживания</string>
+    <string name="AyulessWalEnabled">Режим WAL включён</string>
+    <string name="AyulessManageCache">Управление кэшем Telegram</string>
+    <string name="AyulessUnknown">Неизвестно</string>
 </resources>

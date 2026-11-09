@@ -1,3 +1,12 @@
+/*
+ * This is the source code of AyuGram for Android.
+ *
+ * We do not and cannot prevent the use of our code,
+ * but be respectful and credit the original author.
+ *
+ * Copyright @Radolyn, 2023
+ */
+
 package org.telegram.tgnet;
 
 import android.annotation.SuppressLint;
@@ -501,6 +510,7 @@ public class ConnectionsManager extends BaseController {
                     final TLObject finalResponse = resp;
                     final TLRPC.TL_error finalError = error;
                     Utilities.stageQueue.postRunnable(() -> {
+                        if (finalError == null && finalResponse != null) org.ayuless.ghost.GhostInterceptor.onSuccessfulRequest(currentAccount, object); // Ayuless: read after a successful reply only
                         if (onComplete != null) {
                             onComplete.run(finalResponse, finalError);
                         } else if (onCompleteTimestamp != null) {

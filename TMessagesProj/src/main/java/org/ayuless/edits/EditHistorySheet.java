@@ -1,4 +1,13 @@
 /*
+ * This is the source code of AyuGram for Android.
+ *
+ * We do not and cannot prevent the use of our code,
+ * but be respectful and credit the original author.
+ *
+ * Copyright @Radolyn, 2023
+ */
+
+/*
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (C) 2026 Ayuless contributors
  */
@@ -39,10 +48,10 @@ public final class EditHistorySheet {
             list.setPadding(AndroidUtilities.dp(21), AndroidUtilities.dp(4), AndroidUtilities.dp(21), AndroidUtilities.dp(12));
 
             TLRPC.Message current = messageObject.messageOwner;
-            addVersion(context, list, "Current", current.edit_date != 0 ? current.edit_date : current.date, current.message, current.entities, messageObject.isOutOwner());
+            addVersion(context, list, LocaleController.getString(org.telegram.messenger.R.string.AyulessHistoryCurrent), current.edit_date != 0 ? current.edit_date : current.date, current.message, current.entities, messageObject.isOutOwner());
             for (int i = edits.size() - 1; i >= 0; i--) {
                 StoredEdit e = edits.get(i);
-                String label = e.editDate == 0 ? "Original" : "Version " + (e.version + 1);
+                String label = e.editDate == 0 ? LocaleController.getString(org.telegram.messenger.R.string.AyulessHistoryOriginal) : LocaleController.formatString(org.telegram.messenger.R.string.AyulessHistoryVersion, e.version + 1);
                 int date = e.editDate != 0 ? e.editDate : current.date;
                 addVersion(context, list, label, date, e.text, e.entities, messageObject.isOutOwner());
             }
@@ -50,7 +59,7 @@ public final class EditHistorySheet {
             ScrollView scroll = new ScrollView(context);
             scroll.addView(list);
             BottomSheet.Builder builder = new BottomSheet.Builder(context);
-            builder.setTitle("Edit history", true);
+            builder.setTitle(LocaleController.getString(org.telegram.messenger.R.string.AyulessEditsHistoryTitle), true);
             builder.setCustomView(scroll);
             builder.show();
         });
@@ -78,7 +87,7 @@ public final class EditHistorySheet {
                 // Fall back to plain text.
             }
         }
-        body.setText(sb.length() == 0 ? "(empty)" : sb);
+        body.setText(sb.length() == 0 ? LocaleController.getString(org.telegram.messenger.R.string.AyulessHistoryEmpty) : sb);
         list.addView(body);
     }
 }

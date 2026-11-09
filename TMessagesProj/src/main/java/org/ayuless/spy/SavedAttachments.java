@@ -1,4 +1,13 @@
 /*
+ * This is the source code of AyuGram for Android.
+ *
+ * We do not and cannot prevent the use of our code,
+ * but be respectful and credit the original author.
+ *
+ * Copyright @Radolyn, 2023
+ */
+
+/*
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (C) 2026 Ayuless contributors
  */
@@ -101,7 +110,8 @@ public final class SavedAttachments {
      * Runs the file work on a background queue.
      */
     public static void onKept(int account, TLRPC.Message message) {
-        if (message == null || message.media == null || !isEnabled(account)) {
+        if (message == null || message.media == null || !isEnabled(account)
+                || !MessageSavingConfig.saveMedia(account, message)) {
             return;
         }
         if (!AyulessStore.isStorable(account, message, org.ayuless.content.RetentionConfig.ATTACHMENT)) {
@@ -163,6 +173,32 @@ public final class SavedAttachments {
             } catch (Exception e) {
                 FileLog.e(e);
             }
+        });
+    }
+
+    /** Prepare local media paths for the history screen without decrypting files on the UI thread. */
+    public static void prepareHistory(int account, java.util.ArrayList<TLRPC.Message> messages, Runnable ready) {
+        queue.postRunnable(() -> {
+            for (TLRPC.Message message : messages) {
+                String name = FileLoader.getMessageFileName(message);
+                if (TextUtils.isEmpty(name) || name.contains("/")) continue;
+                File saved = savedFile(account, MessageObject.getDialogId(message), message.id, name);
+                if (saved.isFile()) message.attachPath = saved.getAbsolutePath();
+                else {
+                    File encrypted = new File(saved.getPath() + ".enc");
+                    File key = new File(saved.getPath() + ".enc.key");
+                    if (encrypted.isFile() && key.isFile()) {
+                        try {
+                            File path = FileLoader.getInstance(account).getPathToMessage(message);
+                            File parent = path.getParentFile();
+                            if (parent != null) parent.mkdirs();
+                            AndroidUtilities.copyFile(key, new File(FileLoader.getInternalCacheDir(), path.getName() + ".enc.key"));
+                            AndroidUtilities.copyFile(encrypted, new File(path.getPath() + ".enc"));
+                        } catch (Exception e) { FileLog.e(e); }
+                    }
+                }
+            }
+            AndroidUtilities.runOnUIThread(ready);
         });
     }
 

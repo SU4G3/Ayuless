@@ -1,4 +1,13 @@
 /*
+ * This is the source code of AyuGram for Android.
+ *
+ * We do not and cannot prevent the use of our code,
+ * but be respectful and credit the original author.
+ *
+ * Copyright @Radolyn, 2023
+ */
+
+/*
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (C) 2026 Ayuless contributors
  */
@@ -85,6 +94,7 @@ public class AppearanceSettingsActivity extends AyulessSettingsFragment {
                 break;
             case ID_LOCAL_PREMIUM:
                 ExtrasConfig.set(ExtrasConfig.KEY_LOCAL_PREMIUM, !ExtrasConfig.localPremium());
+                org.ayuless.extras.LocalPremium.refresh();
                 update();
                 break;
             case ID_WORK_IN_BACKGROUND:

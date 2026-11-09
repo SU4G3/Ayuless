@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SPDX-License-Identifier: GPL-3.0-or-later
      Copyright (C) 2026 Ayuless contributors -->
+<!--
+ This is the source code of AyuGram for Android.
+
+ We do not and cannot prevent the use of our code,
+ but be respectful and credit the original author.
+
+ Copyright @Radolyn, 2023
+ AyuGram wording adapted for Ayuless; see docs/CREDITS.md.
+-->
 <resources>
     <string name="AyulessLauncherName" translatable="false">Ayuless</string>
     <string name="AyulessMapsUnavailable">Maps are currently unavailable in Ayuless.</string>
@@ -12,7 +21,7 @@
     <string name="AyulessGhostHideRead">Don\'t send read receipts</string>
     <string name="AyulessGhostHideTyping">Don\'t send typing status</string>
     <string name="AyulessGhostHideStoryViews">Don\'t mark stories as viewed</string>
-    <string name="AyulessGhostOfflineAfterSend">Go offline after sending</string>
+    <string name="AyulessGhostOfflineAfterSend">Immediate offline after online</string>
     <string name="AyulessGhostLocked">%1$s · locked</string>
     <string name="AyulessGhostLockHint">Long-press an option to keep its value when toggling ghost mode.</string>
     <string name="AyulessAntiDelete">Save deleted messages</string>
@@ -38,9 +47,9 @@
     <string name="AyulessGhostProfileAll">All accounts</string>
     <string name="AyulessGhostUseOwn">Use own settings for this account</string>
     <string name="AyulessGhostUseOwnInfo">When off, this account follows the settings for all accounts.</string>
-    <string name="AyulessGhostReadOnAction">Read on actions</string>
+    <string name="AyulessGhostReadOnAction">Send read status after reply</string>
     <string name="AyulessGhostSendSilently">Send silently</string>
-    <string name="AyulessGhostDelayedSend">Delayed send</string>
+    <string name="AyulessGhostDelayedSend">Schedule messages</string>
     <string name="AyulessGhostDelayedSendInfo">Delayed sending: about 12 s for text, 20 s for media. Secret chats require the app to stay open. Works with ghost mode off.</string>
     <string name="AyulessGhostDelayedSendHint">Delayed send is on: the message will be posted in a few seconds.</string>
     <string name="AyulessStorageLimitInfo">When the limit is reached, the oldest saved records are removed.</string>
@@ -241,4 +250,82 @@
     <string name="NotificationHiddenName">Ayuless</string>
     <string name="NotificationHiddenChatName">Ayuless</string>
     <string name="SecretChatName">Ayuless</string>
+
+    <!-- AyuGram preferences, message actions and synchronization. -->
+    <string name="AyulessGhostEssentials">Ghost essentials</string>
+    <string name="AyulessSpyEssentials">Spy essentials</string>
+    <string name="AyulessGhostProfiles">Profiles and additional ghost settings</string>
+    <string name="AyulessMessageSaving">Message Saving Preferences</string>
+    <string name="AyulessSpyStorage">Exceptions, storage and saved data</string>
+    <string name="AyulessChatsMessages">Chats and messages</string>
+    <string name="AyulessMessageAppearance">Message appearance</string>
+    <string name="AyulessCustomMarks">Use custom text marks</string>
+    <string name="AyulessDeletedText">Deleted mark</string>
+    <string name="AyulessEditedText">Edited mark</string>
+    <string name="AyulessGhostMenu">Show ghost mode toggle in menu</string>
+    <string name="AyulessKillMenu">Show kill app button in menu</string>
+    <string name="AyulessEnableGhost">Enable Ghost</string>
+    <string name="AyulessDisableGhost">Disable Ghost</string>
+    <string name="AyulessKillApp">Kill App</string>
+    <string name="AyulessGhostShortcut">Enter with Ghost</string>
+    <string name="AyulessSaveMedia">Save media</string>
+    <string name="AyulessSaveMediaInfo">Keep downloaded attachments of deleted messages and previous versions. Files that were never downloaded cannot be recovered.</string>
+    <string name="AyulessCustomSaving">Customize message saving</string>
+    <string name="AyulessCustomSavingInfo">When off, keep the existing saving behavior, including formatting, reactions, bots and all media categories. Changes affect future saved copies.</string>
+    <string name="AyulessMediaCategories">Limit media saving by chat type</string>
+    <string name="AyulessChooseMediaCategories">Choose chat types</string>
+    <string name="AyulessMediaPrivateChats">…in private chats</string>
+    <string name="AyulessMediaPublicChannels">…in public channels</string>
+    <string name="AyulessMediaPrivateChannels">…in private channels</string>
+    <string name="AyulessMediaPublicGroups">…in public groups</string>
+    <string name="AyulessMediaPrivateGroups">…in private groups</string>
+    <string name="AyulessSaveFormatting">Save formatting</string>
+    <string name="AyulessSaveReactions">Save reactions</string>
+    <string name="AyulessSaveBots">Save in bot dialogs</string>
+    <string name="AyulessReadUntilSetting">Show “Read until” in message menu</string>
+    <string name="AyulessReadUntil">Read until</string>
+    <string name="AyulessReadSent">Read status sent</string>
+    <string name="AyulessLocalResend">Resend deleted messages and quote deleted replies</string>
+    <string name="AyulessKeepLocalSetting">Show “Keep locally” when deleting</string>
+    <string name="AyulessKeepLocally">Keep locally</string>
+    <string name="AyulessKeepLocallyConfirm">Delete this message for everyone and keep a deleted copy in this chat?</string>
+    <string name="AyulessDeleteDateSetting">Show deletion date in message menu</string>
+    <string name="AyulessDeleteDate">Delete Date</string>
+    <string name="AyulessChatFeaturesInfo">“Read until” explicitly sends a read receipt even in ghost mode. “Keep locally” requires saved deleted messages and is available for cloud chats. Resending media requires a downloaded copy.</string>
+    <string name="AyulessEditsHistoryTitle">Edits history</string>
+    <string name="AyulessEditsHistoryMenu">History</string>
+    <string name="AyulessHistoryCurrent">Current version</string>
+    <string name="AyulessHistoryOriginal">Original</string>
+    <string name="AyulessHistoryVersion">Version %1$d</string>
+    <string name="AyulessHistoryEmpty">(empty)</string>
+    <string name="AyulessHistoryHint">Tap a message to copy text or open its downloaded media. Long press to copy text.</string>
+    <string name="AyulessSyncHeader">AyuSync</string>
+    <string name="AyulessSyncStatus">Sync status</string>
+    <string name="AyulessSyncEnable">Enable synchronization</string>
+    <string name="AyulessSyncServer">Server URL</string>
+    <string name="AyulessSyncToken">Access token</string>
+    <string name="AyulessSyncSecure">Use HTTPS &amp; WSS</string>
+    <string name="AyulessSyncForce">Force sync clients</string>
+    <string name="AyulessSyncProfile">Visit profile</string>
+    <string name="AyulessSyncDevice">Device ID</string>
+    <string name="AyulessSyncLastSent">Last sent event</string>
+    <string name="AyulessSyncLastReceived">Last received event</string>
+    <string name="AyulessSyncRegisterCode">Register status code</string>
+    <string name="AyulessSyncIdCopied">Identifier copied to clipboard.</string>
+    <string name="AyulessSyncNever">never</string>
+    <string name="AyulessSyncDisabled">disabled</string>
+    <string name="AyulessSyncConnecting">connecting</string>
+    <string name="AyulessSyncConnected">connected</string>
+    <string name="AyulessSyncDisconnected">disconnected</string>
+    <string name="AyulessSyncNoToken">no token</string>
+    <string name="AyulessSyncNoServer">no server</string>
+    <string name="AyulessSyncInvalidToken">invalid token</string>
+    <string name="AyulessSyncNoMvp">no MVP</string>
+    <string name="AyulessSyncInvalidServer">Enter a server hostname with an optional port, without a path or query.</string>
+    <string name="AyulessSyncInfo">Synchronize local read states between compatible clients without sending read receipts to Telegram. Requires a compatible AyuSync server and access token; the reference service requires MVP. The configured server receives your device ID, account IDs and read states. Edit history is not synchronized.</string>
+    <string name="AyulessMaintenance">Maintenance</string>
+    <string name="AyulessMaintenanceTools">Show maintenance tools</string>
+    <string name="AyulessWalEnabled">WAL mode is enabled</string>
+    <string name="AyulessManageCache">Manage Telegram cache</string>
+    <string name="AyulessUnknown">Unknown</string>
 </resources>

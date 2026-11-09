@@ -1,4 +1,13 @@
 /*
+ * This is the source code of AyuGram for Android.
+ *
+ * We do not and cannot prevent the use of our code,
+ * but be respectful and credit the original author.
+ *
+ * Copyright @Radolyn, 2023
+ */
+
+/*
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (C) 2026 Ayuless contributors
  */
@@ -11,6 +20,16 @@ import org.telegram.messenger.ApplicationLoader;
 
 /** App-wide look of Ayuless features (not per account). */
 public final class AppearanceConfig {
+
+    public static final String KEY_CUSTOM_MARKS = "customMarks";
+    public static final String KEY_DELETED_TEXT = "deletedMarkText";
+    public static final String KEY_EDITED_TEXT = "editedMarkText";
+    public static boolean customMarks() { return ready() && prefs().getBoolean(KEY_CUSTOM_MARKS, false); }
+    public static void setCustomMarks(boolean value) { prefs().edit().putBoolean(KEY_CUSTOM_MARKS, value).apply(); }
+    public static String deletedText() { return ready() ? prefs().getString(KEY_DELETED_TEXT, "🧹") : "🧹"; }
+    public static String editedText() { return ready() ? prefs().getString(KEY_EDITED_TEXT, org.telegram.messenger.LocaleController.getString(org.telegram.messenger.R.string.EditedMessage)) : ""; }
+    public static void setTextMark(String key, String value) { prefs().edit().putString(key, value).apply(); }
+    public static void resetTextMark(String key) { prefs().edit().remove(key).apply(); }
 
     public static final String KEY_TRANSLUCENT_DELETED = "translucentDeleted";
     public static final String KEY_MARK_EMOJI = "deletedMarkEmoji";

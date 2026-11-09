@@ -1,4 +1,13 @@
 /*
+ * This is the source code of AyuGram for Android.
+ *
+ * We do not and cannot prevent the use of our code,
+ * but be respectful and credit the original author.
+ *
+ * Copyright @Radolyn, 2023
+ */
+
+/*
  * This is the source code of Telegram for Android v. 5.x.x.
  * It is licensed under GNU GPL v. 2 or later.
  * You should have received a copy of the license in this archive (see LICENSE).
@@ -1294,6 +1303,9 @@ public class ChatActivity extends BaseFragment implements
     public final static int OPTION_VIEW_STATISTICS = 115;
     public final static int OPTION_WELCOME_REVERT = 116;
     public final static int OPTION_SEND_MONEY = 117;
+    public final static int OPTION_AYULESS_READ_UNTIL = 9003; // Ayuless: explicit read receipt
+    public final static int OPTION_AYULESS_DELETE_DATE = 9004; // Ayuless: retained message metadata
+    public final static int OPTION_AYULESS_KEEP_LOCAL = 9005; // Ayuless: delete remotely and retain locally
     public final static int OPTION_AYULESS_SAVE_MEDIA = 9002; // Ayuless: save unlocked timed/secret media
     public final static int OPTION_AYULESS_EDIT_HISTORY = 9001; // Ayuless: edit history
 
@@ -34324,8 +34336,23 @@ public class ChatActivity extends BaseFragment implements
                 }
                 break;
             }
+            case OPTION_AYULESS_READ_UNTIL: { // Ayuless: authorize only this receipt after an explicit action.
+                org.ayuless.ghost.GhostInterceptor.readUntil(currentAccount, selectedObject, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                    if (!isFinished) BulletinFactory.of(ChatActivity.this).createSimpleBulletin(R.raw.contact_check,
+                            getString(error == null ? R.string.AyulessReadSent : R.string.ErrorOccurred)).show();
+                }));
+                break;
+            }
+            case OPTION_AYULESS_DELETE_DATE: { // Ayuless: deletion timestamp from the retained store.
+                org.ayuless.edits.DeletedMessageActions.showDeleteDate(this, selectedObject);
+                break;
+            }
+            case OPTION_AYULESS_KEEP_LOCAL: { // Ayuless: optional explicit remote delete with local retention.
+                org.ayuless.edits.DeletedMessageActions.keepAndDelete(this, selectedObject);
+                break;
+            }
             case OPTION_AYULESS_EDIT_HISTORY: { // Ayuless: edit history
-                org.ayuless.edits.EditHistorySheet.show(getParentActivity(), currentAccount, selectedObject);
+                presentFragment(new org.ayuless.edits.EditHistoryActivity(selectedObject));
                 break;
             }
             case OPTION_RETRY: {
@@ -47133,9 +47160,26 @@ public class ChatActivity extends BaseFragment implements
             }
         }
 
+        // Ayuless: AyuGram context actions are individually opt-in.
+        boolean ayulessDeleted = org.ayuless.appearance.DeletedStyle.isDeleted(currentAccount, message);
+        if (!isInScheduleMode() && message.getId() != 0 && !message.isOutOwner() && !ayulessDeleted
+                && org.ayuless.ghost.GhostConfig.hideRead(currentAccount)
+                && org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_READ_UNTIL)) {
+            items.add(getString(R.string.AyulessReadUntil)); options.add(OPTION_AYULESS_READ_UNTIL); icons.add(R.drawable.msg_markread);
+        }
+        if (ayulessDeleted && org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_DELETE_DATE)) {
+            items.add(getString(R.string.AyulessDeleteDate)); options.add(OPTION_AYULESS_DELETE_DATE); icons.add(R.drawable.msg_recent);
+        }
+        if (!isInScheduleMode() && message.getId() > 0 && !ayulessDeleted && currentEncryptedChat == null
+                && message.canDeleteMessage(false, currentChat)
+                && org.ayuless.storage.AyulessStore.isStorable(currentAccount, message.messageOwner, org.ayuless.content.RetentionConfig.DELETE)
+                && org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_KEEP_LOCAL)) {
+            items.add(getString(R.string.AyulessKeepLocally)); options.add(OPTION_AYULESS_KEEP_LOCAL); icons.add(R.drawable.msg_delete);
+        }
+
         // Ayuless: edit history entry when previous versions are stored.
         if (org.ayuless.edits.EditHistory.hasHistory(currentAccount, selectedObject)) {
-            items.add("Edit history");
+            items.add(getString(R.string.AyulessEditsHistoryMenu));
             options.add(OPTION_AYULESS_EDIT_HISTORY);
             icons.add(R.drawable.msg_recent);
         }

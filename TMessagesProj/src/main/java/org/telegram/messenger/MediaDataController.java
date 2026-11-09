@@ -1,4 +1,13 @@
 /*
+ * This is the source code of AyuGram for Android.
+ *
+ * We do not and cannot prevent the use of our code,
+ * but be respectful and credit the original author.
+ *
+ * Copyright @Radolyn, 2023
+ */
+
+/*
  * This is the source code of Telegram for Android v. 5.x.x.
  * It is licensed under GNU GPL v. 2 or later.
  * You should have received a copy of the license in this archive (see LICENSE).
@@ -5000,7 +5009,8 @@ public class MediaDataController extends BaseController {
         if (Build.VERSION.SDK_INT < 23) {
             return;
         }
-        int maxShortcuts = ShortcutManagerCompat.getMaxShortcutCountPerActivity(ApplicationLoader.applicationContext) - 2;
+        int maxShortcuts = ShortcutManagerCompat.getMaxShortcutCountPerActivity(ApplicationLoader.applicationContext) - 2
+                - (org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_GHOST_SHORTCUT) ? 1 : 0); // Ayuless: reserve opted-in ghost shortcut
         if (maxShortcuts <= 0) {
             maxShortcuts = 5;
         }
@@ -5027,10 +5037,12 @@ public class MediaDataController extends BaseController {
 
                 if (recreateShortcuts) {
                     ShortcutManagerCompat.removeAllDynamicShortcuts(ApplicationLoader.applicationContext);
+                    org.ayuless.ghost.GhostShortcut.update(); // Ayuless: preserve the opted-in launcher shortcut
                 } else {
                     List<ShortcutInfoCompat> currentShortcuts = ShortcutManagerCompat.getDynamicShortcuts(ApplicationLoader.applicationContext);
                     if (currentShortcuts != null && !currentShortcuts.isEmpty()) {
                         newShortcutsIds.add("compose");
+                        if (org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_GHOST_SHORTCUT)) newShortcutsIds.add("ayuless_ghost"); // Ayuless: preserve ghost shortcut
                         for (int a = 0; a < hintsFinal.size(); a++) {
                             TLRPC.TL_topPeer hint = hintsFinal.get(a);
                             newShortcutsIds.add("did3_" + MessageObject.getPeerId(hint.peer));

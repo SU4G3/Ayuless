@@ -1,4 +1,13 @@
 /*
+ * This is the source code of AyuGram for Android.
+ *
+ * We do not and cannot prevent the use of our code,
+ * but be respectful and credit the original author.
+ *
+ * Copyright @Radolyn, 2023
+ */
+
+/*
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (C) 2026 Ayuless contributors
  */
@@ -47,7 +56,7 @@ public final class DelayedSend {
     /** Delay for messages with media, which may take longer to upload, in seconds. */
     public static final int DELAY_MEDIA = 20;
     /** Minimal distance to "now" a scheduled date still gets when the request leaves. */
-    private static final int MIN_AHEAD = 5;
+    private static final int MIN_AHEAD = 11;
     /** Sends in the same chat within this window share one date, so albums stay together. */
     private static final int GROUP_WINDOW = 3;
 
