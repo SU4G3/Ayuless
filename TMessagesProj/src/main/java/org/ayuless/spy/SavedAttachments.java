@@ -36,7 +36,7 @@ import java.util.Set;
  * upstream rendering works unchanged.
  *
  * <p>Files are named {@code <dialogId>_<msgId>_<attachFileName>}, so a lookup needs no database.
- * Secret chats, self-destructing media and Spy exceptions are never saved. Oldest files are
+ * Sensitive message categories require their own opt-in; Spy exceptions are never saved. Oldest files are
  * removed first when the total size exceeds the limit.
  */
 public final class SavedAttachments {
@@ -104,7 +104,7 @@ public final class SavedAttachments {
         if (message == null || message.media == null || !isEnabled(account)) {
             return;
         }
-        if (!AyulessStore.isStorable(message)) {
+        if (!AyulessStore.isStorable(account, message, org.ayuless.content.RetentionConfig.ATTACHMENT)) {
             return;
         }
         final long dialogId = MessageObject.getDialogId(message);
@@ -128,6 +128,22 @@ public final class SavedAttachments {
                     File f = FileLoader.getInstance(account).getPathToMessage(message, true);
                     if (f != null && f.exists()) {
                         src = f;
+                    }
+                }
+                if (src == null) {
+                    File path = FileLoader.getInstance(account).getPathToMessage(message);
+                    File encrypted = new File(path.getPath() + ".enc");
+                    File key = new File(FileLoader.getInternalCacheDir(), path.getName() + ".enc.key");
+                    if (encrypted.exists() && key.exists()) {
+                        File dst = savedFile(account, dialogId, message.id, attachName + ".enc");
+                        File dir = dst.getParentFile();
+                        if (dir != null && (dir.isDirectory() || dir.mkdirs())) {
+                            if (AndroidUtilities.copyFile(encrypted, dst)) {
+                                AndroidUtilities.copyFile(key, savedFile(account, dialogId, message.id, attachName + ".enc.key"));
+                                enforceLimit();
+                            }
+                        }
+                        return;
                     }
                 }
                 if (src == null || src.length() == 0) {
@@ -164,7 +180,7 @@ public final class SavedAttachments {
         final int account = messageObject.currentAccount;
         final long dialogId = messageObject.getDialogId();
         final int msgId = messageObject.getId();
-        if (msgId <= 0 || !DeletedCache.isDeleted(account, dialogId, msgId)) {
+        if (!DeletedCache.isDeleted(account, dialogId, msgId)) {
             return;
         }
         final String key = account + ":" + dialogId + ":" + msgId;
@@ -180,6 +196,17 @@ public final class SavedAttachments {
             try {
                 File saved = savedFile(account, dialogId, msgId, attachName);
                 if (!saved.exists()) {
+                    File encrypted = savedFile(account, dialogId, msgId, attachName + ".enc");
+                    File keyFile = savedFile(account, dialogId, msgId, attachName + ".enc.key");
+                    File path = FileLoader.getInstance(account).getPathToMessage(message);
+                    if (encrypted.exists() && keyFile.exists()) {
+                        File target = new File(path.getPath() + ".enc");
+                        File targetKey = new File(FileLoader.getInternalCacheDir(), path.getName() + ".enc.key");
+                        if (AndroidUtilities.copyFile(keyFile, targetKey) && AndroidUtilities.copyFile(encrypted, target)) {
+                            AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(account)
+                                    .postNotificationName(NotificationCenter.fileLoaded, attachName, target));
+                        }
+                    }
                     return;
                 }
                 File target = FileLoader.getInstance(account).getPathToMessage(message, true);

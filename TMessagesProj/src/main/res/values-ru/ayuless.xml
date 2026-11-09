@@ -5,6 +5,7 @@
     <string name="AyulessMapsUnavailable">Карты сейчас недоступны в Ayuless.</string>
     <string name="AyulessSettings">Ayuless</string>
     <string name="AyulessSettingsInfo">Режим призрака, шпион, кастомизация</string>
+    <string name="AyulessSettingsVersion">%1$s (%2$d)</string>
     <string name="AyulessGhostHeader">Режим призрака</string>
     <string name="AyulessGhostHideOnline">Не отправлять статус «в сети»</string>
     <string name="AyulessGhostHideRead">Не отправлять отметки о прочтении</string>
@@ -83,11 +84,13 @@
     <string name="AyulessFiltersTitle">Фильтры сообщений</string>
     <string name="AyulessFiltersEnable">Включить фильтры</string>
     <string name="AyulessFiltersInfo">Фильтры скрывают сообщения по ключевым словам или регулярным выражениям, скрывают пользователей с помощью теневого бана и прячут сообщения от заблокированных. Сообщения только скрываются, а не удаляются. Ваши сообщения не фильтруются. Секретные чаты считаются личными.</string>
+    <string name="AyulessFiltersReapply">Обновлять открытые чаты</string>
+    <string name="AyulessFiltersReapplyInfo">Перезагружать открытые чаты при изменении фильтров, по возможности сохраняя текущую позицию.</string>
     <string name="AyulessFiltersMain">Основные</string>
     <string name="AyulessFiltersPrivate">Применять фильтры в личных чатах</string>
     <string name="AyulessFiltersHideBlocked">Скрывать сообщения от пользователей в ЧС</string>
     <string name="AyulessFiltersShared">Общие фильтры</string>
-    <string name="AyulessFiltersSharedInfo">Общие фильтры действуют в группах и каналах, а в личных чатах, если это включено выше. Изменения применяются при следующем открытии чата.</string>
+    <string name="AyulessFiltersSharedInfo">Общие фильтры действуют в группах и каналах, а в личных чатах, если это включено выше. Включите обновление выше, чтобы применять изменения к открытым чатам.</string>
     <string name="AyulessFiltersAdd">Добавить фильтр</string>
     <string name="AyulessFilterEdit">Изменить фильтр</string>
     <string name="AyulessFilterExpression">Выражение</string>
@@ -132,6 +135,24 @@
     <string name="AyulessAttachmentsFolder">Папка вложений</string>
     <string name="AyulessAttachmentsLimit">Лимит размера вложений</string>
     <string name="AyulessAttachmentsUsage">Занято %1$s из %2$s. При достижении лимита самые старые вложения удаляются.</string>
+    <string name="AyulessRetentionHeader">Хранение содержимого</string>
+    <string name="AyulessRestrictedHeader">Контент с ограничениями</string>
+    <string name="AyulessKeepExpiringMedia">Сохранять исчезающие и одноразовые медиа</string>
+    <string name="AyulessUnlockPrivate">Игнорировать запрет сохранения в личных чатах</string>
+    <string name="AyulessUnlockAutoDelete">Разрешить сохранение в чатах с автоудалением</string>
+    <string name="AyulessUnlockTtl">Разрешить сохранение и скриншоты медиа с таймером</string>
+    <string name="AyulessUnlockSecret">Разрешить сохранение и скриншоты в секретных чатах</string>
+    <string name="AyulessUnlockStories">Сохранять и отправлять защищённые истории копией</string>
+    <string name="AyulessRetentionInfo">Параметры хранения расширяют соответствующую функцию Шпиона. Категории независимы: включите все подходящие параметры. Скачайте медиа до исчезновения. Лимиты хранилища и исключения Шпиона сохраняются. Для применения разрешений откройте чат заново.</string>
+    <string name="AyulessRetainDeletedSecret">Антиудаление: секретные чаты</string>
+    <string name="AyulessRetainDeletedTimed">Антиудаление: сообщения с таймерами</string>
+    <string name="AyulessRetainDeletedActions">Антиудаление: зашифрованные служебные действия</string>
+    <string name="AyulessRetainEditsSecret">История правок: секретные чаты</string>
+    <string name="AyulessRetainEditsTimed">История правок: сообщения с таймерами</string>
+    <string name="AyulessRetainEditsActions">История правок: зашифрованные служебные действия</string>
+    <string name="AyulessRetainAttachmentsSecret">Сохранённые вложения: секретные чаты</string>
+    <string name="AyulessRetainAttachmentsTimed">Сохранённые вложения: сообщения с таймерами</string>
+    <string name="AyulessRetainAttachmentsActions">Сохранённые вложения: зашифрованные служебные действия</string>
     <!-- Ayuless: installed-app identity; cloud packs are handled by AppBranding. -->
     <string name="AppName">Ayuless</string>
     <string name="AppNameBeta">Ayuless Beta</string>

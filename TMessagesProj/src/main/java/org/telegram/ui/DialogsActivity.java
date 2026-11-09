@@ -2806,6 +2806,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
 
         observersGroup = getNotificationCenter().createObserversGroup(this);
+        observersGroup.add(org.ayuless.filters.MessageFilters.SETTINGS_CHANGED); // Ayuless: refresh filtered previews
 
         if (searchString == null) {
             currentConnectionState = getConnectionsManager().getConnectionState();
@@ -10446,7 +10447,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     @SuppressWarnings("unchecked")
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.dialogsNeedReload) {
+        if (id == org.ayuless.filters.MessageFilters.SETTINGS_CHANGED) { // Ayuless: force preview layout rebuild
+            if (viewPages != null) {
+                for (ViewPage page : viewPages) {
+                    if (page != null && page.dialogsAdapter != null) {
+                        page.dialogsAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+            if (searchViewPager != null && searchViewPager.dialogsSearchAdapter != null) {
+                searchViewPager.dialogsSearchAdapter.notifyDataSetChanged();
+            }
+        } else if (id == NotificationCenter.dialogsNeedReload) {
             if (viewPages == null || dialogsListFrozen) {
                 return;
             }

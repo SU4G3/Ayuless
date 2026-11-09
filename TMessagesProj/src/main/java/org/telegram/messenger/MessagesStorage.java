@@ -4860,6 +4860,8 @@ public class MessagesStorage extends BaseController {
     }
 
     public void emptyMessagesMedia(long dialogId, ArrayList<Integer> mids) {
+        // Ayuless: includes view-once pending tasks and server read-content updates.
+        if (org.ayuless.content.RetentionConfig.keepMedia(currentAccount, dialogId)) return;
         storageQueue.postRunnable(() -> {
             SQLiteCursor cursor = null;
             SQLitePreparedStatement state = null;
@@ -4878,6 +4880,11 @@ public class MessagesStorage extends BaseController {
                         message.readAttachPath(data, getUserConfig().clientUserId);
                         data.reuse();
                         if (message.media != null) {
+                            // Ayuless: archive an eligible expiring message before any destructive media update.
+                            message.dialog_id = cursor.longValue(3);
+                            message.id = cursor.intValue(1);
+                            if (org.ayuless.content.RetentionConfig.timed(message)
+                                    && org.ayuless.antidelete.AntiDelete.keepLoaded(currentAccount, message)) continue;
                             if (!addFilesToDelete(message, filesToDelete, idsToDelete, namesToDelete, true)) {
                                 continue;
                             } else {
@@ -14628,10 +14635,22 @@ public class MessagesStorage extends BaseController {
             SQLiteCursor cursor = null;
             try {
                 String ids = TextUtils.join(",", messages);
-                cursor = database.queryFinalized(String.format(Locale.US, "SELECT mid, uid FROM randoms_v2 WHERE random_id IN(%s)", ids));
+                cursor = database.queryFinalized(String.format(Locale.US, "SELECT r.mid, r.uid, m.data FROM randoms_v2 r LEFT JOIN messages_v2 m ON m.mid = r.mid AND m.uid = r.uid WHERE r.random_id IN(%s)", ids));
                 LongSparseArray<ArrayList<Integer>> dialogs = new LongSparseArray<>();
                 while (cursor.next()) {
                     long dialogId = cursor.longValue(1);
+                    // Ayuless: retain eligible secret messages before deleting their media.
+                    NativeByteBuffer data = cursor.byteBufferValue(2);
+                    if (data != null) {
+                        TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
+                        if (message != null) message.readAttachPath(data, getUserConfig().clientUserId);
+                        data.reuse();
+                        if (message != null) {
+                            message.dialog_id = dialogId;
+                            message.id = cursor.intValue(0);
+                            if (org.ayuless.antidelete.AntiDelete.keepLoaded(currentAccount, message)) continue;
+                        }
+                    }
                     ArrayList<Integer> mids = dialogs.get(dialogId);
                     if (mids == null) {
                         mids = new ArrayList<>();

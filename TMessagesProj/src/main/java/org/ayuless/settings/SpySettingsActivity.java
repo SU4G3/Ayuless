@@ -58,6 +58,20 @@ public class SpySettingsActivity extends AyulessSettingsFragment {
     private static final int ID_SAVE_ATTACHMENTS = 40;
     private static final int ID_ATTACHMENTS_FOLDER = 41;
 
+    private static final String[] RETENTION_KEYS = {
+        "retainDeletedSecret", "retainDeletedTimed", "retainDeletedActions",
+        "retainEditsSecret", "retainEditsTimed", "retainEditsActions",
+        "retainAttachmentsSecret", "retainAttachmentsTimed", "retainAttachmentsActions",
+        "keepExpiringMedia", "unlockPrivate", "unlockAutoDelete", "unlockTtl", "unlockSecret", "unlockStories"
+    };
+    private static final int[] RETENTION_LABELS = {
+        R.string.AyulessRetainDeletedSecret, R.string.AyulessRetainDeletedTimed, R.string.AyulessRetainDeletedActions,
+        R.string.AyulessRetainEditsSecret, R.string.AyulessRetainEditsTimed, R.string.AyulessRetainEditsActions,
+        R.string.AyulessRetainAttachmentsSecret, R.string.AyulessRetainAttachmentsTimed, R.string.AyulessRetainAttachmentsActions,
+        R.string.AyulessKeepExpiringMedia, R.string.AyulessUnlockPrivate, R.string.AyulessUnlockAutoDelete,
+        R.string.AyulessUnlockTtl, R.string.AyulessUnlockSecret, R.string.AyulessUnlockStories
+    };
+
     private long usedBytes = -1;
     private long attachmentsBytes = -1;
 
@@ -73,7 +87,7 @@ public class SpySettingsActivity extends AyulessSettingsFragment {
     }
 
     @Override
-    protected void fillItems(ArrayList<UItem> items, UniversalAdapter adapter) {
+    protected void fillSettingsItems(ArrayList<UItem> items, UniversalAdapter adapter) {
         final int account = currentAccount;
         items.add(UItem.asHeader(getString(R.string.AyulessSpyHeader)));
         items.add(UItem.asCheck(ID_ANTI_DELETE, getString(R.string.AyulessAntiDelete)).setChecked(AntiDeleteConfig.isEnabled(account)));
@@ -114,6 +128,14 @@ public class SpySettingsActivity extends AyulessSettingsFragment {
         items.add(UItem.asCheck(ID_SAVE_LAST_SEEN, getString(R.string.AyulessSaveLastSeen)).setChecked(SpyExtrasConfig.get(account, SpyExtrasConfig.KEY_SAVE_LAST_SEEN)));
         items.add(UItem.asShadow(getString(R.string.AyulessSaveLastSeenInfo)));
 
+        items.add(UItem.asHeader(getString(R.string.AyulessRetentionHeader)));
+        for (int i = 0; i < RETENTION_KEYS.length; i++) {
+            if (i == 10) items.add(UItem.asHeader(getString(R.string.AyulessRestrictedHeader)));
+            items.add(UItem.asCheck(100 + i, getString(RETENTION_LABELS[i]))
+                    .setChecked(SpyExtrasConfig.get(account, RETENTION_KEYS[i])));
+        }
+        items.add(UItem.asShadow(getString(R.string.AyulessRetentionInfo)));
+
         items.add(UItem.asHeader(getString(R.string.AyulessStorageHeader)));
         items.add(UItem.asButton(ID_STORAGE_USED, getString(R.string.AyulessStorageUsed), usedBytes < 0 ? "…" : AndroidUtilities.formatFileSize(usedBytes)));
         items.add(UItem.asButton(ID_STORAGE_LIMIT, getString(R.string.AyulessStorageLimit), limitLabel(AyulessStore.getLimitBytes())));
@@ -129,6 +151,12 @@ public class SpySettingsActivity extends AyulessSettingsFragment {
     @Override
     protected void onClick(UItem item, View view, int position, float x, float y) {
         final int account = currentAccount;
+        if (item.id >= 100 && item.id < 100 + RETENTION_KEYS.length) {
+            String key = RETENTION_KEYS[item.id - 100];
+            SpyExtrasConfig.set(account, key, !SpyExtrasConfig.get(account, key));
+            update();
+            return;
+        }
         switch (item.id) {
             case ID_ANTI_DELETE:
                 AntiDeleteConfig.setEnabled(account, !AntiDeleteConfig.isEnabled(account));
