@@ -114,12 +114,9 @@ if (apiKeysFile.exists()) {
 }
 def appId = (System.getenv('APP_ID') ?: apiKeys.getProperty('APP_ID'))?.trim()
 def appHash = (System.getenv('APP_HASH') ?: apiKeys.getProperty('APP_HASH'))?.trim()
-def certFingerprint = (System.getenv('CERT_FINGERPRINT') ?: apiKeys.getProperty('CERT_FINGERPRINT'))?.trim()
+def certFingerprint = (System.getenv('CERT_FINGERPRINT') ?: apiKeys.getProperty('CERT_FINGERPRINT'))?.trim() ?: ''
 if (!appId || !appHash) {
     throw new GradleException('Missing APP_ID or APP_HASH. Copy API_KEYS.example to API_KEYS at the repository root and fill in your credentials, or set APP_ID and APP_HASH environment variables.')
-}
-if (!certFingerprint) {
-    throw new GradleException('Missing CERT_FINGERPRINT. Set CERT_FINGERPRINT environment variable or add to API_KEYS (SHA256 uppercase without colons, 64 hex chars).')
 }
 // Ayuless: Normalize APP_ID to a decimal Java int literal and keep credentials out of errors.
 def appIdValue
