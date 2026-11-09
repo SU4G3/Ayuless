@@ -128,12 +128,13 @@
             <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts" />
         </activity-alias>
 
+        <!-- Ayuless: ordinary launcher aliases use this client's identity. -->
         <activity-alias
             android:enabled="false"
             android:name="org.telegram.messenger.VintageIcon"
             android:targetActivity="org.telegram.ui.LaunchActivity"
-            android:icon="@mipmap/icon_6_launcher"
-            android:roundIcon="@mipmap/icon_6_launcher_round"
+            android:icon="@mipmap/ic_launcher_ayuless"
+            android:roundIcon="@mipmap/ic_launcher_ayuless_round"
             android:exported="true">
 
             <intent-filter>
@@ -148,8 +149,8 @@
             android:enabled="false"
             android:name="org.telegram.messenger.AquaIcon"
             android:targetActivity="org.telegram.ui.LaunchActivity"
-            android:icon="@mipmap/icon_4_launcher"
-            android:roundIcon="@mipmap/icon_4_launcher_round"
+            android:icon="@mipmap/ic_launcher_ayuless"
+            android:roundIcon="@mipmap/ic_launcher_ayuless_round"
             android:exported="true">
 
             <intent-filter>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="AppName">텔레그램</string>
-    <string name="AppNameBeta">텔레그램</string>
+    <string name="AppName">Ayuless</string>
+    <string name="AppNameBeta">Ayuless</string>
     <string name="LanguageName">한국어</string>
     <string name="English">영어</string>
     <string name="LanguageNameInEnglish">한국어</string>
@@ -193,8 +193,8 @@
     <string name="NotificationGroupFew">%1$s 님이 %2$s 그룹에 %3$s을(를) 보냈습니다</string>
     <string name="NotificationGroupAlbum">%1$s 님이 사진첩을 %2$s 그룹에 보냈습니다</string>
     <string name="NotificationGroupForwardedFew">%1$s 님이 %2$s 그룹에 %3$s을(를) 전달했습니다</string>
-    <string name="NotificationHiddenName">텔레그램</string>
-    <string name="NotificationHiddenChatName">텔레그램</string>
+    <string name="NotificationHiddenName">Ayuless</string>
+    <string name="NotificationHiddenChatName">Ayuless</string>
     <string name="NotificationHiddenChatUserName">사용자</string>
     <string name="NotificationHiddenMessage">새로운 메시지</string>
     <string name="Reply">답장</string>
@@ -258,7 +258,7 @@
     <string name="NotificationActionPinnedGeoLiveUser">%1$s님이 실시간 위치를 고정했습니다</string>
     <string name="NotificationActionPinnedGifUser">%1$s님이 GIF를 고정했습니다</string>
     <string name="NotificationActionPinnedMusicUser">%1$s님이 오디오 파일을 고정했습니다</string>
-    <string name="SecretChatName">텔레그램</string>
+    <string name="SecretChatName">Ayuless</string>
     <!--contacts view-->
     <string name="SelectContact">연락처 선택</string>
     <string name="ShareContactTitle">연락처 공유</string>
@@ -289,7 +289,7 @@
     <string name="InviteToTelegram">텔레그램으로 초대</string>
     <string name="ShareTelegram">텔레그램 공유하기...</string>
     <string name="UpdateContactsTitle">연락처를 업데이트할까요?</string>
-    <string name="UpdateContactsMessage">텔레그램이 아직 동기화되지 않은 여러 연락처를 찾아냈습니다. 연락처를 동기화하시겠습니까? 본인의 기기, SIM 카드와 Google 계정을 사용하는 중이라면 \'확인\'을 누르십시오.</string>
+    <string name="UpdateContactsMessage">Ayuless이 아직 동기화되지 않은 여러 연락처를 찾아냈습니다. 연락처를 동기화하시겠습니까? 본인의 기기, SIM 카드와 Google 계정을 사용하는 중이라면 \'확인\'을 누르십시오.</string>
     <string name="SortedByName">이름순으로 정렬</string>
     <string name="SortedByLastSeen">마지막 접속순으로 정렬</string>
     <string name="AddContactByPhone">%1$s 추가</string>
@@ -337,7 +337,7 @@
     <string name="NotificationsAndSounds">알림 및 소리</string>
     <string name="CustomNotifications">맞춤 알림</string>
     <string name="ProfilePopupNotification">팝업 알림</string>
-    <string name="ProfilePopupNotificationInfo">텔레그램이 꺼져 있을 때 이 연락처에서 보낸 새로운 메시지가 화면에 나타납니다.</string>
+    <string name="ProfilePopupNotificationInfo">Ayuless이 꺼져 있을 때 이 연락처에서 보낸 새로운 메시지가 화면에 나타납니다.</string>
     <string name="NotificationsLed">빛</string>
     <string name="NotificationsLedColor">색상</string>
     <string name="ColorBlue">파란색</string>
@@ -589,7 +589,7 @@
     <string name="DirectShareInfo">안드로이드 공유 메뉴에 최근 대화방을 표시합니다</string>
     <string name="Emoji">이모지</string>
     <string name="LargeEmoji">큰 이모지</string>
-    <string name="TelegramVersion">Android용 텔레그램 %1$s</string>
+    <string name="TelegramVersion">Android용 Ayuless %1$s</string>
     <string name="DebugMenu">디버그 메뉴</string>
     <string name="DebugMenuLongPress">디버그 메뉴로 이동하려면 길게 눌러주세요</string>
     <string name="DebugSendLogs">로그 보내기</string>
@@ -648,7 +648,7 @@
     <string name="UseProxyTelegram">MTProto 프록시</string>
     <string name="UseProxyTelegramError">사용하고 계신 프록시는 올바르게 설정되지 않았기에 비활성화될 것입니다. 다른 프록시를 사용해 주세요.</string>
     <string name="UseProxySponsor">프록시 협찬</string>
-    <string name="UseProxySponsorInfo">이 채널은 회원님의 프록시 서버로 인해 나타났습니다. 채널을 대화방 목록에서 제거하려면, 텔레그램 설정 &gt; 데이터 및 저장소에서 프록시 사용을 해제하세요.</string>
+    <string name="UseProxySponsorInfo">이 채널은 회원님의 프록시 서버로 인해 나타났습니다. 채널을 대화방 목록에서 제거하려면, Ayuless 설정 &gt; 데이터 및 저장소에서 프록시 사용을 해제하세요.</string>
     <string name="UseProxyInfo">SOCKS5 프록시 설정입니다.</string>
     <string name="UseProxyTelegramInfo">MTProto 프록시 설정입니다.</string>
     <string name="UseProxyTelegramInfo2">이 프록시를 사용하시면 후원 채널이 대화방 목록에 표시될 수 있습니다. 회원님의 텔레그램 트래픽은 전혀 공개되지 않습니다.</string>
@@ -656,7 +656,7 @@
     <string name="UseProxyForCallsInfo">프록시 서버는 통화 품질을 저하시킬 수 있습니다.</string>
     <string name="ConnectingToProxyEnable">사용</string>
     <string name="LowDiskSpaceTitle">주의</string>
-    <string name="LowDiskSpaceMessage">기기에 남은 공간이 거의 없습니다. 텔레그램이 최근 미디어의 캐시만 저장하도록 설정해 여유 공간을 확보하실 수 있습니다.</string>
+    <string name="LowDiskSpaceMessage">기기에 남은 공간이 거의 없습니다. Ayuless이 최근 미디어의 캐시만 저장하도록 설정해 여유 공간을 확보하실 수 있습니다.</string>
     <string name="LowDiskSpaceMessage2">기기의 저장 공간이 거의 다 찼습니다. 캐시 설정으로 불필요한 미디어를 제거하실 수 있습니다. 파일이 필요할 때 다시 다운로드하세요.</string>
     <string name="LowDiskSpaceButton">캐시 관리</string>
     <string name="AutodownloadContacts">연락처</string>
@@ -691,7 +691,7 @@
     <string name="ClearSelectedCache">선택내역 비우기</string>
     <string name="ClearCacheInfo">기기의 저장 공간을 확보합니다. 미디어는 클라우드에 보관됩니다.</string>
     <string name="ClearingCache">캐시 비우는 중...</string>
-    <string name="ClearingCacheDescription">텔레그램이 캐시를 초기화하는 동안 이 창을 계속 열어두세요.</string>
+    <string name="ClearingCacheDescription">Ayuless이 캐시를 초기화하는 동안 이 창을 계속 열어두세요.</string>
     <string name="ChangePhoneNumber">전화번호 변경</string>
     <string name="ChangePhoneNumberInfo">계정과 대화, 미디어를 새 번호로 옮기세요.</string>
     <string name="ChangePhoneNumberSuccessWithPhone">전화번호가 성공적으로 %1$s으로 변경되었습니다.</string>
@@ -720,9 +720,9 @@
     <string name="AuthAnotherClientInfo2">QR 코드를 받으려면 텔레그램 데스크탑을 실행하세요.</string>
     <string name="AuthAnotherClientInfo3">회원님의 계정을 연결하려면 QR 코드를 스캔하세요.</string>
     <string name="AuthAnotherClientUrl">이 코드는 누군가가 회원님의 텔레그램 계정에 로그인할 수 있도록 하는 데 사용될 수 있습니다.\n\n텔레그램 로그인을 인증하려면, 설정 &gt; 기기 &gt; QR 코드 스캔으로 이동하여 코드를 스캔해 주세요.</string>
-    <string name="QRCodePermissionNoCameraWithHint">**텔레그램**이 QR 코드를 스캔하려면 카메라 접근권한이 필요합니다. 설정을 탭하고 -&gt; 권한으로 이동 하신 후, **카메라**를 활성화해주세요.</string>
+    <string name="QRCodePermissionNoCameraWithHint">**Ayuless**이 QR 코드를 스캔하려면 카메라 접근권한이 필요합니다. 설정을 탭하고 -&gt; 권한으로 이동 하신 후, **카메라**를 활성화해주세요.</string>
     <string name="SetProfilePhoto">프로필 사진 설정</string>
-    <string name="AppUpdate">텔레그램 업데이트</string>
+    <string name="AppUpdate">Ayuless 업데이트</string>
     <string name="AppUpdateVersionAndSize">버전  %1$s • %2$s</string>
     <string name="AppUpdateDownloading">%1$d%% 다운로드 중...</string>
     <string name="AppUpdateNow">지금 업데이트 하세요</string>
@@ -765,7 +765,7 @@
     <!--passcode view-->
     <string name="Passcode">암호 잠금</string>
     <string name="ChangePasscode">암호 변경</string>
-    <string name="ChangePasscodeInfo">암호를 설정하시면, 대화 목록 상단에 잠금 아이콘이 나타납니다. 이를 탭하여 텔레그램 앱을 잠그실 수 있습니다.\n\n주의: 암호를 잊어버릴 경우, 앱을 로그아웃하거나 재설치하셔야 합니다. 비밀 대화는 모두 사라집니다.</string>
+    <string name="ChangePasscodeInfo">암호를 설정하시면, 대화 목록 상단에 잠금 아이콘이 나타납니다. 이를 탭하여 Ayuless 앱을 잠그실 수 있습니다.\n\n주의: 암호를 잊어버릴 경우, 앱을 로그아웃하거나 재설치하셔야 합니다. 비밀 대화는 모두 사라집니다.</string>
     <string name="ChangePasscodeInfoShort">암호를 설정하시면, 대화 목록 상단에 잠금 아이콘이 나타납니다. 이를 탭하여 텔레그램 앱을 잠그실 수 있습니다.</string>
     <string name="EnablePasscode">암호 설정</string>
     <string name="ConfirmCreatePasscode">암호를 다시 입력해주세요</string>
@@ -773,7 +773,7 @@
     <string name="PasscodeSwitchToPIN">PIN으로 전환</string>
     <string name="PasscodesDoNotMatchTryAgain">암호가 일치하지 않습니다. 다시 시도해주세요.</string>
     <string name="EnterYourPasscode">암호를 입력하세요</string>
-    <string name="EnterYourPasscodeInfo">이 설정을 관리하려면 현재 텔레그램 암호를 입력해주세요.</string>
+    <string name="EnterYourPasscodeInfo">이 설정을 관리하려면 현재 Ayuless 암호를 입력해주세요.</string>
     <string name="ForgotPasscode">암호를 잊어버리셨나요?</string>
     <string name="ForgotPasscodeInfo">암호를 잊어버리셨다면,  앱을 삭제 후 재설치 해주세요. \n\n비밀 대화는 모두 사라집니다.</string>
     <string name="PasscodeScreenHint">대화 목록 상단의 잠금 아이콘을 탭하여 앱을 잠글 수 있습니다.</string>
@@ -781,7 +781,7 @@
     <string name="DisablePasscodeConfirmMessage">정말 암호를 비활성화 하겠습니까?</string>
     <string name="DisablePasscodeTurnOff">끄기</string>
     <string name="EnterNewPasscode">새 암호를 입력하세요</string>
-    <string name="EnterYourTelegramPasscode">텔레그램 암호 입력</string>
+    <string name="EnterYourTelegramPasscode">Ayuless 암호 입력</string>
     <string name="AutoLock">자동 잠금</string>
     <string name="AutoLockInfo">일정 시간이 지나면 암호를 묻게 됩니다.</string>
     <string name="AutoLockInTime">%1$s 뒤</string>
@@ -791,7 +791,7 @@
     <string name="ScreenCaptureHeader">작업전환에 있는 앱 내용</string>
     <string name="ScreenCaptureShowContent">내용 보기</string>
     <string name="ScreenCaptureInfo">위 기능을 끄면, 앱 안에서 화면을 캡처하실 수 없지만 앱 전환 화면에서 대화 내용이 숨겨집니다.</string>
-    <string name="ScreenCaptureAlert">앱 전환 화면에서 대화 내용이나 목록이 숨겨지지만, 텔레그램에서 스크린샷을 찍으실 수 없습니다.\n\n이 기능을 사용하려면 앱을 다시 시작하셔야 할 수도 있습니다.</string>
+    <string name="ScreenCaptureAlert">앱 전환 화면에서 대화 내용이나 목록이 숨겨지지만, Ayuless에서 스크린샷을 찍으실 수 없습니다.\n\n이 기능을 사용하려면 앱을 다시 시작하셔야 할 수도 있습니다.</string>
     <string name="TooManyTries">너무 많이 시도하셨습니다.\n%1$s초 뒤에 다시 시도해 주세요.</string>
     <!--password view-->
     <string name="TwoStepVerification">2단계 인증</string>
@@ -926,8 +926,8 @@
     <string name="DeleteAll">모두 삭제</string>
     <string name="StopLoadingTitle">로딩을 중단할까요?</string>
     <string name="StopLoading">불러오기를 중단할까요?</string>
-    <string name="UpdateTelegram">텔레그램을 업데이트하세요</string>
-    <string name="UpdateAppAlert">죄송합니다. 텔레그램 앱이 최신 버전이 아니기에 이 요청을 받을 수 없습니다. 텔레그램을 업데이트해 주세요.</string>
+    <string name="UpdateTelegram">Ayuless을 업데이트하세요</string>
+    <string name="UpdateAppAlert">죄송합니다. Ayuless 앱이 최신 버전이 아니기에 이 요청을 받을 수 없습니다. Ayuless을 업데이트해 주세요.</string>
     <string name="InvalidPhoneNumber">전화번호가 잘못되었습니다. 번호를 확인하여 다시 시도해 주세요.</string>
     <string name="PleaseLoginPassport">텔레그램 패스포트를 사용하려면 텔레그램 계정에 로그인해 주세요.</string>
     <string name="BannedPhoneNumber">차단된 전화번호입니다.</string>
@@ -1035,10 +1035,10 @@
     <string name="SecretLinkPreviewAlert">비밀 대화에서 링크 미리보기를 활성화하시겠습니까? 링크 미리보기는 텔레그램 서버에서 만들어지는 점을 유의하시기 바랍니다.</string>
     <string name="SecretChatContextBotAlert">인라인 봇은 제3 개발자가 제공한다는 점을 유의하시기 바랍니다. 봇이 작동을 하기 위해서, 봇의 사용자명 뒤에 입력한 내역이 해당 개발자에게 보내지게 됩니다.</string>
     <string name="EditMessageError">죄송합니다. 메시지를 수정할 수 없습니다.</string>
-    <string name="AllowReadCall">텔레그램이 전화를 수신 할 수 있도록 설정해주셔야 자동으로 코드 입력이 가능합니다.</string>
-    <string name="AllowReadCallAndLog">텔레그램이 전화를 수신하고 통화 기록을 살필 수 있도록 허용해 주세요. 코드를 자동으로 입력해 드릴 수 있습니다.</string>
-    <string name="AllowReadCallLog">텔레그램이 통화 기록을 살필 수 있도록 허용해 주세요. 코드를 자동으로 입력해 드릴 수 있습니다.</string>
-    <string name="AllowFillNumber">텔레그램이 전화를 받을 수 있도록 허용해 주셔야 회원님의 전화번호를 자동으로 확인할 수 있습니다.</string>
+    <string name="AllowReadCall">Ayuless이 전화를 수신 할 수 있도록 설정해주셔야 자동으로 코드 입력이 가능합니다.</string>
+    <string name="AllowReadCallAndLog">Ayuless이 전화를 수신하고 통화 기록을 살필 수 있도록 허용해 주세요. 코드를 자동으로 입력해 드릴 수 있습니다.</string>
+    <string name="AllowReadCallLog">Ayuless이 통화 기록을 살필 수 있도록 허용해 주세요. 코드를 자동으로 입력해 드릴 수 있습니다.</string>
+    <string name="AllowFillNumber">Ayuless이 전화를 받을 수 있도록 허용해 주셔야 회원님의 전화번호를 자동으로 확인할 수 있습니다.</string>
     <string name="UserRestricted">죄송합니다. 이 작업은 진행하실 수 없습니다.</string>
     <string name="YouBlockedUser">죄송합니다. 차단된 사용자나 봇은 그룹에 추가하실 수 없습니다. 먼저 차단을 해제해 주세요.</string>
     <string name="AddAdminErrorNotAMember">이 사용자는 그룹의 참가자가 아니며 회원님에게 사용자를 초대할 권한이 없기에 관리자에 추가하실 수 없습니다.</string>
@@ -1073,23 +1073,23 @@
     <string name="TosUpdateDecline">유감스럽지만, 다른 방법이 없습니다. 다른 앱과 달리, 텔레그램은 광고 타겟팅이나 다른 상업적 목적으로 사용자 데이터를 사용하지 않습니다. 텔레그램은 기능이 풍부한 클라우드 서비스로서 작동하는 데 필요한 정보만을 저장합니다. 개인 정보 및 보안 설정에서 내 데이터에 대한 제어를 할 수 있습니다.\n\n만약 텔레그램의 간소한 요구 사항에 두루 동의하실 수 없다면 저희로서 이 서비스를 제공해 드리기가 어렵습니다.</string>
     <string name="TosDeclineDeleteAccount">주의요망, 텔레그램 클라우드에 저장하신 모든 데이터와 회원님의 텔레그램 계정이 삭제되며, 되돌릴 수 없습니다.\n\n중요: 지금 취소하여 데이터를 잃어버리기 전에 먼저 내보내실 수 있습니다. (최신 텔레그램 데스크톱을 열고 설정 &gt; 고급 설정 &gt; 텔레그램 데이터 내보내기에서 진행하실 수 있습니다.)</string>
     <!--permissions-->
-    <string name="PermissionStorageWithHint">**텔레그램**이 사진, 동영상, 음악과 그 밖의 문서를 보내고 저장하려면 저장 공간 접근 권한이 필요합니다. 설정 &gt; 권한을 탭하고 **파일과 미디어**를 활성화 해주세요.</string>
-    <string name="PermissionNoAudioWithHint">**텔레그램**이 음성 메시지를 보내려면 마이크 접근 권한이 필요합니다. 설정 &gt; 권한을 탭하고 **마이크**를 활성화 해주세요.</string>
-    <string name="PermissionNoAudioVideoWithHint">**텔레그램**이 음성 메시지를 보내려면 마이크 접근 권한이 필요합니다. 설정 &gt; 권한을 탭하고 **마이크**를 활성화 해주세요.</string>
-    <string name="PermissionNoCameraWithHint">**텔레그램**이 사진 및 동영상을 찍으려면 접근 권한이 필요합니다. 설정 &gt; 권한을 탭하고 **카메라**를 활성화 해주세요.</string>
-    <string name="PermissionNoCameraMicVideo">**텔레그램**이 영상 메시지를 보내려면 카메라와 마이크 접근 권한이 필요합니다. 설정 &gt; 권한을 탭하고 **마이크**와 **카메라**를 활성화 해주세요.</string>
-    <string name="PermissionNoLocation">회원님의 위치를 친구들과 공유하려면 텔레그램에게 위치 접근 권한이 필요합니다.</string>
-    <string name="PermissionNoLocationStory">Telegram needs access to your location so that you can add the weather widget to your stories.</string>
-    <string name="PermissionNoLocationFriends">**텔레그램**이 친구들과 위치를 공유하려면 위치 접근 권한이 필요합니다. 설정 &gt; 권한을 탭하고 **위치**를 활성화 해주세요.</string>
-    <string name="PermissionNoLocationNavigation">**텔레그램**이 길을 찾으려면 위치 접근 권한이 필요합니다. 설정 &gt; 권한을 탭하고 **위치**를 활성화 해주세요.</string>
-    <string name="PermissionNoContactsSharing">**텔레그램**에서 연락처를 친구들에게 공유 하려면 연락처 접근 권한이 필요합니다. 설정 &gt; 권한을 탭하고 **연락처**를 활성화 해주세요.</string>
-    <string name="PermissionNoStorageAvatar">**텔레그램**이 프로필 사진 및 영상을 업로드하기 위하여 저장 접근 권한이 필요합니다. 설정 &gt; 권한을 탭하고 **파일 및 미디어**를 활성화 해주세요.</string>
-    <string name="PermissionNoAudioStorageStory">**텔레그램**이 스토리에 음악 파일을 추가하려면 음악 파일에 접근해야 합니다. 설정 &gt; 권한을 탭하고 **음악 및 오디오**를 켜세요.</string>
-    <string name="PermissionDrawAboveOtherApps">화면속화면 모드로 동영상을 재생하려면 텔레그램에게 다른 앱 위에 그릴 수 있는 권한을 부여하셔야 합니다.</string>
-    <string name="PermissionDrawAboveOtherAppsGroupCall">오버레이 모드는 푸시-투-토크시, 텔레그램을 나가더라도 누가 대화를 하는지 알 수 있게 됩니다.</string>
+    <string name="PermissionStorageWithHint">**Ayuless**이 사진, 동영상, 음악과 그 밖의 문서를 보내고 저장하려면 저장 공간 접근 권한이 필요합니다. 설정 &gt; 권한을 탭하고 **파일과 미디어**를 활성화 해주세요.</string>
+    <string name="PermissionNoAudioWithHint">**Ayuless**이 음성 메시지를 보내려면 마이크 접근 권한이 필요합니다. 설정 &gt; 권한을 탭하고 **마이크**를 활성화 해주세요.</string>
+    <string name="PermissionNoAudioVideoWithHint">**Ayuless**이 음성 메시지를 보내려면 마이크 접근 권한이 필요합니다. 설정 &gt; 권한을 탭하고 **마이크**를 활성화 해주세요.</string>
+    <string name="PermissionNoCameraWithHint">**Ayuless**이 사진 및 동영상을 찍으려면 접근 권한이 필요합니다. 설정 &gt; 권한을 탭하고 **카메라**를 활성화 해주세요.</string>
+    <string name="PermissionNoCameraMicVideo">**Ayuless**이 영상 메시지를 보내려면 카메라와 마이크 접근 권한이 필요합니다. 설정 &gt; 권한을 탭하고 **마이크**와 **카메라**를 활성화 해주세요.</string>
+    <string name="PermissionNoLocation">회원님의 위치를 친구들과 공유하려면 Ayuless에게 위치 접근 권한이 필요합니다.</string>
+    <string name="PermissionNoLocationStory">Ayuless needs access to your location so that you can add the weather widget to your stories.</string>
+    <string name="PermissionNoLocationFriends">**Ayuless**이 친구들과 위치를 공유하려면 위치 접근 권한이 필요합니다. 설정 &gt; 권한을 탭하고 **위치**를 활성화 해주세요.</string>
+    <string name="PermissionNoLocationNavigation">**Ayuless**이 길을 찾으려면 위치 접근 권한이 필요합니다. 설정 &gt; 권한을 탭하고 **위치**를 활성화 해주세요.</string>
+    <string name="PermissionNoContactsSharing">**Ayuless**에서 연락처를 친구들에게 공유 하려면 연락처 접근 권한이 필요합니다. 설정 &gt; 권한을 탭하고 **연락처**를 활성화 해주세요.</string>
+    <string name="PermissionNoStorageAvatar">**Ayuless**이 프로필 사진 및 영상을 업로드하기 위하여 저장 접근 권한이 필요합니다. 설정 &gt; 권한을 탭하고 **파일 및 미디어**를 활성화 해주세요.</string>
+    <string name="PermissionNoAudioStorageStory">**Ayuless**이 스토리에 음악 파일을 추가하려면 음악 파일에 접근해야 합니다. 설정 &gt; 권한을 탭하고 **음악 및 오디오**를 켜세요.</string>
+    <string name="PermissionDrawAboveOtherApps">화면속화면 모드로 동영상을 재생하려면 Ayuless에게 다른 앱 위에 그릴 수 있는 권한을 부여하셔야 합니다.</string>
+    <string name="PermissionDrawAboveOtherAppsGroupCall">오버레이 모드는 푸시-투-토크시, Ayuless을 나가더라도 누가 대화를 하는지 알 수 있게 됩니다.</string>
     <string name="PermissionOpenSettings">설정</string>
-    <string name="PermissionXiaomiLockscreen">통화가 제대로 실행되도록 텔레그램이 잠금 화면에 나타나는 것을 허용해 주세요.</string>
-    <string name="PermissionBackgroundLocation">이 대화에서 실시간 위치를 공유 하려면, 텔레그램이 항상 위치에 대해 접근 권한이, 백그라운드 실행시도 포함,  부여되어야 합니다.\n\n회원님이 설정한 시간에만 위치에 접근을 하게 되며, 언제든지 중지를 할 수 있습니다. 텔레그램은 대화에 위치를 공유하는 것 이외에 해당 정보를 일절 사용 하지 않습니다.</string>
+    <string name="PermissionXiaomiLockscreen">통화가 제대로 실행되도록 Ayuless이 잠금 화면에 나타나는 것을 허용해 주세요.</string>
+    <string name="PermissionBackgroundLocation">이 대화에서 실시간 위치를 공유 하려면, Ayuless이 항상 위치에 대해 접근 권한이, 백그라운드 실행시도 포함,  부여되어야 합니다.\n\n회원님이 설정한 시간에만 위치에 접근을 하게 되며, 언제든지 중지를 할 수 있습니다. Ayuless은 대화에 위치를 공유하는 것 이외에 해당 정보를 일절 사용 하지 않습니다.</string>
     <string name="PermissionDrawAboveOtherAppsTitle">화면-속-화면</string>
     <string name="PermissionDrawAboveOtherAppsGroupCallTitle">영상 대화 오버레이</string>
     <!--contacts shortcuts-->

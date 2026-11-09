@@ -4787,6 +4787,15 @@ public class LocaleController {
 
     @Nullable
     private String getStringV2(String key, @StringRes int stringRes, String fallback) {
+        // Ayuless: process only allowlisted templates, before any caller arguments.
+        String resourceKey = key;
+        if (stringRes != 0) {
+            resourceKey = ApplicationLoader.applicationContext.getResources().getResourceEntryName(stringRes);
+        }
+        return org.ayuless.branding.AppBranding.localize(resourceKey, getUnbrandedStringV2(key, stringRes, fallback));
+    }
+
+    private String getUnbrandedStringV2(String key, @StringRes int stringRes, String fallback) {
         final Context context = ApplicationLoader.applicationContext;
         String value;
 
