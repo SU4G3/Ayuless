@@ -144,8 +144,8 @@ not require retention.
   Notification channels, shortcut builders and widget `RemoteViews` already
   supply localized text. `GhostShortcut` and Ayuless settings statically import
   `LocaleController.getString`; they are not `Context.getString` calls.
-  `SyncController.status` and settings option arrays store integer IDs and
-  resolve them through `LocaleController` when displayed. `AppBranding`'s static
+  Settings option arrays store integer IDs and resolve them through
+  `LocaleController` when displayed. `AppBranding`'s static
   initialization only builds its regex/hash allowlist, without Android resource
   reads.
 - Remaining direct text reads are `android.R.string.copy/cut/paste` in

@@ -73,7 +73,8 @@ Device feedback refinements:
 - Restricted-content and retention categories are removed. Local saving,
   forwarding as copies and screenshots apply to every content category. Automatic
   retention still follows the main anti-delete, edit-history and attachment
-  switches (off by default), chat exceptions, and storage limits. Old category
+  switches, chat exceptions, and storage limits. Anti-delete and saved attachments
+  now default on; edit history defaults off. Old category
   preferences are ignored. Import remains an explicit per-account action.
 
 Verification after these refinements: Java syntax parsing, EN/RU resource keys

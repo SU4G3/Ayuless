@@ -122,7 +122,6 @@ public final class GhostInterceptor {
             return false;
         }
         if (isReadRequest(req)) {
-            if (GhostConfig.hideRead(account)) org.ayuless.sync.SyncController.onBlockedRead(account, req);
             return GhostConfig.hideRead(account);
         }
         if (req instanceof TLRPC.TL_messages_setTyping || req instanceof TLRPC.TL_messages_setEncryptedTyping) {

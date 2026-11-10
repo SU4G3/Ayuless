@@ -9,7 +9,7 @@ import android.content.SharedPreferences;
 
 import org.telegram.messenger.ApplicationLoader;
 
-/** Per-account anti-delete switch. Off by default; the settings UI comes in issue #11. */
+/** Per-account anti-delete switch. On by default; stored choices are preserved. */
 public final class AntiDeleteConfig {
 
     private static final String KEY_ENABLED = "enabled";
@@ -22,7 +22,7 @@ public final class AntiDeleteConfig {
     }
 
     public static boolean isEnabled(int account) {
-        return ApplicationLoader.applicationContext != null && prefs(account).getBoolean(KEY_ENABLED, false);
+        return ApplicationLoader.applicationContext != null && prefs(account).getBoolean(KEY_ENABLED, true);
     }
 
     public static void setEnabled(int account, boolean enabled) {

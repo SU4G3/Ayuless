@@ -43,6 +43,8 @@ public class AppearanceSettingsActivity extends AyulessSettingsFragment {
     private static final int ID_LOCAL_PREMIUM = 11;
     private static final int ID_WORK_IN_BACKGROUND = 12;
 
+    private static final int ID_TEXT_MARKS = 20, ID_DELETED_TEXT = 21, ID_EDITED_TEXT = 22;
+
     private DeletedMessagePreview preview;
     private DeletedMarkColors colors;
 
@@ -65,6 +67,11 @@ public class AppearanceSettingsActivity extends AyulessSettingsFragment {
         items.add(UItem.asCheck(ID_TRANSLUCENT, getString(R.string.AyulessTranslucentDeleted)).setChecked(AppearanceConfig.translucentDeleted()));
         items.add(UItem.asButton(ID_MARK_STYLE, R.drawable.ayuless_solar_msg_delete, getString(R.string.AyulessDeletedMarkStyle), TextUtils.isEmpty(AppearanceConfig.markEmoji()) ? getString(R.string.AyulessSpyExceptionsNone) : AppearanceConfig.markEmoji()));
         if (colors != null) items.add(UItem.asCustom(colors));
+        items.add(UItem.asCheck(ID_TEXT_MARKS, getString(R.string.AyulessCustomMarks)).setChecked(AppearanceConfig.customMarks()));
+        if (AppearanceConfig.customMarks()) {
+            items.add(UItem.asButton(ID_DELETED_TEXT, getString(R.string.AyulessDeletedText), AppearanceConfig.deletedText()));
+            items.add(UItem.asButton(ID_EDITED_TEXT, getString(R.string.AyulessEditedText), AppearanceConfig.editedText()));
+        }
         items.add(UItem.asShadow(null));
         items.add(UItem.asHeader(getString(R.string.AyulessUsefulHeader)));
         items.add(UItem.asCheck(ID_GHOST_IN_DIALOGS, getString(R.string.AyulessGhostInDialogs)).setChecked(AppearanceConfig.ghostInDialogs()));
@@ -77,6 +84,19 @@ public class AppearanceSettingsActivity extends AyulessSettingsFragment {
     @Override
     protected void onClick(UItem item, View view, int position, float x, float y) {
         switch (item.id) {
+            case ID_TEXT_MARKS:
+                AppearanceConfig.setCustomMarks(!AppearanceConfig.customMarks());
+                update();
+                break;
+            case ID_DELETED_TEXT:
+            case ID_EDITED_TEXT:
+                boolean edited = item.id == ID_EDITED_TEXT;
+                String key = edited ? AppearanceConfig.KEY_EDITED_TEXT : AppearanceConfig.KEY_DELETED_TEXT;
+                SettingsTextDialog.show(this, getString(edited ? R.string.AyulessEditedText : R.string.AyulessDeletedText),
+                        edited ? AppearanceConfig.editedText() : AppearanceConfig.deletedText(), 32,
+                        value -> { AppearanceConfig.setTextMark(key, value); update(); },
+                        () -> { AppearanceConfig.resetTextMark(key); update(); });
+                break;
             case ID_TRANSLUCENT:
                 AppearanceConfig.setTranslucentDeleted(!AppearanceConfig.translucentDeleted());
                 update();

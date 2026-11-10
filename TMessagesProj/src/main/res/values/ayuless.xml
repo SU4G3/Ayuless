@@ -66,7 +66,6 @@
     <string name="AyulessTranslucentDeleted">Translucent deleted messages</string>
     <string name="AyulessDeletedMarkStyle">Deleted mark</string>
     <string name="AyulessDeletedMarkColor">Mark color</string>
-    <string name="AyulessDeletedMark">deleted</string>
     <string name="AyulessHideSponsored">Hide sponsored messages</string>
     <string name="AyulessLocalPremium">Local Premium</string>
     <string name="AyulessWorkInBackground">Work in background</string>
@@ -132,24 +131,6 @@
     <string name="AyulessChooseOneEmoji">Enter one emoji or leave empty.</string>
     <string name="AyulessDeletedPreview">This message was deleted.</string>
     <string name="AyulessSpyAdditionalInfo">Read dates are recorded on this device. Last online times are approximate.</string>
-    <string name="AyulessRetentionHeader">Content retention</string>
-    <string name="AyulessRestrictedHeader">Restricted content</string>
-    <string name="AyulessKeepExpiringMedia">Keep self-destruct and view-once media</string>
-    <string name="AyulessUnlockPrivate">Ignore saving restrictions in private chats</string>
-    <string name="AyulessUnlockAutoDelete">Allow saving in chats with auto-delete</string>
-    <string name="AyulessUnlockTtl">Allow saving and screenshots of timed media</string>
-    <string name="AyulessUnlockSecret">Allow saving and screenshots in secret chats</string>
-    <string name="AyulessUnlockStories">Allow saving and sharing protected stories as copies</string>
-    <string name="AyulessRetentionInfo">Retention options extend the corresponding Spy feature. Categories are independent; enable each applicable option. Download media before it disappears. Storage limits and Spy exceptions still apply. Reopen a chat to apply saving restrictions.</string>
-    <string name="AyulessRetainDeletedSecret">Anti-delete: secret chats</string>
-    <string name="AyulessRetainDeletedTimed">Anti-delete: messages with timers</string>
-    <string name="AyulessRetainDeletedActions">Anti-delete: encrypted service actions</string>
-    <string name="AyulessRetainEditsSecret">Edit history: secret chats</string>
-    <string name="AyulessRetainEditsTimed">Edit history: messages with timers</string>
-    <string name="AyulessRetainEditsActions">Edit history: encrypted service actions</string>
-    <string name="AyulessRetainAttachmentsSecret">Saved attachments: secret chats</string>
-    <string name="AyulessRetainAttachmentsTimed">Saved attachments: messages with timers</string>
-    <string name="AyulessRetainAttachmentsActions">Saved attachments: encrypted service actions</string>
     <!-- Ayuless: installed-app identity; cloud packs are handled by AppBranding. -->
     <string name="AppName">Ayuless</string>
     <string name="AppNameBeta">Ayuless Beta</string>
@@ -251,25 +232,14 @@
     <string name="NotificationHiddenChatName">Ayuless</string>
     <string name="SecretChatName">Ayuless</string>
 
-    <!-- AyuGram preferences, message actions and synchronization. -->
-    <string name="AyulessGhostEssentials">Ghost essentials</string>
-    <string name="AyulessSpyEssentials">Spy essentials</string>
-    <string name="AyulessGhostProfiles">Profiles and additional ghost settings</string>
-    <string name="AyulessMessageSaving">Message Saving Preferences</string>
-    <string name="AyulessSpyStorage">Exceptions, storage and saved data</string>
-    <string name="AyulessChatsMessages">Chats and messages</string>
-    <string name="AyulessMessageAppearance">Message appearance</string>
+    <!-- AyuGram preferences and message actions. -->
     <string name="AyulessCustomMarks">Use custom text marks</string>
     <string name="AyulessDeletedText">Deleted mark</string>
     <string name="AyulessEditedText">Edited mark</string>
     <string name="AyulessGhostMenu">Show ghost mode toggle in menu</string>
-    <string name="AyulessKillMenu">Show kill app button in menu</string>
     <string name="AyulessEnableGhost">Enable Ghost</string>
     <string name="AyulessDisableGhost">Disable Ghost</string>
-    <string name="AyulessKillApp">Kill App</string>
     <string name="AyulessGhostShortcut">Enter with Ghost</string>
-    <string name="AyulessSaveMedia">Save media</string>
-    <string name="AyulessSaveMediaInfo">Keep downloaded attachments of deleted messages and previous versions. Files that were never downloaded cannot be recovered.</string>
     <string name="AyulessCustomSaving">Customize message saving</string>
     <string name="AyulessCustomSavingInfo">When off, keep the existing saving behavior, including formatting, reactions, bots and all media categories. Changes affect future saved copies.</string>
     <string name="AyulessMediaCategories">Limit media saving by chat type</string>
@@ -291,7 +261,6 @@
     <string name="AyulessKeepLocallyConfirm">Delete this message for everyone and keep a deleted copy in this chat?</string>
     <string name="AyulessDeleteDateSetting">Show deletion date in message menu</string>
     <string name="AyulessDeleteDate">Delete Date</string>
-    <string name="AyulessChatFeaturesInfo">“Read until” explicitly sends a read receipt even in ghost mode. “Keep locally” requires saved deleted messages and is available for cloud chats. Resending media requires a downloaded copy.</string>
     <string name="AyulessEditsHistoryTitle">Edits history</string>
     <string name="AyulessEditsHistoryMenu">History</string>
     <string name="AyulessHistoryCurrent">Current version</string>
@@ -299,33 +268,7 @@
     <string name="AyulessHistoryVersion">Version %1$d</string>
     <string name="AyulessHistoryEmpty">(empty)</string>
     <string name="AyulessHistoryHint">Tap a message to copy text or open its downloaded media. Long press to copy text.</string>
-    <string name="AyulessSyncHeader">AyuSync</string>
-    <string name="AyulessSyncStatus">Sync status</string>
-    <string name="AyulessSyncEnable">Enable synchronization</string>
-    <string name="AyulessSyncServer">Server URL</string>
-    <string name="AyulessSyncToken">Access token</string>
-    <string name="AyulessSyncSecure">Use HTTPS &amp; WSS</string>
-    <string name="AyulessSyncForce">Force sync clients</string>
-    <string name="AyulessSyncProfile">Visit profile</string>
-    <string name="AyulessSyncDevice">Device ID</string>
-    <string name="AyulessSyncLastSent">Last sent event</string>
-    <string name="AyulessSyncLastReceived">Last received event</string>
-    <string name="AyulessSyncRegisterCode">Register status code</string>
-    <string name="AyulessSyncIdCopied">Identifier copied to clipboard.</string>
-    <string name="AyulessSyncNever">never</string>
-    <string name="AyulessSyncDisabled">disabled</string>
-    <string name="AyulessSyncConnecting">connecting</string>
-    <string name="AyulessSyncConnected">connected</string>
-    <string name="AyulessSyncDisconnected">disconnected</string>
-    <string name="AyulessSyncNoToken">no token</string>
-    <string name="AyulessSyncNoServer">no server</string>
-    <string name="AyulessSyncInvalidToken">invalid token</string>
-    <string name="AyulessSyncNoMvp">no MVP</string>
-    <string name="AyulessSyncInvalidServer">Enter a server hostname with an optional port, without a path or query.</string>
-    <string name="AyulessSyncInfo">Synchronize local read states between compatible clients without sending read receipts to Telegram. Requires a compatible AyuSync server and access token; the reference service requires MVP. The configured server receives your device ID, account IDs and read states. Edit history is not synchronized.</string>
-    <string name="AyulessMaintenance">Maintenance</string>
-    <string name="AyulessMaintenanceTools">Show maintenance tools</string>
-    <string name="AyulessWalEnabled">WAL mode is enabled</string>
-    <string name="AyulessManageCache">Manage Telegram cache</string>
     <string name="AyulessUnknown">Unknown</string>
+    <string name="AyulessReadUntilInfo">“Read until” explicitly sends a read receipt even in ghost mode.</string>
+    <string name="AyulessDeletedActionsInfo">“Keep locally” requires saved deleted messages and is available for cloud chats. Resending media requires a downloaded copy.</string>
 </resources>

@@ -22,11 +22,14 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import org.ayuless.antidelete.AntiDeleteConfig;
 import org.ayuless.antidelete.DeletedCache;
 import org.ayuless.edits.EditedCache;
 import org.ayuless.edits.EditsConfig;
+import org.ayuless.extras.ExtrasConfig;
+import org.ayuless.spy.MessageSavingConfig;
 import org.ayuless.spy.SavedAttachments;
 import org.ayuless.spy.SpyExtrasConfig;
 import org.ayuless.spy.SpyExceptions;
@@ -35,7 +38,10 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BottomSheet;
+import org.telegram.ui.Cells.TextCheckBoxCell;
 import org.telegram.ui.Components.BulletinFactory;
+import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UniversalAdapter;
 import org.telegram.ui.UsersSelectActivity;
@@ -59,7 +65,13 @@ public class SpySettingsActivity extends AyulessSettingsFragment {
     private static final int ID_SAVE_READ_DATE = 30;
     private static final int ID_SAVE_LAST_SEEN = 31;
     private static final int ID_EXCEPTIONS = 3;
-    private static final int ID_SAVING = 4;
+    private static final int CUSTOM = 50, CATEGORIES = 51, TYPES = 52;
+    private static final int FORMATTING = 53, REACTIONS = 54, BOTS = 55;
+    private static final int ID_DELETED_ACTION_BASE = 60;
+    private static final String[] DELETED_ACTION_KEYS = {ExtrasConfig.KEY_LOCAL_RESEND,
+            ExtrasConfig.KEY_KEEP_LOCAL, ExtrasConfig.KEY_DELETE_DATE};
+    private static final int[] DELETED_ACTION_TITLES = {R.string.AyulessLocalResend,
+            R.string.AyulessKeepLocalSetting, R.string.AyulessDeleteDateSetting};
     private static final int ID_STORAGE_USED = 10;
     private static final int ID_STORAGE_LIMIT = 11;
     private static final int ID_EXPORT = 20;
@@ -92,7 +104,6 @@ public class SpySettingsActivity extends AyulessSettingsFragment {
         int exceptions = SpyExceptions.get(account).size();
         items.add(UItem.asButton(ID_EXCEPTIONS, getString(R.string.AyulessSpyExceptions),
                 exceptions == 0 ? getString(R.string.AyulessSpyExceptionsNone) : String.valueOf(exceptions)));
-        items.add(UItem.asButton(ID_SAVING, getString(R.string.AyulessMessageSaving)));
         items.add(UItem.asCheck(ID_EDIT_HISTORY, getString(R.string.AyulessEditHistory)).setChecked(EditsConfig.isEnabled(account)));
         items.add(UItem.asShadow(null));
 
@@ -108,12 +119,28 @@ public class SpySettingsActivity extends AyulessSettingsFragment {
                             attachmentsBytes < 0 ? "…" : AndroidUtilities.formatFileSize(attachmentsBytes)), false);
             items.add(UItem.asCustom(ID_ATTACHMENTS_LIMIT, attachmentLimitCell));
         }
-        items.add(UItem.asShadow(null));
+
+        boolean custom = MessageSavingConfig.get(account, MessageSavingConfig.CUSTOM);
+        items.add(UItem.asCheck(CUSTOM, getString(R.string.AyulessCustomSaving)).setChecked(custom));
+        if (custom) {
+            items.add(UItem.asCheck(CATEGORIES, getString(R.string.AyulessMediaCategories))
+                    .setChecked(MessageSavingConfig.get(account, MessageSavingConfig.MEDIA_CATEGORIES)));
+            items.add(UItem.asButton(TYPES, getString(R.string.AyulessChooseMediaCategories))
+                    .setEnabled(MessageSavingConfig.get(account, MessageSavingConfig.MEDIA_CATEGORIES)));
+            items.add(UItem.asCheck(FORMATTING, getString(R.string.AyulessSaveFormatting)).setChecked(MessageSavingConfig.get(account, MessageSavingConfig.FORMATTING)));
+            items.add(UItem.asCheck(REACTIONS, getString(R.string.AyulessSaveReactions)).setChecked(MessageSavingConfig.get(account, MessageSavingConfig.REACTIONS)));
+            items.add(UItem.asCheck(BOTS, getString(R.string.AyulessSaveBots)).setChecked(MessageSavingConfig.get(account, MessageSavingConfig.BOTS)));
+        }
+        items.add(UItem.asShadow(getString(R.string.AyulessCustomSavingInfo)));
 
         items.add(UItem.asHeader(getString(R.string.AyulessSpyAdditional)));
         items.add(UItem.asCheck(ID_SAVE_READ_DATE, getString(R.string.AyulessSaveReadDate)).setChecked(SpyExtrasConfig.get(account, SpyExtrasConfig.KEY_SAVE_READ_DATE)));
         items.add(UItem.asCheck(ID_SAVE_LAST_SEEN, getString(R.string.AyulessSaveLastSeen)).setChecked(SpyExtrasConfig.get(account, SpyExtrasConfig.KEY_SAVE_LAST_SEEN)));
-        items.add(UItem.asShadow(getString(R.string.AyulessSpyAdditionalInfo)));
+        for (int i = 0; i < DELETED_ACTION_KEYS.length; i++) {
+            items.add(UItem.asCheck(ID_DELETED_ACTION_BASE + i, getString(DELETED_ACTION_TITLES[i]))
+                    .setChecked(ExtrasConfig.get(DELETED_ACTION_KEYS[i])));
+        }
+        items.add(UItem.asShadow(getString(R.string.AyulessSpyAdditionalInfo) + "\n\n" + getString(R.string.AyulessDeletedActionsInfo)));
 
         items.add(UItem.asHeader(getString(R.string.AyulessStorageHeader)));
         items.add(UItem.asButton(ID_STORAGE_USED, getString(R.string.AyulessStorageUsed), usedBytes < 0 ? "…" : AndroidUtilities.formatFileSize(usedBytes)));
@@ -133,10 +160,25 @@ public class SpySettingsActivity extends AyulessSettingsFragment {
 
     @Override
     protected void onClick(UItem item, View view, int position, float x, float y) {
+        if (!item.enabled) return;
         final int account = currentAccount;
+        if (item.id >= ID_DELETED_ACTION_BASE && item.id < ID_DELETED_ACTION_BASE + DELETED_ACTION_KEYS.length) {
+            String key = DELETED_ACTION_KEYS[item.id - ID_DELETED_ACTION_BASE];
+            ExtrasConfig.set(key, !ExtrasConfig.get(key));
+            update();
+            return;
+        }
+        String savingKey = item.id == CUSTOM ? MessageSavingConfig.CUSTOM : item.id == CATEGORIES ? MessageSavingConfig.MEDIA_CATEGORIES
+                : item.id == FORMATTING ? MessageSavingConfig.FORMATTING : item.id == REACTIONS ? MessageSavingConfig.REACTIONS
+                : item.id == BOTS ? MessageSavingConfig.BOTS : null;
+        if (savingKey != null) {
+            MessageSavingConfig.set(account, savingKey, !MessageSavingConfig.get(account, savingKey));
+            update();
+            return;
+        }
         switch (item.id) {
-            case ID_SAVING:
-                presentFragment(new MessageSavingSettingsActivity());
+            case TYPES:
+                showMediaCategories();
                 break;
             case ID_ANTI_DELETE:
                 AntiDeleteConfig.setEnabled(account, !AntiDeleteConfig.isEnabled(account));
@@ -325,5 +367,43 @@ public class SpySettingsActivity extends AyulessSettingsFragment {
         AlertDialog dialog = builder.create();
         showDialog(dialog);
         dialog.redPositive();
+    }
+
+    private void showMediaCategories() {
+        if (getParentActivity() == null) return;
+        int[] labels = {R.string.AyulessMediaPrivateChats, R.string.AyulessMediaPublicChannels,
+                R.string.AyulessMediaPrivateChannels, R.string.AyulessMediaPublicGroups, R.string.AyulessMediaPrivateGroups};
+        LinearLayout layout = new LinearLayout(getParentActivity());
+        layout.setOrientation(LinearLayout.VERTICAL);
+        TextCheckBoxCell[] cells = new TextCheckBoxCell[labels.length];
+        for (int i = 0; i < labels.length; i++) {
+            TextCheckBoxCell cell = cells[i] = new TextCheckBoxCell(getParentActivity(), true, false);
+            cell.setTextAndCheck(getString(labels[i]), MessageSavingConfig.get(currentAccount, MessageSavingConfig.CATEGORIES[i]), i < labels.length - 1);
+            cell.setOnClickListener(v -> cell.setChecked(!cell.isChecked()));
+            layout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 50));
+        }
+        BottomSheet sheet = new BottomSheet.Builder(getParentActivity(), false, getResourceProvider())
+                .setTitle(getString(R.string.AyulessChooseMediaCategories)).setCustomView(layout).create();
+        android.widget.LinearLayout buttons = new android.widget.LinearLayout(getParentActivity());
+        buttons.setGravity(android.view.Gravity.END);
+        for (int i = 0; i < 2; i++) {
+            final boolean save = i == 1;
+            android.widget.TextView button = new android.widget.TextView(getParentActivity());
+            button.setText(getString(save ? R.string.Save : R.string.Cancel));
+            button.setTextSize(14);
+            button.setGravity(android.view.Gravity.CENTER);
+            button.setPadding(org.telegram.messenger.AndroidUtilities.dp(20), 0, org.telegram.messenger.AndroidUtilities.dp(20), 0);
+            button.setTextColor(org.telegram.ui.ActionBar.Theme.getColor(org.telegram.ui.ActionBar.Theme.key_dialogTextBlue2, getResourceProvider()));
+            button.setOnClickListener(v -> {
+                if (save) {
+                    for (int j = 0; j < cells.length; j++) MessageSavingConfig.set(currentAccount, MessageSavingConfig.CATEGORIES[j], cells[j].isChecked());
+                    listView.adapter.update(true);
+                }
+                sheet.dismiss();
+            });
+            buttons.addView(button, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, 48));
+        }
+        layout.addView(buttons, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
+        showDialog(sheet);
     }
 }

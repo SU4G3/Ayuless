@@ -1,4 +1,13 @@
 /*
+ * This is the source code of AyuGram for Android.
+ *
+ * We do not and cannot prevent the use of our code,
+ * but be respectful and credit the original author.
+ *
+ * Copyright @Radolyn, 2023
+ */
+
+/*
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (C) 2026 Ayuless contributors
  */
@@ -17,12 +26,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.ayuless.ghost.GhostConfig;
+import org.ayuless.extras.ExtrasConfig;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.SimpleActionBarMenuItem;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeBind;
@@ -45,6 +54,7 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
     private static final int ID_SEND_SILENTLY = 21;
     private static final int ID_STORY_PROMPT = 23;
     private static final int ID_DELAYED_SEND = 22;
+    private static final int ID_MENU = 30, ID_SHORTCUT = 31, ID_READ_UNTIL = 32;
 
     private static final int[] OPTION_TITLES = {
             R.string.AyulessGhostHideRead,
@@ -91,6 +101,7 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
             avatar.setAvatarType(AvatarDrawable.AVATAR_TYPE_FILTER_GROUPS);
             profileAvatar.setImageDrawable(avatar);
         } else {
+            profileAvatar.getImageReceiver().setCurrentAccount(profile);
             avatar.setInfo(profile, user);
             profileAvatar.setForUserOrChat(user, avatar);
         }
@@ -167,7 +178,10 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
         items.add(UItem.asCheck(ID_DELAYED_SEND, getString(R.string.AyulessGhostDelayedSend))
                 .setChecked(GhostConfig.getProfile(profile, GhostConfig.KEY_DELAYED_SEND))
                 .setEnabled(inUse));
-        items.add(UItem.asShadow(getString(R.string.AyulessGhostDelayedSendInfo)));
+        items.add(UItem.asCheck(ID_MENU, getString(R.string.AyulessGhostMenu)).setChecked(ExtrasConfig.get(ExtrasConfig.KEY_GHOST_MENU)));
+        items.add(UItem.asCheck(ID_SHORTCUT, getString(R.string.AyulessGhostShortcut)).setChecked(ExtrasConfig.get(ExtrasConfig.KEY_GHOST_SHORTCUT)));
+        items.add(UItem.asCheck(ID_READ_UNTIL, getString(R.string.AyulessReadUntilSetting)).setChecked(ExtrasConfig.get(ExtrasConfig.KEY_READ_UNTIL)));
+        items.add(UItem.asShadow(getString(R.string.AyulessGhostDelayedSendInfo) + "\n\n" + getString(R.string.AyulessReadUntilInfo)));
     }
 
     @Override
@@ -187,6 +201,14 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
             return;
         }
         if (!item.enabled) {
+            return;
+        }
+        if (item.id == ID_MENU || item.id == ID_SHORTCUT || item.id == ID_READ_UNTIL) {
+            String extra = item.id == ID_MENU ? ExtrasConfig.KEY_GHOST_MENU
+                    : item.id == ID_SHORTCUT ? ExtrasConfig.KEY_GHOST_SHORTCUT : ExtrasConfig.KEY_READ_UNTIL;
+            ExtrasConfig.set(extra, !ExtrasConfig.get(extra));
+            if (item.id == ID_SHORTCUT) org.ayuless.ghost.GhostShortcut.update();
+            update();
             return;
         }
         String key = null;
@@ -241,26 +263,9 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
     }
 
     private void showProfilePicker() {
-        if (getParentActivity() == null) {
-            return;
-        }
-        final ArrayList<Integer> profiles = new ArrayList<>();
-        profiles.add(GhostConfig.PROFILE_ALL);
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-            if (UserConfig.getInstance(a).isClientActivated()) {
-                profiles.add(a);
-            }
-        }
-        final CharSequence[] labels = new CharSequence[profiles.size()];
-        for (int i = 0; i < labels.length; i++) {
-            labels[i] = profileName(profiles.get(i));
-        }
-        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity(), getResourceProvider());
-        builder.setTitle(getString(R.string.AyulessGhostProfile));
-        builder.setItems(labels, (dialog, which) -> {
-            profile = profiles.get(which);
+        GhostAccountSelector.show(this, profile, selected -> {
+            profile = selected;
             update();
         });
-        showDialog(builder.create());
     }
 }

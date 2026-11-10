@@ -4,7 +4,7 @@ Each step is one or more PRs, with a manual test checklist on a test account in 
 
 Status: ✅ done (merged to `main`) · ✅ in progress · ⏳ planned
 
-Nothing has been tested on a device yet. All Ayuless features are off by default and live in **Settings → Ayuless**.
+Nothing has been tested on a device yet. Ayuless settings live in **Settings → Ayuless**. Anti-delete, saved attachments, sponsored-message hiding and background work default on; optional additions default off. Explicit saved choices are preserved.
 
 > **Known issues**
 > - Signing in with a new session may fail on current builds (reported after the first device test, cause not known yet). An existing session works.

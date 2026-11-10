@@ -728,7 +728,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         items.add(UItem.asCustomShadow(topView, 200 - 12));
 
         // Ayuless: a dedicated first section directly below the profile block.
-        items.add(SettingCell.Factory.of(900, IconBackgroundColors.PURPLE.top, IconBackgroundColors.PURPLE.bottom,
+        items.add(SettingCell.Factory.of(900, 0, 0,
                 R.drawable.ayuless_settings_logo, getString(R.string.AyulessSettings), getString(R.string.AyulessSettingsInfo)));
         items.add(UItem.asShadow(null));
 
@@ -1372,6 +1372,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             subtitleView.setTranslationX(icon == 0 ? dp(2) : 0);
 
             iconBackground.setColor(iconColorTop, iconColorBottom);
+            // Ayuless: branded artwork occupies the full colored-icon slot; reset recycled cells too.
+            int iconSize = icon == R.drawable.ayuless_settings_logo ? LayoutHelper.MATCH_PARENT : 24;
+            iconView.setLayoutParams(LayoutHelper.createFrame(iconSize, iconSize, Gravity.CENTER));
             iconView.setImageResource(icon);
             titleView.setText(title);
             subtitleView.setVisibility((twoLines = !TextUtils.isEmpty(subtitle)) ? View.VISIBLE : View.GONE);

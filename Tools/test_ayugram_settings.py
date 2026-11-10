@@ -4,11 +4,12 @@
 """Exercise real settings policies on a JVM, with Android/Telegram boundary stubs.
 
 Covers upgrades, account/profile isolation, opt-in defaults, locks, mutually
-exclusive ghost actions, media categories, bot retention and endpoint validation.
+exclusive ghost actions, media categories, bot retention and preserved explicit choices.
 Does not replace an Android build or device/network integration testing.
 """
 from pathlib import Path
 import os
+import re
 import shutil
 import subprocess
 import tempfile
@@ -20,6 +21,10 @@ STUBS = {
 package android.content;
 public class Context {
  public static final int MODE_PRIVATE=0;
+ public int foregroundStarts, starts, stops;
+ public void startForegroundService(Intent intent){foregroundStarts++;}
+ public void startService(Intent intent){starts++;}
+ public void stopService(Intent intent){stops++;}
  private final java.util.Map<String,SharedPreferences> prefs=new java.util.HashMap<>();
  public SharedPreferences getSharedPreferences(String name,int mode) { return prefs.computeIfAbsent(name,k->new Memory()); }
  static class Memory implements SharedPreferences {
@@ -41,6 +46,8 @@ public class Context {
  }
 }
 """,
+"android/content/Intent.java": "package android.content; public class Intent {public Intent(Context c,Class<?> type){}}",
+"android/os/Build.java": "package android.os; public class Build {public static class VERSION {public static int SDK_INT=34;}}",
 "android/content/SharedPreferences.java": """
 package android.content;
 public interface SharedPreferences {
@@ -79,7 +86,7 @@ package org.telegram.messenger;
 public class MessageObject {public static long getDialogId(org.telegram.tgnet.TLRPC.Message m){return m.dialog_id;}}
 """,
 "org/telegram/messenger/FileLog.java": """
-package org.telegram.messenger; public class FileLog {public static void e(Exception e){throw new AssertionError(e);}}
+package org.telegram.messenger; public class FileLog {public static void e(Throwable e){throw new AssertionError(e);}}
 """,
 "org/telegram/messenger/R.java": """
 package org.telegram.messenger; public class R {public static class string {public static final int EditedMessage=1;}}
@@ -113,21 +120,52 @@ package org.ayuless.ghost; public class StoryGhostPrompt {public static boolean 
 "org/ayuless/spy/SpyExceptions.java": """
 package org.ayuless.spy; public class SpyExceptions {public static boolean isExcepted(int a,long did){return did==99;}}
 """,
-"org/ayuless/spy/SavedAttachments.java": """
-package org.ayuless.spy; public class SavedAttachments {public static boolean isEnabled(int a){return false;}}
-""",
 }
+
+def method(source, signature):
+    start = source.index(signature)
+    brace = source.index("{", start)
+    depth = 1
+    end = brace + 1
+    while depth:
+        depth += (source[end] == "{") - (source[end] == "}")
+        end += 1
+    return source[start:end]
+
+
+# Compile the production preference methods without Android media/file dependencies.
+attachments = (SOURCES / "org/ayuless/spy/SavedAttachments.java").read_text()
+STUBS["org/ayuless/spy/SavedAttachments.java"] = (
+    "package org.ayuless.spy; import android.content.*; "
+    "import org.telegram.messenger.ApplicationLoader; public class SavedAttachments {"
+    + "".join(re.findall(r'private static final String (?:PREFS|KEY_ENABLED) = [^;]+;', attachments))
+    + method(attachments, "private static SharedPreferences prefs()")
+    + method(attachments, "public static boolean isEnabled(int account)")
+    + method(attachments, "public static void setEnabled(int account, boolean enabled)")
+    + "}"
+)
+
+
+service = (SOURCES / "org/ayuless/extras/KeepAliveService.java").read_text()
+STUBS["org/ayuless/extras/KeepAliveService.java"] = (
+    "package org.ayuless.extras; import android.content.*; import android.os.Build; "
+    "import org.telegram.messenger.*; public class KeepAliveService {"
+    + method(service, "public static void apply()") + "}"
+)
+
+
 ACTUAL = [
  "org/ayuless/ghost/GhostConfig.java", "org/ayuless/spy/MessageSavingConfig.java",
- "org/ayuless/sync/SyncConfig.java", "org/ayuless/extras/ExtrasConfig.java",
+ "org/ayuless/extras/ExtrasConfig.java",
  "org/ayuless/appearance/AppearanceConfig.java", "org/ayuless/content/RetentionConfig.java",
  "org/ayuless/antidelete/AntiDeleteConfig.java", "org/ayuless/edits/EditsConfig.java",
 ]
 TEST = r"""
 import org.ayuless.ghost.GhostConfig;
 import org.ayuless.spy.MessageSavingConfig;
-import org.ayuless.sync.SyncConfig;
+import org.ayuless.spy.SavedAttachments;
 import org.ayuless.extras.ExtrasConfig;
+import org.ayuless.extras.KeepAliveService;
 import org.ayuless.appearance.AppearanceConfig;
 import org.ayuless.content.RetentionConfig;
 import org.ayuless.antidelete.AntiDeleteConfig;
@@ -138,15 +176,15 @@ public class PolicyTest {
  static void check(boolean value){assertions++;if(!value)throw new AssertionError("Check "+assertions);}
  public static void main(String[] args) {
   for(int a=0;a<3;a++){
-   check(!GhostConfig.isEnabled(a));check(!GhostConfig.anyActive(a));check(!AntiDeleteConfig.isEnabled(a));
+   check(!GhostConfig.isEnabled(a));check(!GhostConfig.anyActive(a));check(AntiDeleteConfig.isEnabled(a));check(SavedAttachments.isEnabled(a));
    check(!GhostConfig.hideRead(a));check(!GhostConfig.hideOnline(a));check(!GhostConfig.delayedSend(a));
    check(MessageSavingConfig.saveFormatting(a));check(MessageSavingConfig.saveReactions(a));
    check(MessageSavingConfig.saveDialog(a,42));check(!MessageSavingConfig.get(a,MessageSavingConfig.CUSTOM));
   }
-  check(!AppearanceConfig.customMarks());check(!SyncConfig.enabled());check(SyncConfig.secure());
+  check(!AppearanceConfig.customMarks());
   String[] extras={ExtrasConfig.KEY_READ_UNTIL,ExtrasConfig.KEY_KEEP_LOCAL,ExtrasConfig.KEY_DELETE_DATE,
-   ExtrasConfig.KEY_GHOST_MENU,ExtrasConfig.KEY_KILL_MENU,ExtrasConfig.KEY_LOCAL_RESEND,
-   ExtrasConfig.KEY_GHOST_SHORTCUT,ExtrasConfig.KEY_MAINTENANCE};
+   ExtrasConfig.KEY_GHOST_MENU,ExtrasConfig.KEY_LOCAL_RESEND,
+   ExtrasConfig.KEY_GHOST_SHORTCUT};
   for(String key:extras)check(!ExtrasConfig.get(key));
   GhostConfig.setProfile(-1,GhostConfig.KEY_ENABLED,true);
   check(GhostConfig.countEnabled(-1)==4);check(GhostConfig.hideRead(0));check(GhostConfig.hideOnline(2));
@@ -187,11 +225,26 @@ public class PolicyTest {
   check(!MessageSavingConfig.saveFormatting(0));check(!MessageSavingConfig.saveReactions(0));check(MessageSavingConfig.saveFormatting(1));
   MessageSavingConfig.set(0,MessageSavingConfig.CUSTOM,false);
   check(MessageSavingConfig.saveFormatting(0));check(MessageSavingConfig.saveReactions(0));check(MessageSavingConfig.saveDialog(0,42));
-  for(String server:new String[]{"example.org","https://example.org/","example.org:8443","[::1]:8443"})check(SyncConfig.setServer(server));
-  for(String server:new String[]{"https://example.org/path","user@example.org","example.org?token=x","example.org#fragment","example.org:0","example.org:99999","example.org:bad","example.org\nInjected: x"})check(!SyncConfig.setServer(server));
-  check(SyncConfig.setServer(""));check(SyncConfig.server().isEmpty());
-  check(!SyncConfig.enabled());SyncConfig.setEnabled(true);check(SyncConfig.enabled());
-  SyncConfig.setSecure(false);check(!SyncConfig.secure());SyncConfig.setSecure(true);check(SyncConfig.secure());
+  check(ExtrasConfig.hideSponsored());check(ExtrasConfig.workInBackground());
+  android.content.Context context=ApplicationLoader.applicationContext;
+  KeepAliveService.apply();check(context.foregroundStarts==1);check(context.starts==0);check(context.stops==0);
+  android.os.Build.VERSION.SDK_INT=25;
+  KeepAliveService.apply();check(context.starts==1);
+  android.os.Build.VERSION.SDK_INT=34;
+  ExtrasConfig.set(ExtrasConfig.KEY_HIDE_SPONSORED,false);
+  ExtrasConfig.set(ExtrasConfig.KEY_WORK_IN_BACKGROUND,false);
+  AntiDeleteConfig.setEnabled(0,false);
+  check(!ExtrasConfig.hideSponsored());check(!ExtrasConfig.workInBackground());check(!AntiDeleteConfig.isEnabled(0));
+  KeepAliveService.apply();check(context.stops==1);check(context.foregroundStarts==1);
+  check(AntiDeleteConfig.isEnabled(1));
+  SavedAttachments.setEnabled(0,false);
+  check(!SavedAttachments.isEnabled(0));check(SavedAttachments.isEnabled(1));
+  SavedAttachments.setEnabled(0,true);check(SavedAttachments.isEnabled(0));
+  ExtrasConfig.set(ExtrasConfig.KEY_HIDE_SPONSORED,true);
+  ExtrasConfig.set(ExtrasConfig.KEY_WORK_IN_BACKGROUND,true);
+  check(ExtrasConfig.hideSponsored());check(ExtrasConfig.workInBackground());
+  KeepAliveService.apply();check(context.foregroundStarts==2);
+  ApplicationLoader.applicationContext=null;KeepAliveService.apply();check(context.foregroundStarts==2);
   System.out.println("Settings policy passed: "+assertions+" assertions (JVM boundary stubs)");
  }
 }
