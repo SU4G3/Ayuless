@@ -15,9 +15,9 @@
     <string name="AyulessGhostInfo">Скрывайте активность и прочтение сообщений.</string>
     <string name="AyulessGhostLocked">%1$s · фикс.</string>
     <string name="AyulessGhostLockHint">Удерживайте настройку, чтобы отвязать её от режима призрака.</string>
-    <string name="AyulessAntiDelete">Сохранять удалённые</string>
+    <string name="AyulessAntiDelete">Хранить удалённые сообщения</string>
     <string name="AyulessAntiDeleteInfo">Сохраняйте сообщения, удалённые собеседниками.</string>
-    <string name="AyulessEditHistory">Сохранять историю правок</string>
+    <string name="AyulessEditHistory">Запоминать историю правок</string>
     <string name="AyulessEditHistoryInfo">Открывайте прошлые версии через меню сообщения.</string>
     <string name="AyulessStorageHeader">Хранилище</string>
     <string name="AyulessStorageUsed">Занято</string>
@@ -45,7 +45,7 @@
     <string name="AyulessGhostReadOnActionInfo">Отправка сообщения или реакции отмечает чат прочитанным.</string>
     <string name="AyulessGhostSendSilently">Отправлять без звука</string>
     <string name="AyulessGhostSendSilentlyInfo">Отправляйте без звука уведомлений даже вне режима призрака.</string>
-    <string name="AyulessGhostDelayedSend">Использовать отложку</string>
+    <string name="AyulessGhostDelayedSend">Отправлять с задержкой</string>
     <string name="AyulessGhostDelayedSendInfo">Отправляйте с задержкой; для секретных чатов приложение должно оставаться открытым.</string>
     <string name="AyulessSpyHeader">Режим шпиона</string>
     <string name="AyulessStorageLimitInfo">При достижении лимита самые старые записи удаляются.</string>
@@ -67,7 +67,7 @@
     <string name="AyulessDeletedMark">удалено</string>
     <string name="AyulessDeletedAppearanceInfo">Изменения применяются к сообщениям при следующем показе.</string>
     <string name="AyulessHideSponsored">Отключить рекламу</string>
-    <string name="AyulessLocalPremium">Локальный Telegram Premium</string>
+    <string name="AyulessLocalPremium">Telegram Premium локально</string>
     <string name="AyulessWorkInBackground">Работать в фоне</string>
     <string name="AyulessWorkInBackgroundNotification">Ayuless работает в фоне</string>
     <string name="AyulessUsefulFeaturesInfo">Локальный Premium открывает функции клиента без подписки.</string>
@@ -122,7 +122,7 @@
     <string name="AyulessGhostInDialogs">Призрак в списке чатов</string>
     <string name="AyulessGhostInDialogsInfo">Нажмите призрака для вкл./выкл.</string>
     <string name="AyulessGhostTurnedOn">Режим призрака включён</string>
-    <string name="AyulessGhostTurnedOff">Режим призрака выключен</string>
+    <string name="AyulessGhostTurnedOff">Режим призрака отключён</string>
     <string name="AyulessGhostThisAccount">Этот аккаунт</string>
     <string name="AyulessSpyExceptions">Исключения</string>
     <string name="AyulessSpyExceptionsNone">Нет</string>
@@ -274,8 +274,8 @@
     <string name="AyulessMediaPrivateChannels">Закрытые каналы</string>
     <string name="AyulessMediaPublicGroups">Публичные группы</string>
     <string name="AyulessMediaPrivateGroups">Непубличные группы</string>
-    <string name="AyulessSaveFormatting">Сохранять форматирование</string>
-    <string name="AyulessSaveReactions">Сохранять реакции</string>
+    <string name="AyulessSaveFormatting">Оставлять форматирование</string>
+    <string name="AyulessSaveReactions">Оставлять реакции</string>
     <string name="AyulessSaveBots">Сохранять чаты с ботами</string>
     <string name="AyulessLocalResend">Отправлять сохранённые копии</string>
     <string name="AyulessKeepLocalSetting">Оставлять копии при удалении</string>
@@ -332,4 +332,12 @@
     <string name="AyulessExportError">Не удалось завершить. Проверьте соединение, доступ к папке и свободное место, затем повторите.</string>
     <string name="AyulessChatExportDone">Экспорт завершён</string>
     <string name="AyulessExportDoneInfo">Сохранено в выбранной папке. Сообщений экспортировано:</string>
+    <string name="AyulessShowProfileIdentity">Показывать ID и дату регистрации</string>
+    <string name="AyulessRegistrationInfo">Дата регистрации пользователя приблизительно оценивается по росту ID и может отличаться на месяцы или годы. Для чатов используется дата создания из Telegram. Нажмите на значение, чтобы скопировать его.</string>
+    <string name="AyulessNumericId">Числовой ID</string>
+    <string name="AyulessRegistrationDate">Дата регистрации (примерно)</string>
+    <string name="AyulessCreationDate">Дата создания (примерно)</string>
+    <string name="AyulessRegistrationUnknown">Неизвестно</string>
+    <string name="AyulessMapTypes">Карта / Спутник / Гибрид</string>
+    <string name="AyulessMapTypesInfo">Включить типы карты в меню геопозиции. Спутниковые снимки: Sentinel-2 cloudless 2016 с ограниченной детализацией. Гибрид добавляет подписи EOX. Тайлы загружаются с EOX; выбранный тип запоминается.</string>
 </resources>

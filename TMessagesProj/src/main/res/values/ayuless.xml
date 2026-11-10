@@ -16,9 +16,9 @@
     <string name="AyulessGhostInfo">Hide online activity and read receipts.</string>
     <string name="AyulessGhostLocked">%1$s · locked</string>
     <string name="AyulessGhostLockHint">Hold an option to keep it independent of ghost mode.</string>
-    <string name="AyulessAntiDelete">Save deleted messages</string>
+    <string name="AyulessAntiDelete">Keep deleted messages</string>
     <string name="AyulessAntiDeleteInfo">Keep messages deleted by others.</string>
-    <string name="AyulessEditHistory">Save edit history</string>
+    <string name="AyulessEditHistory">Store message edit history</string>
     <string name="AyulessEditHistoryInfo">Open previous versions from the message menu.</string>
     <string name="AyulessStorageHeader">Storage</string>
     <string name="AyulessStorageUsed">Used</string>
@@ -46,7 +46,7 @@
     <string name="AyulessGhostReadOnActionInfo">Sending a message or reaction marks the chat as read.</string>
     <string name="AyulessGhostSendSilently">Send silently</string>
     <string name="AyulessGhostSendSilentlyInfo">Send without notification sound, even outside ghost mode.</string>
-    <string name="AyulessGhostDelayedSend">Delayed send</string>
+    <string name="AyulessGhostDelayedSend">Send with a delay</string>
     <string name="AyulessGhostDelayedSendInfo">Send after a short delay; secret chats require the app to stay open.</string>
     <string name="AyulessSpyHeader">Spy mode</string>
     <string name="AyulessStorageLimitInfo">When the limit is reached, the oldest saved records are removed.</string>
@@ -68,7 +68,7 @@
     <string name="AyulessDeletedMark">deleted</string>
     <string name="AyulessDeletedAppearanceInfo">Changes apply to messages as they are shown again.</string>
     <string name="AyulessHideSponsored">Hide sponsored messages</string>
-    <string name="AyulessLocalPremium">Local Telegram Premium</string>
+    <string name="AyulessLocalPremium">Telegram Premium locally</string>
     <string name="AyulessWorkInBackground">Work in background</string>
     <string name="AyulessWorkInBackgroundNotification">Ayuless is running in the background</string>
     <string name="AyulessUsefulFeaturesInfo">Local Premium unlocks client features without a subscription.</string>
@@ -123,7 +123,7 @@
     <string name="AyulessGhostInDialogs">Ghost in chat list</string>
     <string name="AyulessGhostInDialogsInfo">Tap the ghost to toggle its mode.</string>
     <string name="AyulessGhostTurnedOn">Ghost mode on</string>
-    <string name="AyulessGhostTurnedOff">Ghost mode off</string>
+    <string name="AyulessGhostTurnedOff">Ghost mode disabled</string>
     <string name="AyulessGhostThisAccount">This account</string>
     <string name="AyulessSpyExceptions">Exceptions</string>
     <string name="AyulessSpyExceptionsNone">None</string>
@@ -275,8 +275,8 @@
     <string name="AyulessMediaPrivateChannels">Private channels</string>
     <string name="AyulessMediaPublicGroups">Public groups</string>
     <string name="AyulessMediaPrivateGroups">Private groups</string>
-    <string name="AyulessSaveFormatting">Keep text formatting</string>
-    <string name="AyulessSaveReactions">Keep reactions</string>
+    <string name="AyulessSaveFormatting">Preserve text formatting</string>
+    <string name="AyulessSaveReactions">Preserve reactions</string>
     <string name="AyulessSaveBots">Save bot chats</string>
     <string name="AyulessLocalResend">Send saved copies</string>
     <string name="AyulessKeepLocalSetting">Keep copies on deletion</string>
@@ -333,4 +333,12 @@
     <string name="AyulessExportError">Could not finish. Check connection, folder access and available space, then try again.</string>
     <string name="AyulessChatExportDone">Export complete</string>
     <string name="AyulessExportDoneInfo">Saved in the selected folder. Messages exported:</string>
+    <string name="AyulessShowProfileIdentity">Show ID and registration date</string>
+    <string name="AyulessRegistrationInfo">User registration dates are rough estimates from ID growth and may be wrong by months or years. Chat dates use Telegram’s creation date. Tap a value to copy it.</string>
+    <string name="AyulessNumericId">Numeric ID</string>
+    <string name="AyulessRegistrationDate">Registration date (approximate)</string>
+    <string name="AyulessCreationDate">Creation date (approximate)</string>
+    <string name="AyulessRegistrationUnknown">Unknown</string>
+    <string name="AyulessMapTypes">Map / Satellite / Hybrid</string>
+    <string name="AyulessMapTypesInfo">Enable map types in the location menu. Satellite imagery: Sentinel-2 cloudless 2016, with limited detail. Hybrid adds EOX labels. Tiles load from EOX; the selected type is remembered.</string>
 </resources>
