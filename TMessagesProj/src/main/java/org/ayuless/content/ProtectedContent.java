@@ -155,8 +155,9 @@ public final class ProtectedContent {
      *
      * @return number of protected messages that could not be copied (media not downloaded)
      */
-    public static int sendCopies(int account, ArrayList<MessageObject> messages, long peer, boolean notify, int scheduleDate, MessageObject replyToTopMsg) {
+    public static int sendCopies(int account, ArrayList<MessageObject> messages, long peer, boolean notify, int scheduleDate, MessageObject replyToTopMsg, boolean automaticDelay) {
         AccountInstance instance = AccountInstance.getInstance(account);
+        org.telegram.messenger.SendMessageChatArguments sendArgs = org.ayuless.ghost.DelayedSend.arguments(automaticDelay);
         MessagesController controller = instance.getMessagesController();
         int skipped = 0;
         for (Iterator<MessageObject> it = messages.iterator(); it.hasNext(); ) {
@@ -177,6 +178,7 @@ public final class ProtectedContent {
                 params.replyToTopMsg = replyToTopMsg;
                 params.notify = notify;
                 params.scheduleDate = scheduleDate;
+                params.sendMessageChatArguments = sendArgs;
                 instance.getSendMessagesHelper().sendMessage(params);
                 continue;
             }
@@ -199,7 +201,7 @@ public final class ProtectedContent {
             boolean forceDocument = isDocument && !messageObject.isVideo() && !messageObject.isGif();
             ArrayList<SendMessagesHelper.SendingMediaInfo> list = new ArrayList<>();
             list.add(info);
-            SendMessagesHelper.prepareSendingMedia(instance, list, peer, null, replyToTopMsg, null, null, forceDocument, false, null, notify, scheduleDate, 0, 0, false, null, null, 0, false, 0, 0, null);
+            SendMessagesHelper.prepareSendingMedia(instance, list, peer, null, replyToTopMsg, null, null, forceDocument, false, null, notify, scheduleDate, 0, 0, false, null, sendArgs, 0, false, 0, 0, null);
         }
         if (skipped > 0) {
             AndroidUtilities.runOnUIThread(() -> Toast.makeText(ApplicationLoader.applicationContext,

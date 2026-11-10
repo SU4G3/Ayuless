@@ -47,7 +47,6 @@
     <string name="AyulessGhostSendSilentlyInfo">Отправляйте без звука уведомлений даже вне режима призрака.</string>
     <string name="AyulessGhostDelayedSend">Использовать отложку</string>
     <string name="AyulessGhostDelayedSendInfo">Отправляйте с задержкой; для секретных чатов приложение должно оставаться открытым.</string>
-    <string name="AyulessGhostDelayedSendHint">Включена отложка: сообщение отправится через несколько секунд.</string>
     <string name="AyulessSpyHeader">Режим шпиона</string>
     <string name="AyulessStorageLimitInfo">При достижении лимита самые старые записи удаляются.</string>
     <string name="AyulessDataHeader">Данные</string>
@@ -278,10 +277,6 @@
     <string name="AyulessSaveFormatting">Сохранять форматирование</string>
     <string name="AyulessSaveReactions">Сохранять реакции</string>
     <string name="AyulessSaveBots">Сохранять чаты с ботами</string>
-    <string name="AyulessReadUntilSetting">Прочтение вручную</string>
-    <string name="AyulessReadUntil">Прочитать до этого места</string>
-    <string name="AyulessReadSent">Подтверждение прочтения отправлено</string>
-    <string name="AyulessReadUntilInfo">Подтверждайте прочтение вручную даже при скрытых уведомлениях.</string>
     <string name="AyulessLocalResend">Отправлять сохранённые копии</string>
     <string name="AyulessKeepLocalSetting">Оставлять копии при удалении</string>
     <string name="AyulessKeepLocally">Удалить у всех, оставить копию</string>
@@ -301,4 +296,7 @@
     <string name="AyulessGhostSelfStatus">%1$s (как видят другие)</string>
     <string name="AyulessGhostSelfOfflineUnknown">не в сети ?</string>
     <string name="AyulessMediaOpenFailed">Не удалось открыть файл.</string>
+    <string name="AyulessMarkAsRead">Прочитать</string>
+    <string name="AyulessGhostLocalSeen">Запоминать просмотренные отметки</string>
+    <string name="AyulessGhostLocalSeenInfo">Не показывать повторно просмотренные реакции, упоминания и голоса в опросах на этом устройстве, пока скрыто прочтение. Подтверждения прочтения не отправляются.</string>
 </resources>

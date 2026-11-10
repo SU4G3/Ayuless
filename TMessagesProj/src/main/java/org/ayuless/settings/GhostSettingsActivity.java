@@ -36,7 +36,7 @@ import java.util.ArrayList;
 /** Ayuless > Ghost mode. Edits either the shared profile or one account's own profile. */
 public class GhostSettingsActivity extends AyulessSettingsFragment {
 
-    private static final int ID_MENU = 30, ID_SHORTCUT = 31, ID_READ_UNTIL = 32;
+    private static final int ID_MENU = 30, ID_SHORTCUT = 31, ID_LOCAL_SEEN = 32;
     private static final int ID_PROFILE = 1;
     private static final int ID_USE_OWN = 2;
     private static final int ID_MASTER = 3;
@@ -176,9 +176,10 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
                 .setChecked(org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_GHOST_IN_MENU)));
         items.add(UItem.asCheck(ID_SHORTCUT, getString(R.string.AyulessGhostShortcut))
                 .setChecked(org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_GHOST_SHORTCUT)));
-        items.add(UItem.asCheck(ID_READ_UNTIL, getString(R.string.AyulessReadUntilSetting))
-                .setChecked(org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_READ_UNTIL)));
-        items.add(UItem.asShadow(getString(R.string.AyulessReadUntilInfo)));
+        items.add(UItem.asCheck(ID_LOCAL_SEEN, getString(R.string.AyulessGhostLocalSeen))
+                .setChecked(GhostConfig.getProfile(profile, GhostConfig.KEY_LOCAL_SEEN))
+                .setEnabled(inUse));
+        items.add(UItem.asShadow(getString(R.string.AyulessGhostLocalSeenInfo)));
     }
 
     @Override
@@ -200,17 +201,18 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
         if (!item.enabled) {
             return;
         }
-        if (item.id == ID_MENU || item.id == ID_SHORTCUT || item.id == ID_READ_UNTIL) {
+        if (item.id == ID_MENU || item.id == ID_SHORTCUT) {
             String extra = item.id == ID_MENU ? org.ayuless.extras.ExtrasConfig.KEY_GHOST_IN_MENU
-                    : item.id == ID_SHORTCUT ? org.ayuless.extras.ExtrasConfig.KEY_GHOST_SHORTCUT
-                    : org.ayuless.extras.ExtrasConfig.KEY_READ_UNTIL;
+                    : org.ayuless.extras.ExtrasConfig.KEY_GHOST_SHORTCUT;
             org.ayuless.extras.ExtrasConfig.set(extra, !org.ayuless.extras.ExtrasConfig.get(extra));
             if (item.id == ID_SHORTCUT) org.ayuless.ghost.GhostShortcut.refresh();
             update();
             return;
         }
         String key = null;
-        if (item.id >= ID_OPTION_BASE && item.id < ID_OPTION_BASE + GhostConfig.GHOST_KEYS.length) {
+        if (item.id == ID_LOCAL_SEEN) {
+            key = GhostConfig.KEY_LOCAL_SEEN;
+        } else if (item.id >= ID_OPTION_BASE && item.id < ID_OPTION_BASE + GhostConfig.GHOST_KEYS.length) {
             key = GhostConfig.GHOST_KEYS[item.id - ID_OPTION_BASE];
         } else if (item.id == ID_READ_ON_ACTION) {
             key = GhostConfig.KEY_READ_ON_ACTION;

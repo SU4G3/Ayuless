@@ -592,6 +592,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private ActionBarMenuSubItem clearItem;
     @Nullable
     private ActionBarMenuSubItem readItem;
+    private ActionBarMenuSubItem ayulessUnreadItem; // Ayuless: preserve the separate bulk unread action.
     @Nullable
     private ActionBarMenuSubItem blockItem;
 
@@ -705,6 +706,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     private final static int pin = 100;
     private final static int read = 101;
+    private static final int AYULESS_MARK_UNREAD = 9001; // Ayuless: read is always explicit now.
     private final static int delete = 102;
     private final static int clear = 103;
     private final static int mute = 104;
@@ -3932,7 +3934,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         undoView.showWithAction(did, UndoView.ACTION_REMOVED_FROM_FOLDER, neverShow.size(), filter, null, null);
                     }
                     hideActionMode(false);
-                } else if (id == pin || id == read || id == delete || id == clear || id == mute || id == archive || id == block || id == archive2 || id == pin2) {
+                } else if (id == pin || id == read || id == AYULESS_MARK_UNREAD || id == delete || id == clear || id == mute || id == archive || id == block || id == archive2 || id == pin2) { // Ayuless: retain bulk mark unread.
                     performSelectedDialogsAction(selectedDialogs, id, true, false);
                 }
             }
@@ -6670,7 +6672,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         pin2Item = otherItem.addSubItem(pin2, R.drawable.msg_pin, LocaleController.getString(R.string.DialogPin));
         addToFolderItem = otherItem.addSubItem(add_to_folder, R.drawable.msg_addfolder, LocaleController.getString(R.string.FilterAddTo));
         removeFromFolderItem = otherItem.addSubItem(remove_from_folder, R.drawable.msg_removefolder, LocaleController.getString(R.string.FilterRemoveFrom));
-        readItem = otherItem.addSubItem(read, R.drawable.msg_markread, LocaleController.getString(R.string.MarkAsRead));
+        readItem = otherItem.addSubItem(read, R.drawable.ayuless_solar_eye, LocaleController.getString(R.string.AyulessMarkAsRead)); // Ayuless: explicit server read.
+        ayulessUnreadItem = otherItem.addSubItem(AYULESS_MARK_UNREAD, R.drawable.msg_markunread, LocaleController.getString(R.string.MarkAsUnread)); // Ayuless: keep the upstream unread action.
         clearItem = otherItem.addSubItem(clear, R.drawable.msg_clear, LocaleController.getString(R.string.ClearHistory));
         blockItem = otherItem.addSubItem(block, R.drawable.msg_block, LocaleController.getString(R.string.BlockUser));
 
@@ -8568,19 +8571,22 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
 
         if (!isCommunityCell) {
+            // Ayuless: explicit server read remains available even after local ghost counters clear.
+            ActionBarMenuSubItem ayulessRead = new ActionBarMenuSubItem(getParentActivity(), !hasFolders, false);
+            ayulessRead.setTextAndIcon(LocaleController.getString(R.string.AyulessMarkAsRead), R.drawable.ayuless_solar_eye);
+            ayulessRead.setMinimumWidth(160);
+            ayulessRead.setOnClickListener(e -> {
+                org.ayuless.ghost.GhostInterceptor.readChat(currentAccount, dialogId, success -> {
+                    if (!success && getParentActivity() != null) org.ayuless.edits.DeletedMessageActions.showFailure(this);
+                });
+                finishPreviewFragment();
+            });
+            previewMenu[0].addView(ayulessRead);
             ActionBarMenuSubItem markAsUnreadItem = new ActionBarMenuSubItem(getParentActivity(), !hasFolders, false);
-            if (cell.getHasUnread()) {
-                markAsUnreadItem.setTextAndIcon(LocaleController.getString(R.string.MarkAsRead), R.drawable.msg_markread);
-            } else {
-                markAsUnreadItem.setTextAndIcon(LocaleController.getString(R.string.MarkAsUnread), R.drawable.msg_markunread);
-            }
+            markAsUnreadItem.setTextAndIcon(LocaleController.getString(R.string.MarkAsUnread), R.drawable.msg_markunread); // Ayuless: read has its own explicit action.
             markAsUnreadItem.setMinimumWidth(160);
             markAsUnreadItem.setOnClickListener(e -> {
-                if (cell.getHasUnread()) {
-                    markAsRead(dialogId);
-                } else {
-                    markAsUnread(dialogId);
-                }
+                markAsUnread(dialogId); // Ayuless: separate from the explicit read action.
                 finishPreviewFragment();
             });
             previewMenu[0].addView(markAsUnreadItem);
@@ -9338,12 +9344,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     pinnedActionCount++;
                     pinDialog(selectedDialog, false, filter, minPinnedNum, count == 1);
                 }
+            } else if (action == AYULESS_MARK_UNREAD) { // Ayuless: preserve upstream bulk unread behavior.
+                markAsUnread(selectedDialog);
             } else if (action == read) {
-                if (canReadCount != 0) {
-                    markAsRead(selectedDialog);
-                } else {
-                    markAsUnread(selectedDialog);
-                }
+                // Ayuless: explicit read also works when ghost cleared the local counters.
+                org.ayuless.ghost.GhostInterceptor.readChat(currentAccount, selectedDialog, success -> {
+                    if (!success && getParentActivity() != null) org.ayuless.edits.DeletedMessageActions.showFailure(this);
+                });
             } else if (action == delete || action == clear) {
                 if (count == 1) {
                     if (action == delete && canDeletePsaSelected) {
@@ -9895,17 +9902,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
         }
         if (readItem != null) {
-            if (canReadCount != 0) {
-                readItem.setTextAndIcon(LocaleController.getString(R.string.MarkAsRead), R.drawable.msg_markread);
-                readItem.setVisibility(View.VISIBLE);
-            } else {
-                if (forumCount == 0 && communitiesCount == 0) {
-                    readItem.setTextAndIcon(LocaleController.getString(R.string.MarkAsUnread), R.drawable.msg_markunread);
-                    readItem.setVisibility(View.VISIBLE);
-                } else {
-                    readItem.setVisibility(View.GONE);
-                }
-            }
+            readItem.setTextAndIcon(LocaleController.getString(R.string.AyulessMarkAsRead), R.drawable.ayuless_solar_eye); // Ayuless: always offer a real read.
+            readItem.setVisibility(communitiesCount == 0 ? View.VISIBLE : View.GONE);
+        }
+        if (ayulessUnreadItem != null) { // Ayuless: same eligibility as the upstream unread action.
+            ayulessUnreadItem.setVisibility(canReadCount == 0 && forumCount == 0 && communitiesCount == 0 ? View.VISIBLE : View.GONE);
         }
         if (pinItem != null && pin2Item != null) {
             if (canPinCount != 0) {

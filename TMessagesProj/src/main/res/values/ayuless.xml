@@ -48,7 +48,6 @@
     <string name="AyulessGhostSendSilentlyInfo">Send without notification sound, even outside ghost mode.</string>
     <string name="AyulessGhostDelayedSend">Delayed send</string>
     <string name="AyulessGhostDelayedSendInfo">Send after a short delay; secret chats require the app to stay open.</string>
-    <string name="AyulessGhostDelayedSendHint">Delayed send is on: the message will be posted in a few seconds.</string>
     <string name="AyulessSpyHeader">Spy mode</string>
     <string name="AyulessStorageLimitInfo">When the limit is reached, the oldest saved records are removed.</string>
     <string name="AyulessDataHeader">Data</string>
@@ -279,10 +278,6 @@
     <string name="AyulessSaveFormatting">Keep text formatting</string>
     <string name="AyulessSaveReactions">Keep reactions</string>
     <string name="AyulessSaveBots">Save bot chats</string>
-    <string name="AyulessReadUntilSetting">Manual read receipts</string>
-    <string name="AyulessReadUntil">Mark read through here</string>
-    <string name="AyulessReadSent">Reading confirmation sent</string>
-    <string name="AyulessReadUntilInfo">Confirm reading manually even when read receipts are hidden.</string>
     <string name="AyulessLocalResend">Send saved copies</string>
     <string name="AyulessKeepLocalSetting">Keep copies on deletion</string>
     <string name="AyulessKeepLocally">Delete for all, keep a copy</string>
@@ -302,4 +297,7 @@
     <string name="AyulessGhostSelfStatus">%1$s (as others see you)</string>
     <string name="AyulessGhostSelfOfflineUnknown">offline ?</string>
     <string name="AyulessMediaOpenFailed">Unable to open this file.</string>
+    <string name="AyulessMarkAsRead">Mark as read</string>
+    <string name="AyulessGhostLocalSeen">Remember seen markers locally</string>
+    <string name="AyulessGhostLocalSeenInfo">Keep viewed reactions, mentions and poll votes cleared on this device while read receipts are hidden. No read acknowledgement is sent.</string>
 </resources>

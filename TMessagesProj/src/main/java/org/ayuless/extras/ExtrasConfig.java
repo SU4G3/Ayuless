@@ -13,7 +13,6 @@ import org.telegram.messenger.ApplicationLoader;
 /** App-wide "useful features" toggles (Ayuless > Customization). Sponsored-message hiding and background work default on; other extras default off. */
 public final class ExtrasConfig {
 
-    public static final String KEY_READ_UNTIL = "readUntil";
     public static final String KEY_LOCAL_RESEND = "localResend";
     public static final String KEY_KEEP_OWN_DELETES = "keepOwnDeletes";
     public static final String KEY_DELETE_DATE = "deleteDate";

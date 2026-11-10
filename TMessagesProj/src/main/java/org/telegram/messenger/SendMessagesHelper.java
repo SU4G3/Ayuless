@@ -2251,7 +2251,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         // Ayuless: protected content is sent as copies using the same delayed-send schedule.
         final ArrayList<MessageObject> messages = new ArrayList<>(messagesIn);
         final int scheduleDate = org.ayuless.ghost.DelayedSend.forwardScheduleDate(currentAccount, peer, scheduleDateIn, messages);
-        org.ayuless.content.ProtectedContent.sendCopies(currentAccount, messages, peer, notify, scheduleDate, replyToTopMsg);
+        org.ayuless.content.ProtectedContent.sendCopies(currentAccount, messages, peer, notify, scheduleDate, replyToTopMsg, scheduleDateIn == 0 && scheduleDate != 0); // Ayuless: carry the automatic delay origin into copies.
         if (messages.isEmpty()) {
             return 0;
         }
@@ -2685,6 +2685,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     newMsg.suggested_post = suggestionParams.toTl();
                 }
 
+                org.ayuless.ghost.DelayedSend.markAutomatic(newMsg, scheduleDateIn == 0 && scheduleDate != 0); // Ayuless: keep automatic delay in the chat.
                 MessageObject newMsgObj = new MessageObject(currentAccount, newMsg, true, true);
                 newMsgObj.scheduled = scheduleDate != 0;
                 newMsgObj.messageOwner.send_state = MessageObject.MESSAGE_SEND_STATE_SENDING;
@@ -5332,6 +5333,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             if (replyToTopMsg != null && replyToTopMsg == reply && replyToTopMsg.getId() == 1 || destroyReply) {
                 reply = null;
             }
+            org.ayuless.ghost.DelayedSend.markAutomatic(newMsg, sendMessageParams.scheduleDate == 0 && scheduleDate != 0 || org.ayuless.ghost.DelayedSend.isAutomatic(sendMessageParams.sendMessageChatArguments)); // Ayuless: preserve the origin of scheduling.
             newMsgObj = new MessageObject(currentAccount, newMsg, reply, true, true);
             newMsgObj.sendAnimationData = sendAnimationData;
             newMsgObj.wasJustSent = true;

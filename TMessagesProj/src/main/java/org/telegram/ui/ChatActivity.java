@@ -1294,7 +1294,7 @@ public class ChatActivity extends BaseFragment implements
     public final static int OPTION_VIEW_STATISTICS = 115;
     public final static int OPTION_WELCOME_REVERT = 116;
     public final static int OPTION_SEND_MONEY = 117;
-    public final static int OPTION_AYULESS_READ_UNTIL = 9003;
+    private static final int AYULESS_READ_CHAT = 9003; // Ayuless: explicit read in the chat header.
     public final static int OPTION_AYULESS_DELETE_DATE = 9004;
     public final static int OPTION_AYULESS_KEEP_LOCAL = 9005;
     public final static int OPTION_AYULESS_SAVE_MEDIA = 9002; // Ayuless: save unlocked timed/secret media
@@ -3718,7 +3718,11 @@ public class ChatActivity extends BaseFragment implements
                 if (id != chat_menu_options && id != chat_menu_topics_panel && id != -1 && topicsPanel != null && topicsPanel.isOpen()) {
                     topicsPanel.close();
                 }
-                if (id == -1) {
+                if (id == AYULESS_READ_CHAT) { // Ayuless: one explicit action bypasses ghost.
+                    org.ayuless.ghost.GhostInterceptor.readChat(currentAccount, dialog_id, success -> {
+                        if (!success && !isFinished && getParentActivity() != null) org.ayuless.edits.DeletedMessageActions.showFailure(ChatActivity.this);
+                    });
+                } else if (id == -1) {
                     if (isInPollAddOptionMode()) {
                         pollAddOptionModeClose();
                     } else if (actionBar.isActionModeShowed()) {
@@ -4277,6 +4281,7 @@ public class ChatActivity extends BaseFragment implements
             }
             createTopicsPanelItem(menu);
             headerItem = menu.addItem(chat_menu_options, otherIcon);
+            headerItem.lazilyAddSubItem(AYULESS_READ_CHAT, R.drawable.ayuless_solar_eye, getString(R.string.AyulessMarkAsRead)); // Ayuless: always available.
             updateTopicsPanelItem();
             headerItem.setSubMenuDelegate(new ActionBarMenuItem.ActionBarSubMenuItemDelegate() {
                 @Override
@@ -8894,8 +8899,8 @@ public class ChatActivity extends BaseFragment implements
         };
 
         if (isTopic) {
-            reactionsMentionCount = forumTopic.unread_reactions_count;
-            pollVotesMentionCount = forumTopic.unread_poll_votes_count;
+            reactionsMentionCount = org.ayuless.ghost.GhostSeen.countForChat(currentAccount, dialog_id, getTopicId(), org.ayuless.ghost.GhostSeen.REACTIONS, forumTopic.unread_reactions_count); // Ayuless: restore topic counters.
+            pollVotesMentionCount = org.ayuless.ghost.GhostSeen.countForChat(currentAccount, dialog_id, getTopicId(), org.ayuless.ghost.GhostSeen.POLL_VOTES, forumTopic.unread_poll_votes_count); // Ayuless: restore topic counters.
             updateReactionsMentionButton(false);
             updatePollVotesMentionButton(false);
         } else {
@@ -10572,8 +10577,8 @@ public class ChatActivity extends BaseFragment implements
                 getMessagesController().getTopicsController().getTopicRepliesCount(dialog_id, topic.id);
             }
 
-            reactionsMentionCount = topic != null ? topic.unread_reactions_count : 0;
-            pollVotesMentionCount = topic != null ? topic.unread_poll_votes_count : 0;
+            reactionsMentionCount = org.ayuless.ghost.GhostSeen.countForChat(currentAccount, dialog_id, getTopicId(), org.ayuless.ghost.GhostSeen.REACTIONS, topic != null ? topic.unread_reactions_count : 0); // Ayuless: overlay reloaded topic markers.
+            pollVotesMentionCount = org.ayuless.ghost.GhostSeen.countForChat(currentAccount, dialog_id, getTopicId(), org.ayuless.ghost.GhostSeen.POLL_VOTES, topic != null ? topic.unread_poll_votes_count : 0); // Ayuless: overlay reloaded topic markers.
             updateReactionsMentionButton(false);
             updatePollVotesMentionButton(false);
             updateTopicButtons();
@@ -10676,8 +10681,8 @@ public class ChatActivity extends BaseFragment implements
             }
             applyDraftMaybe(true, true);
 
-            reactionsMentionCount = topic != null ? topic.unread_reactions_count : 0;
-            pollVotesMentionCount = topic != null ? topic.unread_poll_votes_count : 0;
+            reactionsMentionCount = org.ayuless.ghost.GhostSeen.countForChat(currentAccount, dialog_id, getTopicId(), org.ayuless.ghost.GhostSeen.REACTIONS, topic != null ? topic.unread_reactions_count : 0); // Ayuless: overlay reloaded topic markers.
+            pollVotesMentionCount = org.ayuless.ghost.GhostSeen.countForChat(currentAccount, dialog_id, getTopicId(), org.ayuless.ghost.GhostSeen.POLL_VOTES, topic != null ? topic.unread_poll_votes_count : 0); // Ayuless: overlay reloaded topic markers.
             updateReactionsMentionButton(false);
             updatePollVotesMentionButton(false);
             updateTopicButtons();
@@ -11164,6 +11169,7 @@ public class ChatActivity extends BaseFragment implements
                 ReactionsEffectOverlay.show(ChatActivity.this, null, cell, null,0, 0, ReactionsLayoutInBubble.VisibleReaction.fromTL(reaction.reaction), currentAccount, reaction.big ? ReactionsEffectOverlay.LONG_ANIMATION : ReactionsEffectOverlay.SHORT_ANIMATION);
                 ReactionsEffectOverlay.startAnimation();
             }
+            org.ayuless.ghost.GhostSeen.remember(currentAccount, messageCell.getMessageObject(), getTopicId(), org.ayuless.ghost.GhostSeen.REACTIONS, reactionsMentionCount); // Ayuless: capture live reactions before the animation clears them.
             messageCell.markReactionsAsRead();
         } else if (cell instanceof ChatActionCell) {
             final ChatActionCell actionCell = (ChatActionCell) cell;
@@ -11172,6 +11178,7 @@ public class ChatActivity extends BaseFragment implements
                 ReactionsEffectOverlay.show(ChatActivity.this, null, cell, null,0, 0, ReactionsLayoutInBubble.VisibleReaction.fromTL(reaction.reaction), currentAccount, reaction.big ? ReactionsEffectOverlay.LONG_ANIMATION : ReactionsEffectOverlay.SHORT_ANIMATION);
                 ReactionsEffectOverlay.startAnimation();
             }
+            org.ayuless.ghost.GhostSeen.remember(currentAccount, actionCell.getMessageObject(), getTopicId(), org.ayuless.ghost.GhostSeen.REACTIONS, reactionsMentionCount); // Ayuless: include animated service-message reactions.
             actionCell.markReactionsAsRead();
         }
     }
@@ -16765,6 +16772,7 @@ public class ChatActivity extends BaseFragment implements
 
                 if (messageObject != null && fragmentOpened && openAnimationEnded && (chatListItemAnimator == null || !chatListItemAnimator.isRunning()) && messageCell.checkUnreadPollVotes()) {
                     pollVotesMentionCount--;
+                    org.ayuless.ghost.GhostSeen.remember(currentAccount, messageObject, getTopicId(), org.ayuless.ghost.GhostSeen.POLL_VOTES, pollVotesMentionCount); // Ayuless: persist displayed markers only.
                     getMessagesStorage().markMessagePollVotesAsRead(getDialogId(), getTopicId(), messageObject.getId());
                     if (pollVotesMentionCount <= 0) {
                         getMessagesController().markPollVotesAsRead(dialog_id, getTopicId());
@@ -16779,6 +16787,7 @@ public class ChatActivity extends BaseFragment implements
                 }
                 if (messageObject != null && fragmentOpened && openAnimationEnded && (chatListItemAnimator == null || !chatListItemAnimator.isRunning()) && messageCell.checkUnreadReactions(clipTop, chatListView.getMeasuredHeight() - blurredViewBottomOffset)) {
                     reactionsMentionCount--;
+                    org.ayuless.ghost.GhostSeen.remember(currentAccount, messageObject, getTopicId(), org.ayuless.ghost.GhostSeen.REACTIONS, reactionsMentionCount); // Ayuless: persist displayed markers only.
                     getMessagesStorage().markMessageReactionsAsRead(getDialogId(), getTopicId(), messageObject.getId());
                     if (reactionsMentionCount <= 0) {
                         getMessagesController().markReactionsAsRead(dialog_id, getTopicId());
@@ -16813,6 +16822,7 @@ public class ChatActivity extends BaseFragment implements
                 hasTopicSeparator = cell.topicSeparator != null;
                 if (messageObject != null && fragmentOpened && openAnimationEnded && (chatListItemAnimator == null || !chatListItemAnimator.isRunning()) && cell.checkUnreadReactions(clipTop, chatListView.getMeasuredHeight() - blurredViewBottomOffset)) {
                     reactionsMentionCount--;
+                    org.ayuless.ghost.GhostSeen.remember(currentAccount, messageObject, getTopicId(), org.ayuless.ghost.GhostSeen.REACTIONS, reactionsMentionCount); // Ayuless: include service-message reactions.
                     getMessagesStorage().markMessageReactionsAsRead(getDialogId(), getTopicId(), messageObject.getId());
                     if (reactionsMentionCount <= 0) {
                         getMessagesController().markReactionsAsRead(dialog_id, getTopicId());
@@ -21560,7 +21570,7 @@ public class ChatActivity extends BaseFragment implements
         int load_type = (Integer) args[8];
         boolean isEnd = (Boolean) args[9];
         int loaded_max_id = (Integer) args[12];
-        int loaded_mentions_count = chatWasReset ? 0 : (Integer) args[13];
+        int loaded_mentions_count = chatWasReset ? 0 : org.ayuless.ghost.GhostSeen.countForChat(currentAccount, dialog_id, getTopicId(), org.ayuless.ghost.GhostSeen.MENTIONS, (Integer) args[13]); // Ayuless: overlay server/cache mentions.
 
         if (loaded_mentions_count < 0) {
             loaded_mentions_count *= -1;
@@ -22859,7 +22869,7 @@ public class ChatActivity extends BaseFragment implements
                 int mode = (Integer) args[3];
                 if (mode != chatMode && chatMode != MODE_SAVED && chatMode != MODE_SUGGESTIONS) {
                     if (chatMode != MODE_SCHEDULED && mode == MODE_SCHEDULED && !isPaused && LaunchActivity.getSafeLastFragment() == this && messagePreviewParams == null) {
-                        if (!arr.isEmpty() && arr.get(0).getId() < 0) {
+                        if (!arr.isEmpty() && arr.get(0).getId() < 0 && !org.ayuless.ghost.DelayedSend.isAutomatic(arr)) { // Ayuless: ghost delay stays in the normal chat.
                             openScheduledMessages(arr.get(0).getId(), arr.get(0).messageOwner != null && arr.get(0).messageOwner.video_processing_pending);
                         }
                     }
@@ -23198,7 +23208,7 @@ public class ChatActivity extends BaseFragment implements
                 scheduleNowDialog = null;
             }
             processDeletedMessages(markAsDeletedMessages, channelId, sent, !movedToScheduled);
-            if (movedToScheduled && chatMode != ChatActivity.MODE_SCHEDULED) {
+            if (movedToScheduled && chatMode != ChatActivity.MODE_SCHEDULED && !org.ayuless.ghost.DelayedSend.isAutomatic(messages)) { // Ayuless: suppress automatic delay navigation.
                 getMessagesController().forceNoReload(dialog_id, ChatActivity.MODE_SCHEDULED);
                 openScheduledMessages(scheduledMessageId, true);
             } else if (chatMode == ChatActivity.MODE_SCHEDULED && update && conversion && LaunchActivity.getSafeLastFragment() == this && isFullyVisible && sentMessages != null && !sentMessages.isEmpty() && parentLayout != null) {
@@ -24966,13 +24976,18 @@ public class ChatActivity extends BaseFragment implements
             long topicId = (Long) args[1];
             if (dialog_id == dialogId && this.getTopicId() == topicId) {
                 int count = (int) args[2];
-                if (newMentionsCount > count) {
+                if (newMentionsCount > count || org.ayuless.ghost.GhostSeen.isLocalCount(args)) { // Ayuless: accept authoritative local recounts in either direction.
                     newMentionsCount = count;
                     if (newMentionsCount <= 0) {
                         newMentionsCount = 0;
                         hasAllMentionsLocal = true;
                         showMentionDownButton(false, true);
                     } else {
+                        // Ayuless: a newly arrived mention may restore a previously hidden button.
+                        if (org.ayuless.ghost.GhostSeen.isLocalCount(args)) {
+                            hasAllMentionsLocal = false;
+                            showMentionDownButton(true, true);
+                        }
                         sideControlsButtonsLayout.setButtonCount(ChatActivitySideControlsButtonsLayout.BUTTON_MENTION, newMentionsCount, true);
                     }
                 }
@@ -30688,6 +30703,7 @@ public class ChatActivity extends BaseFragment implements
                         } else {
                             sideControlsButtonsLayout.setButtonCount(ChatActivitySideControlsButtonsLayout.BUTTON_MENTION, newMentionsCount, true);
                         }
+                        org.ayuless.ghost.GhostSeen.remember(currentAccount, message, getTopicId(), org.ayuless.ghost.GhostSeen.MENTIONS, newMentionsCount); // Ayuless: persist displayed mentions.
                         getMessagesController().markMentionMessageAsRead(message.getId(), ChatObject.isChannel(currentChat) ? currentChat.id : 0, dialog_id);
                         message.setContentIsRead();
                     }
@@ -34325,20 +34341,6 @@ public class ChatActivity extends BaseFragment implements
         }
         boolean preserveDim = false;
         switch (option) {
-            case OPTION_AYULESS_READ_UNTIL: {
-                if (chatMode != MODE_SCHEDULED && !selectedObject.isOut()
-                        && !org.ayuless.appearance.DeletedStyle.isDeleted(currentAccount, selectedObject)
-                        && org.ayuless.ghost.GhostConfig.hideRead(currentAccount)
-                        && org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_READ_UNTIL)) {
-                    org.ayuless.ghost.GhostInterceptor.readUntil(currentAccount, selectedObject, success -> {
-                        if (isFinished || getParentActivity() == null) return;
-                        if (success) BulletinFactory.of(this).createSimpleBulletin(R.raw.contact_check,
-                                getString(R.string.AyulessReadSent)).show();
-                        else org.ayuless.edits.DeletedMessageActions.showFailure(this);
-                    });
-                }
-                break;
-            }
             case OPTION_AYULESS_DELETE_DATE: {
                 org.ayuless.edits.DeletedMessageActions.showDeleteDate(this, currentAccount, selectedObject);
                 break;
@@ -39279,6 +39281,7 @@ public class ChatActivity extends BaseFragment implements
                             } else {
                                 sideControlsButtonsLayout.setButtonCount(ChatActivitySideControlsButtonsLayout.BUTTON_MENTION, newMentionsCount, true);
                             }
+                            org.ayuless.ghost.GhostSeen.remember(currentAccount, message, getTopicId(), org.ayuless.ghost.GhostSeen.MENTIONS, newMentionsCount); // Ayuless: persist displayed mentions.
                             getMessagesController().markMentionMessageAsRead(message.getId(), ChatObject.isChannel(currentChat) ? currentChat.id : 0, dialog_id);
                             message.setContentIsRead();
                         }
@@ -47162,14 +47165,6 @@ public class ChatActivity extends BaseFragment implements
             }
         }
 
-        if (chatMode != MODE_SCHEDULED && message.getId() != 0 && !message.isOut()
-                && !org.ayuless.appearance.DeletedStyle.isDeleted(currentAccount, message)
-                && org.ayuless.ghost.GhostConfig.hideRead(currentAccount)
-                && org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_READ_UNTIL)) {
-            items.add(getString(R.string.AyulessReadUntil));
-            options.add(OPTION_AYULESS_READ_UNTIL);
-            icons.add(R.drawable.msg_markread);
-        }
         if (org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_DELETE_DATE)
                 && org.ayuless.appearance.DeletedStyle.isDeleted(currentAccount, message)) {
             items.add(getString(R.string.AyulessDeleteDate));
@@ -47673,6 +47668,10 @@ public class ChatActivity extends BaseFragment implements
 
     private void loadLastUnreadMention() {
         wasManualScroll = true;
+        // Ayuless: the server still includes mentions whose receipts ghost mode suppressed.
+        if (org.ayuless.ghost.GhostSeen.findNext(currentAccount, dialog_id, getTopicId(), org.ayuless.ghost.GhostSeen.MENTIONS, mid -> {
+            if (mid != 0 && !isFinished) scrollToMessageId(mid, 0, false, 0, true, 0);
+        })) return;
         if (hasAllMentionsLocal) {
             getMessagesStorage().getUnreadMention(dialog_id, getTopicId(), param -> {
                 if (param == 0) {

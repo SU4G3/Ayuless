@@ -102,18 +102,69 @@ public final class GhostInterceptor {
         }
     }
 
-    public static void readUntil(int account, org.telegram.messenger.MessageObject message,
-                                 java.util.function.Consumer<Boolean> completion) {
-        if (message == null || message.messageOwner == null || message.getId() == 0) {
-            AndroidUtilities.runOnUIThread(() -> completion.accept(false));
+    /** Explicit chat action; only these request instances bypass ghost mode. */
+    public static void readChat(int account, long dialogId, java.util.function.Consumer<Boolean> completion) {
+        MessagesController controller = MessagesController.getInstance(account);
+        TLRPC.Dialog dialog = controller.dialogs_dict.get(dialogId);
+        if (dialog == null) {
+            completion.accept(false);
             return;
         }
+        final int maxId = dialog.top_message, maxDate = dialog.last_message_date;
+        if (!GhostConfig.hideRead(account)) {
+            controller.markMentionsAsRead(dialogId, 0);
+            controller.markReactionsAsRead(dialogId, 0);
+            controller.markPollVotesAsRead(dialogId, 0);
+            controller.markDialogAsRead(dialogId, maxId, maxId, maxDate, false, 0, 0, true, 0);
+            completion.accept(true);
+            return;
+        }
+        readHistory(account, dialogId, maxId, maxDate, success -> {
+            if (!success) { completion.accept(false); return; }
+            // Upstream handles local unread history and notifications; its redundant RPC is blocked.
+            controller.markDialogAsRead(dialogId, maxId, maxId, maxDate, false, 0, 0, true, 0);
+            if (DialogObject.isEncryptedDialog(dialogId)) {
+                TLRPC.EncryptedChat chat = controller.getEncryptedChat(DialogObject.getEncryptedChatId(dialogId));
+                if (chat != null && chat.ttl > 0 && GhostConfig.hideRead(account)) {
+                    org.telegram.messenger.MessagesStorage.getInstance(account).createTaskForSecretChat(chat.id, maxDate,
+                            Math.max(ConnectionsManager.getInstance(account).getCurrentTime(), maxDate), 0, null);
+                }
+                completion.accept(true);
+                return;
+            }
+            TLRPC.TL_messages_readMentions mentions = new TLRPC.TL_messages_readMentions();
+            mentions.peer = controller.getInputPeer(dialogId);
+            TLRPC.TL_messages_readReactions reactions = new TLRPC.TL_messages_readReactions();
+            reactions.peer = mentions.peer;
+            TLRPC.TL_messages_readPollVotes votes = new TLRPC.TL_messages_readPollVotes();
+            votes.peer = mentions.peer;
+            TLObject[] requests = {mentions, reactions, votes};
+            int[] pending = {requests.length};
+            boolean[] ok = {true};
+            for (int i = 0; i < requests.length; i++) {
+                final int kind = i;
+                TLObject request = requests[i];
+                sendExplicitRead(account, request, acknowledged -> {
+                    if (!acknowledged) ok[0] = false;
+                    else {
+                        // The matching real receipt succeeded; local cleanup stays upstream.
+                        if (kind == 0) controller.markMentionsAsRead(dialogId, 0);
+                        else if (kind == 1) controller.markReactionsAsRead(dialogId, 0);
+                        else controller.markPollVotesAsRead(dialogId, 0);
+                    }
+                    if (--pending[0] == 0) completion.accept(ok[0]);
+                });
+            }
+        });
+    }
+
+    private static void readHistory(int account, long dialogId, int maxId, int maxDate,
+                                    java.util.function.Consumer<Boolean> completion) {
         MessagesController controller = MessagesController.getInstance(account);
-        long dialogId = message.getDialogId();
         TLObject request;
         if (DialogObject.isEncryptedDialog(dialogId)) {
             TLRPC.EncryptedChat chat = controller.getEncryptedChat(DialogObject.getEncryptedChatId(dialogId));
-            if (chat == null || message.messageOwner.date <= 0) {
+            if (chat == null || maxDate <= 0) {
                 AndroidUtilities.runOnUIThread(() -> completion.accept(false));
                 return;
             }
@@ -121,7 +172,7 @@ public final class GhostInterceptor {
             read.peer = new TLRPC.TL_inputEncryptedChat();
             read.peer.chat_id = chat.id;
             read.peer.access_hash = chat.access_hash;
-            read.max_date = message.messageOwner.date;
+            read.max_date = maxDate;
             request = read;
         } else {
             TLRPC.InputPeer peer = controller.getInputPeer(dialogId);
@@ -136,22 +187,35 @@ public final class GhostInterceptor {
                     AndroidUtilities.runOnUIThread(() -> completion.accept(false));
                     return;
                 }
-                read.max_id = message.getId();
+                read.max_id = maxId;
                 request = read;
             } else {
                 TLRPC.TL_messages_readHistory read = new TLRPC.TL_messages_readHistory();
                 read.peer = peer;
-                read.max_id = message.getId();
+                read.max_id = maxId;
                 request = read;
             }
         }
+        sendExplicitRead(account, request, completion);
+    }
+
+    private static void sendExplicitRead(int account, TLObject request, java.util.function.Consumer<Boolean> completion) {
         explicitOnce.add(request);
         ConnectionsManager.getInstance(account).sendRequest(request, (response, error) -> {
+            MessagesController controller = MessagesController.getInstance(account);
             if (error == null && response instanceof TLRPC.TL_messages_affectedMessages) {
                 TLRPC.TL_messages_affectedMessages affected = (TLRPC.TL_messages_affectedMessages) response;
                 controller.processNewDifferenceParams(-1, affected.pts, -1, affected.pts_count);
+            } else if (error == null && response instanceof TLRPC.TL_messages_affectedHistory) {
+                TLRPC.TL_messages_affectedHistory affected = (TLRPC.TL_messages_affectedHistory) response;
+                controller.processNewDifferenceParams(-1, affected.pts, -1, affected.pts_count);
+                if (affected.offset > 0) {
+                    sendExplicitRead(account, request, completion);
+                    return;
+                }
             }
-            AndroidUtilities.runOnUIThread(() -> completion.accept(error == null && response != null));
+            boolean success = error == null && response != null && !(response instanceof TLRPC.TL_boolFalse);
+            AndroidUtilities.runOnUIThread(() -> completion.accept(success));
         });
     }
 

@@ -784,6 +784,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     private void getNextReactionMentionInternal(long dialogId, long topicId, int count, final boolean isReactions, Consumer<Integer> callback) {
+        if (org.ayuless.ghost.GhostSeen.findNext(currentAccount, dialogId, topicId, isReactions ? org.ayuless.ghost.GhostSeen.REACTIONS : org.ayuless.ghost.GhostSeen.POLL_VOTES, callback)) return; // Ayuless: skip locally seen markers.
         final String tableMentionsForDialogs = isReactions ? "reaction_mentions" : "poll_votes_mentions";
         final String tableMentionsForTopics = isReactions ? "reaction_mentions_topics" : "poll_votes_mentions_topics";
         final boolean isVotes = !isReactions;
@@ -14446,6 +14447,7 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         ArrayList<Integer> arrayList = new ArrayList<>();
         if (messageObject.messageOwner.mentioned) {
+            org.ayuless.ghost.GhostSeen.rememberContent(currentAccount, messageObject); // Ayuless: persist mentions cleared by media playback.
             getMessagesStorage().markMentionMessageAsRead(-messageObject.messageOwner.peer_id.channel_id, messageObject.getId(), messageObject.getDialogId());
         }
         arrayList.add(messageObject.getId());
@@ -16239,6 +16241,7 @@ public class MessagesController extends BaseController implements NotificationCe
         getMessagesStorage().cleanup(false);
         org.ayuless.storage.AyulessStore.getInstance(currentAccount).clearAll(); // Ayuless: wipe local deleted/edit history on logout
         org.ayuless.content.RetentionConfig.clearOpened(currentAccount); // Ayuless: account slots can be reused
+        org.ayuless.ghost.GhostSeen.clear(currentAccount); // Ayuless: clear per-account seen markers on logout.
         cleanup();
         getContactsController().deleteUnknownAppAccounts();
     }
@@ -19666,6 +19669,8 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
             } else if (baseUpdate instanceof TL_update.TL_updateMessagePoll) {
                 TL_update.TL_updateMessagePoll update = (TL_update.TL_updateMessagePoll) baseUpdate;
+                // Ayuless: a replayed vote marker must respect the local seen watermark.
+                if (update.peer != null) org.ayuless.ghost.GhostSeen.applyPoll(currentAccount, MessageObject.getPeerId(update.peer), update.msg_id, update.results);
                 if (update.peer != null && update.results != null && update.msg_id != 0) {
                     long dialogId = MessageObject.getPeerId(update.peer);
                     SparseBooleanArray sparseBooleanArray = new SparseBooleanArray();
@@ -19689,6 +19694,7 @@ public class MessagesController extends BaseController implements NotificationCe
             } else if (baseUpdate instanceof TL_update.TL_updateMessageReactions) {
                 TL_update.TL_updateMessageReactions update = (TL_update.TL_updateMessageReactions) baseUpdate;
                 long dialogId = MessageObject.getPeerId(update.peer);
+                org.ayuless.ghost.GhostSeen.applyReactions(currentAccount, dialogId, update.msg_id, update.reactions); // Ayuless: filter only previously seen events.
 
                 getMessagesStorage().updateMessageReactions(dialogId, update.msg_id, update.reactions);
 
@@ -22467,6 +22473,7 @@ public class MessagesController extends BaseController implements NotificationCe
     
     
     public void sortDialogs(LongSparseArray<TLRPC.Chat> chatsDict) {
+        org.ayuless.ghost.GhostSeen.applyDialogs(currentAccount, this); // Ayuless: local ghost counters also apply to dialog filters.
         if (chatsDict == null && ApplicationLoader.mainInterfacePaused) {
             return;
         }

@@ -37,6 +37,7 @@ public final class GhostConfig {
     /** Ask before opening stories whether to view them in ghost mode. On by default. */
     public static final String KEY_STORY_PROMPT = "storyPrompt";
     public static final String KEY_DELAYED_SEND = "delayedSend";
+    public static final String KEY_LOCAL_SEEN = "localSeen";
     /** Per-account flag: use the account's own profile instead of the shared one. */
     public static final String KEY_OVERRIDE = "override";
     /** Suffix of the per-toggle lock flag, e.g. "hideReadLocked". */

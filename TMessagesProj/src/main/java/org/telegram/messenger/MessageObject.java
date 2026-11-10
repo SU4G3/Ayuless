@@ -2077,6 +2077,7 @@ public class MessageObject {
 
         currentAccount = accountNum;
         messageOwner = message;
+        org.ayuless.ghost.GhostSeen.applyMessage(currentAccount, message); // Ayuless: restore local ghost receipts.
         org.ayuless.content.ProtectedContent.onMessageObject(currentAccount, message); // Ayuless: opt-in saving restrictions
         replyMessageObject = replyToMessage;
         eventId = eid;
