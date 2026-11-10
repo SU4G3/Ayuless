@@ -46,6 +46,8 @@ public class AppearanceSettingsActivity extends AyulessSettingsFragment {
 
     private static final int ID_TEXT_MARKS = 20, ID_DELETED_TEXT = 21, ID_EDITED_TEXT = 22;
 
+    private static final int ID_TEXT_MARKS = 20, ID_DELETED_TEXT = 21, ID_EDITED_TEXT = 22;
+
     private DeletedMessagePreview preview;
     private DeletedMarkColors colors;
 
