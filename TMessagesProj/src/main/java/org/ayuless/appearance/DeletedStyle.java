@@ -24,6 +24,9 @@ import android.text.style.ReplacementSpan;
 
 import org.ayuless.antidelete.DeletedCache;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.ColoredImageSpan;
 
 /** How messages kept by anti-delete look in a chat. */
 public final class DeletedStyle {
@@ -55,7 +58,20 @@ public final class DeletedStyle {
         String emoji = AppearanceConfig.markEmoji();
         if (TextUtils.isEmpty(emoji)) return time;
         SpannableString mark = new SpannableString(emoji + " ");
-        mark.setSpan(new EmojiMarkSpan(), 0, emoji.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        if ("🗑️".equals(emoji) || "🗑".equals(emoji)) {
+            // Keep the approved Solar delete mark; other choices use the selected emoji.
+            ColoredImageSpan span = new ColoredImageSpan(R.drawable.ayuless_solar_msg_delete);
+            if (Theme.chat_timePaint != null) {
+                span.setRelativeSize(Theme.chat_timePaint.getFontMetricsInt());
+            } else {
+                span.setSize(org.telegram.messenger.AndroidUtilities.dp(12));
+            }
+            int color = AppearanceConfig.markColor();
+            if (color != AppearanceConfig.COLOR_DEFAULT) span.setOverrideColor(color);
+            mark.setSpan(span, 0, emoji.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        } else {
+            mark.setSpan(new EmojiMarkSpan(), 0, emoji.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
         return TextUtils.concat(mark, time);
     }
 

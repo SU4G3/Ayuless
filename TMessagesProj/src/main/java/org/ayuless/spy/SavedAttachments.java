@@ -284,12 +284,24 @@ public final class SavedAttachments {
         });
     }
 
-    /** Must run on the queue. Removes the oldest files until the total fits the limit. */
+    /** Recheck the common budget after saved-message storage changes. */
+    public static void checkLimit() {
+        queue.postRunnable(SavedAttachments::enforceLimit);
+    }
+
+    /** Must run on the queue. Database queries remain on the database queue. */
     private static void enforceLimit() {
+        if (getLimitBytes() <= 0) return;
+        AyulessStore.totalSizeBytes(databaseBytes ->
+                queue.postRunnable(() -> enforceLimit(databaseBytes)));
+    }
+
+    private static void enforceLimit(long databaseBytes) {
         long limit = getLimitBytes();
         if (limit <= 0) {
             return;
         }
+        limit = Math.max(0, limit - databaseBytes);
         File[] files = allFiles();
         long total = 0;
         for (File f : files) {

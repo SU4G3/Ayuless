@@ -8,8 +8,6 @@ package org.ayuless.settings;
 import android.content.Context;
 import android.view.View;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UItem;
@@ -43,16 +41,7 @@ public abstract class AyulessSettingsFragment extends UniversalFragment {
                 viewType -> !UniversalAdapter.isShadow(viewType),
                 AndroidUtilities.dp(12), AndroidUtilities.dp(20), false);
         listView.setSectionsDrawBackground(true);
-        listView.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
-            @Override
-            public void onChildViewAttachedToWindow(View view) {
-                AyulessSettingsSwitch.applyTo(view, getResourceProvider());
-            }
-
-            @Override
-            public void onChildViewDetachedFromWindow(View view) {
-            }
-        });
+        // Use Telegram switch drawing and theme colors throughout Ayuless settings.
         return fragmentView;
     }
 

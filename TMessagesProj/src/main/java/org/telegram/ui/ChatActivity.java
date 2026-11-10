@@ -33215,16 +33215,22 @@ public class ChatActivity extends BaseFragment implements
                     }
                 }
 
+                // Ayuless: reuse the restriction footer beside the copy-forward action (opt-in).
+                boolean ayulessForwardHint = options.contains(OPTION_FORWARD)
+                        && org.ayuless.content.ProtectedContent.showForwardHint(message);
                 boolean showNoForwards = (isPeerNoForwards() || message.messageOwner.noforwards && currentUser != null && currentUser.bot) && message.messageOwner.action == null && message.isSent() && !message.isEditing() && chatMode != MODE_SCHEDULED && chatMode != MODE_SAVED && getDialogId() != UserObject.VERIFY;
                 scrimPopupContainerLayout.addView(popupLayout, LayoutHelper.createLinearRelatively(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, isReactionsAvailable ? 16 : 0, 0, isReactionsAvailable ? 36 : 0, 0));
                 scrimPopupContainerLayout.setPopupWindowLayout(popupLayout);
-                if (showNoForwards) {
+                if (showNoForwards || ayulessForwardHint) {
                     popupLayout.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
                     boolean isChannel = ChatObject.isChannel(currentChat) && !currentChat.megagroup;
                     TextView tv = new TextView(contentView.getContext());
                     tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                     ThemeBind.textColor(tv, Theme.key_actionBarDefaultSubmenuItem, getResourceProvider());
-                    if (isPeerNoForwards()) {
+                    // Ayuless: describe the original restriction while forwarding remains available as a copy.
+                    if (ayulessForwardHint) {
+                        tv.setText(LocaleController.getString(R.string.AyulessOriginalForwardRestricted));
+                    } else if (isPeerNoForwards()) {
                         final CharSequence str;
                         if (getDialogId() > 0) {
                             if (userInfo != null && currentUser != null && userInfo.noforwards_peer_enabled) {
