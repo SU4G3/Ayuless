@@ -33206,8 +33206,8 @@ public class ChatActivity extends BaseFragment implements
                     }
                 }
 
-                boolean explainOriginalRestriction = options.contains(OPTION_FORWARD)
-                        && org.ayuless.content.ProtectedContent.showForwardHint(currentAccount, message);
+                // Ayuless: always explain the original forwarding restriction, without a preference.
+                boolean explainOriginalRestriction = org.ayuless.content.ProtectedContent.showForwardHint(currentAccount, message);
                 boolean showNoForwards = explainOriginalRestriction || (isPeerNoForwards() || message.messageOwner.noforwards && currentUser != null && currentUser.bot) && message.messageOwner.action == null && message.isSent() && !message.isEditing() && chatMode != MODE_SCHEDULED && chatMode != MODE_SAVED && getDialogId() != UserObject.VERIFY;
                 scrimPopupContainerLayout.addView(popupLayout, LayoutHelper.createLinearRelatively(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, isReactionsAvailable ? 16 : 0, 0, isReactionsAvailable ? 36 : 0, 0));
                 scrimPopupContainerLayout.setPopupWindowLayout(popupLayout);

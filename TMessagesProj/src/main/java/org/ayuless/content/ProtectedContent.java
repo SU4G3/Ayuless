@@ -65,8 +65,7 @@ public final class ProtectedContent {
     }
 
     public static boolean showForwardHint(int account, MessageObject object) {
-        return org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_RESTRICTED_FORWARD_HINT)
-                && forwardingRestricted(account, object);
+        return forwardingRestricted(account, object);
     }
 
     private static boolean needsCopy(MessagesController controller, MessageObject object) {

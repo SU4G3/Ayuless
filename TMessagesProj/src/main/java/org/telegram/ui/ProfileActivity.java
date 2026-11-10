@@ -2361,6 +2361,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     @Override
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
+        // Ayuless: release any pending server self-status request.
+        if (ayulessSelfStatus != null) ayulessSelfStatus.stop();
         if (sharedMediaLayout != null) {
             sharedMediaLayout.onDestroy();
         }
@@ -9793,9 +9795,19 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
     }
 
+    // Ayuless: keep server self status separate from the locally online user.
+    private org.ayuless.ghost.SelfStatus ayulessSelfStatus;
+
     @Override
     public void onResume() {
         super.onResume();
+        // Ayuless: refresh only while the own profile is visible.
+        if (userId == getUserConfig().getClientUserId()) {
+            if (ayulessSelfStatus == null) {
+                ayulessSelfStatus = new org.ayuless.ghost.SelfStatus(currentAccount, () -> updateProfileData(false));
+            }
+            ayulessSelfStatus.start();
+        }
         if (sharedMediaLayout != null) {
             sharedMediaLayout.onResume();
         }
@@ -9845,6 +9857,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     @Override
     public void onPause() {
         super.onPause();
+        // Ayuless: stop polling when the profile leaves the screen.
+        if (ayulessSelfStatus != null) ayulessSelfStatus.stop();
         if (undoView != null) {
             undoView.hide(true, 0);
         }
@@ -11776,6 +11790,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 description.append(LocaleController.getString(user.photo != null && user.photo.personal && user.photo.has_video ? R.string.CustomAvatarTooltipVideo : R.string.CustomAvatarTooltip));
                 description.setSpan(new DotDividerSpan(), newString2.length() + 1, newString2.length() + 2, 0);
                 photoDescriptionText = description;
+            }
+            // Ayuless: show the server status while this account hides online presence.
+            if (user.id == getUserConfig().getClientUserId() && org.ayuless.ghost.GhostConfig.hideOnline(currentAccount)) {
+                newString2 = ayulessSelfStatus == null ? getString(R.string.AyulessGhostSelfOfflineUnknown) : ayulessSelfStatus.text();
+                isOnline[0] = false;
             }
             profileStatusText = newString2;
             updateOnlineText(true);

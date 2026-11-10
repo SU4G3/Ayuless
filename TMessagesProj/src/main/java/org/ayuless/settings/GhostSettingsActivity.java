@@ -153,7 +153,7 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
                         .setPad(1));
             }
         }
-        items.add(UItem.asShadow(getString(R.string.AyulessGhostInfo) + "\n\n" + getString(R.string.AyulessGhostLockHint)));
+        items.add(UItem.asShadow(getString(R.string.AyulessGhostLockHint)));
 
         final boolean hideRead = GhostConfig.getProfile(profile, GhostConfig.KEY_HIDE_READ);
         items.add(UItem.asCheck(ID_READ_ON_ACTION, getString(R.string.AyulessGhostReadOnAction))

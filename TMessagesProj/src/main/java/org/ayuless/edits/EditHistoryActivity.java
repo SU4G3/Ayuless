@@ -13,10 +13,12 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.MediaController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.PhotoViewer;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
@@ -161,17 +163,52 @@ public final class EditHistoryActivity extends UniversalFragment {
             return;
         }
         Utilities.globalQueue.postRunnable(() -> {
-            File file = ProtectedContent.readableFile(currentAccount, message);
+            File resolved = null;
+            try {
+                resolved = ProtectedContent.readableFile(currentAccount, message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            final File file = resolved;
             AndroidUtilities.runOnUIThread(() -> {
                 if (isFinished || getParentActivity() == null) return;
                 if (file == null || !file.isFile()) {
                     BulletinFactory.of(this).createErrorBulletin(LocaleController.getString(R.string.AyulessProtectedForwardNeedsDownload)).show();
-                } else {
+                    return;
+                }
+                try {
+                    if (object.isPhoto() || object.isVideo() || object.isGif() || object.isRoundVideo()) {
+                        PhotoViewer viewer = PhotoViewer.getInstance();
+                        // The viewer requires both a live parent fragment and a non-null provider.
+                        viewer.setParentActivity(this, getResourceProvider());
+                        boolean video = object.isVideo() || object.isRoundVideo()
+                                || object.isGif() && object.getDocument() != null
+                                && "video/mp4".equals(object.getDocument().mime_type);
+                        ArrayList<Object> single = new ArrayList<>();
+                        single.add(new MediaController.PhotoEntry(0, 0, message.date,
+                                file.getAbsolutePath(), 0, video, 0, 0, file.length()));
+                        // View the exact retained file, without live-chat IDs, downloads or editing controls.
+                        if (viewer.openPhotoForSelect(single, 0, PhotoViewer.SELECT_TYPE_NO_SELECT, false,
+                                new PhotoViewer.EmptyPhotoViewerProvider() {
+                                    @Override
+                                    public boolean allowCaption() { return false; }
+                                }, null)) return;
+                    }
                     String mime = object.getDocument() == null ? "image/jpeg" : object.getDocument().mime_type;
-                    AndroidUtilities.openForView(file, object.getFileName(), mime, getParentActivity(), getResourceProvider(), false);
+                    // URI creation and both ACTION_VIEW attempts can throw (e.g. no installed handler).
+                    if (!AndroidUtilities.openForView(file, object.getFileName(), mime, getParentActivity(), getResourceProvider(), false)) {
+                        showMediaError();
+                    }
+                } catch (Exception e) {
+                    FileLog.e(e);
+                    showMediaError();
                 }
             });
         });
+    }
+
+    private void showMediaError() {
+        BulletinFactory.of(this).createErrorBulletin(LocaleController.getString(R.string.AyulessMediaOpenFailed)).show();
     }
 
     @Override
