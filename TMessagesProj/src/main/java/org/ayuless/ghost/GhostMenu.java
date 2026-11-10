@@ -24,12 +24,5 @@ public final class GhostMenu {
                     getString(GhostConfig.isEnabled(account) ? R.string.AyulessDisableGhost : R.string.AyulessEnableGhost),
                     () -> GhostBadge.toggle(fragment, account, null));
         }
-        if (ExtrasConfig.get(ExtrasConfig.KEY_KILL_MENU)) {
-            menu.add(R.drawable.ayuless_solar_msg_delete, getString(R.string.AyulessKillApp), () -> {
-                if (fragment.getParentActivity() == null) return;
-                fragment.getParentActivity().finishAndRemoveTask();
-                android.os.Process.killProcess(android.os.Process.myPid());
-            });
-        }
     }
 }

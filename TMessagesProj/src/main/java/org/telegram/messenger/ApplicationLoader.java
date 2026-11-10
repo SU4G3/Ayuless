@@ -284,7 +284,6 @@ public class ApplicationLoader extends Application {
             DownloadController.getInstance(a);
         }
         BillingController.getInstance().startConnection();
-        org.ayuless.sync.SyncController.apply(); // Ayuless: sync connects only after explicit opt-in
     }
 
     public ApplicationLoader() {

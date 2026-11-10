@@ -1,13 +1,4 @@
 /*
- * This is the source code of AyuGram for Android.
- *
- * We do not and cannot prevent the use of our code,
- * but be respectful and credit the original author.
- *
- * Copyright @Radolyn, 2023
- */
-
-/*
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (C) 2026 Ayuless contributors
  */
@@ -30,11 +21,6 @@ import android.widget.TextView;
 import androidx.core.content.pm.PackageInfoCompat;
 
 import org.ayuless.ghost.GhostConfig;
-import org.ayuless.antidelete.AntiDeleteConfig;
-import org.ayuless.edits.EditsConfig;
-import org.ayuless.extras.ExtrasConfig;
-import org.ayuless.extras.KeepAliveService;
-import org.ayuless.appearance.AppearanceConfig;
 import org.telegram.utils.glass.BaseFragmentSimpleGlass;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
@@ -50,17 +36,7 @@ import org.telegram.ui.Components.UniversalAdapter;
 import java.util.ArrayList;
 
 /** Settings > Ayuless: header, feature categories and project links. */
-public class AyulessSettingsActivity extends AyulessSettingsFragment implements org.telegram.messenger.NotificationCenter.NotificationCenterDelegate {
-
-    @Override public boolean onFragmentCreate() {
-        org.telegram.messenger.NotificationCenter.getGlobalInstance().addObserver(this, org.ayuless.sync.SyncController.STATUS_CHANGED);
-        return super.onFragmentCreate();
-    }
-    @Override public void onFragmentDestroy() {
-        org.telegram.messenger.NotificationCenter.getGlobalInstance().removeObserver(this, org.ayuless.sync.SyncController.STATUS_CHANGED);
-        super.onFragmentDestroy();
-    }
-    @Override public void didReceivedNotification(int id, int account, Object... args) { refresh(); }
+public class AyulessSettingsActivity extends AyulessSettingsFragment {
 
     static final String SOURCE_URL = "https://github.com/SU4G3/Ayuless";
     private static final String ISSUES_URL = SOURCE_URL + "/issues";
@@ -74,26 +50,6 @@ public class AyulessSettingsActivity extends AyulessSettingsFragment implements 
     private static final int ID_ISSUES = 11;
     private static final int ID_DOCS = 12;
 
-    private static final int ID_MASTER = 100;
-    private static final int ID_GHOST_BASE = 110;
-    private static final int ID_READ_REPLY = 120;
-    private static final int ID_SCHEDULE = 121;
-    private static final int ID_DELETE = 130;
-    private static final int ID_EDITS = 131;
-    private static final int ID_SAVING = 132;
-    private static final int ID_SERVICE = 140;
-    private static final int ID_ADS = 141;
-    private static final int ID_PREMIUM = 142;
-    private static final int ID_MARKS = 150;
-    private static final int ID_DELETED_MARK = 151;
-    private static final int ID_EDITED_MARK = 152;
-    private static final int ID_GHOST_MENU = 153;
-    private static final int ID_KILL_MENU = 154;
-    private static final int ID_CHATS = 160;
-    private static final int ID_SYNC = 161;
-    private static final int ID_MAINTENANCE = 170;
-    private static final int ID_CACHE = 171;
-    private boolean ghostExpanded;
     private View headerView;
 
     @Override
@@ -127,66 +83,19 @@ public class AyulessSettingsActivity extends AyulessSettingsFragment implements 
             items.add(UItem.asCustomShadow(headerView, 198));
         }
 
-        int profile = GhostConfig.activeProfile(currentAccount);
-        items.add(UItem.asHeader(getString(R.string.AyulessGhostEssentials)));
-        items.add(UItem.asExpandableSwitch(ID_MASTER, getString(R.string.AyulessGhostHeader),
-                        GhostConfig.countEnabled(profile) + "/" + GhostConfig.GHOST_KEYS.length)
-                .setChecked(GhostConfig.isEnabled(currentAccount)).setCollapsed(!ghostExpanded)
-                .setClickCallback(v -> {
-                    GhostConfig.setProfile(profile, GhostConfig.KEY_ENABLED, !GhostConfig.isEnabled(currentAccount));
-                    refresh();
-                }));
-        if (ghostExpanded) {
-            int[] titles = { R.string.AyulessGhostHideRead, R.string.AyulessGhostHideStoryViews,
-                    R.string.AyulessGhostHideOnline, R.string.AyulessGhostHideTyping, R.string.AyulessGhostOfflineAfterSend };
-            for (int i = 0; i < titles.length; i++) {
-                items.add(UItem.asCheck(ID_GHOST_BASE + i, getString(titles[i]))
-                        .setChecked(GhostConfig.getProfile(profile, GhostConfig.GHOST_KEYS[i])));
-            }
-        }
-        items.add(UItem.asCheck(ID_READ_REPLY, getString(R.string.AyulessGhostReadOnAction))
-                .setChecked(GhostConfig.getProfile(profile, GhostConfig.KEY_READ_ON_ACTION)));
-        items.add(UItem.asCheck(ID_SCHEDULE, getString(R.string.AyulessGhostDelayedSend))
-                .setChecked(GhostConfig.delayedSend(currentAccount)));
-        items.add(UItem.asButton(ID_GHOST, R.drawable.ayuless_solar_ghost, getString(R.string.AyulessGhostProfiles)));
+        items.add(UItem.asHeader(getString(R.string.AyulessCategoriesHeader)));
+        String ghostState = GhostConfig.isEnabled(currentAccount)
+                ? GhostConfig.countEnabled(GhostConfig.activeProfile(currentAccount)) + "/" + GhostConfig.GHOST_KEYS.length
+                : getString(R.string.AyulessOff);
+        items.add(UItem.asButton(ID_GHOST, R.drawable.ayuless_solar_ghost, getString(R.string.AyulessGhostHeader), ghostState));
+        items.add(UItem.asButton(ID_SPY, R.drawable.ayuless_solar_msg_stories_stealth, getString(R.string.AyulessSpy)));
+        String filtersState = org.ayuless.filters.MessageFilters.isEnabled()
+                ? String.valueOf(org.ayuless.filters.MessageFilters.getFilters().size() + org.ayuless.filters.MessageFilters.getShadowBan().size())
+                : getString(R.string.AyulessOff);
+        items.add(UItem.asButton(ID_FILTERS, R.drawable.ayuless_solar_msg_filter, getString(R.string.AyulessFilters), filtersState));
+        items.add(UItem.asButton(ID_CUSTOMIZATION, R.drawable.ayuless_solar_menu_edit_appearance, getString(R.string.AyulessCustomization)));
         items.add(UItem.asShadow(null));
 
-        items.add(UItem.asHeader(getString(R.string.AyulessSpyEssentials)));
-        items.add(UItem.asCheck(ID_DELETE, getString(R.string.AyulessAntiDelete)).setChecked(AntiDeleteConfig.isEnabled(currentAccount)));
-        items.add(UItem.asCheck(ID_EDITS, getString(R.string.AyulessEditHistory)).setChecked(EditsConfig.isEnabled(currentAccount)));
-        items.add(UItem.asButton(ID_SAVING, getString(R.string.AyulessMessageSaving)));
-        items.add(UItem.asButton(ID_SPY, getString(R.string.AyulessSpyStorage)));
-        items.add(UItem.asShadow(null));
-
-        items.add(UItem.asHeader(getString(R.string.AyulessUsefulHeader)));
-        items.add(UItem.asCheck(ID_SERVICE, getString(R.string.AyulessWorkInBackground)).setChecked(ExtrasConfig.workInBackground()));
-        items.add(UItem.asCheck(ID_ADS, getString(R.string.AyulessHideSponsored)).setChecked(ExtrasConfig.hideSponsored()));
-        items.add(UItem.asCheck(ID_PREMIUM, getString(R.string.AyulessLocalPremium)).setChecked(ExtrasConfig.localPremium()));
-        items.add(UItem.asButton(ID_FILTERS, R.drawable.ayuless_solar_msg_filter, getString(R.string.AyulessFilters)));
-        items.add(UItem.asButton(ID_CHATS, getString(R.string.AyulessChatsMessages)));
-        items.add(UItem.asShadow(null));
-
-        items.add(UItem.asHeader(getString(R.string.AyulessCustomization)));
-        items.add(UItem.asCheck(ID_MARKS, getString(R.string.AyulessCustomMarks)).setChecked(AppearanceConfig.customMarks()));
-        items.add(UItem.asButton(ID_DELETED_MARK, getString(R.string.AyulessDeletedText), AppearanceConfig.deletedText()).setEnabled(AppearanceConfig.customMarks()));
-        items.add(UItem.asButton(ID_EDITED_MARK, getString(R.string.AyulessEditedText), AppearanceConfig.editedText()).setEnabled(AppearanceConfig.customMarks()));
-        items.add(UItem.asCheck(ID_GHOST_MENU, getString(R.string.AyulessGhostMenu)).setChecked(ExtrasConfig.get(ExtrasConfig.KEY_GHOST_MENU)));
-        items.add(UItem.asCheck(ID_KILL_MENU, getString(R.string.AyulessKillMenu)).setChecked(ExtrasConfig.get(ExtrasConfig.KEY_KILL_MENU)));
-        items.add(UItem.asButton(ID_CUSTOMIZATION, R.drawable.ayuless_solar_menu_edit_appearance, getString(R.string.AyulessMessageAppearance)));
-        items.add(UItem.asShadow(null));
-
-        items.add(UItem.asHeader(getString(R.string.AyulessSyncHeader)));
-        items.add(UItem.asButton(ID_SYNC, getString(R.string.AyulessSyncStatus), org.ayuless.sync.SyncController.statusText()));
-        items.add(UItem.asShadow(null));
-
-        items.add(UItem.asHeader(getString(R.string.AyulessMaintenance)));
-        items.add(UItem.asCheck(ID_MAINTENANCE, getString(R.string.AyulessMaintenanceTools)).setChecked(ExtrasConfig.get(ExtrasConfig.KEY_MAINTENANCE)));
-        if (ExtrasConfig.get(ExtrasConfig.KEY_MAINTENANCE)) {
-            items.add(UItem.asButton(0, getString(R.string.AyulessWalEnabled)).setEnabled(false));
-            items.add(UItem.asButton(ID_SPY, getString(R.string.AyulessStorageClear)));
-            items.add(UItem.asButton(ID_CACHE, getString(R.string.AyulessManageCache)));
-        }
-        items.add(UItem.asShadow(null));
         items.add(UItem.asHeader(getString(R.string.AyulessLinksHeader)));
         items.add(UItem.asButton(ID_SOURCE, R.drawable.ayuless_solar_msg_link2, getString(R.string.AyulessSourceCode), "GitHub"));
         items.add(UItem.asButton(ID_ISSUES, R.drawable.ayuless_solar_msg_ask_question, getString(R.string.AyulessIssues)));
@@ -196,35 +105,7 @@ public class AyulessSettingsActivity extends AyulessSettingsFragment implements 
 
     @Override
     protected void onClick(UItem item, View view, int position, float x, float y) {
-        if (!item.enabled) return;
-        int profile = GhostConfig.activeProfile(currentAccount);
-        if (item.id >= ID_GHOST_BASE && item.id < ID_GHOST_BASE + GhostConfig.GHOST_KEYS.length) {
-            String key = GhostConfig.GHOST_KEYS[item.id - ID_GHOST_BASE];
-            GhostConfig.setProfile(profile, key, !GhostConfig.getProfile(profile, key));
-            refresh();
-            return;
-        }
         switch (item.id) {
-            case ID_MASTER: ghostExpanded = !ghostExpanded; refresh(); break;
-            case ID_READ_REPLY:
-                GhostConfig.setProfile(profile, GhostConfig.KEY_READ_ON_ACTION, !GhostConfig.getProfile(profile, GhostConfig.KEY_READ_ON_ACTION)); refresh(); break;
-            case ID_SCHEDULE:
-                GhostConfig.setProfile(profile, GhostConfig.KEY_DELAYED_SEND, !GhostConfig.delayedSend(currentAccount)); refresh(); break;
-            case ID_DELETE: AntiDeleteConfig.setEnabled(currentAccount, !AntiDeleteConfig.isEnabled(currentAccount)); refresh(); break;
-            case ID_EDITS: EditsConfig.setEnabled(currentAccount, !EditsConfig.isEnabled(currentAccount)); refresh(); break;
-            case ID_SAVING: presentFragment(new MessageSavingSettingsActivity()); break;
-            case ID_SERVICE: ExtrasConfig.set(ExtrasConfig.KEY_WORK_IN_BACKGROUND, !ExtrasConfig.workInBackground()); KeepAliveService.apply(); refresh(); break;
-            case ID_ADS: ExtrasConfig.set(ExtrasConfig.KEY_HIDE_SPONSORED, !ExtrasConfig.hideSponsored()); refresh(); break;
-            case ID_PREMIUM: ExtrasConfig.set(ExtrasConfig.KEY_LOCAL_PREMIUM, !ExtrasConfig.localPremium()); org.ayuless.extras.LocalPremium.refresh(); refresh(); break;
-            case ID_MARKS: AppearanceConfig.setCustomMarks(!AppearanceConfig.customMarks()); refresh(); break;
-            case ID_DELETED_MARK: editMark(false); break;
-            case ID_EDITED_MARK: editMark(true); break;
-            case ID_GHOST_MENU: ExtrasConfig.set(ExtrasConfig.KEY_GHOST_MENU, !ExtrasConfig.get(ExtrasConfig.KEY_GHOST_MENU)); refresh(); break;
-            case ID_KILL_MENU: ExtrasConfig.set(ExtrasConfig.KEY_KILL_MENU, !ExtrasConfig.get(ExtrasConfig.KEY_KILL_MENU)); refresh(); break;
-            case ID_CHATS: presentFragment(new ChatFeaturesSettingsActivity()); break;
-            case ID_SYNC: presentFragment(new SyncSettingsActivity()); break;
-            case ID_MAINTENANCE: ExtrasConfig.set(ExtrasConfig.KEY_MAINTENANCE, !ExtrasConfig.get(ExtrasConfig.KEY_MAINTENANCE)); refresh(); break;
-            case ID_CACHE: presentFragment(new org.telegram.ui.CacheControlActivity()); break;
             case ID_GHOST:
                 presentFragment(new GhostSettingsActivity());
                 break;
@@ -252,18 +133,6 @@ public class AyulessSettingsActivity extends AyulessSettingsFragment implements 
     @Override
     protected boolean onLongClick(UItem item, View view, int position, float x, float y) {
         return false;
-    }
-
-    private void refresh() {
-        if (listView != null && listView.adapter != null) listView.adapter.update(true);
-    }
-
-    private void editMark(boolean edited) {
-        String key = edited ? AppearanceConfig.KEY_EDITED_TEXT : AppearanceConfig.KEY_DELETED_TEXT;
-        SettingsTextDialog.show(this, getString(edited ? R.string.AyulessEditedText : R.string.AyulessDeletedText),
-                edited ? AppearanceConfig.editedText() : AppearanceConfig.deletedText(), 32,
-                value -> { AppearanceConfig.setTextMark(key, value); refresh(); },
-                () -> { AppearanceConfig.resetTextMark(key); refresh(); });
     }
 
     private View createHeader(Context context) {

@@ -73,7 +73,7 @@ public final class SavedAttachments {
     }
 
     public static boolean isEnabled(int account) {
-        return ApplicationLoader.applicationContext != null && prefs().getBoolean(KEY_ENABLED + account, false);
+        return ApplicationLoader.applicationContext != null && prefs().getBoolean(KEY_ENABLED + account, true);
     }
 
     public static void setEnabled(int account, boolean enabled) {

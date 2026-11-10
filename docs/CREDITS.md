@@ -18,11 +18,12 @@ Ayuless (GPL-3.0-or-later) as long as this attribution is kept.
 
 ## Inspiration
 
-Thanks to the [AyuGram](https://github.com/AyuGram) team (Radolyn Labs). Ayuless follows AyuGram's feature set and settings layout. Ayuless is not affiliated with AyuGram or Radolyn Labs. Name idea from exteraless.
+Thanks to the [AyuGram](https://github.com/AyuGram) team (Radolyn Labs). Ayuless follows AyuGram's feature set. Ayuless is not affiliated with AyuGram or Radolyn Labs. Name idea from exteraless.
 
 The original settings restyle was independently implemented from the visual
 measurements in [SETTINGS-STYLE.md](SETTINGS-STYLE.md). The parity port below adapts
-Radolyn settings structure, behavior and EN/RU wording using Telegram UI classes.
+Radolyn behavior and EN/RU wording using Telegram UI classes. The settings
+category structure is restored to PR #51.
 No exteraGram code, UI components or preferences framework is included; all
 Ayuless branding remains its own.
 
@@ -41,9 +42,12 @@ Source mapping: settings/text dialogs and marks derive from `AyuConfig`,
 `AyuConstants`; capture policies and history derive from `AyuMessagesController`,
 `AyuMessageHistory` and `AyuMessageCell`; ghost/request/context/launcher hooks
 adapt `AyuGhostUtils`, `AyuState`, `AyuForwarder`, `AyuUtils` and the AyuGram-marked
-Telegram hooks. Sync derives from `sync/*`, `sync/models/*` and
-`AyuSyncPreferencesActivity`, replacing its networking libraries with existing
-Ayuless dependencies. Resource wording derives from `values/ayu.xml` and
+Telegram hooks. The ghost profile picker adapts the avatar/name account dialog
+from `org/telegram/ui/Components/AlertsCreator.createAccountSelectDialog` in the
+reference checkout, reusing Ayuless's upstream `AccountSelectCell` without any
+exteraGram customizations. Its shared row and selected-profile check are local
+additions; it never changes the active Telegram account. There is no separate
+Radolyn ghost account selector in that checkout. Resource wording derives from `values/ayu.xml` and
 `values-ru/ayu.xml`. The test harness and parity inventory are original Ayuless
 verification/documentation, not copied reference code.
 
@@ -65,17 +69,13 @@ Derived files (each keeps the original Radolyn header):
 - `TMessagesProj/src/main/java/org/ayuless/ghost/GhostMenu.java`
 - `TMessagesProj/src/main/java/org/ayuless/ghost/GhostShortcut.java`
 - `TMessagesProj/src/main/java/org/ayuless/settings/AppearanceSettingsActivity.java`
-- `TMessagesProj/src/main/java/org/ayuless/settings/AyulessSettingsActivity.java`
-- `TMessagesProj/src/main/java/org/ayuless/settings/ChatFeaturesSettingsActivity.java`
-- `TMessagesProj/src/main/java/org/ayuless/settings/MessageSavingSettingsActivity.java`
+- `TMessagesProj/src/main/java/org/ayuless/settings/GhostAccountSelector.java`
+- `TMessagesProj/src/main/java/org/ayuless/settings/GhostSettingsActivity.java`
 - `TMessagesProj/src/main/java/org/ayuless/settings/SettingsTextDialog.java`
 - `TMessagesProj/src/main/java/org/ayuless/settings/SpySettingsActivity.java`
-- `TMessagesProj/src/main/java/org/ayuless/settings/SyncSettingsActivity.java`
 - `TMessagesProj/src/main/java/org/ayuless/spy/MessageSavingConfig.java`
 - `TMessagesProj/src/main/java/org/ayuless/spy/SavedAttachments.java`
 - `TMessagesProj/src/main/java/org/ayuless/storage/AyulessStore.java`
-- `TMessagesProj/src/main/java/org/ayuless/sync/SyncConfig.java`
-- `TMessagesProj/src/main/java/org/ayuless/sync/SyncController.java`
 - `TMessagesProj/src/main/java/org/telegram/messenger/ApplicationLoader.java`
 - `TMessagesProj/src/main/java/org/telegram/messenger/MediaDataController.java`
 - `TMessagesProj/src/main/java/org/telegram/messenger/MessagesController.java`

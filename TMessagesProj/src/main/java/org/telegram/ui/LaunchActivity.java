@@ -7195,6 +7195,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     @Override
     protected void onResume() {
         super.onResume();
+        org.ayuless.extras.KeepAliveService.apply(); // Ayuless: retry foreground service startup while visible
         WidgetMedia.onAppPaused(false);
         isResumed = true;
         PipCoordinator.getInstance().onActivityResume(this);
