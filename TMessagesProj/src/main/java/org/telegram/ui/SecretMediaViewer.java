@@ -195,7 +195,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
 
         private void setDestroyTime(long time, long ttl, boolean videoProgress) {
             // Ayuless: blocked opens have no countdown, including video progress and view-once.
-            if (org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount)
+            if (org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount, currentMessageObject == null ? 0 : currentMessageObject.getDialogId())
                     && currentMessageObject != null && currentMessageObject.messageOwner.destroyTime == 0) {
                 destroyTime = 0;
                 drawable.stop();
@@ -236,7 +236,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
         @Override
         protected void onDraw(Canvas canvas) {
             // Ayuless: unopened media has no server timer when ghost mode blocks its receipt.
-            if (org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount)
+            if (org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount, currentMessageObject == null ? 0 : currentMessageObject.getDialogId())
                     && currentMessageObject != null && currentMessageObject.messageOwner.destroyTime == 0) return;
             if (currentMessageObject == null || currentMessageObject.messageOwner.destroyTime == 0 && currentMessageObject.messageOwner.ttl != 0x7FFFFFFF) {
                 return;

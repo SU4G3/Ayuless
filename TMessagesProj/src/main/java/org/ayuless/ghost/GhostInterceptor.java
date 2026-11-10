@@ -52,7 +52,7 @@ public final class GhostInterceptor {
         if (explicitOnce.remove(req)) return false;
         if (allowedOnce.remove(req)) {
             // Automatic acknowledgements must still be enabled when the request leaves.
-            return GhostConfig.hideRead(account) && !GhostConfig.readOnAction(account);
+            return blocksRead(account, requestDialog(req)) && !GhostConfig.readOnAction(account);
         }
         if (org.ayuless.extras.SponsoredBlocker.shouldBlock(req)) {
             return true;
@@ -77,10 +77,14 @@ public final class GhostInterceptor {
             return false;
         }
         if (isReadRequest(req)) {
-            return GhostConfig.hideRead(account);
+            if (req instanceof TLRPC.TL_messages_readMessageContents && GhostConfig.hideRead(account)) {
+                forwardExceptedContents(account, (TLRPC.TL_messages_readMessageContents) req);
+                return true;
+            }
+            return blocksRead(account, requestDialog(req));
         }
         if (req instanceof TLRPC.TL_messages_setTyping || req instanceof TLRPC.TL_messages_setEncryptedTyping) {
-            return GhostConfig.hideTyping(account);
+            return GhostConfig.hideTyping(account) && !org.ayuless.chat.ChatToolsConfig.excepted(account, requestDialog(req), true);
         }
         if (req instanceof TL_stories.TL_stories_readStories || req instanceof TL_stories.TL_stories_incrementStoryViews) {
             return GhostConfig.hideStoryViews(account);
@@ -222,6 +226,57 @@ public final class GhostInterceptor {
     /** Same policy for content receipts, encrypted read service packets and local expiry. */
     public static boolean blocksMediaRead(int account) {
         return GhostConfig.hideRead(account);
+    }
+
+    public static boolean blocksRead(int account, long dialog) {
+        return GhostConfig.hideRead(account) && !org.ayuless.chat.ChatToolsConfig.excepted(account, dialog, false);
+    }
+
+    public static boolean blocksMediaRead(int account, long dialog) { return blocksRead(account, dialog); }
+
+    private static long requestDialog(TLObject req) {
+        TLRPC.InputPeer peer = null;
+        if (req instanceof TLRPC.TL_messages_readHistory) peer = ((TLRPC.TL_messages_readHistory) req).peer;
+        else if (req instanceof TLRPC.TL_messages_readMentions) peer = ((TLRPC.TL_messages_readMentions) req).peer;
+        else if (req instanceof TLRPC.TL_messages_readReactions) peer = ((TLRPC.TL_messages_readReactions) req).peer;
+        else if (req instanceof TLRPC.TL_messages_readPollVotes) peer = ((TLRPC.TL_messages_readPollVotes) req).peer;
+        else if (req instanceof TLRPC.TL_messages_readDiscussion) peer = ((TLRPC.TL_messages_readDiscussion) req).peer;
+        else if (req instanceof TLRPC.TL_messages_readSavedHistory) peer = ((TLRPC.TL_messages_readSavedHistory) req).parent_peer;
+        else if (req instanceof TLRPC.TL_messages_setTyping) peer = ((TLRPC.TL_messages_setTyping) req).peer;
+        else if (req instanceof TLRPC.TL_channels_readHistory) return -((TLRPC.TL_channels_readHistory) req).channel.channel_id;
+        else if (req instanceof TLRPC.TL_channels_readMessageContents) return -((TLRPC.TL_channels_readMessageContents) req).channel.channel_id;
+        else if (req instanceof TLRPC.TL_messages_readEncryptedHistory) return DialogObject.makeEncryptedDialogId(((TLRPC.TL_messages_readEncryptedHistory) req).peer.chat_id);
+        else if (req instanceof TLRPC.TL_messages_setEncryptedTyping) return DialogObject.makeEncryptedDialogId(((TLRPC.TL_messages_setEncryptedTyping) req).peer.chat_id);
+        return peer == null ? 0 : DialogObject.getPeerDialogId(peer);
+    }
+
+    /** Peerless content receipts may contain messages from several dialogs. Resolve off-thread. */
+    private static void forwardExceptedContents(int account, TLRPC.TL_messages_readMessageContents original) {
+        if (!org.ayuless.chat.ChatToolsConfig.enabled()) return;
+        org.telegram.messenger.MessagesStorage storage = org.telegram.messenger.MessagesStorage.getInstance(account);
+        storage.getStorageQueue().postRunnable(() -> {
+            TLRPC.TL_messages_readMessageContents subset = new TLRPC.TL_messages_readMessageContents();
+            try {
+                for (Integer id : original.id) {
+                    org.telegram.SQLite.SQLiteCursor c = storage.getDatabase().queryFinalized(
+                            "SELECT uid FROM messages_v2 WHERE mid = ? AND is_channel = 0", id);
+                    try {
+                        while (c.next()) {
+                            if (!blocksRead(account, c.longValue(0))) { subset.id.add(id); break; }
+                        }
+                    } finally { c.dispose(); }
+                }
+                if (!subset.id.isEmpty()) {
+                    explicitOnce.add(subset);
+                    ConnectionsManager.getInstance(account).sendRequest(subset, (response, error) -> {
+                        if (response instanceof TLRPC.TL_messages_affectedMessages) {
+                            TLRPC.TL_messages_affectedMessages a = (TLRPC.TL_messages_affectedMessages) response;
+                            MessagesController.getInstance(account).processNewDifferenceParams(-1, a.pts, -1, a.pts_count);
+                        }
+                    });
+                }
+            } catch (Exception e) { FileLog.e(e); }
+        });
     }
 
     private static boolean isReadRequest(TLObject req) {

@@ -300,4 +300,37 @@
     <string name="AyulessMarkAsRead">Mark as read</string>
     <string name="AyulessGhostLocalSeen">Remember seen markers locally</string>
     <string name="AyulessGhostLocalSeenInfo">Keep viewed reactions, mentions and poll votes cleared on this device while read receipts are hidden. No read acknowledgement is sent.</string>
+
+    <!-- Chat tools and export: original Ayuless implementation. -->
+    <string name="AyulessChatTools">Chat menu and export</string>
+    <string name="AyulessChatToolsInfo">Show Ayuless in the chat menu. Enables chat exceptions and export. Off by default.</string>
+    <string name="AyulessChatDeleted">Deleted messages</string>
+    <string name="AyulessChatDontSave">Don’t save</string>
+    <string name="AyulessChatDontRead">Don’t send read</string>
+    <string name="AyulessChatDontType">Don’t send typing</string>
+    <string name="AyulessChatGhostInfo">On: follow Ghost settings. Off: always allow receipts or typing in this chat.</string>
+    <string name="AyulessChatClear">Clear deleted</string>
+    <string name="AyulessChatClearConfirm">Delete saved deleted messages, edit history and saved attachments for this chat? This cannot be undone.</string>
+    <string name="AyulessChatCleared">Saved chat data cleared.</string>
+    <string name="AyulessChatEmpty">No saved deleted messages.</string>
+    <string name="AyulessChatExport">Export chat</string>
+    <string name="AyulessPagePrevious">Previous page</string>
+    <string name="AyulessPageNext">Next page</string>
+    <string name="AyulessExportText">Text messages</string>
+    <string name="AyulessExportPhotos">Photos</string>
+    <string name="AyulessExportVideos">Videos</string>
+    <string name="AyulessExportVoice">Voice and round messages</string>
+    <string name="AyulessExportFiles">Files</string>
+    <string name="AyulessExportStickers">Stickers and GIFs</string>
+    <string name="AyulessExportCustomDates">Custom date range</string>
+    <string name="AyulessExportFrom">From</string>
+    <string name="AyulessExportTo">Through</string>
+    <string name="AyulessExportMediaInfo">Copies downloaded media and saved Ayuless attachments only. Missing files are marked in the export. Secret chats use local history. Keep this screen open until export finishes.</string>
+    <string name="AyulessExportFormatInfo">JSON off: HTML with message bubbles. All dates are included unless a custom range is selected. Deleted messages also follow the selected media types.</string>
+    <string name="AyulessExportChooseFolder">Choose folder and export</string>
+    <string name="AyulessExportInvalid">Select at least one message type and a valid date range.</string>
+    <string name="AyulessExportProgress">Messages exported:</string>
+    <string name="AyulessExportError">Could not finish. Check connection, folder access and available space, then try again.</string>
+    <string name="AyulessChatExportDone">Export complete</string>
+    <string name="AyulessExportDoneInfo">Saved in the selected folder. Messages exported:</string>
 </resources>

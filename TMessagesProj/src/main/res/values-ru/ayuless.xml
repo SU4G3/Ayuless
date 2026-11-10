@@ -299,4 +299,37 @@
     <string name="AyulessMarkAsRead">Прочитать</string>
     <string name="AyulessGhostLocalSeen">Запоминать просмотренные отметки</string>
     <string name="AyulessGhostLocalSeenInfo">Не показывать повторно просмотренные реакции, упоминания и голоса в опросах на этом устройстве, пока скрыто прочтение. Подтверждения прочтения не отправляются.</string>
+
+    <!-- Chat tools and export: original Ayuless implementation. -->
+    <string name="AyulessChatTools">Меню чата и экспорт</string>
+    <string name="AyulessChatToolsInfo">Показывать Ayuless в меню чата. Включает исключения для чатов и экспорт. По умолчанию выключено.</string>
+    <string name="AyulessChatDeleted">Удалённые сообщения</string>
+    <string name="AyulessChatDontSave">Не сохранять</string>
+    <string name="AyulessChatDontRead">Не отправлять прочтение</string>
+    <string name="AyulessChatDontType">Не отправлять набор</string>
+    <string name="AyulessChatGhostInfo">Включено: следовать настройкам Ghost. Выключено: разрешить прочтения или набор в этом чате.</string>
+    <string name="AyulessChatClear">Очистить удалённые</string>
+    <string name="AyulessChatClearConfirm">Удалить сохранённые удалённые сообщения, историю правок и сохранённые вложения этого чата? Отменить это действие нельзя.</string>
+    <string name="AyulessChatCleared">Сохранённые данные чата очищены.</string>
+    <string name="AyulessChatEmpty">Нет сохранённых удалённых сообщений.</string>
+    <string name="AyulessChatExport">Экспорт чата</string>
+    <string name="AyulessPagePrevious">Предыдущая страница</string>
+    <string name="AyulessPageNext">Следующая страница</string>
+    <string name="AyulessExportText">Текстовые сообщения</string>
+    <string name="AyulessExportPhotos">Фото</string>
+    <string name="AyulessExportVideos">Видео</string>
+    <string name="AyulessExportVoice">Голосовые и кружки</string>
+    <string name="AyulessExportFiles">Файлы</string>
+    <string name="AyulessExportStickers">Стикеры и GIF</string>
+    <string name="AyulessExportCustomDates">Выбрать даты</string>
+    <string name="AyulessExportFrom">С</string>
+    <string name="AyulessExportTo">По</string>
+    <string name="AyulessExportMediaInfo">Копирует только скачанные медиа и вложения Ayuless. Отсутствующие файлы отмечаются в экспорте. Для секретных чатов используется локальная история. Не закрывайте экран до завершения экспорта.</string>
+    <string name="AyulessExportFormatInfo">JSON выключен: HTML с пузырями сообщений. Без выбора дат включается вся история. Для удалённых сообщений также учитываются выбранные типы медиа.</string>
+    <string name="AyulessExportChooseFolder">Выбрать папку и начать</string>
+    <string name="AyulessExportInvalid">Выберите хотя бы один тип сообщений и корректный диапазон дат.</string>
+    <string name="AyulessExportProgress">Сообщений экспортировано:</string>
+    <string name="AyulessExportError">Не удалось завершить. Проверьте соединение, доступ к папке и свободное место, затем повторите.</string>
+    <string name="AyulessChatExportDone">Экспорт завершён</string>
+    <string name="AyulessExportDoneInfo">Сохранено в выбранной папке. Сообщений экспортировано:</string>
 </resources>

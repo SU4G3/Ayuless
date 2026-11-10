@@ -1294,6 +1294,7 @@ public class ChatActivity extends BaseFragment implements
     public final static int OPTION_VIEW_STATISTICS = 115;
     public final static int OPTION_WELCOME_REVERT = 116;
     public final static int OPTION_SEND_MONEY = 117;
+    private static final int AYULESS_CHAT_TOOLS = 9004; // Ayuless: per-chat tools.
     private static final int AYULESS_READ_CHAT = 9003; // Ayuless: explicit read in the chat header.
     public final static int OPTION_AYULESS_DELETE_DATE = 9004;
     public final static int OPTION_AYULESS_KEEP_LOCAL = 9005;
@@ -3718,6 +3719,10 @@ public class ChatActivity extends BaseFragment implements
                 if (id != chat_menu_options && id != chat_menu_topics_panel && id != -1 && topicsPanel != null && topicsPanel.isOpen()) {
                     topicsPanel.close();
                 }
+                if (id == AYULESS_CHAT_TOOLS && org.ayuless.chat.ChatToolsConfig.enabled()) { // Ayuless: opt-in per-chat tools.
+                    presentFragment(new org.ayuless.chat.ChatToolsActivity(currentAccount, dialog_id));
+                    return;
+                }
                 if (id == AYULESS_READ_CHAT) { // Ayuless: one explicit action bypasses ghost.
                     org.ayuless.ghost.GhostInterceptor.readChat(currentAccount, dialog_id, success -> {
                         if (!success && !isFinished && getParentActivity() != null) org.ayuless.edits.DeletedMessageActions.showFailure(ChatActivity.this);
@@ -4281,6 +4286,9 @@ public class ChatActivity extends BaseFragment implements
             }
             createTopicsPanelItem(menu);
             headerItem = menu.addItem(chat_menu_options, otherIcon);
+            // Ayuless: register once and refresh opt-in visibility when the chat resumes.
+            headerItem.lazilyAddSubItem(AYULESS_CHAT_TOOLS, R.drawable.ayuless_solar_ghost, getString(R.string.AyulessLauncherName));
+            headerItem.setSubItemShown(AYULESS_CHAT_TOOLS, org.ayuless.chat.ChatToolsConfig.enabled());
             headerItem.lazilyAddSubItem(AYULESS_READ_CHAT, R.drawable.ayuless_solar_eye, getString(R.string.AyulessMarkAsRead)); // Ayuless: always available.
             updateTopicsPanelItem();
             headerItem.setSubMenuDelegate(new ActionBarMenuItem.ActionBarSubMenuItemDelegate() {
@@ -16249,7 +16257,7 @@ public class ChatActivity extends BaseFragment implements
             return null;
         }
         // Ayuless: a blocked receipt must never start local expiry or consume the first open.
-        if (org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount)) return null;
+        if (org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount, dialog_id)) return null;
         // Ayuless: retained media sends only its original open receipt, including after restart.
         if (org.ayuless.content.RetentionConfig.wasOpened(currentAccount, messageObject.messageOwner)) return null;
         if (readNow) {
@@ -16266,7 +16274,7 @@ public class ChatActivity extends BaseFragment implements
         } else {
             return () -> {
                 // Ayuless: ghost mode may change while the viewer opens.
-                if (org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount)) return;
+                if (org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount, dialog_id)) return;
                 if (org.ayuless.content.RetentionConfig.wasOpened(currentAccount, messageObject.messageOwner)) return;
                 org.ayuless.content.RetentionConfig.rememberOpen(currentAccount, messageObject.messageOwner);
                 final boolean delete = messageObject.messageOwner.ttl != 0x7FFFFFFF;
@@ -16287,7 +16295,7 @@ public class ChatActivity extends BaseFragment implements
             return null;
         }
         // Ayuless: blocked opens cannot schedule view-once deletion.
-        if (org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount)) return null;
+        if (org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount, dialog_id)) return null;
         // Ayuless: the open receipt remains upstream; only local expiry is suppressed.
         if (org.ayuless.content.RetentionConfig.keepMedia(currentAccount, dialog_id)) return null;
         final long taskId = getMessagesController().createDeleteShowOnceTask(dialog_id, messageObject.getId());
@@ -30737,6 +30745,8 @@ public class ChatActivity extends BaseFragment implements
     @Override
     public void onResume() {
         super.onResume();
+        // Ayuless: settings may change while this chat remains on the back stack.
+        if (headerItem != null) headerItem.setSubItemShown(AYULESS_CHAT_TOOLS, org.ayuless.chat.ChatToolsConfig.enabled());
         checkShowBlur(false);
         activityResumeTime = System.currentTimeMillis();
         if (openImport && getSendMessagesHelper().getImportingHistory(dialog_id) != null) {

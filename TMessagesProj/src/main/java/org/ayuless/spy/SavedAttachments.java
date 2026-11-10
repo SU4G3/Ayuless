@@ -360,17 +360,23 @@ public final class SavedAttachments {
 
     /** Delete saved attachments of one dialog, e.g. when its stored data is removed. */
     public static void clearDialog(int account, long dialogId) {
+        clearDialog(account, dialogId, null);
+    }
+
+    /** Completion reports failed deletes as well as successful, already absent files. */
+    public static void clearDialog(int account, long dialogId, java.util.function.Consumer<Boolean> completion) {
         queue.postRunnable(() -> {
-            File[] list = accountDir(account).listFiles();
-            if (list == null) {
-                return;
-            }
+            boolean success = true;
+            File directory = accountDir(account);
+            File[] list = directory.listFiles();
+            if (list == null && directory.exists()) success = false;
             String prefix = dialogId + "_";
-            for (File f : list) {
-                if (f.getName().startsWith(prefix)) {
-                    f.delete();
-                }
+            if (list != null) for (File f : list) {
+                if (f.getName().startsWith(prefix) && !f.delete() && f.exists()) success = false;
             }
+            restoreChecked.removeIf(key -> key.startsWith(account + ":" + dialogId + ":"));
+            final boolean result = success;
+            if (completion != null) AndroidUtilities.runOnUIThread(() -> completion.accept(result));
         });
     }
 }

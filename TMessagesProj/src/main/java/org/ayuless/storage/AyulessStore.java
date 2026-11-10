@@ -179,6 +179,48 @@ public final class AyulessStore {
         });
     }
 
+    /** Clear only Spy data, leaving observed read dates intact. Completion follows the DB commit. */
+    public void clearSavedDialog(long dialogId, Callback<Boolean> completion) {
+        queue.postRunnable(() -> {
+            try {
+                SQLiteDatabase database = db();
+                database.beginTransaction();
+                try {
+                    String[] args = {String.valueOf(dialogId)};
+                    database.delete("deleted_messages", "dialog_id = ?", args);
+                    database.delete("edit_history", "dialog_id = ?", args);
+                    database.setTransactionSuccessful();
+                } finally { database.endTransaction(); }
+                org.ayuless.spy.SavedAttachments.clearDialog(account, dialogId, result -> {
+                    org.ayuless.antidelete.DeletedCache.reload(account);
+                    org.ayuless.edits.EditedCache.reload(account);
+                    completion.run(result);
+                });
+            } catch (Exception e) {
+                FileLog.e(e);
+                AndroidUtilities.runOnUIThread(() -> completion.run(false));
+            }
+        });
+    }
+
+    /** Bounded keyset page, including negative secret-chat ids. Null signals a storage error. */
+    public void deletedPage(long dialogId, long beforeDate, long beforeId, Callback<ArrayList<TLRPC.Message>> callback) {
+        queue.postRunnable(() -> {
+            ArrayList<TLRPC.Message> result = new ArrayList<>();
+            try (Cursor c = db().rawQuery("SELECT data FROM deleted_messages WHERE dialog_id = ? AND (date < ? OR (date = ? AND msg_id < ?)) ORDER BY date DESC, msg_id DESC LIMIT 100",
+                    new String[]{"" + dialogId, "" + beforeDate, "" + beforeDate, "" + beforeId})) {
+                while (c.moveToNext()) {
+                    TLRPC.Message message = deserializeMessage(c.getBlob(0));
+                    if (message == null) throw new IllegalStateException("Invalid saved message");
+                    message.dialog_id = dialogId;
+                    result.add(message);
+                }
+            } catch (Exception e) { FileLog.e(e); result = null; }
+            final ArrayList<TLRPC.Message> page = result;
+            AndroidUtilities.runOnUIThread(() -> callback.run(page));
+        });
+    }
+
     /** Remove all stored data and delete the database file (used on logout). */
     public void clearAll() {
         org.ayuless.spy.LastSeen.reset(account);
