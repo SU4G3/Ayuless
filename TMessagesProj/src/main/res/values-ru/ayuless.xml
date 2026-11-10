@@ -270,4 +270,7 @@
     <string name="AyulessUnknown">Неизвестно</string>
     <string name="AyulessReadUntilInfo">«Прочитать до» явно отправляет отметку о прочтении даже в режиме призрака.</string>
     <string name="AyulessDeletedActionsInfo">«Оставить локально» требует сохранения удалённых сообщений и доступно в облачных чатах. Для повторной отправки медиа нужна скачанная копия.</string>
+    <string name="AyulessMediaViewOnce">Один просмотр</string>
+    <string name="AyulessRestrictedForwardHint">Подсказка об ограничении пересылки</string>
+    <string name="AyulessOriginalForwardRestricted">В оригинальном сообщении пересылка запрещена</string>
 </resources>

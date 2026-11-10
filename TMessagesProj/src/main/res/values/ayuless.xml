@@ -271,4 +271,7 @@
     <string name="AyulessUnknown">Unknown</string>
     <string name="AyulessReadUntilInfo">“Read until” explicitly sends a read receipt even in ghost mode.</string>
     <string name="AyulessDeletedActionsInfo">“Keep locally” requires saved deleted messages and is available for cloud chats. Resending media requires a downloaded copy.</string>
+    <string name="AyulessMediaViewOnce">View once</string>
+    <string name="AyulessRestrictedForwardHint">Show forwarding restriction hint</string>
+    <string name="AyulessOriginalForwardRestricted">Forwarding is restricted in the original message</string>
 </resources>

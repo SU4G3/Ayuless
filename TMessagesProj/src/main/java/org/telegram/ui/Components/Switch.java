@@ -40,17 +40,6 @@ import me.vkryl.android.animator.BoolAnimator;
 
 public class Switch extends View implements Theme.Colorable {
 
-    // Ayuless: opt-in drawing for our settings switches; state stays upstream.
-    public interface DrawingDelegate {
-        void draw(Canvas canvas, Switch view);
-    }
-    private DrawingDelegate drawingDelegate;
-
-    public void setDrawingDelegate(DrawingDelegate delegate) {
-        drawingDelegate = delegate;
-        invalidate();
-    }
-
     @Override
     public void updateColors() {
         colorSet = 0; // the ripple color is re-read from the theme on the next press
@@ -393,12 +382,7 @@ public class Switch extends View implements Theme.Colorable {
             return;
         }
 
-        // Ayuless: only explicitly styled instances use the custom appearance.
-        if (drawingDelegate != null) {
-            drawingDelegate.draw(canvas, this);
-            return;
-        }
-
+        // Ayuless: settings use this upstream renderer too, including OFF colors and ripple.
         int width = AndroidUtilities.dp(31);
         int thumb = AndroidUtilities.dp(20);
         int x = (getMeasuredWidth() - width) / 2;

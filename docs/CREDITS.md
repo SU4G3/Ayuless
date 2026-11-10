@@ -12,6 +12,8 @@ Files: `TMessagesProj/src/main/res/drawable/ayuless_solar_*.xml`.
 
 `ayuless_solar_eye.xml` is an eye adaptation drawn in the Solar Linear style
 for the retained TTL media badge, with the same CC BY 4.0 attribution above.
+`ayuless_solar_clock.xml` is a clock adaptation in the same Solar Linear style
+for timed media, credited to 480 Design / R4IN80W under CC BY 4.0.
 
 CC BY 4.0 is one-way compatible with GPLv3: the icons can be distributed as part of
 Ayuless (GPL-3.0-or-later) as long as this attribution is kept.
@@ -36,6 +38,11 @@ License note: the AyuGram4A repository ships the GNU GPL version 2 text and its 
 Reference revision: `7013145676d36d82ee13c02a89f72097b7490dcd`. The original GPLv2 text is preserved in
 [LICENSE-AYUGRAM.txt](LICENSE-AYUGRAM.txt). See [AYUGRAM-PARITY.md](AYUGRAM-PARITY.md)
 for exact behavior changes, retained implementations and exclusions.
+
+The forwarding restriction hint follows the context-menu footer placement in
+AyuGram4A `ChatActivity.java` (the `showNoForwards` block). Ayuless reuses its
+existing upstream footer with independent original-restriction detection in
+`ProtectedContent.java`; no additional AyuGram code was copied.
 
 Source mapping: settings/text dialogs and marks derive from `AyuConfig`,
 `AyuGramPreferencesActivity`, `MessageSavingPreferencesActivity`, `AyuUi` and

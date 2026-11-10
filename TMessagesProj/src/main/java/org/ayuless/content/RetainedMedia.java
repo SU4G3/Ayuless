@@ -5,6 +5,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC;
@@ -37,10 +38,13 @@ public final class RetainedMedia {
     public static CharSequence decorateTime(MessageObject object, CharSequence time) {
         if (!showPreview(object)) return time;
         int seconds = ttl(object);
-        SpannableString badge = new SpannableString("◉ " + (seconds == Integer.MAX_VALUE ? "1" : seconds + "s") + "  ");
-        ColoredImageSpan eye = new ColoredImageSpan(R.drawable.ayuless_solar_eye);
-        eye.setRelativeSize(Theme.chat_timePaint.getFontMetricsInt());
-        badge.setSpan(eye, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        boolean viewOnce = seconds == Integer.MAX_VALUE;
+        SpannableString badge = new SpannableString("◉ " + (viewOnce
+                ? LocaleController.getString(R.string.AyulessMediaViewOnce) : seconds + "s") + " | ");
+        ColoredImageSpan icon = new ColoredImageSpan(viewOnce
+                ? R.drawable.ayuless_solar_eye : R.drawable.ayuless_solar_clock);
+        icon.setRelativeSize(Theme.chat_timePaint.getFontMetricsInt());
+        badge.setSpan(icon, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return TextUtils.concat(badge, time);
     }
 }
