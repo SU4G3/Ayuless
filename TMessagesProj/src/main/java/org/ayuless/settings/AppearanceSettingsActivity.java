@@ -1,13 +1,4 @@
 /*
- * This is the source code of AyuGram for Android.
- *
- * We do not and cannot prevent the use of our code,
- * but be respectful and credit the original author.
- *
- * Copyright @Radolyn, 2023
- */
-
-/*
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (C) 2026 Ayuless contributors
  */
@@ -42,7 +33,6 @@ public class AppearanceSettingsActivity extends AyulessSettingsFragment {
     private static final int ID_HIDE_SPONSORED = 10;
     private static final int ID_LOCAL_PREMIUM = 11;
     private static final int ID_WORK_IN_BACKGROUND = 12;
-    private static final int ID_RESTRICTED_FORWARD_HINT = 13;
 
     private DeletedMessagePreview preview;
     private DeletedMarkColors colors;
@@ -72,7 +62,7 @@ public class AppearanceSettingsActivity extends AyulessSettingsFragment {
         items.add(UItem.asShadow(getString(R.string.AyulessGhostInDialogsInfo)));
         items.add(UItem.asCheck(ID_HIDE_SPONSORED, getString(R.string.AyulessHideSponsored)).setChecked(ExtrasConfig.hideSponsored()));
         items.add(UItem.asCheck(ID_LOCAL_PREMIUM, getString(R.string.AyulessLocalPremium)).setChecked(ExtrasConfig.localPremium()));
-        items.add(UItem.asCheck(ID_RESTRICTED_FORWARD_HINT, getString(R.string.AyulessRestrictedForwardHint)).setChecked(ExtrasConfig.get(ExtrasConfig.KEY_RESTRICTED_FORWARD_HINT)));
+        // CLEANROOM: reimplement CR-02.3 restriction hint setting row
         items.add(UItem.asCheck(ID_WORK_IN_BACKGROUND, getString(R.string.AyulessWorkInBackground)).setChecked(ExtrasConfig.workInBackground()));
         items.add(UItem.asShadow(getString(R.string.AyulessUsefulFeaturesInfo)));
     }
@@ -97,13 +87,10 @@ public class AppearanceSettingsActivity extends AyulessSettingsFragment {
                 break;
             case ID_LOCAL_PREMIUM:
                 ExtrasConfig.set(ExtrasConfig.KEY_LOCAL_PREMIUM, !ExtrasConfig.localPremium());
-                org.ayuless.extras.LocalPremium.refresh();
+                // CLEANROOM: reimplement CR-08 refresh after local Premium changes
                 update();
                 break;
-            case ID_RESTRICTED_FORWARD_HINT:
-                ExtrasConfig.set(ExtrasConfig.KEY_RESTRICTED_FORWARD_HINT, !ExtrasConfig.get(ExtrasConfig.KEY_RESTRICTED_FORWARD_HINT));
-                update();
-                break;
+            // CLEANROOM: reimplement CR-06.4 hint setting event
             case ID_WORK_IN_BACKGROUND:
                 ExtrasConfig.set(ExtrasConfig.KEY_WORK_IN_BACKGROUND, !ExtrasConfig.workInBackground());
                 KeepAliveService.apply();

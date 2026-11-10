@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SPDX-License-Identifier: GPL-3.0-or-later
      Copyright (C) 2026 Ayuless contributors -->
-<!--
- This is the source code of AyuGram for Android.
-
- We do not and cannot prevent the use of our code,
- but be respectful and credit the original author.
-
- Copyright @Radolyn, 2023
- AyuGram wording adapted for Ayuless; see docs/CREDITS.md.
--->
 <resources>
     <string name="AyulessLauncherName" translatable="false">Ayuless</string>
     <string name="AyulessMapsUnavailable">Maps are currently unavailable in Ayuless.</string>
@@ -268,45 +259,6 @@
     <string name="NotificationHiddenName">Ayuless</string>
     <string name="NotificationHiddenChatName">Ayuless</string>
     <string name="SecretChatName">Ayuless</string>
-    <string name="AyulessCustomMarks">Use custom text marks</string>
-    <string name="AyulessDeletedText">Deleted mark</string>
-    <string name="AyulessEditedText">Edited mark</string>
-    <string name="AyulessGhostMenu">Ghost toggle in menu</string>
-    <string name="AyulessEnableGhost">Enable Ghost</string>
-    <string name="AyulessDisableGhost">Disable Ghost</string>
-    <string name="AyulessGhostShortcut">Enter with Ghost</string>
-    <string name="AyulessCustomSaving">Customize message saving</string>
-    <string name="AyulessCustomSavingInfo">When off, keep the existing saving behavior, including formatting, reactions, bots and all media categories. Changes affect future saved copies.</string>
-    <string name="AyulessMediaCategories">Filter media by chat type</string>
-    <string name="AyulessChooseMediaCategories">Choose chat types</string>
-    <string name="AyulessMediaPrivateChats">…in private chats</string>
-    <string name="AyulessMediaPublicChannels">…in public channels</string>
-    <string name="AyulessMediaPrivateChannels">…in private channels</string>
-    <string name="AyulessMediaPublicGroups">…in public groups</string>
-    <string name="AyulessMediaPrivateGroups">…in private groups</string>
-    <string name="AyulessSaveFormatting">Save formatting</string>
-    <string name="AyulessSaveReactions">Save reactions</string>
-    <string name="AyulessSaveBots">Save in bot dialogs</string>
-    <string name="AyulessReadUntilSetting">“Read until” in menu</string>
-    <string name="AyulessReadUntil">Read until</string>
-    <string name="AyulessReadSent">Read status sent</string>
-    <string name="AyulessLocalResend">Resend deleted messages</string>
-    <string name="AyulessKeepLocalSetting">“Keep locally” option</string>
-    <string name="AyulessKeepLocally">Keep locally</string>
-    <string name="AyulessKeepLocallyConfirm">Delete this message for everyone and keep a deleted copy in this chat?</string>
-    <string name="AyulessDeleteDateSetting">Deletion date in menu</string>
-    <string name="AyulessDeleteDate">Delete Date</string>
-    <string name="AyulessEditsHistoryTitle">Edits history</string>
-    <string name="AyulessEditsHistoryMenu">History</string>
-    <string name="AyulessHistoryCurrent">Current version</string>
-    <string name="AyulessHistoryOriginal">Original</string>
-    <string name="AyulessHistoryVersion">Version %1$d</string>
-    <string name="AyulessHistoryEmpty">(empty)</string>
-    <string name="AyulessHistoryHint">Tap a message to copy text or open its downloaded media. Long press to copy text.</string>
-    <string name="AyulessUnknown">Unknown</string>
-    <string name="AyulessReadUntilInfo">“Read until” explicitly sends a read receipt even in ghost mode.</string>
-    <string name="AyulessDeletedActionsInfo">“Keep locally” requires saved deleted messages and is available for cloud chats. Resending media requires a downloaded copy.</string>
     <string name="AyulessMediaViewOnce">View once</string>
-    <string name="AyulessRestrictedForwardHint">Forwarding hint</string>
-    <string name="AyulessOriginalForwardRestricted">Forwarding is restricted in the original message</string>
+    <!-- CLEANROOM: reimplement CR-02 through CR-08 and CR-11 resource meanings -->
 </resources>

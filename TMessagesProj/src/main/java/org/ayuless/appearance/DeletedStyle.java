@@ -1,13 +1,4 @@
 /*
- * This is the source code of AyuGram for Android.
- *
- * We do not and cannot prevent the use of our code,
- * but be respectful and credit the original author.
- *
- * Copyright @Radolyn, 2023
- */
-
-/*
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (C) 2026 Ayuless contributors
  */
@@ -51,10 +42,7 @@ public final class DeletedStyle {
 
     /** Shared by real messages and the live settings preview. */
     public static CharSequence decorateTimeLabel(CharSequence time) {
-        if (AppearanceConfig.customMarks()) {
-            String text = AppearanceConfig.deletedText();
-            return TextUtils.isEmpty(text) ? time : TextUtils.concat(text, " ", time);
-        }
+        // CLEANROOM: reimplement CR-07 custom deletion text prefix
         String emoji = AppearanceConfig.markEmoji();
         if (TextUtils.isEmpty(emoji)) return time;
         SpannableString mark = new SpannableString(emoji + " ");

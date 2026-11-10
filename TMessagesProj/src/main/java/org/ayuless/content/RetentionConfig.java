@@ -1,12 +1,3 @@
-/*
- * This is the source code of AyuGram for Android.
- *
- * We do not and cannot prevent the use of our code,
- * but be respectful and credit the original author.
- *
- * Copyright @Radolyn, 2023
- */
-
 // SPDX-License-Identifier: GPL-3.0-or-later
 package org.ayuless.content;
 
@@ -29,9 +20,9 @@ public final class RetentionConfig {
                 || message.destroyTimeMillis != 0 || message.media != null && message.media.ttl_seconds != 0;
     }
 
+    // CLEANROOM: reimplement CR-04 bot capture eligibility
     public static boolean storable(int account, TLRPC.Message message, String purpose) {
-        if (message == null || SpyExceptions.isExcepted(account, MessageObject.getDialogId(message))
-                || !org.ayuless.spy.MessageSavingConfig.saveDialog(account, MessageObject.getDialogId(message))) return false;
+        if (message == null || SpyExceptions.isExcepted(account, MessageObject.getDialogId(message))) return false;
         if (DELETE.equals(purpose)) return AntiDeleteConfig.isEnabled(account);
         if (EDIT.equals(purpose)) return EditsConfig.isEnabled(account);
         if (ATTACHMENT.equals(purpose)) return SavedAttachments.isEnabled(account);

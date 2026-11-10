@@ -1,12 +1,3 @@
-/*
- * This is the source code of AyuGram for Android.
- *
- * We do not and cannot prevent the use of our code,
- * but be respectful and credit the original author.
- *
- * Copyright @Radolyn, 2023
- */
-
 // SPDX-License-Identifier: GPL-3.0-or-later
 package org.ayuless.content;
 
@@ -59,37 +50,23 @@ public final class ProtectedContent {
     }
 
     /** True if the server will refuse a plain forward of this message. */
-    private static boolean needsCopy(MessageObject messageObject) {
+    // CLEANROOM: reimplement CR-06.2 deleted-message copies and CR-06.4 source restriction hint
+    private static boolean needsCopy(MessagesController controller, MessageObject messageObject) {
         TLRPC.Message message = messageObject.messageOwner;
         if (message == null || !canUnlock(messageObject.currentAccount, message)) {
             return false;
         }
-        if (org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_LOCAL_RESEND)
-                && org.ayuless.antidelete.DeletedCache.isDeleted(messageObject.currentAccount, messageObject.getDialogId(), messageObject.getId())) return true;
+        if (unlocked.contains(message)) {
+            return true;
+        }
         long dialogId = MessageObject.getDialogId(message);
-        return DialogObject.isEncryptedDialog(dialogId) || RetentionConfig.timed(message)
-                || forwardingRestricted(messageObject);
-    }
-
-    /** Original server restriction, independent of other reasons to send a local copy. */
-    public static boolean forwardingRestricted(MessageObject object) {
-        if (object == null || object.messageOwner == null) return false;
-        TLRPC.Message message = object.messageOwner;
-        if (message.noforwards || unlocked.contains(message)) return true;
-        MessagesController controller = MessagesController.getInstance(object.currentAccount);
-        long dialogId = MessageObject.getDialogId(message);
-        if (DialogObject.isEncryptedDialog(dialogId)) return false;
+        if (DialogObject.isEncryptedDialog(dialogId) || RetentionConfig.timed(message)) return true;
         if (dialogId > 0) {
             TLRPC.UserFull full = controller.getUserFull(dialogId);
             return full != null && (full.noforwards_peer_enabled || full.noforwards_my_enabled);
         }
         TLRPC.Chat chat = controller.getChat(-dialogId);
         return chat != null && chat.noforwards;
-    }
-
-    public static boolean showForwardHint(MessageObject object) {
-        return org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_RESTRICTED_FORWARD_HINT)
-                && forwardingRestricted(object);
     }
 
     /** Materialize an encrypted cache file only when the user explicitly saves or shares it. */
@@ -172,10 +149,11 @@ public final class ProtectedContent {
      */
     public static int sendCopies(int account, ArrayList<MessageObject> messages, long peer, boolean notify, int scheduleDate, MessageObject replyToTopMsg) {
         AccountInstance instance = AccountInstance.getInstance(account);
+        MessagesController controller = instance.getMessagesController();
         int skipped = 0;
         for (Iterator<MessageObject> it = messages.iterator(); it.hasNext(); ) {
             MessageObject messageObject = it.next();
-            if (!needsCopy(messageObject)) {
+            if (!needsCopy(controller, messageObject)) {
                 continue;
             }
             it.remove();

@@ -1,13 +1,4 @@
 /*
- * This is the source code of AyuGram for Android.
- *
- * We do not and cannot prevent the use of our code,
- * but be respectful and credit the original author.
- *
- * Copyright @Radolyn, 2023
- */
-
-/*
  * This is the source code of Telegram for Android v. 5.x.x.
  * It is licensed under GNU GPL v. 2 or later.
  * You should have received a copy of the license in this archive (see LICENSE).
@@ -277,10 +268,11 @@ public class UserConfig extends BaseController {
         }
     }
 
+    // CLEANROOM: reimplement CR-08 server-self update gates
     private void checkPremiumSelf(TLRPC.User oldUser, TLRPC.User newUser) {
         if (oldUser != null && newUser != null && oldUser.premium != newUser.premium) {
             AndroidUtilities.runOnUIThread(() -> {
-                getMessagesController().updatePremium(newUser.premium || org.ayuless.extras.ExtrasConfig.localPremium()); // Ayuless: retain local Premium preference
+                getMessagesController().updatePremium(newUser.premium);
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.currentUserPremiumStatusChanged);
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.premiumStatusChangedGlobal);
 
@@ -290,7 +282,7 @@ public class UserConfig extends BaseController {
             });
         } else if (oldUser == null) {
             AndroidUtilities.runOnUIThread(() -> {
-                getMessagesController().updatePremium(newUser.premium || org.ayuless.extras.ExtrasConfig.localPremium()); // Ayuless: retain local Premium preference
+                getMessagesController().updatePremium(newUser.premium);
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.currentUserPremiumStatusChanged);
                 getMediaDataController().loadPremiumPromo(true);
             });
@@ -581,12 +573,13 @@ public class UserConfig extends BaseController {
         }
     }
 
+    // CLEANROOM: reimplement CR-08 local Premium self gate
     public boolean isPremium() {
         TLRPC.User user = currentUser;
         if (user == null) {
             return false;
         }
-        return user.premium || org.ayuless.extras.ExtrasConfig.localPremium(); // Ayuless: optional local Premium
+        return user.premium;
     }
 
     public Long getEmojiStatus() {

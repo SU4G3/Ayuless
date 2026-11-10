@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SPDX-License-Identifier: GPL-3.0-or-later
      Copyright (C) 2026 Ayuless contributors -->
-<!--
- This is the source code of AyuGram for Android.
-
- We do not and cannot prevent the use of our code,
- but be respectful and credit the original author.
-
- Copyright @Radolyn, 2023
- AyuGram wording adapted for Ayuless; see docs/CREDITS.md.
--->
 <resources>
     <string name="AyulessMapsUnavailable">Карты сейчас недоступны в Ayuless.</string>
     <string name="AyulessSettings">Ayuless</string>
@@ -267,45 +258,6 @@
     <string name="NotificationHiddenName">Ayuless</string>
     <string name="NotificationHiddenChatName">Ayuless</string>
     <string name="SecretChatName">Ayuless</string>
-    <string name="AyulessCustomMarks">Использовать текстовые метки</string>
-    <string name="AyulessDeletedText">Метка удалённого</string>
-    <string name="AyulessEditedText">Метка изменённого</string>
-    <string name="AyulessGhostMenu">Призрак в меню</string>
-    <string name="AyulessEnableGhost">Включить Призрака</string>
-    <string name="AyulessDisableGhost">Выключить Призрака</string>
-    <string name="AyulessGhostShortcut">Войти с Призраком</string>
-    <string name="AyulessCustomSaving">Настроить сохранение сообщений</string>
-    <string name="AyulessCustomSavingInfo">Когда выключено, сохраняется прежнее поведение: форматирование, реакции, диалоги с ботами и все категории файлов. Изменения применяются к новым сохранённым копиям.</string>
-    <string name="AyulessMediaCategories">Медиа по типу чата</string>
-    <string name="AyulessChooseMediaCategories">Выбрать типы чатов</string>
-    <string name="AyulessMediaPrivateChats">…в личных чатах</string>
-    <string name="AyulessMediaPublicChannels">…в открытых каналах</string>
-    <string name="AyulessMediaPrivateChannels">…в приватных каналах</string>
-    <string name="AyulessMediaPublicGroups">…в открытых группах</string>
-    <string name="AyulessMediaPrivateGroups">…в приватных группах</string>
-    <string name="AyulessSaveFormatting">Сохранять форматирование</string>
-    <string name="AyulessSaveReactions">Сохранять реакции</string>
-    <string name="AyulessSaveBots">Сохранять в диалогах с ботами</string>
-    <string name="AyulessReadUntilSetting">«Прочитать до» в меню</string>
-    <string name="AyulessReadUntil">Прочитать до</string>
-    <string name="AyulessReadSent">Статус прочтения отправлен</string>
-    <string name="AyulessLocalResend">Пересылка удалённых</string>
-    <string name="AyulessKeepLocalSetting">Пункт «Сохранить локально»</string>
-    <string name="AyulessKeepLocally">Сохранить локально</string>
-    <string name="AyulessKeepLocallyConfirm">Удалить это сообщение у всех и оставить удалённую копию в этом чате?</string>
-    <string name="AyulessDeleteDateSetting">Дата удаления в меню</string>
-    <string name="AyulessDeleteDate">Дата удаления</string>
-    <string name="AyulessEditsHistoryTitle">История редактирования</string>
-    <string name="AyulessEditsHistoryMenu">История</string>
-    <string name="AyulessHistoryCurrent">Текущая версия</string>
-    <string name="AyulessHistoryOriginal">Оригинал</string>
-    <string name="AyulessHistoryVersion">Версия %1$d</string>
-    <string name="AyulessHistoryEmpty">(пусто)</string>
-    <string name="AyulessHistoryHint">Нажмите на сообщение, чтобы скопировать текст или открыть загруженный файл. Удерживайте, чтобы скопировать текст.</string>
-    <string name="AyulessUnknown">Неизвестно</string>
-    <string name="AyulessReadUntilInfo">«Прочитать до» явно отправляет отметку о прочтении даже в режиме призрака.</string>
-    <string name="AyulessDeletedActionsInfo">«Оставить локально» требует сохранения удалённых сообщений и доступно в облачных чатах. Для повторной отправки медиа нужна скачанная копия.</string>
     <string name="AyulessMediaViewOnce">Один просмотр</string>
-    <string name="AyulessRestrictedForwardHint">Подсказка о пересылке</string>
-    <string name="AyulessOriginalForwardRestricted">В оригинальном сообщении пересылка запрещена</string>
+    <!-- CLEANROOM: reimplement CR-02 through CR-08 and CR-11 resource meanings -->
 </resources>

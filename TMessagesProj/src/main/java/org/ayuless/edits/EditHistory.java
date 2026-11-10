@@ -1,13 +1,4 @@
 /*
- * This is the source code of AyuGram for Android.
- *
- * We do not and cannot prevent the use of our code,
- * but be respectful and credit the original author.
- *
- * Copyright @Radolyn, 2023
- */
-
-/*
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (C) 2026 Ayuless contributors
  */
@@ -39,6 +30,7 @@ public final class EditHistory {
      * Must be called before MessagesStorage.putMessages for the edit is queued: the lookup runs on
      * the storage queue, so it reads the row as it was before the edit.
      */
+    // CLEANROOM: reimplement CR-05.1 revision media capture
     public static void onServerEdit(int account, TLRPC.Message edited) {
         if (edited == null || !EditsConfig.isEnabled(account)) {
             return;
@@ -61,7 +53,6 @@ public final class EditHistory {
                 return;
             }
             AyulessStore.getInstance(account).saveEdit(old);
-            org.ayuless.spy.SavedAttachments.onKept(account, old);
             EditedCache.mark(account, dialogId, msgId);
         });
     }
@@ -91,6 +82,7 @@ public final class EditHistory {
         return null;
     }
 
+    // CLEANROOM: reimplement CR-05.1 zero/nonzero media transitions
     static boolean contentChanged(TLRPC.Message old, String newText, ArrayList<TLRPC.MessageEntity> newEntities, long newMediaId) {
         if (!TextUtils.equals(nonNull(old.message), nonNull(newText))) {
             return true;
@@ -99,7 +91,7 @@ public final class EditHistory {
             return true;
         }
         long oldMediaId = mediaId(old.media);
-        return oldMediaId != newMediaId;
+        return oldMediaId != 0 && newMediaId != 0 && oldMediaId != newMediaId;
     }
 
     private static String nonNull(String s) {

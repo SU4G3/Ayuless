@@ -1,13 +1,4 @@
 /*
- * This is the source code of AyuGram for Android.
- *
- * We do not and cannot prevent the use of our code,
- * but be respectful and credit the original author.
- *
- * Copyright @Radolyn, 2023
- */
-
-/*
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (C) 2026 Ayuless contributors
  */
@@ -89,6 +80,7 @@ public final class AyulessStore {
     // ---- writes ----
 
     /** Save a message that was deleted on the server side. No-op for non-storable messages. */
+    // CLEANROOM: reimplement CR-04 future deletion snapshot policy
     public void saveDeleted(TLRPC.Message message) {
         if (!isStorable(account, message, org.ayuless.content.RetentionConfig.DELETE)) {
             return;
@@ -101,7 +93,7 @@ public final class AyulessStore {
         final Long topicId = topicIdOf(message);
         final int date = message.date;
         final Long fromId = message.from_id != null ? MessageObject.getPeerId(message.from_id) : null;
-        final byte[] data = serialize(org.ayuless.spy.MessageSavingConfig.snapshot(account, message));
+        final byte[] data = serialize(message);
         if (data == null) {
             return;
         }
@@ -132,6 +124,7 @@ public final class AyulessStore {
      * Save the version of a message as it was before an edit. Call with the old message object
      * before applying the server edit.
      */
+    // CLEANROOM: reimplement CR-04 future revision formatting policy
     public void saveEdit(TLRPC.Message before) {
         if (!isStorable(account, before, org.ayuless.content.RetentionConfig.EDIT)) {
             return;
@@ -143,7 +136,7 @@ public final class AyulessStore {
         final int msgId = before.id;
         final int editDate = before.edit_date;
         final String text = before.message;
-        final byte[] entities = serializeEntities(org.ayuless.spy.MessageSavingConfig.saveFormatting(account) ? before.entities : null);
+        final byte[] entities = serializeEntities(before.entities);
         final byte[] media = before.media != null && !(before.media instanceof TLRPC.TL_messageMediaEmpty) ? serialize(before.media) : null;
         queue.postRunnable(() -> {
             try {
@@ -564,17 +557,7 @@ public final class AyulessStore {
         });
     }
 
-    public void getDeleteDate(long dialogId, int msgId, Callback<Integer> callback) {
-        queue.postRunnable(() -> {
-            int date = 0;
-            try (Cursor cursor = db().rawQuery("SELECT deleted_at FROM deleted_messages WHERE dialog_id = ? AND msg_id = ?",
-                    new String[]{String.valueOf(dialogId), String.valueOf(msgId)})) {
-                if (cursor.moveToFirst()) date = cursor.getInt(0);
-            } catch (Exception e) { FileLog.e(e); }
-            final int result = date;
-            AndroidUtilities.runOnUIThread(() -> callback.run(result));
-        });
-    }
+    // CLEANROOM: reimplement CR-06.5 asynchronous deletion-time query
 
     public void sizeBytes(Callback<Long> callback) {
         queue.postRunnable(() -> {
