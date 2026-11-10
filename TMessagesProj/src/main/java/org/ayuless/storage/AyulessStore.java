@@ -14,8 +14,6 @@
 package org.ayuless.storage;
 
 import android.content.ContentValues;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -44,10 +42,6 @@ import java.util.ArrayList;
  * UI thread. All message categories follow the main feature switches and chat exceptions.
  */
 public final class AyulessStore {
-
-    public static final String PREFS = "ayuless_storage";
-    public static final String KEY_LIMIT_BYTES = "limit_bytes";
-    public static final long DEFAULT_LIMIT_BYTES = 100L * 1024 * 1024;
 
     /** Run the size check after this many writes, not on every insert. */
     private static final int CLEANUP_EVERY_WRITES = 50;
@@ -589,14 +583,46 @@ public final class AyulessStore {
         });
     }
 
+    /** Total saved-message storage, matching the attachments slider's app-wide scope. */
+    public static void totalSizeBytes(Callback<Long> callback) {
+        queue.postRunnable(() -> {
+            long size = totalSizeBytesInternal();
+            AndroidUtilities.runOnUIThread(() -> callback.run(size));
+        });
+    }
+
+    private static long totalSizeBytesInternal() {
+        long size = 0;
+        for (int account = 0; account < UserConfig.MAX_ACCOUNT_COUNT; account++) {
+            AyulessStore store = getInstance(account);
+            if (store.dbFile().exists()) {
+                size += store.sizeBytesInternal();
+            }
+        }
+        return size;
+    }
+
     // ---- size limit ----
 
     public static long getLimitBytes() {
-        return prefs().getLong(KEY_LIMIT_BYTES, DEFAULT_LIMIT_BYTES);
+        return org.ayuless.spy.SavedAttachments.getLimitBytes();
     }
 
     public static void setLimitBytes(long bytes) {
-        prefs().edit().putLong(KEY_LIMIT_BYTES, bytes).apply();
+        org.ayuless.spy.SavedAttachments.setLimitBytes(bytes);
+        enforceStorageLimit();
+    }
+
+    private static void enforceStorageLimit() {
+        queue.postRunnable(() -> {
+            for (int account = 0; account < UserConfig.MAX_ACCOUNT_COUNT; account++) {
+                AyulessStore store = getInstance(account);
+                if (store.dbFile().exists()) {
+                    store.enforceLimit();
+                }
+            }
+            org.ayuless.spy.SavedAttachments.checkLimit();
+        });
     }
 
     private void afterWrite() {
@@ -604,7 +630,7 @@ public final class AyulessStore {
             return;
         }
         writesSinceCleanup = 0;
-        enforceLimit();
+        enforceStorageLimit();
     }
 
     private void enforceLimit() {
@@ -615,7 +641,7 @@ public final class AyulessStore {
         SQLiteDatabase db = db();
         boolean removed = false;
         int guard = 0;
-        while (sizeBytesInternal() > limit && guard++ < 1000) {
+        while (totalSizeBytesInternal() > limit && guard++ < 1000) {
             int deleted = db.delete("deleted_messages",
                     "rowid IN (SELECT rowid FROM deleted_messages ORDER BY deleted_at ASC LIMIT " + CLEANUP_BATCH + ")", null);
             int edits = db.delete("edit_history",
@@ -676,10 +702,6 @@ public final class AyulessStore {
             dir.mkdirs();
         }
         return new File(dir, "ayuless_" + account + ".db");
-    }
-
-    private static SharedPreferences prefs() {
-        return ApplicationLoader.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
     }
 
     private static Long topicIdOf(TLRPC.Message message) {

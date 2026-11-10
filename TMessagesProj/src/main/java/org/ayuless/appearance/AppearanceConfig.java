@@ -76,7 +76,7 @@ public final class AppearanceConfig {
     }
 
     public static void setMarkEmoji(String emoji) {
-        prefs().edit().putString(KEY_MARK_EMOJI, emoji).apply();
+        prefs().edit().putString(KEY_MARK_EMOJI, emoji).putBoolean(KEY_CUSTOM_MARKS, false).apply();
     }
 
     public static int markColor() {

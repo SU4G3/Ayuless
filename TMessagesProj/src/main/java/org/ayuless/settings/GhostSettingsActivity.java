@@ -163,25 +163,29 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
                         .setPad(1));
             }
         }
-        items.add(UItem.asShadow(getString(R.string.AyulessGhostLockHint)));
+        items.add(UItem.asShadow(getString(R.string.AyulessGhostInfo) + "\n\n" + getString(R.string.AyulessGhostLockHint)));
 
         final boolean hideRead = GhostConfig.getProfile(profile, GhostConfig.KEY_HIDE_READ);
         items.add(UItem.asCheck(ID_READ_ON_ACTION, getString(R.string.AyulessGhostReadOnAction))
                 .setChecked(GhostConfig.getProfile(profile, GhostConfig.KEY_READ_ON_ACTION))
                 .setEnabled(inUse && hideRead));
+        items.add(UItem.asShadow(getString(R.string.AyulessGhostReadOnActionInfo)));
         items.add(UItem.asCheck(ID_SEND_SILENTLY, getString(R.string.AyulessGhostSendSilently))
                 .setChecked(GhostConfig.getProfile(profile, GhostConfig.KEY_SEND_SILENTLY))
                 .setEnabled(inUse));
+        items.add(UItem.asShadow(getString(R.string.AyulessGhostSendSilentlyInfo)));
         items.add(UItem.asCheck(ID_STORY_PROMPT, getString(R.string.AyulessGhostStoryPrompt))
                 .setChecked(GhostConfig.getProfile(profile, GhostConfig.KEY_STORY_PROMPT, true))
                 .setEnabled(inUse));
+        items.add(UItem.asShadow(getString(R.string.AyulessGhostStoryPromptInfo)));
         items.add(UItem.asCheck(ID_DELAYED_SEND, getString(R.string.AyulessGhostDelayedSend))
                 .setChecked(GhostConfig.getProfile(profile, GhostConfig.KEY_DELAYED_SEND))
                 .setEnabled(inUse));
+        items.add(UItem.asShadow(getString(R.string.AyulessGhostDelayedSendInfo)));
         items.add(UItem.asCheck(ID_MENU, getString(R.string.AyulessGhostMenu)).setChecked(ExtrasConfig.get(ExtrasConfig.KEY_GHOST_MENU)));
         items.add(UItem.asCheck(ID_SHORTCUT, getString(R.string.AyulessGhostShortcut)).setChecked(ExtrasConfig.get(ExtrasConfig.KEY_GHOST_SHORTCUT)));
         items.add(UItem.asCheck(ID_READ_UNTIL, getString(R.string.AyulessReadUntilSetting)).setChecked(ExtrasConfig.get(ExtrasConfig.KEY_READ_UNTIL)));
-        items.add(UItem.asShadow(getString(R.string.AyulessGhostDelayedSendInfo) + "\n\n" + getString(R.string.AyulessReadUntilInfo)));
+        items.add(UItem.asShadow(getString(R.string.AyulessReadUntilInfo)));
     }
 
     @Override
