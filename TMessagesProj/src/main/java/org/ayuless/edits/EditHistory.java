@@ -30,7 +30,6 @@ public final class EditHistory {
      * Must be called before MessagesStorage.putMessages for the edit is queued: the lookup runs on
      * the storage queue, so it reads the row as it was before the edit.
      */
-    // CLEANROOM: reimplement CR-05.1 revision media capture
     public static void onServerEdit(int account, TLRPC.Message edited) {
         if (edited == null || !EditsConfig.isEnabled(account)) {
             return;
@@ -45,7 +44,7 @@ public final class EditHistory {
         final long newMediaId = mediaId(edited.media);
         MessagesStorage storage = MessagesStorage.getInstance(account);
         storage.getStorageQueue().postRunnable(() -> {
-            TLRPC.Message old = readStored(storage, dialogId, msgId);
+            TLRPC.Message old = readStored(account, storage, dialogId, msgId);
             if (old == null || !AyulessStore.isStorable(account, old, org.ayuless.content.RetentionConfig.EDIT)) {
                 return;
             }
@@ -53,19 +52,26 @@ public final class EditHistory {
                 return;
             }
             AyulessStore.getInstance(account).saveEdit(old);
+            org.ayuless.spy.SavedAttachments.onKept(account, old);
             EditedCache.mark(account, dialogId, msgId);
         });
     }
 
-    private static TLRPC.Message readStored(MessagesStorage storage, long dialogId, int msgId) {
+    private static TLRPC.Message readStored(int account, MessagesStorage storage, long dialogId, int msgId) {
         SQLiteCursor cursor = null;
         try {
             cursor = storage.getDatabase().queryFinalized("SELECT data FROM messages_v2 WHERE uid = " + dialogId + " AND mid = " + msgId + " LIMIT 1");
             if (cursor.next()) {
                 NativeByteBuffer data = cursor.byteBufferValue(0);
                 if (data != null) {
-                    TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                    data.reuse();
+                    TLRPC.Message message;
+                    try {
+                        message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
+                        if (message != null) message.readAttachPath(data,
+                                org.telegram.messenger.UserConfig.getInstance(account).getClientUserId());
+                    } finally {
+                        data.reuse();
+                    }
                     if (message != null) {
                         message.dialog_id = dialogId;
                     }
@@ -82,7 +88,6 @@ public final class EditHistory {
         return null;
     }
 
-    // CLEANROOM: reimplement CR-05.1 zero/nonzero media transitions
     static boolean contentChanged(TLRPC.Message old, String newText, ArrayList<TLRPC.MessageEntity> newEntities, long newMediaId) {
         if (!TextUtils.equals(nonNull(old.message), nonNull(newText))) {
             return true;
@@ -91,7 +96,7 @@ public final class EditHistory {
             return true;
         }
         long oldMediaId = mediaId(old.media);
-        return oldMediaId != 0 && newMediaId != 0 && oldMediaId != newMediaId;
+        return oldMediaId != newMediaId;
     }
 
     private static String nonNull(String s) {

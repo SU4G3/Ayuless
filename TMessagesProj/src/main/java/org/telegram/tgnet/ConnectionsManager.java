@@ -498,10 +498,12 @@ public class ConnectionsManager extends BaseController {
                         FileLog.d("java received " + resp + (error != null ? " error = " + error : "") + " messageId = 0x" + Long.toHexString(requestMsgId));
                         FileLog.dumpResponseAndRequest(currentAccount, object, resp, error, requestMsgId, finalStartRequestTime, requestToken);
                     }
-                    // CLEANROOM: reimplement CR-03.2 successful response integration
                     final TLObject finalResponse = resp;
                     final TLRPC.TL_error finalError = error;
                     Utilities.stageQueue.postRunnable(() -> {
+                        if (finalResponse != null && finalError == null) {
+                            org.ayuless.ghost.GhostInterceptor.onSuccessfulRequest(currentAccount, object);
+                        }
                         if (onComplete != null) {
                             onComplete.run(finalResponse, finalError);
                         } else if (onCompleteTimestamp != null) {

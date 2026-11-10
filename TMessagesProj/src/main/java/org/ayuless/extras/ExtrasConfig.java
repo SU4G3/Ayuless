@@ -13,7 +13,13 @@ import org.telegram.messenger.ApplicationLoader;
 /** App-wide "useful features" toggles (Ayuless > Customization). Sponsored-message hiding and background work default on; other extras default off. */
 public final class ExtrasConfig {
 
-    // CLEANROOM: reimplement CR-02 global optional feature keys and CR-06.4 hint default
+    public static final String KEY_READ_UNTIL = "readUntil";
+    public static final String KEY_LOCAL_RESEND = "localResend";
+    public static final String KEY_KEEP_OWN_DELETES = "keepOwnDeletes";
+    public static final String KEY_DELETE_DATE = "deleteDate";
+    public static final String KEY_GHOST_IN_MENU = "ghostInMenu";
+    public static final String KEY_GHOST_SHORTCUT = "ghostShortcut";
+    public static final String KEY_RESTRICTED_FORWARD_HINT = "restrictedForwardHint";
     public static final String KEY_HIDE_SPONSORED = "hideSponsored";
     public static final String KEY_LOCAL_PREMIUM = "localPremium";
     public static final String KEY_WORK_IN_BACKGROUND = "workInBackground";
@@ -26,7 +32,7 @@ public final class ExtrasConfig {
     }
 
     public static boolean get(String key) {
-        return ApplicationLoader.applicationContext != null && prefs().getBoolean(key, KEY_HIDE_SPONSORED.equals(key) || KEY_WORK_IN_BACKGROUND.equals(key));
+        return ApplicationLoader.applicationContext != null && prefs().getBoolean(key, KEY_HIDE_SPONSORED.equals(key) || KEY_WORK_IN_BACKGROUND.equals(key) || KEY_RESTRICTED_FORWARD_HINT.equals(key));
     }
 
     public static void set(String key, boolean value) {

@@ -47,8 +47,7 @@ public final class DelayedSend {
     /** Delay for messages with media, which may take longer to upload, in seconds. */
     public static final int DELAY_MEDIA = 20;
     /** Minimal distance to "now" a scheduled date still gets when the request leaves. */
-    // CLEANROOM: reimplement CR-03.3 scheduled-send timing floor
-    private static final int MIN_AHEAD = 5;
+    private static final int MIN_AHEAD = 11;
     /** Sends in the same chat within this window share one date, so albums stay together. */
     private static final int GROUP_WINDOW = 3;
 

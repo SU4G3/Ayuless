@@ -100,7 +100,6 @@ public final class SavedAttachments {
      * Called for every message anti-delete kept. Copies its media if it is already downloaded.
      * Runs the file work on a background queue.
      */
-    // CLEANROOM: reimplement CR-04 attachment category policy
     public static void onKept(int account, TLRPC.Message message) {
         if (message == null || message.media == null || !isEnabled(account)) {
             return;
@@ -109,7 +108,7 @@ public final class SavedAttachments {
             return;
         }
         final long dialogId = MessageObject.getDialogId(message);
-        if (SpyExceptions.isExcepted(account, dialogId)) {
+        if (SpyExceptions.isExcepted(account, dialogId) || !MessageSavingConfig.allowMedia(account, dialogId)) {
             return;
         }
         final String attachName = FileLoader.getMessageFileName(message);
@@ -167,7 +166,48 @@ public final class SavedAttachments {
         });
     }
 
-    // CLEANROOM: reimplement CR-05.3 history attachment preparation
+    public static void prepareHistory(int account, java.util.List<TLRPC.Message> messages, Runnable completion) {
+        queue.postRunnable(() -> {
+            for (TLRPC.Message message : messages) {
+                try {
+                    String name = FileLoader.getMessageFileName(message);
+                    if (TextUtils.isEmpty(name) || name.contains("/")) continue;
+                    File saved = savedFile(account, MessageObject.getDialogId(message), message.id, name);
+                    if (saved.isFile()) {
+                        if (TextUtils.isEmpty(message.attachPath)) {
+                            message.attachPath = saved.getAbsolutePath();
+                        } else if (!new File(message.attachPath).isFile()) {
+                            File cache = FileLoader.getInstance(account).getPathToMessage(message);
+                            if (cache != null && !TextUtils.isEmpty(cache.getPath()) && !cache.isFile()) {
+                                File directory = cache.getParentFile();
+                                if (directory == null || directory.isDirectory() || directory.mkdirs()) {
+                                    AndroidUtilities.copyFile(saved, cache);
+                                }
+                            }
+                        }
+                        continue;
+                    }
+                    File encrypted = new File(saved.getPath() + ".enc");
+                    File key = new File(saved.getPath() + ".enc.key");
+                    if (!encrypted.isFile() || !key.isFile()) continue;
+                    File cache = FileLoader.getInstance(account).getPathToMessage(message);
+                    if (cache == null || TextUtils.isEmpty(cache.getPath())) continue;
+                    File target = new File(cache.getPath() + ".enc");
+                    File targetKey = new File(FileLoader.getInternalCacheDir(), cache.getName() + ".enc.key");
+                    File directory = target.getParentFile();
+                    File keyDirectory = targetKey.getParentFile();
+                    if (directory != null && !directory.isDirectory() && !directory.mkdirs()) continue;
+                    if (keyDirectory != null && !keyDirectory.isDirectory() && !keyDirectory.mkdirs()) continue;
+                    if (!AndroidUtilities.copyFile(key, targetKey) || !AndroidUtilities.copyFile(encrypted, target)) {
+                        FileLog.e("Unable to restore revision attachment: " + name);
+                    }
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+            }
+            AndroidUtilities.runOnUIThread(completion);
+        });
+    }
 
     // ---- restoring ----
 

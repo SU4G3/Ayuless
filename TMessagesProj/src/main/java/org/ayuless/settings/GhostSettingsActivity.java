@@ -36,6 +36,7 @@ import java.util.ArrayList;
 /** Ayuless > Ghost mode. Edits either the shared profile or one account's own profile. */
 public class GhostSettingsActivity extends AyulessSettingsFragment {
 
+    private static final int ID_MENU = 30, ID_SHORTCUT = 31, ID_READ_UNTIL = 32;
     private static final int ID_PROFILE = 1;
     private static final int ID_USE_OWN = 2;
     private static final int ID_MASTER = 3;
@@ -171,7 +172,13 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
                 .setChecked(GhostConfig.getProfile(profile, GhostConfig.KEY_DELAYED_SEND))
                 .setEnabled(inUse));
         items.add(UItem.asShadow(getString(R.string.AyulessGhostDelayedSendInfo)));
-        // CLEANROOM: reimplement CR-02.1 global menu, launcher and explicit-read rows
+        items.add(UItem.asCheck(ID_MENU, getString(R.string.AyulessGhostMenu))
+                .setChecked(org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_GHOST_IN_MENU)));
+        items.add(UItem.asCheck(ID_SHORTCUT, getString(R.string.AyulessGhostShortcut))
+                .setChecked(org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_GHOST_SHORTCUT)));
+        items.add(UItem.asCheck(ID_READ_UNTIL, getString(R.string.AyulessReadUntilSetting))
+                .setChecked(org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_READ_UNTIL)));
+        items.add(UItem.asShadow(getString(R.string.AyulessReadUntilInfo)));
     }
 
     @Override
@@ -193,7 +200,15 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
         if (!item.enabled) {
             return;
         }
-        // CLEANROOM: reimplement CR-02.1 global feature-setting events
+        if (item.id == ID_MENU || item.id == ID_SHORTCUT || item.id == ID_READ_UNTIL) {
+            String extra = item.id == ID_MENU ? org.ayuless.extras.ExtrasConfig.KEY_GHOST_IN_MENU
+                    : item.id == ID_SHORTCUT ? org.ayuless.extras.ExtrasConfig.KEY_GHOST_SHORTCUT
+                    : org.ayuless.extras.ExtrasConfig.KEY_READ_UNTIL;
+            org.ayuless.extras.ExtrasConfig.set(extra, !org.ayuless.extras.ExtrasConfig.get(extra));
+            if (item.id == ID_SHORTCUT) org.ayuless.ghost.GhostShortcut.refresh();
+            update();
+            return;
+        }
         String key = null;
         if (item.id >= ID_OPTION_BASE && item.id < ID_OPTION_BASE + GhostConfig.GHOST_KEYS.length) {
             key = GhostConfig.GHOST_KEYS[item.id - ID_OPTION_BASE];
@@ -246,6 +261,56 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
     }
 
     private void showProfilePicker() {
-        // CLEANROOM: reimplement CR-02.4 avatar profile chooser
+        if (getParentActivity() == null) return;
+        Context context = getParentActivity();
+        LinearLayout rows = new LinearLayout(context);
+        rows.setOrientation(LinearLayout.VERTICAL);
+        rows.setPadding(dp(14), 0, dp(14), 0);
+        org.telegram.ui.ActionBar.AlertDialog dialog = new org.telegram.ui.ActionBar.AlertDialog.Builder(context, getResourceProvider())
+                .setTitle(getString(R.string.AyulessGhostProfile)).setView(rows).create();
+        android.widget.FrameLayout shared = new android.widget.FrameLayout(context);
+        shared.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector, getResourceProvider()), 2));
+        BackupImageView avatarView = new BackupImageView(context);
+        avatarView.setRoundRadius(dp(18));
+        AvatarDrawable avatar = new AvatarDrawable();
+        avatar.setAvatarType(AvatarDrawable.AVATAR_TYPE_FILTER_GROUPS);
+        avatarView.setImageDrawable(avatar);
+        shared.addView(avatarView, LayoutHelper.createFrame(36, 36, Gravity.LEFT | Gravity.TOP, 10, 10, 0, 0));
+        TextView name = new TextView(context);
+        name.setText(getString(R.string.AyulessGhostProfileAll));
+        name.setTextSize(15);
+        name.setTypeface(org.telegram.messenger.AndroidUtilities.bold());
+        name.setSingleLine(true);
+        name.setEllipsize(TextUtils.TruncateAt.END);
+        name.setGravity(Gravity.CENTER_VERTICAL);
+        ThemeBind.textColor(name, Theme.key_chats_menuItemText, getResourceProvider());
+        shared.addView(name, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 56, Gravity.LEFT | Gravity.TOP, 61, 0, 52, 0));
+        android.widget.ImageView check = new android.widget.ImageView(context);
+        check.setImageResource(R.drawable.account_check);
+        check.setScaleType(android.widget.ImageView.ScaleType.CENTER);
+        ThemeBind.colorFilter(check, Theme.key_chats_menuItemCheck, android.graphics.PorterDuff.Mode.MULTIPLY);
+        check.setVisibility(profile == GhostConfig.PROFILE_ALL ? View.VISIBLE : View.INVISIBLE);
+        shared.addView(check, LayoutHelper.createFrame(40, 56, Gravity.RIGHT | Gravity.TOP, 0, 0, 6, 0));
+        rows.addView(shared, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 56));
+        shared.setOnClickListener(v -> {
+            profile = GhostConfig.PROFILE_ALL;
+            dialog.dismiss();
+            update();
+        });
+        for (int account = 0; account < UserConfig.MAX_ACCOUNT_COUNT; account++) {
+            if (!UserConfig.getInstance(account).isClientActivated()) continue;
+            final int slot = account;
+            org.telegram.ui.Cells.AccountSelectCell cell = new org.telegram.ui.Cells.AccountSelectCell(context, false);
+            cell.setAccount(slot, false);
+            cell.setProfileChecked(profile == slot);
+            cell.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector, getResourceProvider()), 2));
+            rows.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 56));
+            cell.setOnClickListener(v -> {
+                profile = slot;
+                dialog.dismiss();
+                update();
+            });
+        }
+        showDialog(dialog);
     }
 }

@@ -1294,6 +1294,9 @@ public class ChatActivity extends BaseFragment implements
     public final static int OPTION_VIEW_STATISTICS = 115;
     public final static int OPTION_WELCOME_REVERT = 116;
     public final static int OPTION_SEND_MONEY = 117;
+    public final static int OPTION_AYULESS_READ_UNTIL = 9003;
+    public final static int OPTION_AYULESS_DELETE_DATE = 9004;
+    public final static int OPTION_AYULESS_KEEP_LOCAL = 9005;
     public final static int OPTION_AYULESS_SAVE_MEDIA = 9002; // Ayuless: save unlocked timed/secret media
     public final static int OPTION_AYULESS_EDIT_HISTORY = 9001; // Ayuless: edit history
 
@@ -31673,7 +31676,6 @@ public class ChatActivity extends BaseFragment implements
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    // CLEANROOM: reimplement CR-06.4 restriction footer
     private boolean createMenu(View v, boolean single, boolean listView, float x, float y, boolean searchGroup, boolean longpress, boolean suggestEdit) {
         if (actionBar.isActionModeShowed() || isReport()) {
             return false;
@@ -33204,7 +33206,9 @@ public class ChatActivity extends BaseFragment implements
                     }
                 }
 
-                boolean showNoForwards = (isPeerNoForwards() || message.messageOwner.noforwards && currentUser != null && currentUser.bot) && message.messageOwner.action == null && message.isSent() && !message.isEditing() && chatMode != MODE_SCHEDULED && chatMode != MODE_SAVED && getDialogId() != UserObject.VERIFY;
+                boolean explainOriginalRestriction = options.contains(OPTION_FORWARD)
+                        && org.ayuless.content.ProtectedContent.showForwardHint(currentAccount, message);
+                boolean showNoForwards = explainOriginalRestriction || (isPeerNoForwards() || message.messageOwner.noforwards && currentUser != null && currentUser.bot) && message.messageOwner.action == null && message.isSent() && !message.isEditing() && chatMode != MODE_SCHEDULED && chatMode != MODE_SAVED && getDialogId() != UserObject.VERIFY;
                 scrimPopupContainerLayout.addView(popupLayout, LayoutHelper.createLinearRelatively(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, isReactionsAvailable ? 16 : 0, 0, isReactionsAvailable ? 36 : 0, 0));
                 scrimPopupContainerLayout.setPopupWindowLayout(popupLayout);
                 if (showNoForwards) {
@@ -33213,7 +33217,9 @@ public class ChatActivity extends BaseFragment implements
                     TextView tv = new TextView(contentView.getContext());
                     tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                     ThemeBind.textColor(tv, Theme.key_actionBarDefaultSubmenuItem, getResourceProvider());
-                    if (isPeerNoForwards()) {
+                    if (explainOriginalRestriction) {
+                        tv.setText(getString(R.string.AyulessOriginalForwardRestricted));
+                    } else if (isPeerNoForwards()) {
                         final CharSequence str;
                         if (getDialogId() > 0) {
                             if (userInfo != null && currentUser != null && userInfo.noforwards_peer_enabled) {
@@ -34313,13 +34319,34 @@ public class ChatActivity extends BaseFragment implements
         MediaController.saveFile(path, getParentActivity(), messageObject.isVideo() ? 1 : 0, null, null);
     }
 
-    // CLEANROOM: reimplement CR-03.4 explicit reads, CR-05.2 history navigation and CR-06 deleted actions
     private void processSelectedOption(int option) {
         if (selectedObject == null || getParentActivity() == null) {
             return;
         }
         boolean preserveDim = false;
         switch (option) {
+            case OPTION_AYULESS_READ_UNTIL: {
+                if (chatMode != MODE_SCHEDULED && !selectedObject.isOut()
+                        && !org.ayuless.appearance.DeletedStyle.isDeleted(currentAccount, selectedObject)
+                        && org.ayuless.ghost.GhostConfig.hideRead(currentAccount)
+                        && org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_READ_UNTIL)) {
+                    org.ayuless.ghost.GhostInterceptor.readUntil(currentAccount, selectedObject, success -> {
+                        if (isFinished || getParentActivity() == null) return;
+                        if (success) BulletinFactory.of(this).createSimpleBulletin(R.raw.contact_check,
+                                getString(R.string.AyulessReadSent)).show();
+                        else org.ayuless.edits.DeletedMessageActions.showFailure(this);
+                    });
+                }
+                break;
+            }
+            case OPTION_AYULESS_DELETE_DATE: {
+                org.ayuless.edits.DeletedMessageActions.showDeleteDate(this, currentAccount, selectedObject);
+                break;
+            }
+            case OPTION_AYULESS_KEEP_LOCAL: {
+                org.ayuless.edits.DeletedMessageActions.keepLocally(this, currentAccount, selectedObject, chatMode == MODE_SCHEDULED);
+                break;
+            }
             case OPTION_AYULESS_SAVE_MEDIA: { // Ayuless: decrypt only on explicit save.
                 if (selectedObject != null && getParentActivity() != null) {
                     org.ayuless.content.ProtectedContent.saveMedia(getParentActivity(), selectedObject);
@@ -34327,7 +34354,7 @@ public class ChatActivity extends BaseFragment implements
                 break;
             }
             case OPTION_AYULESS_EDIT_HISTORY: { // Ayuless: edit history
-                org.ayuless.edits.EditHistorySheet.show(getParentActivity(), currentAccount, selectedObject);
+                presentFragment(new org.ayuless.edits.EditHistoryActivity(currentAccount, selectedObject));
                 break;
             }
             case OPTION_RETRY: {
@@ -46466,7 +46493,6 @@ public class ChatActivity extends BaseFragment implements
         return -1;
     }
 
-    // CLEANROOM: reimplement CR-03.4, CR-05.2 and CR-06 optional message commands
     public void fillMessageMenu(
         MessageObject primaryMessage,
 
@@ -47136,9 +47162,29 @@ public class ChatActivity extends BaseFragment implements
             }
         }
 
+        if (chatMode != MODE_SCHEDULED && message.getId() != 0 && !message.isOut()
+                && !org.ayuless.appearance.DeletedStyle.isDeleted(currentAccount, message)
+                && org.ayuless.ghost.GhostConfig.hideRead(currentAccount)
+                && org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_READ_UNTIL)) {
+            items.add(getString(R.string.AyulessReadUntil));
+            options.add(OPTION_AYULESS_READ_UNTIL);
+            icons.add(R.drawable.msg_markread);
+        }
+        if (org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_DELETE_DATE)
+                && org.ayuless.appearance.DeletedStyle.isDeleted(currentAccount, message)) {
+            items.add(getString(R.string.AyulessDeleteDate));
+            options.add(OPTION_AYULESS_DELETE_DATE);
+            icons.add(R.drawable.msg_recent);
+        }
+        if (org.ayuless.edits.DeletedMessageActions.canKeep(currentAccount, message, chatMode == MODE_SCHEDULED)) {
+            items.add(getString(R.string.AyulessKeepLocally));
+            options.add(OPTION_AYULESS_KEEP_LOCAL);
+            icons.add(R.drawable.msg_delete);
+        }
+
         // Ayuless: edit history entry when previous versions are stored.
         if (org.ayuless.edits.EditHistory.hasHistory(currentAccount, selectedObject)) {
-            items.add("Edit history");
+            items.add(getString(R.string.AyulessEditsHistoryMenu));
             options.add(OPTION_AYULESS_EDIT_HISTORY);
             icons.add(R.drawable.msg_recent);
         }

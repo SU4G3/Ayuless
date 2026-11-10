@@ -924,9 +924,9 @@ public class MessagesController extends BaseController implements NotificationCe
         return reactionsUniqMax;
     }
 
-    // CLEANROOM: reimplement CR-08 self-user local Premium gate
     public boolean isPremiumUser(TLRPC.User currentUser) {
-        return currentUser != null && currentUser.premium && !isSupportUser(currentUser);
+        return currentUser != null && !isSupportUser(currentUser) && (currentUser.premium
+                || currentUser.id == getUserConfig().getClientUserId() && org.ayuless.extras.ExtrasConfig.localPremium());
     }
 
     public boolean didPressTranscribeButtonEnough() {

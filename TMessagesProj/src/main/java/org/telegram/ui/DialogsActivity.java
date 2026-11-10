@@ -13302,7 +13302,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
     }
 
-    // CLEANROOM: reimplement CR-03.5 privacy overflow entry
     private void showItemOptions() {
         ItemOptions io = ItemOptions.makeOptions(this, optionsItem);
         io.setColors(getThemedColor(Theme.key_actionBarDefaultTitle), getThemedColor(Theme.key_actionBarDefaultTitle));
@@ -13466,6 +13465,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
         }
 
+        if (org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_GHOST_IN_MENU)) {
+            io.add(R.drawable.ayuless_solar_ghost, getString(org.ayuless.ghost.GhostConfig.isEnabled(currentAccount)
+                    ? R.string.AyulessDisableGhost : R.string.AyulessEnableGhost), () -> {
+                org.ayuless.ghost.GhostBadge.toggle(this, currentAccount, ayulessGhostItem);
+            });
+        }
         io.show();
         io.setTranslationY(-dp(64));
     }

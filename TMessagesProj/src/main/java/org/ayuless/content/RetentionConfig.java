@@ -20,9 +20,8 @@ public final class RetentionConfig {
                 || message.destroyTimeMillis != 0 || message.media != null && message.media.ttl_seconds != 0;
     }
 
-    // CLEANROOM: reimplement CR-04 bot capture eligibility
     public static boolean storable(int account, TLRPC.Message message, String purpose) {
-        if (message == null || SpyExceptions.isExcepted(account, MessageObject.getDialogId(message))) return false;
+        if (message == null || !org.ayuless.spy.MessageSavingConfig.allowBot(account, MessageObject.getDialogId(message)) || SpyExceptions.isExcepted(account, MessageObject.getDialogId(message))) return false;
         if (DELETE.equals(purpose)) return AntiDeleteConfig.isEnabled(account);
         if (EDIT.equals(purpose)) return EditsConfig.isEnabled(account);
         if (ATTACHMENT.equals(purpose)) return SavedAttachments.isEnabled(account);

@@ -49,24 +49,33 @@ public final class ProtectedContent {
         return message != null;
     }
 
-    /** True if the server will refuse a plain forward of this message. */
-    // CLEANROOM: reimplement CR-06.2 deleted-message copies and CR-06.4 source restriction hint
-    private static boolean needsCopy(MessagesController controller, MessageObject messageObject) {
-        TLRPC.Message message = messageObject.messageOwner;
-        if (message == null || !canUnlock(messageObject.currentAccount, message)) {
-            return false;
-        }
-        if (unlocked.contains(message)) {
-            return true;
-        }
-        long dialogId = MessageObject.getDialogId(message);
-        if (DialogObject.isEncryptedDialog(dialogId) || RetentionConfig.timed(message)) return true;
-        if (dialogId > 0) {
-            TLRPC.UserFull full = controller.getUserFull(dialogId);
+    public static boolean forwardingRestricted(int account, MessageObject object) {
+        if (object == null || object.messageOwner == null) return false;
+        TLRPC.Message message = object.messageOwner;
+        if (message.noforwards || unlocked.contains(message)) return true;
+        long dialog = object.getDialogId();
+        if (DialogObject.isEncryptedDialog(dialog)) return false;
+        MessagesController controller = MessagesController.getInstance(account);
+        if (dialog > 0) {
+            TLRPC.UserFull full = controller.getUserFull(dialog);
             return full != null && (full.noforwards_peer_enabled || full.noforwards_my_enabled);
         }
-        TLRPC.Chat chat = controller.getChat(-dialogId);
+        TLRPC.Chat chat = controller.getChat(-dialog);
         return chat != null && chat.noforwards;
+    }
+
+    public static boolean showForwardHint(int account, MessageObject object) {
+        return org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_RESTRICTED_FORWARD_HINT)
+                && forwardingRestricted(account, object);
+    }
+
+    private static boolean needsCopy(MessagesController controller, MessageObject object) {
+        TLRPC.Message message = object.messageOwner;
+        if (message == null || !canUnlock(object.currentAccount, message)) return false;
+        return forwardingRestricted(object.currentAccount, object)
+                || DialogObject.isEncryptedDialog(object.getDialogId()) || RetentionConfig.timed(message)
+                || org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_LOCAL_RESEND)
+                && org.ayuless.antidelete.DeletedCache.isDeleted(object.currentAccount, object.getDialogId(), object.getId());
     }
 
     /** Materialize an encrypted cache file only when the user explicitly saves or shares it. */

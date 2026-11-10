@@ -1535,7 +1535,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
     @SuppressLint("Range")
     private boolean handleIntent(Intent intent, boolean isNew, boolean restore, boolean fromPassword, Browser.Progress progress, boolean rebuildFragments, boolean openedTelegram) {
-        // CLEANROOM: reimplement CR-03.5 explicit privacy launcher intent
+        org.ayuless.ghost.GhostShortcut.handleIntent(intent);
         if (GiftInfoBottomSheet.handleIntent(intent, progress)) {
             return true;
         }

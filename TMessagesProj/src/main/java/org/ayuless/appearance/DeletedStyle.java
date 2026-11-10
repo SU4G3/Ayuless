@@ -42,7 +42,10 @@ public final class DeletedStyle {
 
     /** Shared by real messages and the live settings preview. */
     public static CharSequence decorateTimeLabel(CharSequence time) {
-        // CLEANROOM: reimplement CR-07 custom deletion text prefix
+        if (AppearanceConfig.customMarks()) {
+            String prefix = AppearanceConfig.deletedMarkText();
+            return TextUtils.isEmpty(prefix) ? time : TextUtils.concat(prefix, " ", time);
+        }
         String emoji = AppearanceConfig.markEmoji();
         if (TextUtils.isEmpty(emoji)) return time;
         SpannableString mark = new SpannableString(emoji + " ");

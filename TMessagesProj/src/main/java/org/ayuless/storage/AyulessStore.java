@@ -80,7 +80,6 @@ public final class AyulessStore {
     // ---- writes ----
 
     /** Save a message that was deleted on the server side. No-op for non-storable messages. */
-    // CLEANROOM: reimplement CR-04 future deletion snapshot policy
     public void saveDeleted(TLRPC.Message message) {
         if (!isStorable(account, message, org.ayuless.content.RetentionConfig.DELETE)) {
             return;
@@ -93,7 +92,7 @@ public final class AyulessStore {
         final Long topicId = topicIdOf(message);
         final int date = message.date;
         final Long fromId = message.from_id != null ? MessageObject.getPeerId(message.from_id) : null;
-        final byte[] data = serialize(message);
+        final byte[] data = serialize(org.ayuless.spy.MessageSavingConfig.snapshot(account, message));
         if (data == null) {
             return;
         }
@@ -124,7 +123,6 @@ public final class AyulessStore {
      * Save the version of a message as it was before an edit. Call with the old message object
      * before applying the server edit.
      */
-    // CLEANROOM: reimplement CR-04 future revision formatting policy
     public void saveEdit(TLRPC.Message before) {
         if (!isStorable(account, before, org.ayuless.content.RetentionConfig.EDIT)) {
             return;
@@ -136,7 +134,7 @@ public final class AyulessStore {
         final int msgId = before.id;
         final int editDate = before.edit_date;
         final String text = before.message;
-        final byte[] entities = serializeEntities(before.entities);
+        final byte[] entities = org.ayuless.spy.MessageSavingConfig.keepFormatting(account) ? serializeEntities(before.entities) : null;
         final byte[] media = before.media != null && !(before.media instanceof TLRPC.TL_messageMediaEmpty) ? serialize(before.media) : null;
         queue.postRunnable(() -> {
             try {
@@ -557,7 +555,19 @@ public final class AyulessStore {
         });
     }
 
-    // CLEANROOM: reimplement CR-06.5 asynchronous deletion-time query
+    public void getDeleteDate(long dialogId, int msgId, Callback<Long> callback) {
+        queue.postRunnable(() -> {
+            long result = 0;
+            try (Cursor cursor = db().rawQuery("SELECT deleted_at FROM deleted_messages WHERE dialog_id = ? AND msg_id = ?",
+                    new String[]{String.valueOf(dialogId), String.valueOf(msgId)})) {
+                if (cursor.moveToFirst()) result = cursor.getLong(0);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            final long timestamp = result;
+            AndroidUtilities.runOnUIThread(() -> callback.run(timestamp));
+        });
+    }
 
     public void sizeBytes(Callback<Long> callback) {
         queue.postRunnable(() -> {

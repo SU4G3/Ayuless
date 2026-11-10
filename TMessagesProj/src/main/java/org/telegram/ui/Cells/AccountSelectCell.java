@@ -140,6 +140,10 @@ public class AccountSelectCell extends FrameLayout {
         checkImageView.setVisibility(check && account == UserConfig.selectedAccount ? VISIBLE : INVISIBLE);
     }
 
+    public void setProfileChecked(boolean checked) {
+        if (checkImageView != null) checkImageView.setVisibility(checked ? VISIBLE : INVISIBLE);
+    }
+
     public int getAccountNumber() {
         return accountNumber;
     }

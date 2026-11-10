@@ -12,7 +12,33 @@ import org.telegram.messenger.ApplicationLoader;
 /** App-wide look of Ayuless features (not per account). */
 public final class AppearanceConfig {
 
-    // CLEANROOM: reimplement CR-07 text-marker preferences and emoji-mode exit
+    public static final String KEY_CUSTOM_MARKS = "customMarks";
+    public static final String KEY_DELETED_TEXT = "deletedMarkText";
+    public static final String KEY_EDITED_TEXT = "editedMarkText";
+
+    public static boolean customMarks() {
+        return ready() && prefs().getBoolean(KEY_CUSTOM_MARKS, false);
+    }
+
+    public static String deletedMarkText() {
+        return ready() ? prefs().getString(KEY_DELETED_TEXT, "🧹") : "🧹";
+    }
+
+    public static String editedMarkText() {
+        String fallback = org.telegram.messenger.LocaleController.getString(org.telegram.messenger.R.string.EditedMessage);
+        return ready() ? prefs().getString(KEY_EDITED_TEXT, fallback) : fallback;
+    }
+
+    public static void setCustomMarks(boolean enabled) {
+        prefs().edit().putBoolean(KEY_CUSTOM_MARKS, enabled).apply();
+    }
+
+    public static void setMarkText(String key, String value) {
+        if (!KEY_DELETED_TEXT.equals(key) && !KEY_EDITED_TEXT.equals(key)) throw new IllegalArgumentException(key);
+        SharedPreferences.Editor editor = prefs().edit();
+        if (value == null) editor.remove(key); else editor.putString(key, value);
+        editor.apply();
+    }
     public static final String KEY_TRANSLUCENT_DELETED = "translucentDeleted";
     public static final String KEY_MARK_EMOJI = "deletedMarkEmoji";
     public static final String KEY_MARK_COLOR = "deletedMarkColor";
@@ -58,7 +84,7 @@ public final class AppearanceConfig {
     }
 
     public static void setMarkEmoji(String emoji) {
-        prefs().edit().putString(KEY_MARK_EMOJI, emoji).apply();
+        prefs().edit().putString(KEY_MARK_EMOJI, emoji).putBoolean(KEY_CUSTOM_MARKS, false).apply();
     }
 
     public static int markColor() {

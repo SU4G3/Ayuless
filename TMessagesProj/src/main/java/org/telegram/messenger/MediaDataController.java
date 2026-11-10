@@ -394,6 +394,7 @@ public class MediaDataController extends BaseController {
             Utilities.globalQueue.postRunnable(() -> {
                 try {
                     ShortcutManagerCompat.removeAllDynamicShortcuts(ApplicationLoader.applicationContext);
+                    org.ayuless.ghost.GhostShortcut.refresh();
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
@@ -4996,7 +4997,6 @@ public class MediaDataController extends BaseController {
     private static RectF bitmapRect;
     private static Path roundPath;
 
-    // CLEANROOM: reimplement CR-03.5 launcher shortcut preservation
     public void buildShortcuts() {
         if (Build.VERSION.SDK_INT < 23) {
             return;
@@ -5005,6 +5005,7 @@ public class MediaDataController extends BaseController {
         if (maxShortcuts <= 0) {
             maxShortcuts = 5;
         }
+        if (org.ayuless.ghost.GhostShortcut.enabled()) maxShortcuts = Math.max(3, maxShortcuts - 1);
         ArrayList<TLRPC.TL_topPeer> hintsFinal = new ArrayList<>();
         if (SharedConfig.passcodeHash.length() <= 0) {
             for (int a = 0; a < hints.size(); a++) {
@@ -5026,12 +5027,15 @@ public class MediaDataController extends BaseController {
                 ArrayList<String> newShortcutsIds = new ArrayList<>();
                 ArrayList<String> shortcutsToDelete = new ArrayList<>();
 
+                if (!recreateShortcuts) org.ayuless.ghost.GhostShortcut.refresh();
                 if (recreateShortcuts) {
                     ShortcutManagerCompat.removeAllDynamicShortcuts(ApplicationLoader.applicationContext);
+                    org.ayuless.ghost.GhostShortcut.refresh();
                 } else {
                     List<ShortcutInfoCompat> currentShortcuts = ShortcutManagerCompat.getDynamicShortcuts(ApplicationLoader.applicationContext);
                     if (currentShortcuts != null && !currentShortcuts.isEmpty()) {
                         newShortcutsIds.add("compose");
+                        if (org.ayuless.ghost.GhostShortcut.enabled()) newShortcutsIds.add(org.ayuless.ghost.GhostShortcut.ID);
                         for (int a = 0; a < hintsFinal.size(); a++) {
                             TLRPC.TL_topPeer hint = hintsFinal.get(a);
                             newShortcutsIds.add("did3_" + MessageObject.getPeerId(hint.peer));

@@ -15525,7 +15525,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
      * time it is (an album's), `editDate` the latest edit. Also a widget's estimate of the corner its time takes
      * before a cell lays it out (RichWidgetBlock#estimateSafeArea).
      */
-    // CLEANROOM: reimplement CR-07 optional edited timestamp label
     public static String timeString(MessageObject current, MessageObject message, boolean edited, int editDate) {
         if (current.notime || current.isSponsored() || current.isQuickReply() || current.isWelcomeMessage()) {
             return "";
@@ -15542,7 +15541,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
                 return LocaleController.formatPmEditedDate(editDate);
             }
-            return getString(R.string.EditedMessage) + " " + LocaleController.getInstance().getFormatterDay().format((long) (message.messageOwner.date) * 1000);
+            return (org.ayuless.appearance.AppearanceConfig.customMarks() ? org.ayuless.appearance.AppearanceConfig.editedMarkText() : getString(R.string.EditedMessage)) + " " + LocaleController.getInstance().getFormatterDay().format((long) (message.messageOwner.date) * 1000);
         } else if (current.isSaved && current.messageOwner.fwd_from != null && (current.messageOwner.fwd_from.date != 0 || current.messageOwner.fwd_from.saved_date != 0)
                 // A widget keeps its time alone in Saved Messages: the pill over its corner stays short.
                 && !(MessageObject.getMedia(current.messageOwner) instanceof TLRPC.TL_messageMediaWidget)) {

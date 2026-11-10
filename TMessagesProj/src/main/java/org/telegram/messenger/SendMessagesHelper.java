@@ -4446,8 +4446,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         });
     }
 
-    // CLEANROOM: reimplement CR-06.1 deleted-original reply fallback
     public void sendMessage(SendMessageParams sendMessageParams) {
+        org.ayuless.edits.DeletedMessageActions.prepareReply(currentAccount, sendMessageParams);
         final SendMessageChatArguments sendMessageChatArguments = sendMessageParams.sendMessageChatArguments != null ?
                 sendMessageParams.sendMessageChatArguments : SendMessageChatArguments.EMPTY;
         String message = sendMessageParams.message;

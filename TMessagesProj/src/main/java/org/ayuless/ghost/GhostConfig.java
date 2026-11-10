@@ -91,9 +91,21 @@ public final class GhostConfig {
         return ready() ? profilePrefs(profile).getBoolean(key, def) : def;
     }
 
-    // CLEANROOM: reimplement CR-03.1 initial seeding and mutual exclusion
     public static void setProfile(int profile, String key, boolean value) {
-        profilePrefs(profile).edit().putBoolean(key, value).apply();
+        SharedPreferences prefs = profilePrefs(profile);
+        SharedPreferences.Editor editor = prefs.edit().putBoolean(key, value);
+        if (KEY_ENABLED.equals(key) && value) {
+            boolean configured = false;
+            for (String option : GHOST_KEYS) configured |= prefs.contains(option);
+            if (!configured) {
+                for (String option : GHOST_KEYS) {
+                    if (!KEY_HIDE_STORY_VIEWS.equals(option)) editor.putBoolean(option, true);
+                }
+            }
+        }
+        if (value && KEY_READ_ON_ACTION.equals(key)) editor.putBoolean(KEY_DELAYED_SEND, false);
+        if (value && KEY_DELAYED_SEND.equals(key)) editor.putBoolean(KEY_READ_ON_ACTION, false);
+        editor.apply();
     }
 
     /** Whether one of the five ghost toggles is locked in a profile. */
