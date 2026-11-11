@@ -456,8 +456,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         mapTypeButton.addSubItem(map_list_menu_satellite, R.drawable.msg_satellite, getString(R.string.Satellite));
         mapTypeButton.addSubItem(map_list_menu_hybrid, R.drawable.msg_hybrid, getString(R.string.Hybrid));
         mapTypeButton.setContentDescription(getString(R.string.AccDescrMoreOptions));
-        // Ayuless: opt-in raster map types, using the upstream menu placement and appearance.
-        mapTypeButton.setVisibility(org.ayuless.settings.ProfileMapConfig.mapTypesEnabled() ? View.VISIBLE : View.GONE);
+        // Ayuless: map types are always available in the upstream menu.
         if (chatLocation != null) {
             simpleActionBar.setTitle(getString(R.string.ChatLocation));
         } else if (messageObject != null) {

@@ -1295,7 +1295,7 @@ public class ChatActivity extends BaseFragment implements
     public final static int OPTION_WELCOME_REVERT = 116;
     public final static int OPTION_SEND_MONEY = 117;
     private static final int AYULESS_CHAT_TOOLS = 9004; // Ayuless: per-chat tools.
-    private static final int AYULESS_READ_CHAT = 9003; // Ayuless: explicit read in the chat header.
+    public static final int OPTION_AYULESS_READ_MESSAGE = 9003; // Ayuless: explicit read up to a message.
     public final static int OPTION_AYULESS_DELETE_DATE = 9004;
     public final static int OPTION_AYULESS_KEEP_LOCAL = 9005;
     public final static int OPTION_AYULESS_SAVE_MEDIA = 9002; // Ayuless: save unlocked timed/secret media
@@ -3719,15 +3719,11 @@ public class ChatActivity extends BaseFragment implements
                 if (id != chat_menu_options && id != chat_menu_topics_panel && id != -1 && topicsPanel != null && topicsPanel.isOpen()) {
                     topicsPanel.close();
                 }
-                if (id == AYULESS_CHAT_TOOLS && org.ayuless.chat.ChatToolsConfig.enabled()) { // Ayuless: opt-in per-chat tools.
+                if (id == AYULESS_CHAT_TOOLS) { // Ayuless: per-chat tools are always available.
                     presentFragment(new org.ayuless.chat.ChatToolsActivity(currentAccount, dialog_id));
                     return;
                 }
-                if (id == AYULESS_READ_CHAT) { // Ayuless: one explicit action bypasses ghost.
-                    org.ayuless.ghost.GhostInterceptor.readChat(currentAccount, dialog_id, success -> {
-                        if (!success && !isFinished && getParentActivity() != null) org.ayuless.edits.DeletedMessageActions.showFailure(ChatActivity.this);
-                    });
-                } else if (id == -1) {
+                if (id == -1) {
                     if (isInPollAddOptionMode()) {
                         pollAddOptionModeClose();
                     } else if (actionBar.isActionModeShowed()) {
@@ -4286,10 +4282,8 @@ public class ChatActivity extends BaseFragment implements
             }
             createTopicsPanelItem(menu);
             headerItem = menu.addItem(chat_menu_options, otherIcon);
-            // Ayuless: register once and refresh opt-in visibility when the chat resumes.
+            // Ayuless: per-chat tools are always available.
             headerItem.lazilyAddSubItem(AYULESS_CHAT_TOOLS, R.drawable.ayuless_solar_ghost, getString(R.string.AyulessLauncherName));
-            headerItem.setSubItemShown(AYULESS_CHAT_TOOLS, org.ayuless.chat.ChatToolsConfig.enabled());
-            headerItem.lazilyAddSubItem(AYULESS_READ_CHAT, R.drawable.ayuless_solar_eye, getString(R.string.AyulessMarkAsRead)); // Ayuless: always available.
             updateTopicsPanelItem();
             headerItem.setSubMenuDelegate(new ActionBarMenuItem.ActionBarSubMenuItemDelegate() {
                 @Override
@@ -30745,8 +30739,6 @@ public class ChatActivity extends BaseFragment implements
     @Override
     public void onResume() {
         super.onResume();
-        // Ayuless: settings may change while this chat remains on the back stack.
-        if (headerItem != null) headerItem.setSubItemShown(AYULESS_CHAT_TOOLS, org.ayuless.chat.ChatToolsConfig.enabled());
         checkShowBlur(false);
         activityResumeTime = System.currentTimeMillis();
         if (openImport && getSendMessagesHelper().getImportingHistory(dialog_id) != null) {
@@ -34351,6 +34343,12 @@ public class ChatActivity extends BaseFragment implements
         }
         boolean preserveDim = false;
         switch (option) {
+            case OPTION_AYULESS_READ_MESSAGE: { // Ayuless: bypass ghost only for this message boundary.
+                org.ayuless.ghost.GhostInterceptor.readThroughMessage(currentAccount, selectedObject, success -> {
+                    if (!success && !isFinished && getParentActivity() != null) org.ayuless.edits.DeletedMessageActions.showFailure(ChatActivity.this);
+                });
+                break;
+            }
             case OPTION_AYULESS_DELETE_DATE: {
                 org.ayuless.edits.DeletedMessageActions.showDeleteDate(this, currentAccount, selectedObject);
                 break;
@@ -47158,6 +47156,15 @@ public class ChatActivity extends BaseFragment implements
             items.add(getString(R.string.WelcomeMessageRevert));
             options.add(OPTION_WELCOME_REVERT);
             icons.add(R.drawable.outline_revert_24);
+        }
+
+        // Ayuless: read history only through the selected delivered message.
+        if (!isInScheduleMode() && chatMode != MODE_QUICK_REPLIES && message != null
+                && !message.isSending() && !message.isSendError()
+                && (message.getId() > 0 || currentEncryptedChat != null)) {
+            items.add(getString(R.string.AyulessMarkAsRead));
+            options.add(OPTION_AYULESS_READ_MESSAGE);
+            icons.add(R.drawable.ayuless_solar_eye);
         }
 
         // Ayuless: explicit actions for unlocked secret/timed content, preserving open behavior.

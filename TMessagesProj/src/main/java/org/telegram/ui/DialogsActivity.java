@@ -591,7 +591,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     @Nullable
     private ActionBarMenuSubItem clearItem;
     @Nullable
-    private ActionBarMenuSubItem readItem;
     private ActionBarMenuSubItem ayulessUnreadItem; // Ayuless: preserve the separate bulk unread action.
     @Nullable
     private ActionBarMenuSubItem blockItem;
@@ -706,7 +705,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     private final static int pin = 100;
     private final static int read = 101;
-    private static final int AYULESS_MARK_UNREAD = 9001; // Ayuless: read is always explicit now.
+    private static final int AYULESS_MARK_UNREAD = 9001; // Ayuless: separate bulk unread action.
     private final static int delete = 102;
     private final static int clear = 103;
     private final static int mute = 104;
@@ -6672,7 +6671,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         pin2Item = otherItem.addSubItem(pin2, R.drawable.msg_pin, LocaleController.getString(R.string.DialogPin));
         addToFolderItem = otherItem.addSubItem(add_to_folder, R.drawable.msg_addfolder, LocaleController.getString(R.string.FilterAddTo));
         removeFromFolderItem = otherItem.addSubItem(remove_from_folder, R.drawable.msg_removefolder, LocaleController.getString(R.string.FilterRemoveFrom));
-        readItem = otherItem.addSubItem(read, R.drawable.ayuless_solar_eye, LocaleController.getString(R.string.AyulessMarkAsRead)); // Ayuless: explicit server read.
         ayulessUnreadItem = otherItem.addSubItem(AYULESS_MARK_UNREAD, R.drawable.msg_markunread, LocaleController.getString(R.string.MarkAsUnread)); // Ayuless: keep the upstream unread action.
         clearItem = otherItem.addSubItem(clear, R.drawable.msg_clear, LocaleController.getString(R.string.ClearHistory));
         blockItem = otherItem.addSubItem(block, R.drawable.msg_block, LocaleController.getString(R.string.BlockUser));
@@ -8571,22 +8569,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
 
         if (!isCommunityCell) {
-            // Ayuless: explicit server read remains available even after local ghost counters clear.
-            ActionBarMenuSubItem ayulessRead = new ActionBarMenuSubItem(getParentActivity(), !hasFolders, false);
-            ayulessRead.setTextAndIcon(LocaleController.getString(R.string.AyulessMarkAsRead), R.drawable.ayuless_solar_eye);
-            ayulessRead.setMinimumWidth(160);
-            ayulessRead.setOnClickListener(e -> {
-                org.ayuless.ghost.GhostInterceptor.readChat(currentAccount, dialogId, success -> {
-                    if (!success && getParentActivity() != null) org.ayuless.edits.DeletedMessageActions.showFailure(this);
-                });
-                finishPreviewFragment();
-            });
-            previewMenu[0].addView(ayulessRead);
+            // Ayuless: reading is available from a message context menu.
             ActionBarMenuSubItem markAsUnreadItem = new ActionBarMenuSubItem(getParentActivity(), !hasFolders, false);
-            markAsUnreadItem.setTextAndIcon(LocaleController.getString(R.string.MarkAsUnread), R.drawable.msg_markunread); // Ayuless: read has its own explicit action.
+            markAsUnreadItem.setTextAndIcon(LocaleController.getString(R.string.MarkAsUnread), R.drawable.msg_markunread); // Ayuless: preserve mark unread.
             markAsUnreadItem.setMinimumWidth(160);
             markAsUnreadItem.setOnClickListener(e -> {
-                markAsUnread(dialogId); // Ayuless: separate from the explicit read action.
+                markAsUnread(dialogId);
                 finishPreviewFragment();
             });
             previewMenu[0].addView(markAsUnreadItem);
@@ -9346,11 +9334,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
             } else if (action == AYULESS_MARK_UNREAD) { // Ayuless: preserve upstream bulk unread behavior.
                 markAsUnread(selectedDialog);
-            } else if (action == read) {
-                // Ayuless: explicit read also works when ghost cleared the local counters.
-                org.ayuless.ghost.GhostInterceptor.readChat(currentAccount, selectedDialog, success -> {
-                    if (!success && getParentActivity() != null) org.ayuless.edits.DeletedMessageActions.showFailure(this);
-                });
+            } else if (action == read) { // Ayuless: preserve the configured upstream swipe action without a ghost bypass.
+                if (canReadCount != 0) {
+                    getMessagesController().markMentionsAsRead(selectedDialog, 0);
+                    getMessagesController().markReactionsAsRead(selectedDialog, 0);
+                    getMessagesController().markPollVotesAsRead(selectedDialog, 0);
+                    getMessagesController().markDialogAsRead(selectedDialog, dialog.top_message, dialog.top_message,
+                            dialog.last_message_date, false, 0, 0, true, 0);
+                } else {
+                    markAsUnread(selectedDialog);
+                }
             } else if (action == delete || action == clear) {
                 if (count == 1) {
                     if (action == delete && canDeletePsaSelected) {
@@ -9900,10 +9893,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 muteItem.setIcon(R.drawable.msg_mute);
                 muteItem.setContentDescription(LocaleController.getString(R.string.ChatsMute));
             }
-        }
-        if (readItem != null) {
-            readItem.setTextAndIcon(LocaleController.getString(R.string.AyulessMarkAsRead), R.drawable.ayuless_solar_eye); // Ayuless: always offer a real read.
-            readItem.setVisibility(communitiesCount == 0 ? View.VISIBLE : View.GONE);
         }
         if (ayulessUnreadItem != null) { // Ayuless: same eligibility as the upstream unread action.
             ayulessUnreadItem.setVisibility(canReadCount == 0 && forumCount == 0 && communitiesCount == 0 ? View.VISIBLE : View.GONE);

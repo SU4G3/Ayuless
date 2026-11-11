@@ -19,10 +19,8 @@ public final class ProfileMapConfig {
 
     public static boolean showProfileIdentity() { return prefs().getBoolean("profileIdentity", true); }
     public static void setShowProfileIdentity(boolean value) { prefs().edit().putBoolean("profileIdentity", value).apply(); }
-    public static boolean mapTypesEnabled() { return prefs().getBoolean("mapTypes", false); }
-    public static void setMapTypesEnabled(boolean value) { prefs().edit().putBoolean("mapTypes", value).apply(); }
     public static int mapType() {
-        return mapTypesEnabled() ? validType(prefs().getInt("mapType", IMapsProvider.MAP_TYPE_NORMAL)) : IMapsProvider.MAP_TYPE_NORMAL;
+        return validType(prefs().getInt("mapType", IMapsProvider.MAP_TYPE_NORMAL));
     }
     public static void setMapType(int value) { prefs().edit().putInt("mapType", validType(value)).apply(); }
     public static int validType(int value) {

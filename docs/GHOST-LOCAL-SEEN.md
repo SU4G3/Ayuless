@@ -1,8 +1,6 @@
 # Local ghost markers and explicit reads
 
-The default-off **Remember seen markers locally** option is in Ayuless → Ghost
-mode and follows the selected shared/account profile. It only applies while
-that account's effective hide-read option is active.
+Local seen markers are always remembered while the account's effective hide-read option is active. There is no separate setting or profile preference for this behavior.
 
 `org.ayuless.ghost.GhostSeen` records markers when the upstream chat actually
 displays/clears them. Its preferences are isolated by account slot and dialog;
@@ -14,18 +12,19 @@ dialog counters and chat jump buttons. Cached counters are provisionally
 adjusted using the stored intersection; read-only `getUnreadMentions`,
 `getUnreadReactions` and `getUnreadPollVotes` pages reconcile the exact counters
 and jump targets. These queries never acknowledge reading. Failed queries leave
-the local watermarks intact. Disabling the option or hiding-read policy bypasses
-the overlay.
+the local watermarks intact. Disabling the hide-read policy bypasses the overlay.
 
-**Mark as read** / **Прочитать**, with the existing Solar eye drawable, is always
-available in chat-list preview/selection menus and the normal chat header menu.
-It has no setting. With hidden reads enabled, only the request instances created
-for that action bypass the interceptor: history, mentions, reactions and poll
-votes for the selected dialog. Chunked affected-history replies are completed
-before reporting success. Local cleanup follows successful receipts. Secret
-history reads use dates and start the normal local TTL task after success.
-With hidden reads off, the action uses upstream controller methods. The separate
-mark-as-unread action remains available.
+**Mark as read** / **Прочитать**, with the existing Solar eye drawable, is available
+in a message's long-press context menu. It reads history up to and including that
+message; it is absent from chat-list preview/selection menus and the chat header.
+Only the bounded history request bypasses ghost mode. It does not send dialog-wide
+mention, reaction or poll-vote acknowledgements. Chunked affected-history replies
+are completed before reporting success. Local unread counts and notifications
+preserve later unread messages. Secret history receipts use the selected message's
+date (Telegram's secret-chat protocol uses second-resolution dates) and start the
+normal local TTL task after success. The separate mark-as-unread action and the
+configured chat swipe gesture remain available; the swipe uses the normal ghost
+policy.
 
 Automatic delayed sends retain their existing scheduling calculations. A local
 message parameter identifies their origin, including forwards, retries and
@@ -35,13 +34,15 @@ navigation. The delayed-send hint toast was removed.
 
 ## Verification
 
-An isolated Java 21 harness compiled the production `GhostSeen`,
+Before the message-action cleanup, an isolated Java 21 harness compiled the production `GhostSeen`,
 `GhostInterceptor` and `DelayedSend` against dependency stubs and passed 53
 checks. These cover restarts, account/dialog isolation, new reactions on old
 messages, mentions and poll snapshots, counter reconciliation and pagination,
 jump filtering, option changes during requests, explicit one-time receipts,
 chunked receipts, failure handling, upstream delegation, secret TTL and delayed
 send origin. This is not an Android integration test.
+
+After the cleanup (2026-11-11), a separate JDK 21 harness compiled the extracted production message-read methods against stubs. Private/channel ID boundaries, secret-chat dates and TTL, zero/nonzero local unread counts, invalid messages/peers and failed requests passed. SQLite cases checked normal/reverse ID bounds, read-state bits, outgoing messages and dialog isolation. This does not verify Android integration or server behavior.
 
 The requested offline release Java compilation stopped before compilation:
 the sandbox cannot create the Gradle wrapper lock under `~/.gradle` (read-only

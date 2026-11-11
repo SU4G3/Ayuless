@@ -54,7 +54,7 @@ public final class ChatExportActivity extends AyulessSettingsFragment {
         }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
     }
     @Override protected void onClick(UItem item, View v, int p, float x, float y) {
-        if (job != null || !ChatToolsConfig.enabled()) return;
+        if (job != null) return;
         if (item.id >= 1 && item.id <= 7) options.include[item.id - 1] = !options.include[item.id - 1];
         else if (item.id == 10) {
             custom = !custom;

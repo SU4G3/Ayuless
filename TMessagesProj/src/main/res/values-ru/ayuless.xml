@@ -297,17 +297,9 @@
     <string name="AyulessGhostSelfOfflineUnknown">не в сети ?</string>
     <string name="AyulessMediaOpenFailed">Не удалось открыть файл.</string>
     <string name="AyulessMarkAsRead">Прочитать</string>
-    <string name="AyulessGhostLocalSeen">Запоминать просмотренные отметки</string>
-    <string name="AyulessGhostLocalSeenInfo">Не показывать повторно просмотренные реакции, упоминания и голоса в опросах на этом устройстве, пока скрыто прочтение. Подтверждения прочтения не отправляются.</string>
 
     <!-- Chat tools and export: original Ayuless implementation. -->
-    <string name="AyulessChatTools">Меню чата и экспорт</string>
-    <string name="AyulessChatToolsInfo">Показывать Ayuless в меню чата. Включает исключения для чатов и экспорт. По умолчанию выключено.</string>
     <string name="AyulessChatDeleted">Удалённые сообщения</string>
-    <string name="AyulessChatDontSave">Не сохранять</string>
-    <string name="AyulessChatDontRead">Не отправлять прочтение</string>
-    <string name="AyulessChatDontType">Не отправлять набор</string>
-    <string name="AyulessChatGhostInfo">Включено: следовать настройкам Ghost. Выключено: разрешить прочтения или набор в этом чате.</string>
     <string name="AyulessChatClear">Очистить удалённые</string>
     <string name="AyulessChatClearConfirm">Удалить сохранённые удалённые сообщения, историю правок и сохранённые вложения этого чата? Отменить это действие нельзя.</string>
     <string name="AyulessChatCleared">Сохранённые данные чата очищены.</string>
@@ -338,6 +330,4 @@
     <string name="AyulessRegistrationDate">Дата регистрации (примерно)</string>
     <string name="AyulessCreationDate">Дата создания (примерно)</string>
     <string name="AyulessRegistrationUnknown">Неизвестно</string>
-    <string name="AyulessMapTypes">Карта / Спутник / Гибрид</string>
-    <string name="AyulessMapTypesInfo">Включить типы карты в меню геопозиции. Спутниковые снимки: Sentinel-2 cloudless 2016 с ограниченной детализацией. Гибрид добавляет подписи EOX. Тайлы загружаются с EOX; выбранный тип запоминается.</string>
 </resources>

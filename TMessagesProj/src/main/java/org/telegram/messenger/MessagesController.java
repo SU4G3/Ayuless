@@ -14753,7 +14753,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         if (countDiff == 0 || maxPositiveId >= dialog.top_message) {
                             dialog.unread_count = 0;
                         } else {
-                            dialog.unread_count = Math.max(dialog.unread_count - countDiff, 0);
+                            dialog.unread_count = Math.max(dialog.unread_count - Math.max(0, countDiff), 0); // Ayuless: -1 means a bounded read covered no cached unread messages.
                             if (maxPositiveId != Integer.MIN_VALUE && dialog.unread_count > dialog.top_message - maxPositiveId) {
                                 dialog.unread_count = dialog.top_message - maxPositiveId;
                             }
@@ -14781,7 +14781,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     if (!popup) {
                         getNotificationsController().processReadMessages(null, dialogId, 0, maxPositiveId, false);
                         LongSparseIntArray dialogsToUpdate = new LongSparseIntArray(1);
-                        dialogsToUpdate.put(dialogId, 0);
+                        dialogsToUpdate.put(dialogId, countDiff != 0 && dialog != null ? dialog.unread_count : 0); // Ayuless: preserve notifications after a bounded read.
                         getNotificationsController().processDialogsUpdateRead(dialogsToUpdate);
                     } else {
                         getNotificationsController().processReadMessages(null, dialogId, 0, maxPositiveId, true);
@@ -14808,7 +14808,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         if (countDiff == 0 || maxNegativeId <= dialog.top_message) {
                             dialog.unread_count = 0;
                         } else {
-                            dialog.unread_count = Math.max(dialog.unread_count - countDiff, 0);
+                            dialog.unread_count = Math.max(dialog.unread_count - Math.max(0, countDiff), 0); // Ayuless: -1 means a bounded read covered no cached unread messages.
                             if (maxNegativeId != Integer.MAX_VALUE && dialog.unread_count > maxNegativeId - dialog.top_message) {
                                 dialog.unread_count = maxNegativeId - dialog.top_message;
                             }
@@ -14833,7 +14833,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, UPDATE_MASK_READ_DIALOG_MESSAGE);
                     }
                     LongSparseIntArray dialogsToUpdate = new LongSparseIntArray(1);
-                    dialogsToUpdate.put(dialogId, 0);
+                    dialogsToUpdate.put(dialogId, countDiff != 0 && dialog != null ? dialog.unread_count : 0); // Ayuless: preserve notifications after a bounded read.
                     getNotificationsController().processDialogsUpdateRead(dialogsToUpdate);
                 }));
 

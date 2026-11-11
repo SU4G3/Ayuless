@@ -48,8 +48,8 @@ public final class DeletedMessagesActivity extends AyulessSettingsFragment {
             TLRPC.Message m = page.get(i);
             String text = m.message == null || m.message.isEmpty() ? getString(R.string.AyulessExportFiles) : m.message;
             if (text.length() > 300) text = text.substring(0, 300) + "…";
-            items.add(UItem.asButton(i + 1, R.drawable.ayuless_solar_msg_delete,
-                    "✕ " + text, new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.US).format(new java.util.Date(m.date * 1000L))));
+            items.add(UItem.asButton(i + 1, 0,
+                    "🗑️ " + text, new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.US).format(new java.util.Date(m.date * 1000L))));
         }
         if (!loading && cursors.size() > 1) items.add(UItem.asButton(-1, 0, getString(R.string.AyulessPagePrevious)));
         if (!loading && !end) items.add(UItem.asButton(-2, 0, getString(R.string.AyulessPageNext)));

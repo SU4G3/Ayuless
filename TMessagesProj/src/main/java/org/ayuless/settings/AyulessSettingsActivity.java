@@ -83,8 +83,6 @@ public class AyulessSettingsActivity extends AyulessSettingsFragment {
             items.add(UItem.asCustomShadow(headerView, 198));
         }
 
-        items.add(UItem.asCheck(20, getString(R.string.AyulessChatTools)).setChecked(org.ayuless.chat.ChatToolsConfig.enabled()));
-        items.add(UItem.asShadow(getString(R.string.AyulessChatToolsInfo)));
         items.add(UItem.asHeader(getString(R.string.AyulessCategoriesHeader)));
         String ghostState = GhostConfig.isEnabled(currentAccount)
                 ? GhostConfig.countEnabled(GhostConfig.activeProfile(currentAccount)) + "/" + GhostConfig.GHOST_KEYS.length
@@ -108,10 +106,6 @@ public class AyulessSettingsActivity extends AyulessSettingsFragment {
     @Override
     protected void onClick(UItem item, View view, int position, float x, float y) {
         switch (item.id) {
-            case 20:
-                org.ayuless.chat.ChatToolsConfig.setEnabled(!org.ayuless.chat.ChatToolsConfig.enabled());
-                listView.adapter.update(false);
-                break;
             case ID_GHOST:
                 presentFragment(new GhostSettingsActivity());
                 break;

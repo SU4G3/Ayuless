@@ -298,17 +298,9 @@
     <string name="AyulessGhostSelfOfflineUnknown">offline ?</string>
     <string name="AyulessMediaOpenFailed">Unable to open this file.</string>
     <string name="AyulessMarkAsRead">Mark as read</string>
-    <string name="AyulessGhostLocalSeen">Remember seen markers locally</string>
-    <string name="AyulessGhostLocalSeenInfo">Keep viewed reactions, mentions and poll votes cleared on this device while read receipts are hidden. No read acknowledgement is sent.</string>
 
     <!-- Chat tools and export: original Ayuless implementation. -->
-    <string name="AyulessChatTools">Chat menu and export</string>
-    <string name="AyulessChatToolsInfo">Show Ayuless in the chat menu. Enables chat exceptions and export. Off by default.</string>
     <string name="AyulessChatDeleted">Deleted messages</string>
-    <string name="AyulessChatDontSave">Don’t save</string>
-    <string name="AyulessChatDontRead">Don’t send read</string>
-    <string name="AyulessChatDontType">Don’t send typing</string>
-    <string name="AyulessChatGhostInfo">On: follow Ghost settings. Off: always allow receipts or typing in this chat.</string>
     <string name="AyulessChatClear">Clear deleted</string>
     <string name="AyulessChatClearConfirm">Delete saved deleted messages, edit history and saved attachments for this chat? This cannot be undone.</string>
     <string name="AyulessChatCleared">Saved chat data cleared.</string>
@@ -339,6 +331,4 @@
     <string name="AyulessRegistrationDate">Registration date (approximate)</string>
     <string name="AyulessCreationDate">Creation date (approximate)</string>
     <string name="AyulessRegistrationUnknown">Unknown</string>
-    <string name="AyulessMapTypes">Map / Satellite / Hybrid</string>
-    <string name="AyulessMapTypesInfo">Enable map types in the location menu. Satellite imagery: Sentinel-2 cloudless 2016, with limited detail. Hybrid adds EOX labels. Tiles load from EOX; the selected type is remembered.</string>
 </resources>

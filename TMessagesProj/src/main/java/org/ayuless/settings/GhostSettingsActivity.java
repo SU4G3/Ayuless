@@ -36,7 +36,7 @@ import java.util.ArrayList;
 /** Ayuless > Ghost mode. Edits either the shared profile or one account's own profile. */
 public class GhostSettingsActivity extends AyulessSettingsFragment {
 
-    private static final int ID_MENU = 30, ID_SHORTCUT = 31, ID_LOCAL_SEEN = 32;
+    private static final int ID_MENU = 30, ID_SHORTCUT = 31;
     private static final int ID_PROFILE = 1;
     private static final int ID_USE_OWN = 2;
     private static final int ID_MASTER = 3;
@@ -176,10 +176,6 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
                 .setChecked(org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_GHOST_IN_MENU)));
         items.add(UItem.asCheck(ID_SHORTCUT, getString(R.string.AyulessGhostShortcut))
                 .setChecked(org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_GHOST_SHORTCUT)));
-        items.add(UItem.asCheck(ID_LOCAL_SEEN, getString(R.string.AyulessGhostLocalSeen))
-                .setChecked(GhostConfig.getProfile(profile, GhostConfig.KEY_LOCAL_SEEN))
-                .setEnabled(inUse));
-        items.add(UItem.asShadow(getString(R.string.AyulessGhostLocalSeenInfo)));
     }
 
     @Override
@@ -210,9 +206,7 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
             return;
         }
         String key = null;
-        if (item.id == ID_LOCAL_SEEN) {
-            key = GhostConfig.KEY_LOCAL_SEEN;
-        } else if (item.id >= ID_OPTION_BASE && item.id < ID_OPTION_BASE + GhostConfig.GHOST_KEYS.length) {
+        if (item.id >= ID_OPTION_BASE && item.id < ID_OPTION_BASE + GhostConfig.GHOST_KEYS.length) {
             key = GhostConfig.GHOST_KEYS[item.id - ID_OPTION_BASE];
         } else if (item.id == ID_READ_ON_ACTION) {
             key = GhostConfig.KEY_READ_ON_ACTION;

@@ -58,8 +58,7 @@ public final class GhostSeen {
     }
 
     private static boolean enabled(int account) {
-        return account >= 0 && account < instances.length && GhostConfig.hideRead(account)
-                && GhostConfig.getProfile(GhostConfig.activeProfile(account), GhostConfig.KEY_LOCAL_SEEN);
+        return account >= 0 && account < instances.length && GhostConfig.hideRead(account);
     }
 
     private static String key(long dialog, long topic, int kind) {

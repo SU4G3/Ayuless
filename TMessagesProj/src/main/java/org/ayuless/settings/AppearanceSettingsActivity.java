@@ -34,7 +34,6 @@ public class AppearanceSettingsActivity extends AyulessSettingsFragment {
     private static final int ID_LOCAL_PREMIUM = 11;
     private static final int ID_WORK_IN_BACKGROUND = 12;
     private static final int ID_PROFILE_IDENTITY = 13;
-    private static final int ID_MAP_TYPES = 14;
 
     private DeletedMessagePreview preview;
     private DeletedMarkColors colors;
@@ -62,8 +61,6 @@ public class AppearanceSettingsActivity extends AyulessSettingsFragment {
         items.add(UItem.asHeader(getString(R.string.AyulessUsefulHeader)));
         items.add(UItem.asCheck(ID_PROFILE_IDENTITY, getString(R.string.AyulessShowProfileIdentity)).setChecked(ProfileMapConfig.showProfileIdentity()));
         items.add(UItem.asShadow(getString(R.string.AyulessRegistrationInfo)));
-        items.add(UItem.asCheck(ID_MAP_TYPES, getString(R.string.AyulessMapTypes)).setChecked(ProfileMapConfig.mapTypesEnabled()));
-        items.add(UItem.asShadow(getString(R.string.AyulessMapTypesInfo)));
         items.add(UItem.asCheck(ID_GHOST_IN_DIALOGS, getString(R.string.AyulessGhostInDialogs)).setChecked(AppearanceConfig.ghostInDialogs()));
         items.add(UItem.asShadow(getString(R.string.AyulessGhostInDialogsInfo)));
         items.add(UItem.asCheck(ID_HIDE_SPONSORED, getString(R.string.AyulessHideSponsored)).setChecked(ExtrasConfig.hideSponsored()));
@@ -77,10 +74,6 @@ public class AppearanceSettingsActivity extends AyulessSettingsFragment {
         switch (item.id) {
             case ID_PROFILE_IDENTITY:
                 ProfileMapConfig.setShowProfileIdentity(!ProfileMapConfig.showProfileIdentity());
-                update();
-                break;
-            case ID_MAP_TYPES:
-                ProfileMapConfig.setMapTypesEnabled(!ProfileMapConfig.mapTypesEnabled());
                 update();
                 break;
             case ID_TRANSLUCENT:

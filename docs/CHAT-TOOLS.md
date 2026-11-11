@@ -2,11 +2,11 @@
 
 This is an original implementation in `org.ayuless.chat`; no reference-client sources or new sticker assets were used.
 
-Enable **Settings → Ayuless → Chat menu and export** (off by default). Open a chat's three-dot menu and choose **Ayuless**. The tools operate on the whole dialog, including when opened from a topic.
+Open a chat's three-dot menu and choose **Ayuless**. The menu and export are always available. The tools operate on the whole dialog, including when opened from a topic.
 
 - Deleted messages use date/id keyset pages of 100, newest first. Only the current page is retained. A tap checks Telegram's local cache before opening the message.
-- Don't save edits the existing account's Spy exceptions.
-- The receipt and typing switches follow the active Ghost profile when checked. Unchecking creates an account/dialog exception permitting that activity. Exceptions never enable suppression when the global Ghost option is off. Disabling chat tools suspends these exceptions.
+- The deleted list uses only a trash emoji before each message.
+- Saving exceptions remain in Spy settings; receipt/typing exceptions and their old preference reads have been removed.
 - Clear deleted removes this dialog's saved deleted messages, revisions and saved attachment copies. It preserves observed read dates and Telegram's own cache. Completion waits for attachment deletion and reports failures; the operation cannot be undone.
 
 ## Export behavior
@@ -21,8 +21,12 @@ All network waits, database reads, media copies and output formatting run off th
 
 ## Verification
 
+The Java/SDK and aapt2 checks below describe the original export implementation, before the menu cleanup.
+
 - Requested offline Gradle command: blocked before compilation by the sandbox's read-only Gradle wrapper lock under `$HOME/.gradle`.
 - All changed/new Java files: compiled successfully with JDK 21 `javac`, the Android 36 SDK, existing repository build classes and cached dependency jars. Resource constants were generated in `/tmp` solely for this check. This does not replace a full Gradle build.
 - English and Russian `ayuless.xml`: compiled with SDK `aapt2`.
 
-Device checks still needed: cloud/secret/group/channel chats, multi-page saved history, per-account shared/overridden Ghost profiles, mixed-dialog content receipts, date boundaries, SAF providers that rename files, permission revocation, full storage, cancellation during a media copy, deletion failures, and process termination. Open exported HTML and parse JSON from a real large chat, including attachment names with punctuation and hostile HTML text.
+Menu cleanup verification (2026-11-11): the requested offline Gradle command still stops at the read-only wrapper lock before compilation. All 15 remaining changed Java files passed JDK 21 syntax parsing. EN/RU XML keys and numbered placeholders match, and `Tools/test_strings_build.py` passed. These checks do not replace a full Android build.
+
+Device checks still needed: cloud/secret/group/channel chats, multi-page saved history, per-account shared/overridden Ghost profiles, date boundaries, SAF providers that rename files, permission revocation, full storage, cancellation during a media copy, deletion failures, and process termination. Open exported HTML and parse JSON from a real large chat, including attachment names with punctuation and hostile HTML text.

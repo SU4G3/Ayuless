@@ -130,7 +130,7 @@ final class MapLibreMap implements IMapsProvider.IMap, IMapsProvider.IUISettings
     }
 
     @Override public void setMapType(int type) {
-        mapType = ProfileMapConfig.mapTypesEnabled() ? ProfileMapConfig.validType(type) : IMapsProvider.MAP_TYPE_NORMAL;
+        mapType = ProfileMapConfig.validType(type);
         applyStyle();
     }
     @Override public void setMapStyle(IMapsProvider.IMapStyleOptions value) {
