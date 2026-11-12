@@ -12,6 +12,8 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parents[1]
 FORBIDDEN = re.compile(
     r"com\.google\.(?:android\.(?:gms|play|recaptcha|search\.verification)|firebase|mlkit)"
+    # OS launcher badge permissions/IPC are not Huawei SDK dependencies.
+    r"|com\.huawei\.(?:hms|hianalytics|updatesdk|agconnect)"
     r"|com\.android\.billingclient|credentials-play-services-auth|libgsaverification"
 )
 ANDROID_NAME = "{http://schemas.android.com/apk/res/android}name"
@@ -73,6 +75,8 @@ if list(ROOT.glob("TMessagesProj*/google-services.json")):
     errors.append("Google Services configuration still exists")
 if (ROOT / "TMessagesProj/libs/libgsaverification-client.aar").exists():
     errors.append("Proprietary search verification AAR still exists")
+if (ROOT / "TMessagesProj_AppHuawei").exists():
+    errors.append("Unused proprietary Huawei distribution still exists")
 if errors:
     raise SystemExit("\n".join(errors))
 print(f"DeGoogle source audit passed ({len(modules)} configured modules; SDK-only sources excluded).")

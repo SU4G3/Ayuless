@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # DRAFT fdroiddata/metadata/org.ayuless.messenger.yml; not a submission or a tested build.
-# Resolve CHECKLIST.md before enabling this build. In particular, provision pinned
-# Rust toolchains/crate sources and rebuild the packaged WidgetJS bytecode.
+# Resolve CHECKLIST.md before enabling: asset provenance, embedded QuickJS
+# builtins, full classpath/scanner and build-server validation remain open.
 Categories:
   - Internet
 License: GPL-3.0-or-later
@@ -29,34 +29,50 @@ Builds:
   - versionName: 13.2.1
     # gradle.properties APP_VERSION_CODE=7291; afat adds ABI digit 9.
     versionCode: 72919
-    disable: 'Draft: commit, API credentials, source scanner, asset licences and offline native/WidgetJS build need review; see CHECKLIST.md'
+    disable: 'Draft: asset provenance, QuickJS builtin sources, scanner and build validation; see CHECKLIST.md'
     commit: REPLACE_WITH_REVIEWED_RELEASE_COMMIT
     subdir: TMessagesProj_App
     submodules: true
+    # fdroiddata rustup srclib supplies the reviewed installer; no curl|sh here.
+    # Verify this srclib/version against the target fdroiddata checkout.
+    srclibs:
+      - rustup@1.28.2
     sudo:
       - apt-get update
-      - apt-get install -y cmake ninja-build make nasm meson pkg-config gperf python3 perl patch
+      - apt-get install -y build-essential cmake ninja-build make nasm meson pkg-config gperf python3 perl patch clang nodejs npm
+      - npm install --global pnpm@12.10.1
     gradle:
       - afat
     gradleprops:
       - ayulessUnsignedRelease=true
-    # Only unused demo binaries and the development signing key are removed.
-    # Never scanignore the packaged WidgetSandbox/*.qbc; rebuild from sources.
+      - ayulessRebuildWidgetJs=true
+    # WidgetJS .qbc and unused WASM have been removed from the repository.
+    # Do not scanignore executable bytecode, including QuickJS builtin arrays.
     rm:
       - TMessagesProj/config/release.keystore
-      - TMessagesProj/jni/twidget/widget-sandbox/packages/quickjs-wasm/dist/emscripten-module.wasm
       - TMessagesProj/jni/twidget/widget-sandbox/apps/android/gradle/wrapper/gradle-wrapper.jar
       - TMessagesProj/jni/twidget/widget-sandbox/packages/android/gradle/wrapper/gradle-wrapper.jar
     prebuild:
       - (cd .. && cp API_KEYS.example API_KEYS)
       - (cd .. && python3 Tools/check_degoogle.py)
+      # Networked preparation on the F-Droid server, before source scanning.
+      # The sandbox used to edit this recipe has not executed these commands.
+      - $$rustup$$/rustup-init.sh -y --no-modify-path --profile minimal --default-toolchain 1.96.1
+      - . $HOME/.cargo/env && rustup set auto-self-update disable
+      - . $HOME/.cargo/env && rustup toolchain install 1.98.0 --profile minimal
+      - . $HOME/.cargo/env && rustup target add --toolchain 1.96.1 aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
+      - . $HOME/.cargo/env && rustup target add --toolchain 1.98.0 aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
+      - (cd .. && . $HOME/.cargo/env && Tools/native/vendor-rust.sh)
+      - (cd ../TMessagesProj/jni/twidget/widget-sandbox && pnpm install --frozen-lockfile --ignore-scripts)
+      # AGP requires the SDK CMake package, not only distro cmake.
+      - $$SDK$$/cmdline-tools/latest/bin/sdkmanager 'cmake;3.22.1'
     # Executed from subdir after source scanning. The same source-build wrapper
     # as CI is used, with fetching explicitly disabled. All four ABIs are needed.
-    # Provision SDK 36, build-tools 36.0.0, SDK CMake 3.22.1, rustup/cargo,
-    # Rust 1.96.1 + 1.98.0 with all four Android targets, and locked crate sources
-    # in an F-Droid-approved preparation step. This draft does not fetch them.
+    # SDK 36/build-tools 36.0.0 are selected by Gradle. Cargo vendoring above
+    # includes gram-wallet, the separate C++ generator workspace, and tlottie.
+    # npm's esbuild host binary and source completeness need scanner review.
     build:
-      - (cd .. && export ANDROID_SDK_ROOT=$$SDK$$ ANDROID_NDK_HOME=$$NDK$$ SOURCE_DATE_EPOCH=1 TZ=UTC LC_ALL=C && Tools/native/build-prebuilts.sh --offline)
+      - (cd .. && . $HOME/.cargo/env && export ANDROID_SDK_ROOT=$$SDK$$ ANDROID_NDK_HOME=$$NDK$$ SOURCE_DATE_EPOCH=1 TZ=UTC LC_ALL=C && Tools/native/build-prebuilts.sh --offline)
       - (cd .. && Tools/native/check-prebuilts.sh)
     ndk: 27.2.12479018
     # Gradle assembles afatRelease. With the property above, no signing key is

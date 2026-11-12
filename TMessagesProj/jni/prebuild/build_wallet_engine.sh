@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Regenerate the C++20 bindings and build Wallet Engine for all Android ABIs.
 # Uses common.sh overrides: ABIS, API, JOBS, ANDROID_NDK_HOME, LIB_DIR, INCLUDE_DIR.
-# Install Rust via rustup; the source's rust-toolchain.toml selects the version.
+# Ayuless: Rust is provisioned before compilation; select a pinned distribution.
 
 set -Eeuo pipefail
 
@@ -9,8 +9,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/common.sh"
 
 require_ndk
-require_command cargo
-require_command rustup
+# Ayuless: select a prepared, pinned toolchain; never install during compilation.
+source "$JNI_DIR/../../Tools/native/rust-env.sh"
+setup_rust_env 1.96.1 "${WALLET_RUST_BIN:-}"
 
 # gram-wallet's Cargo manifest pins its path dependency to this submodule.
 ENGINE_DIR="$JNI_DIR/wallet-engine"
@@ -31,7 +32,7 @@ LIB_DIR="$(cd "$LIB_DIR" && pwd)"
 # The app adapter links the engine and reexports its UniFFI scaffolding. Build
 # one archive to avoid linking two copies of Rust and wallet-engine into JNI.
 cd "$ADAPTER_DIR"
-export RUSTC="$(rustup which rustc)"
+
 export CARGO_BUILD_JOBS="$JOBS"
 export CARGO_INCREMENTAL=0
 
@@ -45,22 +46,8 @@ rust_target_for_abi() {
     esac
 }
 
-installed_targets="$(rustup target list --installed)"
-missing_targets=()
-for abi in $ABIS; do
-    target="$(rust_target_for_abi "$abi")"
-    if [[ $'\n'"$installed_targets"$'\n' != *$'\n'"$target"$'\n'* ]]; then
-        missing_targets+=("$target")
-    fi
-done
-if (( ${#missing_targets[@]} )); then
-    echo "ERROR: missing Rust Android targets. From $ENGINE_DIR run:" >&2
-    echo "       rustup target add ${missing_targets[*]}" >&2
-    exit 1
-fi
-
 # Use stable virtual paths in Rust objects, as common.sh does for C/C++.
-rust_sysroot="$(rustc --print sysroot)"
+rust_sysroot="$("$RUSTC" --print sysroot)"
 rust_cargo_home="${CARGO_HOME:-$HOME/.cargo}"
 rustflags=(
     "--remap-path-prefix=$ENGINE_DIR=/wallet-engine"
@@ -68,6 +55,7 @@ rustflags=(
     "--remap-path-prefix=$BUILD_DIR=/wallet-engine-target"
     "--remap-path-prefix=$rust_sysroot=/rust-sysroot"
     "--remap-path-prefix=$rust_cargo_home=/cargo-home"
+    "--remap-path-prefix=$JNI_DIR=/jni"
     "-Cdebuginfo=0"
     "-Crelocation-model=pic"
 )
@@ -81,13 +69,15 @@ case "$host_os" in
     Darwin) host_library=libgram_wallet.dylib ;;
     Linux) host_library=libgram_wallet.so ;;
 esac
-echo "Generating Wallet Engine C++ bindings with $(rustc --version)"
-cargo rustc --manifest-path "$ADAPTER_DIR/Cargo.toml" \
+echo "Generating Wallet Engine C++ bindings with $("$RUSTC" --version)"
+"$CARGO" rustc --manifest-path "$ADAPTER_DIR/Cargo.toml" \
     --target-dir "$BUILD_DIR/host" --locked --release --lib --crate-type cdylib
-cargo run --manifest-path "$ENGINE_DIR/bindgen/cpp/bindgen/Cargo.toml" \
+# Ayuless: read this workspace's vendored Cargo configuration.
+(cd "$ENGINE_DIR/bindgen/cpp/bindgen"
+"$CARGO" run --manifest-path "$ENGINE_DIR/bindgen/cpp/bindgen/Cargo.toml" \
     --target-dir "$BUILD_DIR/bindgen" --locked -- \
     --library --out-dir "$BUILD_DIR/bindings" \
-    "$BUILD_DIR/host/release/$host_library"
+    "$BUILD_DIR/host/release/$host_library")
 
 for generated in wallet_engine.hpp wallet_engine.cpp wallet_engine_scaffolding.hpp \
                  gram_wallet.hpp gram_wallet.cpp gram_wallet_scaffolding.hpp; do
@@ -115,7 +105,7 @@ for abi in $ABIS; do
         "CC_${cc_key}=$linker" \
         "CXX_${cc_key}=${linker}++" \
         "AR_${cc_key}=$NDK_TOOLCHAIN/bin/llvm-ar" \
-        cargo rustc --manifest-path "$ADAPTER_DIR/Cargo.toml" \
+        "$CARGO" rustc --manifest-path "$ADAPTER_DIR/Cargo.toml" \
         --target-dir "$BUILD_DIR/android" --locked --release --lib \
         --target "$target" --crate-type staticlib
 

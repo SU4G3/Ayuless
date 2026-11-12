@@ -18,12 +18,88 @@ https://www.openstreetmap.org/copyright
 Optional satellite imagery: Sentinel-2 cloudless 2016 by EOX IT Services GmbH,
 containing modified Copernicus Sentinel data 2016, CC BY 4.0.
 https://s2maps.eu / https://maps.eox.at/
+Exact imagery attribution (also displayed with clickable links on the map):
+Sentinel-2 cloudless – https://s2maps.eu by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016)
+https://creativecommons.org/licenses/by/4.0/
+Only the original 2016 s2cloudless_3857 WMTS layer is configured. This notice
+does not license newer EOX mosaics. Current service/vintage availability needs
+confirmation; no newer vintage may be silently substituted.
 Hybrid overlay: data by OpenStreetMap contributors (ODbL) and Natural Earth
 (public domain); rendering by EOX and MapServer. EOX's service permission
 is described in docs/CREDITS.md; no CC BY licence is asserted for the overlay.
 The provider-specific credits and links also appear on the map.
 
-This notice supplements upstream and dependency notices. It is not a complete
-licence inventory of upstream fonts, models, animations or other assets.
-Full project credits and outstanding audit: docs/CREDITS.md and
-docs/fdroid/CHECKLIST.md in the source repository.
+Bundled fonts
+
+Roboto Mono variable (rmono_var.ttf): Copyright 2015 The Roboto Mono Project
+Authors (https://github.com/googlefonts/robotomono). SIL Open Font License 1.1,
+explicitly stated in the font metadata. Full licence: ayuless-notices/font-OFL-1.1.txt.
+Family source: https://github.com/googlefonts/RobotoMono
+
+Roboto Mono static rmono.ttf has the same project copyright; exact source
+revision and grant for this file still need confirmation (family licence OFL).
+Legacy Roboto rmedium/rmediumitalic/ritalic/rcondensedbold: embedded copyright
+2011 Google Inc. Roboto ExtraBold: copyright 2011 The Roboto Project Authors.
+Family source: https://github.com/googlefonts/roboto-classic
+Legacy Apache-2.0 versus later OFL licensing must be matched to each file.
+These family references are not an assertion that provenance is resolved.
+
+Merriweather Bold: Copyright 2016 The Merriweather Project Authors
+(https://github.com/EbenSorkin/Merriweather), Reserved Font Name Merriweather.
+Merriweather 24pt Bold Italic: Copyright 2024 The Merriweather Project Authors
+(https://github.com/EbenSorkin/Merriweather4), Reserved Font Name Merriweather.
+Family licence OFL-1.1; exact grants/source releases for the bundled files remain
+to be confirmed. Custom gram.ttf and num.otf have no identified grant/source.
+
+JLaTeXMath sources: https://github.com/dkaraush/jlatexmath-android
+The upstream inventory lists OFL Euler/AMS fonts, public-domain stmary/rsfs,
+Knuth-licensed Computer Modern/Cyrillic fonts, free dsrom and GPLv2 Greek fonts.
+Individual dependency font notices are retained under
+org/scilab/forge/jlatexmath/fonts/licences when packaged. The recursive submodule
+and final packaged variants still need review, including Greek-font compatibility.
+
+Widget engine and resources
+
+QuickJS-ng (TelegramMessenger fork): MIT, Fabrice Bellard, Charlie Gordon,
+Ben Noordhuis, Saúl Ibarra Corretgé and contributors.
+https://github.com/TelegramMessenger/quickjs
+Full licence: ayuless-notices/quickjs-MIT.txt.
+Widget-sandbox sources: TMessagesProj/jni/twidget/widget-sandbox in the Ayuless
+source tree; generated WidgetJS bundles use linkedom (Andrea Giammarchi, ISC),
+parse5 (Ivan Nikulin, MIT) and css-tree (Roman Dvornov, MIT), plus their locked
+transitive dependencies. Their complete licence texts still need collection from
+the prepared source packages; the current third-party notice alone is insufficient.
+Sources: https://github.com/WebReflection/linkedom,
+https://github.com/inikulin/parse5, https://github.com/csstree/csstree
+This profile does not ship the old WidgetJS/libs Chart.js or D3 bundles.
+
+Twidget: BSD-3-Clause, Copyright 2026 The twidget Authors.
+Full licence: ayuless-notices/twidget-BSD.txt.
+litehtml: BSD-3-Clause, Yuri Kobets, https://github.com/litehtml/litehtml
+gumbo-parser: Apache-2.0, Google, https://github.com/google/gumbo-parser
+Phosphor vector icons: MIT, Copyright 2023 Phosphor Icons,
+https://github.com/phosphor-icons/core
+Full texts: ayuless-notices/litehtml-BSD.txt, gumbo-Apache-2.0.txt, phosphor-MIT.txt.
+Phosphor sources are retained in the optional TwidgetAssets tree; whether the
+selected Android renderer actually ships any of them must be checked in the APK.
+
+PhoneFormat reader code: Copyright 2012 Rick Maddy, BSD-2-Clause.
+Full notice: ayuless-notices/phoneformat-BSD.txt. This does not prove a grant for
+PhoneFormats.dat itself.
+
+Outstanding inherited asset provenance
+
+Sources/distribution: https://github.com/DrKLO/Telegram/tree/7be672ea/TMessagesProj/src/main
+No individual grant/preferred source has been established here for:
+secureid_ocr_nn.dat (OCR weights); PhoneFormats.dat, grammars.dat, shapes.dat;
+models/diamond_ios/*.bin and models/*.binobj/model textures; gram.ttf/num.otf;
+emoji.pack and emoji/compound PNGs; raw Lottie JSON animations and MP3/WAV sounds;
+inherited drawable/mipmap art, themes, wallet textures, backgrounds and stickers.
+The AppleColorEmoji renderer in Tools/EmojiTextureMaker.html is a non-free
+provenance risk: its code licence grants no rights to Apple's rendered glyphs.
+Obtain free sources/grants or replace the affected assets before release.
+
+This notice records known credits and missing evidence; it grants no rights to
+unresolved assets. The per-file inventory with hashes, sources and licence status
+is docs/fdroid/ASSET-INVENTORY.tsv; the audit and remaining release blockers are
+docs/LICENSE-AUDIT.md and docs/fdroid/CHECKLIST.md in the Ayuless source repository.

@@ -29,7 +29,8 @@ require_cmake_ninja
 find_archive() {
     local root="$1"
     local name="$2"
-    find "$root" -type f -name "$name" -print -quit
+    # Ayuless: select outputs independently of filesystem traversal order.
+    find "$root" -type f -name "$name" -print | LC_ALL=C sort | head -n 1
 }
 
 rm -rf "$BUILD_DIR"

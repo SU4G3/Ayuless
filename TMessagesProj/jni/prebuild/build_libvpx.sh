@@ -151,7 +151,8 @@ copy_generated_header_overlay() {
         chmod 0644 "$destination"
         copied=$((copied + 1))
         echo "==> generated/ABI header: $destination"
-    done < <(find "$installed_root/vpx" -type f -name '*.h' -print0)
+    # Ayuless: filesystem traversal order must not affect generated outputs.
+    done < <(find "$installed_root/vpx" -type f -name '*.h' -print0 | sort -z)
 
     if [[ "$copied" == "0" ]]; then
         echo "==> libvpx $abi: no generated/ABI-dependent public headers"
@@ -319,7 +320,7 @@ EOF
     # Normalize host/check-out paths in that diagnostic string only; configure
     # itself and all compiler arguments above remain untouched.
     local vpx_config_c
-    vpx_config_c="$(find "$build_dir" -type f -name vpx_config.c -print -quit)"
+    vpx_config_c="$(find "$build_dir" -type f -name vpx_config.c -print | LC_ALL=C sort | head -n 1)"
     [[ -n "$vpx_config_c" ]] || {
         error "Generated vpx_config.c was not found for $abi"
         popd >/dev/null

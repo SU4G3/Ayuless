@@ -17,54 +17,13 @@ if [ ! -f "$manifest" ]; then
   exit 1
 fi
 
-rustup_toolchain=
-if command -v rustup >/dev/null 2>&1; then
-  rustup_toolchain=${TLOTTIE_RUST_TOOLCHAIN:-stable}
-fi
-
-run_cargo() {
-  if [ -n "$rustup_toolchain" ]; then
-    rustup run "$rustup_toolchain" cargo "$@"
-  else
-    cargo "$@"
-  fi
-}
-
-run_rustc() {
-  if [ -n "$rustup_toolchain" ]; then
-    rustup run "$rustup_toolchain" rustc "$@"
-  else
-    rustc "$@"
-  fi
-}
-
-# Cargo otherwise resolves rustc through PATH. That can mix a rustup Cargo with
-# a Homebrew/system rustc whose sysroot does not contain the checked targets.
-if [ -n "$rustup_toolchain" ]; then
-  RUSTC=$(rustup which --toolchain "$rustup_toolchain" rustc)
-else
-  RUSTC=$(command -v rustc)
-fi
-export RUSTC
-
-if [ -n "$rustup_toolchain" ]; then
-  missing_targets=
-  for target in \
-    aarch64-linux-android \
-    armv7-linux-androideabi \
-    i686-linux-android \
-    x86_64-linux-android
-  do
-    if ! rustup target list --toolchain "$rustup_toolchain" --installed | grep -qx "$target"; then
-      missing_targets="$missing_targets $target"
-    fi
-  done
-  if [ -n "$missing_targets" ]; then
-    echo "error: Rust Android targets are not installed:$missing_targets" >&2
-    echo "install them with: rustup target add --toolchain $rustup_toolchain$missing_targets" >&2
-    exit 1
-  fi
-fi
+# Ayuless: pinned toolchains may be supplied directly by the build environment.
+source "$JNI_DIR/../../Tools/native/rust-env.sh"
+setup_rust_env "${TLOTTIE_RUST_TOOLCHAIN:-1.98.0}" "${TLOTTIE_RUST_BIN:-}"
+run_cargo() { "$CARGO" "$@"; }
+run_rustc() { "$RUSTC" "$@"; }
+# Cargo configuration discovery must use the tlottie workspace, not caller cwd.
+cd "$tlottie_dir"
 
 target_dir=${CARGO_TARGET_DIR:-"$tlottie_dir/target/no-std-android"}
 mkdir -p "$target_dir"
@@ -98,6 +57,7 @@ append_rustflag() {
   fi
   CARGO_ENCODED_RUSTFLAGS="$CARGO_ENCODED_RUSTFLAGS$1"
 }
+append_rustflag "--remap-path-prefix=$JNI_DIR=/jni"
 append_rustflag "--remap-path-prefix=$tlottie_dir=/tlottie"
 append_rustflag "--remap-path-prefix=$target_dir=/tlottie-target"
 append_rustflag "--remap-path-prefix=$rust_sysroot=/rust-sysroot"
@@ -108,7 +68,7 @@ if [ -n "$cargo_home" ]; then
 fi
 export CARGO_ENCODED_RUSTFLAGS
 export CARGO_INCREMENTAL=0
-export SOURCE_DATE_EPOCH=1
+export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1}"
 export TZ=UTC
 export LC_ALL=C
 
