@@ -50,6 +50,22 @@ command if any are missing. Generated `.a` files are ignored by Git.
 Re-run the source build after changing native inputs; local outputs are not
 automatically rebuilt by Gradle. The CI cache uses the same output directories.
 
+## Offline builds and F-Droid
+
+`Tools/native/build-prebuilts.sh --offline` uses already initialised, pinned
+native submodules and installed Rust toolchains/Android targets. It does not run
+Git updates or rustup installation, disables rustup auto-install, and sets
+`CARGO_NET_OFFLINE=true`. All locked Cargo dependencies must already be available
+as sources, along with the SDK, NDK and host tools. Missing inputs fail the build.
+The normal invocation still prepares submodules and toolchains as CI does.
+
+This mode does not provision F-Droid's build server. The disabled
+[draft recipe](fdroid/org.ayuless.messenger.yml) needs reviewed source/toolchain
+preparation and a WidgetJS bytecode source build before submission; see the
+[checklist](fdroid/CHECKLIST.md). For an unsigned application release, use
+`./gradlew :TMessagesProj_App:assembleAfatRelease -PayulessUnsignedRelease=true`;
+the application module does not require the local release keystore in this mode.
+
 ## CI
 
 - `.github/actions/native-prebuilts` builds the libraries and caches them under a

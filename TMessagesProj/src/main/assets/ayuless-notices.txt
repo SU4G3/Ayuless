@@ -1,0 +1,29 @@
+Ayuless artwork and map credits
+
+Ayuless branding: Copyright (C) 2026 Ayuless contributors,
+GPL-3.0-or-later. Editable source: branding/generate.py in
+https://github.com/SU4G3/Ayuless
+
+Solar Icons Set by 480 Design and R4IN80W, CC BY 4.0:
+https://www.figma.com/community/file/1166831539721848736/solar-icons-set
+https://creativecommons.org/licenses/by/4.0/
+Used as ayuless_solar_*.xml Android vector drawables. Converted to Android
+vectors with color adjustments; eye and clock adaptations use the Solar
+Linear style. These adaptations are also attributed under CC BY 4.0.
+
+Street maps use OpenFreeMap and OpenStreetMap data. MapLibre displays the
+source attribution on the map. OpenStreetMap contributors: ODbL 1.0,
+https://www.openstreetmap.org/copyright
+
+Optional satellite imagery: Sentinel-2 cloudless 2016 by EOX IT Services GmbH,
+containing modified Copernicus Sentinel data 2016, CC BY 4.0.
+https://s2maps.eu / https://maps.eox.at/
+Hybrid overlay: data by OpenStreetMap contributors (ODbL) and Natural Earth
+(public domain); rendering by EOX and MapServer. EOX's service permission
+is described in docs/CREDITS.md; no CC BY licence is asserted for the overlay.
+The provider-specific credits and links also appear on the map.
+
+This notice supplements upstream and dependency notices. It is not a complete
+licence inventory of upstream fonts, models, animations or other assets.
+Full project credits and outstanding audit: docs/CREDITS.md and
+docs/fdroid/CHECKLIST.md in the source repository.

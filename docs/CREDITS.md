@@ -7,6 +7,8 @@ Ayuless uses icons from the **Solar Icons Set**
 by **480 Design** and **R4IN80W**, licensed under
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 The icons were converted to Android vector drawables; colors may be adjusted.
+These credits and modification notes are also included in the APK as
+`assets/ayuless-notices.txt`.
 
 Files: `TMessagesProj/src/main/res/drawable/ayuless_solar_*.xml`.
 

@@ -34,13 +34,17 @@ grep -rl "Apache License" $I . | wc -l
 - **CC BY 4.0** artwork: the Solar icons (`TMessagesProj/src/main/res/drawable/ayuless_solar_*.xml`) are licensed under CC BY 4.0, which is one-way compatible with GPLv3 (CC BY 4.0 material may be included in a GPLv3 work). Attribution is kept in [CREDITS.md](CREDITS.md) and in each file's header comment.
 - **Native submodules** (BoringSSL, FFmpeg, libvpx, dav1d, opus, openh264, tdlib, abseil, WAMR, ...) are under permissive or LGPL licenses. All GPLv3-compatible. FFmpeg must be built without `--enable-nonfree`.
 
-## Proprietary parts to remove
+## Dependency and binary audit status
 
-These are not license-compatible with a fully free build and are tracked in the roadmap (step 1):
+The Java header snapshot above is not a complete audit of assets or recursive
+dependencies. Current F-Droid blockers and verification status are tracked in
+[fdroid/CHECKLIST.md](fdroid/CHECKLIST.md).
 
-- `TMessagesProj/jni/prebuild/lib/**/*.a`: 64 prebuilt static libs (204 MB). CI now rebuilds all of them from the pinned source submodules and links the APK against those ([NATIVE.md](NATIVE.md)); the committed copies are only removed once that build has proven stable.
+- `TMessagesProj/jni/prebuild/lib/**/*.a`: the committed copies have been removed. CI builds all 64 static archives from pinned source submodules ([NATIVE.md](NATIVE.md)). A prebuilt archive is not inherently proprietary; F-Droid needs a source build and compatible licensing of its inputs.
 - ~~`TMessagesProj/libs/libgsaverification-client.aar`~~: closed Google binary, removed in #14 (`Tools/check_degoogle.py` fails the build if it comes back).
-- Gradle deps: `com.google.android.gms:*`, `com.google.firebase:*`, `com.google.mlkit:*`, `com.google.android.play:integrity`, `com.android.billingclient:billing`, `androidx.credentials:credentials-play-services-auth`.
+- Proprietary Gradle SDKs (GMS, Firebase, ML Kit, Play Integrity, billing and Play credentials provider) have been removed from the active build; see [DEGOOGLE.md](DEGOOGLE.md). Historical Huawei sources remain outside the configured build. Full transitive resolution still needs review.
+- Packaged QuickJS `.qbc` assets still need a source-generation step. Upstream binary models, data, fonts and artwork need individual licence/source review; do not infer their licensing from the Java header snapshot.
+- Solar artwork attribution is also packaged in `assets/ayuless-notices.txt`. Dependency `licences/` directories are no longer excluded by the root packaging configuration. Verify notices in the built APK.
 
 ## New code
 
