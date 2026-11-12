@@ -1,13 +1,4 @@
 /*
- * This is the source code of AyuGram for Android.
- *
- * We do not and cannot prevent the use of our code,
- * but be respectful and credit the original author.
- *
- * Copyright @Radolyn, 2023
- */
-
-/*
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (C) 2026 Ayuless contributors
  */
@@ -101,17 +92,17 @@ public final class GhostConfig {
     }
 
     public static void setProfile(int profile, String key, boolean value) {
-        SharedPreferences p = profilePrefs(profile);
-        SharedPreferences.Editor editor = p.edit().putBoolean(key, value);
+        SharedPreferences prefs = profilePrefs(profile);
+        SharedPreferences.Editor editor = prefs.edit().putBoolean(key, value);
         if (KEY_ENABLED.equals(key) && value) {
             boolean configured = false;
-            for (String option : GHOST_KEYS) configured |= p.contains(option);
+            for (String option : GHOST_KEYS) configured |= prefs.contains(option);
             if (!configured) {
-                editor.putBoolean(KEY_HIDE_READ, true).putBoolean(KEY_HIDE_ONLINE, true)
-                        .putBoolean(KEY_HIDE_TYPING, true).putBoolean(KEY_OFFLINE_AFTER_SEND, true);
+                for (String option : GHOST_KEYS) {
+                    if (!KEY_HIDE_STORY_VIEWS.equals(option)) editor.putBoolean(option, true);
+                }
             }
         }
-        // AyuGram treats reading after reply and scheduling as mutually exclusive.
         if (value && KEY_READ_ON_ACTION.equals(key)) editor.putBoolean(KEY_DELAYED_SEND, false);
         if (value && KEY_DELAYED_SEND.equals(key)) editor.putBoolean(KEY_READ_ON_ACTION, false);
         editor.apply();

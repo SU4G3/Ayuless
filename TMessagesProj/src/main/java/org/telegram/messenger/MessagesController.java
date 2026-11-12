@@ -1,13 +1,4 @@
 /*
- * This is the source code of AyuGram for Android.
- *
- * We do not and cannot prevent the use of our code,
- * but be respectful and credit the original author.
- *
- * Copyright @Radolyn, 2023
- */
-
-/*
  * This is the source code of Telegram for Android v. 5.x.x.
  * It is licensed under GNU GPL v. 2 or later.
  * You should have received a copy of the license in this archive (see LICENSE).
@@ -793,6 +784,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     private void getNextReactionMentionInternal(long dialogId, long topicId, int count, final boolean isReactions, Consumer<Integer> callback) {
+        if (org.ayuless.ghost.GhostSeen.findNext(currentAccount, dialogId, topicId, isReactions ? org.ayuless.ghost.GhostSeen.REACTIONS : org.ayuless.ghost.GhostSeen.POLL_VOTES, callback)) return; // Ayuless: skip locally seen markers.
         final String tableMentionsForDialogs = isReactions ? "reaction_mentions" : "poll_votes_mentions";
         final String tableMentionsForTopics = isReactions ? "reaction_mentions_topics" : "poll_votes_mentions_topics";
         final boolean isVotes = !isReactions;
@@ -934,7 +926,8 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean isPremiumUser(TLRPC.User currentUser) {
-        return currentUser != null && (currentUser.premium || currentUser.id == getUserConfig().getClientUserId() && org.ayuless.extras.ExtrasConfig.localPremium()) && !isSupportUser(currentUser); // Ayuless: local Premium for self only
+        return currentUser != null && !isSupportUser(currentUser) && (currentUser.premium
+                || currentUser.id == getUserConfig().getClientUserId() && org.ayuless.extras.ExtrasConfig.localPremium());
     }
 
     public boolean didPressTranscribeButtonEnough() {
@@ -14454,6 +14447,7 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         ArrayList<Integer> arrayList = new ArrayList<>();
         if (messageObject.messageOwner.mentioned) {
+            org.ayuless.ghost.GhostSeen.rememberContent(currentAccount, messageObject); // Ayuless: persist mentions cleared by media playback.
             getMessagesStorage().markMentionMessageAsRead(-messageObject.messageOwner.peer_id.channel_id, messageObject.getId(), messageObject.getDialogId());
         }
         arrayList.add(messageObject.getId());
@@ -14536,7 +14530,7 @@ public class MessagesController extends BaseController implements NotificationCe
 
     public void markMessageAsRead2(long dialogId, int mid, TLRPC.InputChannel inputChannel, int ttl, long taskId, boolean createDeleteTask) {
         // Ayuless: do not create a local TTL task for a receipt ghost mode blocks.
-        if (org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount)) {
+        if (org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount, dialogId)) {
             if (taskId != 0) getMessagesStorage().removePendingTask(taskId);
             return;
         }
@@ -14598,7 +14592,7 @@ public class MessagesController extends BaseController implements NotificationCe
 
     public void markMessageAsRead(long dialogId, long randomId, int ttl) {
         // Ayuless: encrypted content receipts and their local tasks share the ghost policy.
-        if (org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount)) return;
+        if (org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount, dialogId)) return;
         if (randomId == 0 || dialogId == 0 || ttl <= 0 && ttl != Integer.MIN_VALUE) {
             return;
         }
@@ -14759,7 +14753,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         if (countDiff == 0 || maxPositiveId >= dialog.top_message) {
                             dialog.unread_count = 0;
                         } else {
-                            dialog.unread_count = Math.max(dialog.unread_count - countDiff, 0);
+                            dialog.unread_count = Math.max(dialog.unread_count - Math.max(0, countDiff), 0); // Ayuless: -1 means a bounded read covered no cached unread messages.
                             if (maxPositiveId != Integer.MIN_VALUE && dialog.unread_count > dialog.top_message - maxPositiveId) {
                                 dialog.unread_count = dialog.top_message - maxPositiveId;
                             }
@@ -14787,7 +14781,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     if (!popup) {
                         getNotificationsController().processReadMessages(null, dialogId, 0, maxPositiveId, false);
                         LongSparseIntArray dialogsToUpdate = new LongSparseIntArray(1);
-                        dialogsToUpdate.put(dialogId, 0);
+                        dialogsToUpdate.put(dialogId, countDiff != 0 && dialog != null ? dialog.unread_count : 0); // Ayuless: preserve notifications after a bounded read.
                         getNotificationsController().processDialogsUpdateRead(dialogsToUpdate);
                     } else {
                         getNotificationsController().processReadMessages(null, dialogId, 0, maxPositiveId, true);
@@ -14814,7 +14808,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         if (countDiff == 0 || maxNegativeId <= dialog.top_message) {
                             dialog.unread_count = 0;
                         } else {
-                            dialog.unread_count = Math.max(dialog.unread_count - countDiff, 0);
+                            dialog.unread_count = Math.max(dialog.unread_count - Math.max(0, countDiff), 0); // Ayuless: -1 means a bounded read covered no cached unread messages.
                             if (maxNegativeId != Integer.MAX_VALUE && dialog.unread_count > maxNegativeId - dialog.top_message) {
                                 dialog.unread_count = maxNegativeId - dialog.top_message;
                             }
@@ -14839,12 +14833,12 @@ public class MessagesController extends BaseController implements NotificationCe
                         getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, UPDATE_MASK_READ_DIALOG_MESSAGE);
                     }
                     LongSparseIntArray dialogsToUpdate = new LongSparseIntArray(1);
-                    dialogsToUpdate.put(dialogId, 0);
+                    dialogsToUpdate.put(dialogId, countDiff != 0 && dialog != null ? dialog.unread_count : 0); // Ayuless: preserve notifications after a bounded read.
                     getNotificationsController().processDialogsUpdateRead(dialogsToUpdate);
                 }));
 
                 // Ayuless: blocked readEncryptedHistory must not start secret-chat TTL locally.
-                if (chat != null && chat.ttl > 0 && !org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount)) {
+                if (chat != null && chat.ttl > 0 && !org.ayuless.ghost.GhostInterceptor.blocksMediaRead(currentAccount, dialogId)) {
                     int serverTime = Math.max(getConnectionsManager().getCurrentTime(), maxDate);
                     getMessagesStorage().createTaskForSecretChat(chat.id, maxDate, serverTime, 0, null);
                 }
@@ -16247,6 +16241,7 @@ public class MessagesController extends BaseController implements NotificationCe
         getMessagesStorage().cleanup(false);
         org.ayuless.storage.AyulessStore.getInstance(currentAccount).clearAll(); // Ayuless: wipe local deleted/edit history on logout
         org.ayuless.content.RetentionConfig.clearOpened(currentAccount); // Ayuless: account slots can be reused
+        org.ayuless.ghost.GhostSeen.clear(currentAccount); // Ayuless: clear per-account seen markers on logout.
         cleanup();
         getContactsController().deleteUnknownAppAccounts();
     }
@@ -19674,6 +19669,8 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
             } else if (baseUpdate instanceof TL_update.TL_updateMessagePoll) {
                 TL_update.TL_updateMessagePoll update = (TL_update.TL_updateMessagePoll) baseUpdate;
+                // Ayuless: a replayed vote marker must respect the local seen watermark.
+                if (update.peer != null) org.ayuless.ghost.GhostSeen.applyPoll(currentAccount, MessageObject.getPeerId(update.peer), update.msg_id, update.results);
                 if (update.peer != null && update.results != null && update.msg_id != 0) {
                     long dialogId = MessageObject.getPeerId(update.peer);
                     SparseBooleanArray sparseBooleanArray = new SparseBooleanArray();
@@ -19697,6 +19694,7 @@ public class MessagesController extends BaseController implements NotificationCe
             } else if (baseUpdate instanceof TL_update.TL_updateMessageReactions) {
                 TL_update.TL_updateMessageReactions update = (TL_update.TL_updateMessageReactions) baseUpdate;
                 long dialogId = MessageObject.getPeerId(update.peer);
+                org.ayuless.ghost.GhostSeen.applyReactions(currentAccount, dialogId, update.msg_id, update.reactions); // Ayuless: filter only previously seen events.
 
                 getMessagesStorage().updateMessageReactions(dialogId, update.msg_id, update.reactions);
 
@@ -22475,6 +22473,7 @@ public class MessagesController extends BaseController implements NotificationCe
     
     
     public void sortDialogs(LongSparseArray<TLRPC.Chat> chatsDict) {
+        org.ayuless.ghost.GhostSeen.applyDialogs(currentAccount, this); // Ayuless: local ghost counters also apply to dialog filters.
         if (chatsDict == null && ApplicationLoader.mainInterfacePaused) {
             return;
         }

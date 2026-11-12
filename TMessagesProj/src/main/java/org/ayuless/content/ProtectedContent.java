@@ -1,12 +1,3 @@
-/*
- * This is the source code of AyuGram for Android.
- *
- * We do not and cannot prevent the use of our code,
- * but be respectful and credit the original author.
- *
- * Copyright @Radolyn, 2023
- */
-
 // SPDX-License-Identifier: GPL-3.0-or-later
 package org.ayuless.content;
 
@@ -58,38 +49,32 @@ public final class ProtectedContent {
         return message != null;
     }
 
-    /** True if the server will refuse a plain forward of this message. */
-    private static boolean needsCopy(MessageObject messageObject) {
-        TLRPC.Message message = messageObject.messageOwner;
-        if (message == null || !canUnlock(messageObject.currentAccount, message)) {
-            return false;
-        }
-        if (org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_LOCAL_RESEND)
-                && org.ayuless.antidelete.DeletedCache.isDeleted(messageObject.currentAccount, messageObject.getDialogId(), messageObject.getId())) return true;
-        long dialogId = MessageObject.getDialogId(message);
-        return DialogObject.isEncryptedDialog(dialogId) || RetentionConfig.timed(message)
-                || forwardingRestricted(messageObject);
-    }
-
-    /** Original server restriction, independent of other reasons to send a local copy. */
-    public static boolean forwardingRestricted(MessageObject object) {
+    public static boolean forwardingRestricted(int account, MessageObject object) {
         if (object == null || object.messageOwner == null) return false;
         TLRPC.Message message = object.messageOwner;
         if (message.noforwards || unlocked.contains(message)) return true;
-        MessagesController controller = MessagesController.getInstance(object.currentAccount);
-        long dialogId = MessageObject.getDialogId(message);
-        if (DialogObject.isEncryptedDialog(dialogId)) return false;
-        if (dialogId > 0) {
-            TLRPC.UserFull full = controller.getUserFull(dialogId);
+        long dialog = object.getDialogId();
+        if (DialogObject.isEncryptedDialog(dialog)) return false;
+        MessagesController controller = MessagesController.getInstance(account);
+        if (dialog > 0) {
+            TLRPC.UserFull full = controller.getUserFull(dialog);
             return full != null && (full.noforwards_peer_enabled || full.noforwards_my_enabled);
         }
-        TLRPC.Chat chat = controller.getChat(-dialogId);
+        TLRPC.Chat chat = controller.getChat(-dialog);
         return chat != null && chat.noforwards;
     }
 
-    public static boolean showForwardHint(MessageObject object) {
-        return org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_RESTRICTED_FORWARD_HINT)
-                && forwardingRestricted(object);
+    public static boolean showForwardHint(int account, MessageObject object) {
+        return forwardingRestricted(account, object);
+    }
+
+    private static boolean needsCopy(MessagesController controller, MessageObject object) {
+        TLRPC.Message message = object.messageOwner;
+        if (message == null || !canUnlock(object.currentAccount, message)) return false;
+        return forwardingRestricted(object.currentAccount, object)
+                || DialogObject.isEncryptedDialog(object.getDialogId()) || RetentionConfig.timed(message)
+                || org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_LOCAL_RESEND)
+                && org.ayuless.antidelete.DeletedCache.isDeleted(object.currentAccount, object.getDialogId(), object.getId());
     }
 
     /** Materialize an encrypted cache file only when the user explicitly saves or shares it. */
@@ -170,12 +155,14 @@ public final class ProtectedContent {
      *
      * @return number of protected messages that could not be copied (media not downloaded)
      */
-    public static int sendCopies(int account, ArrayList<MessageObject> messages, long peer, boolean notify, int scheduleDate, MessageObject replyToTopMsg) {
+    public static int sendCopies(int account, ArrayList<MessageObject> messages, long peer, boolean notify, int scheduleDate, MessageObject replyToTopMsg, boolean automaticDelay) {
         AccountInstance instance = AccountInstance.getInstance(account);
+        org.telegram.messenger.SendMessageChatArguments sendArgs = org.ayuless.ghost.DelayedSend.arguments(automaticDelay);
+        MessagesController controller = instance.getMessagesController();
         int skipped = 0;
         for (Iterator<MessageObject> it = messages.iterator(); it.hasNext(); ) {
             MessageObject messageObject = it.next();
-            if (!needsCopy(messageObject)) {
+            if (!needsCopy(controller, messageObject)) {
                 continue;
             }
             it.remove();
@@ -191,6 +178,7 @@ public final class ProtectedContent {
                 params.replyToTopMsg = replyToTopMsg;
                 params.notify = notify;
                 params.scheduleDate = scheduleDate;
+                params.sendMessageChatArguments = sendArgs;
                 instance.getSendMessagesHelper().sendMessage(params);
                 continue;
             }
@@ -213,7 +201,7 @@ public final class ProtectedContent {
             boolean forceDocument = isDocument && !messageObject.isVideo() && !messageObject.isGif();
             ArrayList<SendMessagesHelper.SendingMediaInfo> list = new ArrayList<>();
             list.add(info);
-            SendMessagesHelper.prepareSendingMedia(instance, list, peer, null, replyToTopMsg, null, null, forceDocument, false, null, notify, scheduleDate, 0, 0, false, null, null, 0, false, 0, 0, null);
+            SendMessagesHelper.prepareSendingMedia(instance, list, peer, null, replyToTopMsg, null, null, forceDocument, false, null, notify, scheduleDate, 0, 0, false, null, sendArgs, 0, false, 0, 0, null);
         }
         if (skipped > 0) {
             AndroidUtilities.runOnUIThread(() -> Toast.makeText(ApplicationLoader.applicationContext,

@@ -686,6 +686,7 @@ public class NotificationCenter {
                 }
             }
         }
+        if (!org.ayuless.ghost.GhostSeen.beforeNotification(currentAccount, id, args)) return; // Ayuless: overlay counters and discard stale local recounts before UI observers.
         broadcasting++;
         ArrayList<NotificationCenterDelegate> objects = observers.get(id);
         if (objects != null && !objects.isEmpty()) {

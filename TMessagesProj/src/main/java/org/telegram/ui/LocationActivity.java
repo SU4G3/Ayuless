@@ -442,7 +442,10 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     openDirections(null);
                 } else if ((id == map_list_menu_map || id == map_list_menu_satellite || id == map_list_menu_hybrid) && map != null) {
                     pokeMapSnapshot();
-                    map.setMapType(id == map_list_menu_satellite ? IMapsProvider.MAP_TYPE_SATELLITE : id == map_list_menu_hybrid ? IMapsProvider.MAP_TYPE_HYBRID : IMapsProvider.MAP_TYPE_NORMAL);
+                    // Ayuless: persist the type selected in Telegram's existing menu.
+                    int type = id == map_list_menu_satellite ? IMapsProvider.MAP_TYPE_SATELLITE : id == map_list_menu_hybrid ? IMapsProvider.MAP_TYPE_HYBRID : IMapsProvider.MAP_TYPE_NORMAL;
+                    org.ayuless.settings.ProfileMapConfig.setMapType(type);
+                    map.setMapType(type);
                 }
             }
         });
@@ -453,6 +456,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         mapTypeButton.addSubItem(map_list_menu_satellite, R.drawable.msg_satellite, getString(R.string.Satellite));
         mapTypeButton.addSubItem(map_list_menu_hybrid, R.drawable.msg_hybrid, getString(R.string.Hybrid));
         mapTypeButton.setContentDescription(getString(R.string.AccDescrMoreOptions));
+        // Ayuless: map types are always available in the upstream menu.
         if (chatLocation != null) {
             simpleActionBar.setTitle(getString(R.string.ChatLocation));
         } else if (messageObject != null) {
@@ -1103,6 +1107,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         ApplicationLoader.getMapsProvider().initializeMaps(ApplicationLoader.applicationContext);
                         mapView.getMapAsync(map1 -> {
                             this.map = map1;
+                            // Ayuless: restore before applying the day/night street style.
+                            this.map.setMapType(org.ayuless.settings.ProfileMapConfig.mapType());
                             int themeResId = getMapThemeResId();
                             if (themeResId != 0) {
                                 currentMapStyleDark = true;

@@ -1,4 +1,10 @@
-# AyuGram parity
+# AyuGram parity — historical phase-A audit input
+
+The implementation described below has been removed by clean-room phase A. This
+is a historical inventory, not the phase-B implementation contract or evidence
+that the current tree retains the port. Phase B must use
+[CLEANROOM-SPEC.md](CLEANROOM-SPEC.md) and must not consult the reference checkout
+or historical implementation patches. See [CLEANROOM-REMOVED.md](CLEANROOM-REMOVED.md).
 
 Reference: read-only `../ayugram4a` at `7013145676d36d82ee13c02a89f72097b7490dcd`, `TMessagesProj/src/main/java/com/radolyn/ayugram/`,
 EN/RU `res/values*/ayu.xml`, and the AyuGram hooks in Telegram sources.

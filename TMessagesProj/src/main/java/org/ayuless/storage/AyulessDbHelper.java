@@ -17,7 +17,7 @@ import java.io.File;
  */
 final class AyulessDbHelper extends SQLiteOpenHelper {
 
-    static final int DB_VERSION = 2;
+    static final int DB_VERSION = 3;
 
     AyulessDbHelper(Context context, File dbFile) {
         super(context, dbFile.getAbsolutePath(), null, DB_VERSION);
@@ -28,6 +28,7 @@ final class AyulessDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         createV1(db);
         createV2(db);
+        createV3(db);
     }
 
     @Override
@@ -37,6 +38,9 @@ final class AyulessDbHelper extends SQLiteOpenHelper {
             switch (v) {
                 case 1:
                     createV2(db);
+                    break;
+                case 2:
+                    createV3(db);
                     break;
                 default:
                     throw new IllegalStateException("No Ayuless DB migration from v" + v);
@@ -53,6 +57,11 @@ final class AyulessDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS last_seen");
         createV1(db);
         createV2(db);
+        createV3(db);
+    }
+
+    private static void createV3(SQLiteDatabase db) {
+        db.execSQL("CREATE INDEX IF NOT EXISTS deleted_messages_page ON deleted_messages (dialog_id, date DESC, msg_id DESC)");
     }
 
     private static void createV1(SQLiteDatabase db) {

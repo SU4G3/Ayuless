@@ -45,6 +45,9 @@ Ayuless — неофициальный Android-клиент с функциям�
 - **Фильтры** — ключевые слова и regex, теневой бан, скрытие сообщений заблокированных; работают и в превью списка чатов, и в уведомлениях.
 - **Запрет сохранения** — в группах и каналах можно сохранять, копировать и пересылать копией.
 - **Дополнительно** — скрытие спонсорских сообщений, локальный Premium (перевод чата), работа в фоне.
+- **Инструменты чата** — меню Ayuless для отдельного чата и экспорт переписки.
+- **Карты** — выбор обычной, спутниковой или гибридной карты.
+- **Профили** — ID и примерная дата регистрации пользователя или дата создания чата.
 - **Бэкап** — экспорт, импорт и очистка локальной базы.
 
 В работе (открытые PR): секретные чаты, TTL и «посмотреть один раз» (#43, #44, #45), новый вид настроек (#42), вход с подменой клиента (#35). Подробно: [ROADMAP](docs/ROADMAP.md).
@@ -73,11 +76,11 @@ Tools/native/build-prebuilts.sh
 
 ### Участие
 
-Правила кода и лицензирования: [CONTRIBUTING.md](CONTRIBUTING.md). Код из exteraGram не используется. Части кода основаны на AyuGram4A (© Radolyn Labs), с сохранением их копирайтов; список файлов в [docs/CREDITS.md](docs/CREDITS.md).
+Правила кода и лицензирования: [CONTRIBUTING.md](CONTRIBUTING.md). Код из exteraGram не используется. Порт на основе AyuGram удалён, а функции заново реализованы независимо по письменной спецификации [docs/CLEANROOM-SPEC.md](docs/CLEANROOM-SPEC.md), без доступа к исходникам AyuGram. Более ранняя история Git (до этого изменения) всё ещё содержит прежний порт.
 
 ### Благодарности
 
-Спасибо команде [AyuGram](https://github.com/AyuGram) (Radolyn Labs): их клиент вдохновил Ayuless, набор функций и устройство настроек взяты у них за образец. Части кода Ayuless основаны на коде AyuGram4A, авторство сохранено. Спасибо [exteraless](https://github.com/exteraless) за идею названия. Остальные авторы и лицензии: [docs/CREDITS.md](docs/CREDITS.md).
+Спасибо команде [AyuGram](https://github.com/AyuGram) (Radolyn Labs): их клиент вдохновил Ayuless, набор функций и устройство настроек взяты у них за образец. Спасибо [exteraless](https://github.com/exteraless) за идею названия. Остальные авторы и лицензии: [docs/CREDITS.md](docs/CREDITS.md).
 
 ---
 
@@ -101,6 +104,9 @@ Every feature has its own toggle in the **Ayuless** settings section (per accoun
 - **Filters** — keywords and regex, shadow ban, hide blocked users; also in chat list previews and notifications.
 - **Restricted saving** — save, copy and forward as copy in groups and channels.
 - **Extras** — hide sponsored messages, local Premium (chat translation), work in background.
+- **Chat tools** — a per-chat Ayuless menu and chat export.
+- **Maps** — choose map, satellite or hybrid view.
+- **Profiles** — IDs and approximate user registration dates or chat creation dates.
 - **Backup** — export, import and clear the local database.
 
 In progress (open PRs): secret chats, TTL and view-once (#43, #44, #45), new settings look (#42), login with client spoof (#35). Details: [ROADMAP](docs/ROADMAP.md).
@@ -129,11 +135,11 @@ Tools/native/build-prebuilts.sh
 
 ### Contributing
 
-Code and licensing rules: [CONTRIBUTING.md](CONTRIBUTING.md). No exteraGram code is used. Parts of the code are based on AyuGram4A (© Radolyn Labs) with their copyright notices kept; the file list is in [docs/CREDITS.md](docs/CREDITS.md).
+Code and licensing rules: [CONTRIBUTING.md](CONTRIBUTING.md). No exteraGram code is used. The AyuGram-derived port was removed, and the features were re-implemented independently from the written specification [docs/CLEANROOM-SPEC.md](docs/CLEANROOM-SPEC.md), without access to AyuGram sources. Older Git history (before this change) still contains the earlier port.
 
 ### Thanks
 
-Thanks to the [AyuGram](https://github.com/AyuGram) team (Radolyn Labs): their client inspired Ayuless, and its feature set and settings layout served as the model. Parts of Ayuless are based on AyuGram4A code, with authorship kept. Thanks to [exteraless](https://github.com/exteraless) for the name idea. Other authors and licenses: [docs/CREDITS.md](docs/CREDITS.md).
+Thanks to the [AyuGram](https://github.com/AyuGram) team (Radolyn Labs): their client inspired Ayuless, and its feature set and settings layout served as the model. Thanks to [exteraless](https://github.com/exteraless) for the name idea. Other authors and licenses: [docs/CREDITS.md](docs/CREDITS.md).
 
 ---
 

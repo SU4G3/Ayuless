@@ -1,13 +1,4 @@
 /*
- * This is the source code of AyuGram for Android.
- *
- * We do not and cannot prevent the use of our code,
- * but be respectful and credit the original author.
- *
- * Copyright @Radolyn, 2023
- */
-
-/*
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (C) 2026 Ayuless contributors
  */
@@ -110,15 +101,14 @@ public final class SavedAttachments {
      * Runs the file work on a background queue.
      */
     public static void onKept(int account, TLRPC.Message message) {
-        if (message == null || message.media == null || !isEnabled(account)
-                || !MessageSavingConfig.saveMedia(account, message)) {
+        if (message == null || message.media == null || !isEnabled(account)) {
             return;
         }
         if (!AyulessStore.isStorable(account, message, org.ayuless.content.RetentionConfig.ATTACHMENT)) {
             return;
         }
         final long dialogId = MessageObject.getDialogId(message);
-        if (SpyExceptions.isExcepted(account, dialogId)) {
+        if (SpyExceptions.isExcepted(account, dialogId) || !MessageSavingConfig.allowMedia(account, dialogId)) {
             return;
         }
         final String attachName = FileLoader.getMessageFileName(message);
@@ -176,29 +166,46 @@ public final class SavedAttachments {
         });
     }
 
-    /** Prepare local media paths for the history screen without decrypting files on the UI thread. */
-    public static void prepareHistory(int account, java.util.ArrayList<TLRPC.Message> messages, Runnable ready) {
+    public static void prepareHistory(int account, java.util.List<TLRPC.Message> messages, Runnable completion) {
         queue.postRunnable(() -> {
             for (TLRPC.Message message : messages) {
-                String name = FileLoader.getMessageFileName(message);
-                if (TextUtils.isEmpty(name) || name.contains("/")) continue;
-                File saved = savedFile(account, MessageObject.getDialogId(message), message.id, name);
-                if (saved.isFile()) message.attachPath = saved.getAbsolutePath();
-                else {
+                try {
+                    String name = FileLoader.getMessageFileName(message);
+                    if (TextUtils.isEmpty(name) || name.contains("/")) continue;
+                    File saved = savedFile(account, MessageObject.getDialogId(message), message.id, name);
+                    if (saved.isFile()) {
+                        if (TextUtils.isEmpty(message.attachPath)) {
+                            message.attachPath = saved.getAbsolutePath();
+                        } else if (!new File(message.attachPath).isFile()) {
+                            File cache = FileLoader.getInstance(account).getPathToMessage(message);
+                            if (cache != null && !TextUtils.isEmpty(cache.getPath()) && !cache.isFile()) {
+                                File directory = cache.getParentFile();
+                                if (directory == null || directory.isDirectory() || directory.mkdirs()) {
+                                    AndroidUtilities.copyFile(saved, cache);
+                                }
+                            }
+                        }
+                        continue;
+                    }
                     File encrypted = new File(saved.getPath() + ".enc");
                     File key = new File(saved.getPath() + ".enc.key");
-                    if (encrypted.isFile() && key.isFile()) {
-                        try {
-                            File path = FileLoader.getInstance(account).getPathToMessage(message);
-                            File parent = path.getParentFile();
-                            if (parent != null) parent.mkdirs();
-                            AndroidUtilities.copyFile(key, new File(FileLoader.getInternalCacheDir(), path.getName() + ".enc.key"));
-                            AndroidUtilities.copyFile(encrypted, new File(path.getPath() + ".enc"));
-                        } catch (Exception e) { FileLog.e(e); }
+                    if (!encrypted.isFile() || !key.isFile()) continue;
+                    File cache = FileLoader.getInstance(account).getPathToMessage(message);
+                    if (cache == null || TextUtils.isEmpty(cache.getPath())) continue;
+                    File target = new File(cache.getPath() + ".enc");
+                    File targetKey = new File(FileLoader.getInternalCacheDir(), cache.getName() + ".enc.key");
+                    File directory = target.getParentFile();
+                    File keyDirectory = targetKey.getParentFile();
+                    if (directory != null && !directory.isDirectory() && !directory.mkdirs()) continue;
+                    if (keyDirectory != null && !keyDirectory.isDirectory() && !keyDirectory.mkdirs()) continue;
+                    if (!AndroidUtilities.copyFile(key, targetKey) || !AndroidUtilities.copyFile(encrypted, target)) {
+                        FileLog.e("Unable to restore revision attachment: " + name);
                     }
+                } catch (Exception e) {
+                    FileLog.e(e);
                 }
             }
-            AndroidUtilities.runOnUIThread(ready);
+            AndroidUtilities.runOnUIThread(completion);
         });
     }
 
@@ -353,17 +360,23 @@ public final class SavedAttachments {
 
     /** Delete saved attachments of one dialog, e.g. when its stored data is removed. */
     public static void clearDialog(int account, long dialogId) {
+        clearDialog(account, dialogId, null);
+    }
+
+    /** Completion reports failed deletes as well as successful, already absent files. */
+    public static void clearDialog(int account, long dialogId, java.util.function.Consumer<Boolean> completion) {
         queue.postRunnable(() -> {
-            File[] list = accountDir(account).listFiles();
-            if (list == null) {
-                return;
-            }
+            boolean success = true;
+            File directory = accountDir(account);
+            File[] list = directory.listFiles();
+            if (list == null && directory.exists()) success = false;
             String prefix = dialogId + "_";
-            for (File f : list) {
-                if (f.getName().startsWith(prefix)) {
-                    f.delete();
-                }
+            if (list != null) for (File f : list) {
+                if (f.getName().startsWith(prefix) && !f.delete() && f.exists()) success = false;
             }
+            restoreChecked.removeIf(key -> key.startsWith(account + ":" + dialogId + ":"));
+            final boolean result = success;
+            if (completion != null) AndroidUtilities.runOnUIThread(() -> completion.accept(result));
         });
     }
 }

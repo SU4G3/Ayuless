@@ -1,13 +1,4 @@
 /*
- * This is the source code of AyuGram for Android.
- *
- * We do not and cannot prevent the use of our code,
- * but be respectful and credit the original author.
- *
- * Copyright @Radolyn, 2023
- */
-
-/*
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (C) 2026 Ayuless contributors
  */
@@ -53,7 +44,7 @@ public final class EditHistory {
         final long newMediaId = mediaId(edited.media);
         MessagesStorage storage = MessagesStorage.getInstance(account);
         storage.getStorageQueue().postRunnable(() -> {
-            TLRPC.Message old = readStored(storage, dialogId, msgId);
+            TLRPC.Message old = readStored(account, storage, dialogId, msgId);
             if (old == null || !AyulessStore.isStorable(account, old, org.ayuless.content.RetentionConfig.EDIT)) {
                 return;
             }
@@ -66,15 +57,21 @@ public final class EditHistory {
         });
     }
 
-    private static TLRPC.Message readStored(MessagesStorage storage, long dialogId, int msgId) {
+    private static TLRPC.Message readStored(int account, MessagesStorage storage, long dialogId, int msgId) {
         SQLiteCursor cursor = null;
         try {
             cursor = storage.getDatabase().queryFinalized("SELECT data FROM messages_v2 WHERE uid = " + dialogId + " AND mid = " + msgId + " LIMIT 1");
             if (cursor.next()) {
                 NativeByteBuffer data = cursor.byteBufferValue(0);
                 if (data != null) {
-                    TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                    data.reuse();
+                    TLRPC.Message message;
+                    try {
+                        message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
+                        if (message != null) message.readAttachPath(data,
+                                org.telegram.messenger.UserConfig.getInstance(account).getClientUserId());
+                    } finally {
+                        data.reuse();
+                    }
                     if (message != null) {
                         message.dialog_id = dialogId;
                     }

@@ -1,27 +1,12 @@
 /*
- * This is the source code of AyuGram for Android.
- *
- * We do not and cannot prevent the use of our code,
- * but be respectful and credit the original author.
- *
- * Copyright @Radolyn, 2023
- */
-
-/*
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (C) 2026 Ayuless contributors
  */
 
 package org.ayuless.ghost;
 
-import android.widget.Toast;
-
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.DialogObject;
-import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessageChatArguments;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.tgnet.ConnectionsManager;
@@ -29,6 +14,10 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 /**
  * Delayed send: a message is sent as a scheduled message a few seconds ahead instead of
@@ -60,7 +49,9 @@ public final class DelayedSend {
     /** Sends in the same chat within this window share one date, so albums stay together. */
     private static final int GROUP_WINDOW = 3;
 
-    private static final String KEY_HINT_SHOWN = "delayedSendHintShown";
+    private static final String AUTOMATIC = "ayuless_ghost_delay";
+    private static final Set<SendMessageChatArguments> automaticArguments = Collections.synchronizedSet(
+            Collections.newSetFromMap(new WeakHashMap<>()));
 
     private static int lastAccount = -1;
     private static long lastDialog;
@@ -123,7 +114,6 @@ public final class DelayedSend {
         lastDialog = dialogId;
         lastComputedAt = now;
         lastDate = now + (media ? DELAY_MEDIA : DELAY_TEXT);
-        showHintOnce();
         return lastDate;
     }
 
@@ -151,17 +141,31 @@ public final class DelayedSend {
         }
     }
 
-    private static void showHintOnce() {
-        if (GhostConfig.profilePrefs(GhostConfig.PROFILE_ALL).getBoolean(KEY_HINT_SHOWN, false)) {
-            return;
+    /** Persist the origin so explicit scheduling still opens the upstream scheduled view. */
+    public static void markAutomatic(TLRPC.Message message, boolean automatic) {
+        if (!automatic) return;
+        if (message.params == null) message.params = new HashMap<>();
+        message.params.put(AUTOMATIC, "1");
+    }
+
+    /** Carry the origin through asynchronous preparation of protected-content copies. */
+    public static SendMessageChatArguments arguments(boolean automatic) {
+        if (!automatic) return null;
+        SendMessageChatArguments args = new SendMessageChatArguments.Builder().build();
+        automaticArguments.add(args);
+        return args;
+    }
+
+    public static boolean isAutomatic(SendMessageChatArguments args) {
+        return args != null && automaticArguments.contains(args);
+    }
+
+    public static boolean isAutomatic(ArrayList<MessageObject> messages) {
+        if (messages == null || messages.isEmpty()) return false;
+        for (MessageObject message : messages) {
+            if (message == null || message.messageOwner == null || message.messageOwner.params == null
+                    || !"1".equals(message.messageOwner.params.get(AUTOMATIC))) return false;
         }
-        GhostConfig.profilePrefs(GhostConfig.PROFILE_ALL).edit().putBoolean(KEY_HINT_SHOWN, true).apply();
-        AndroidUtilities.runOnUIThread(() -> {
-            try {
-                Toast.makeText(ApplicationLoader.applicationContext,
-                        LocaleController.getString(R.string.AyulessGhostDelayedSendHint), Toast.LENGTH_LONG).show();
-            } catch (Exception ignore) {
-            }
-        });
+        return true;
     }
 }

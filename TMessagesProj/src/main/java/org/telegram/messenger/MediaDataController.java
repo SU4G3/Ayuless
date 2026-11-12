@@ -1,13 +1,4 @@
 /*
- * This is the source code of AyuGram for Android.
- *
- * We do not and cannot prevent the use of our code,
- * but be respectful and credit the original author.
- *
- * Copyright @Radolyn, 2023
- */
-
-/*
  * This is the source code of Telegram for Android v. 5.x.x.
  * It is licensed under GNU GPL v. 2 or later.
  * You should have received a copy of the license in this archive (see LICENSE).
@@ -403,6 +394,7 @@ public class MediaDataController extends BaseController {
             Utilities.globalQueue.postRunnable(() -> {
                 try {
                     ShortcutManagerCompat.removeAllDynamicShortcuts(ApplicationLoader.applicationContext);
+                    org.ayuless.ghost.GhostShortcut.refresh();
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
@@ -5009,11 +5001,11 @@ public class MediaDataController extends BaseController {
         if (Build.VERSION.SDK_INT < 23) {
             return;
         }
-        int maxShortcuts = ShortcutManagerCompat.getMaxShortcutCountPerActivity(ApplicationLoader.applicationContext) - 2
-                - (org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_GHOST_SHORTCUT) ? 1 : 0); // Ayuless: reserve opted-in ghost shortcut
+        int maxShortcuts = ShortcutManagerCompat.getMaxShortcutCountPerActivity(ApplicationLoader.applicationContext) - 2;
         if (maxShortcuts <= 0) {
             maxShortcuts = 5;
         }
+        if (org.ayuless.ghost.GhostShortcut.enabled()) maxShortcuts = Math.max(3, maxShortcuts - 1);
         ArrayList<TLRPC.TL_topPeer> hintsFinal = new ArrayList<>();
         if (SharedConfig.passcodeHash.length() <= 0) {
             for (int a = 0; a < hints.size(); a++) {
@@ -5035,14 +5027,15 @@ public class MediaDataController extends BaseController {
                 ArrayList<String> newShortcutsIds = new ArrayList<>();
                 ArrayList<String> shortcutsToDelete = new ArrayList<>();
 
+                if (!recreateShortcuts) org.ayuless.ghost.GhostShortcut.refresh();
                 if (recreateShortcuts) {
                     ShortcutManagerCompat.removeAllDynamicShortcuts(ApplicationLoader.applicationContext);
-                    org.ayuless.ghost.GhostShortcut.update(); // Ayuless: preserve the opted-in launcher shortcut
+                    org.ayuless.ghost.GhostShortcut.refresh();
                 } else {
                     List<ShortcutInfoCompat> currentShortcuts = ShortcutManagerCompat.getDynamicShortcuts(ApplicationLoader.applicationContext);
                     if (currentShortcuts != null && !currentShortcuts.isEmpty()) {
                         newShortcutsIds.add("compose");
-                        if (org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_GHOST_SHORTCUT)) newShortcutsIds.add("ayuless_ghost"); // Ayuless: preserve ghost shortcut
+                        if (org.ayuless.ghost.GhostShortcut.enabled()) newShortcutsIds.add(org.ayuless.ghost.GhostShortcut.ID);
                         for (int a = 0; a < hintsFinal.size(); a++) {
                             TLRPC.TL_topPeer hint = hintsFinal.get(a);
                             newShortcutsIds.add("did3_" + MessageObject.getPeerId(hint.peer));
