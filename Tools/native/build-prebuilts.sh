@@ -15,6 +15,7 @@
 #   Tools/native/build-prebuilts.sh            # all ABIs
 #   ABIS="arm64-v8a" Tools/native/build-prebuilts.sh
 #   Tools/native/build-prebuilts.sh --print-key   # cache key inputs only
+#   Tools/native/build-prebuilts.sh --offline     # prepared sources/toolchains only
 #
 # Host requirements (Linux x86_64 or macOS): Android NDK 27.2.12479018, cmake,
 # ninja, make, nasm, meson, pkg-config, gperf, python3, perl, patch, rustup.
@@ -57,9 +58,17 @@ print_key() {
     )
 }
 
-if [[ "${1:-}" == "--print-key" ]]; then
-    print_key
-    exit 0
+offline=false
+case "${1:-}" in
+    --print-key) print_key; exit 0 ;;
+    --offline) offline=true ;;
+    '') ;;
+    *) echo "Usage: $0 [--print-key|--offline]" >&2; exit 2 ;;
+esac
+
+if "$offline"; then
+    # Ayuless: F-Droid's build phase must not fetch sources or toolchains.
+    export CARGO_NET_OFFLINE=true RUSTUP_AUTO_INSTALL=0 RUSTUP_NO_UPDATE_CHECK=1
 fi
 
 missing=()
@@ -73,14 +82,34 @@ if (( ${#missing[@]} )); then
     exit 1
 fi
 
-echo "==> Initialising pinned source submodules"
-git -C "$ROOT" submodule update --init --recursive --depth 1 "${SUBMODULES[@]}"
+if "$offline"; then
+    echo "==> Checking prepared source submodules"
+    submodule_status="$(git -C "$ROOT" submodule status --recursive -- "${SUBMODULES[@]}")"
+    if grep -qE '^[-+U]' <<< "$submodule_status"; then
+        echo "ERROR: offline build requires all native submodules at their pinned commits" >&2
+        exit 1
+    fi
+else
+    echo "==> Initialising pinned source submodules"
+    git -C "$ROOT" submodule update --init --recursive --depth 1 "${SUBMODULES[@]}"
+fi
 
 echo "==> Preparing Rust toolchains"
 wallet_toolchain="$(sed -n 's/^channel *= *"\(.*\)"/\1/p' "$JNI/gram-wallet/rust-toolchain.toml")"
 for toolchain in "$wallet_toolchain" "$TLOTTIE_RUST_TOOLCHAIN"; do
-    rustup toolchain install "$toolchain" --profile minimal
-    rustup target add --toolchain "$toolchain" "${RUST_ANDROID_TARGETS[@]}"
+    if "$offline"; then
+        rustup run "$toolchain" rustc --version
+        installed_targets="$(rustup target list --toolchain "$toolchain" --installed)"
+        for target in "${RUST_ANDROID_TARGETS[@]}"; do
+            if ! grep -qxF "$target" <<< "$installed_targets"; then
+                echo "ERROR: offline build requires Rust $toolchain target $target" >&2
+                exit 1
+            fi
+        done
+    else
+        rustup toolchain install "$toolchain" --profile minimal
+        rustup target add --toolchain "$toolchain" "${RUST_ANDROID_TARGETS[@]}"
+    fi
 done
 
 echo "==> Building prebuilt libraries (this takes a while)"

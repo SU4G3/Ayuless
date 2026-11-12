@@ -55,7 +55,7 @@ Ayuless — неофициальный Android-клиент с функциям�
 ### Открытость
 
 - Все нативные библиотеки (BoringSSL, FFmpeg, libvpx, dav1d и др.) собираются из исходников.
-- Без Google Play Services, Firebase и ML Kit. Пуши через [UnifiedPush](https://unifiedpush.org), карты через [MapLibre](https://maplibre.org).
+- Без Google Play Services, Firebase и ML Kit. Карты через [MapLibre](https://maplibre.org); поддержка [UnifiedPush](https://unifiedpush.org) пока в черновике #30 и не включена.
 
 ### Сборка
 
@@ -73,6 +73,10 @@ Tools/native/build-prebuilts.sh
 ```
 
 Файл `API_KEYS` в git-ignore и никогда не коммитится. APK появится в `TMessagesProj_App/build/outputs/apk/afat/release/app.apk`. ID приложения: `org.ayuless.messenger`.
+
+### F-Droid
+
+Подготовлен [черновик рецепта сборки](docs/fdroid/org.ayuless.messenger.yml) для официального репозитория F-Droid. Заявка ещё не подана; рецепт отключён до устранения [блокеров и проверок](docs/fdroid/CHECKLIST.md). Метаданные EN/RU находятся в `fastlane/metadata/android/`. Приложение требует несвободные серверы Telegram; UnifiedPush #30 для подачи не обязателен.
 
 ### Участие
 
@@ -114,7 +118,7 @@ In progress (open PRs): secret chats, TTL and view-once (#43, #44, #45), new set
 ### Openness
 
 - All native libraries (BoringSSL, FFmpeg, libvpx, dav1d, etc.) are built from source.
-- No Google Play Services, Firebase or ML Kit. Push via [UnifiedPush](https://unifiedpush.org), maps via [MapLibre](https://maplibre.org).
+- No Google Play Services, Firebase or ML Kit. Maps via [MapLibre](https://maplibre.org); [UnifiedPush](https://unifiedpush.org) support is still draft #30 and is not included.
 
 ### Building
 
@@ -132,6 +136,10 @@ Tools/native/build-prebuilts.sh
 ```
 
 `API_KEYS` is git-ignored and must never be committed. The APK ends up in `TMessagesProj_App/build/outputs/apk/afat/release/app.apk`. Application ID: `org.ayuless.messenger`.
+
+### F-Droid
+
+A [draft build recipe](docs/fdroid/org.ayuless.messenger.yml) is available for the official F-Droid repository. No submission has been made; the recipe is disabled pending the [blockers and checks](docs/fdroid/CHECKLIST.md). EN/RU store metadata lives in `fastlane/metadata/android/`. The app requires Telegram's proprietary servers; UnifiedPush #30 is not required for submission.
 
 ### Contributing
 
