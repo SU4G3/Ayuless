@@ -87,9 +87,11 @@ it is not hidden with `scanignore`.
 
 ## Remaining requirements
 
-- **Credentials/login:** the draft copies `API_KEYS.example`, which cannot log
-  in. Choose distributable credentials or an explicit user-configured design
-  before enabling the recipe. Existing login identity handling was preserved.
+- **Login:** following the user's explicit selection, the recipe now copies
+  `docs/fdroid/API_KEYS.public` with API ID 4, the matching archived public API
+  hash and official Android fingerprint. The missing-credentials issue is
+  resolved. Existing login identity handling is preserved; a new login in the
+  actual F-Droid-built APK still needs verification.
 - **Assets:** Solar attribution is already recorded. Embedded font metadata
   identifies Roboto 2.137/2.138, Roboto Classic 3.009, Roboto Mono 3.000/3.001,
   Merriweather 2.002/2.101; family licences are available, but exact-file

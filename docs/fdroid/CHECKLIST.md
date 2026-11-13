@@ -3,8 +3,8 @@
 Audit updated: 2026-11-13. **Draft; not submitted, accepted or published.**
 QuickJS source generation, local metadata validation and the prepared source
 scanner now pass; see [VALIDATION-2026-11-13.md](VALIDATION-2026-11-13.md).
-The recipe remains disabled pending distributable login credentials, asset
-provenance review and a complete F-Droid server build. An unknown licence entry
+The recipe remains disabled pending login/asset review and a complete F-Droid
+server build. An unknown licence entry
 records missing evidence; it does not prove that an upstream asset is non-free.
 Anti-Features do not replace a licence or complete corresponding source.
 F-Droid permits redistributable non-free artwork/fonts with `NonFreeAssets`;
@@ -157,19 +157,20 @@ See the [inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/) and
 ## API credentials, login identity and network behaviour
 
 - [x] Gradle reads ignored root `API_KEYS`, with environment overrides
-  `APP_ID`, `APP_HASH`, `CERT_FINGERPRINT`. The recipe copies `API_KEYS.example`
-  (`APP_ID=12345`, hash `0123456789abcdef0123456789abcdef`): these are public
-  **compile placeholders**, not usable Telegram credentials. Credentials are
+  `APP_ID`, `APP_HASH`, `CERT_FINGERPRINT`. The recipe copies
+  `docs/fdroid/API_KEYS.public`: the user-selected Android API ID 4, its matching
+  archived public API hash and the official Telegram Android fingerprint.
+  `API_KEYS.example` remains a template for independently registered clients.
+  Credentials are
   compiled into the app and cannot be treated as secrets in distributed APKs.
-- [ ] **Choose usable, distributable API credentials with reviewers.** Replace
-  the example during recipe preparation by a documented, authorized credential
-  source or adopt an acceptable user-supplied configuration design. Building
-  with placeholders does not demonstrate login. Do not use CI secrets as an
-  undocumented F-Droid prerequisite.
+- [x] **Select the build credentials.** The user explicitly selected API ID 4
+  and its matching fingerprint. The public build profile is available in the
+  source tree, so F-Droid does not depend on GitHub Secrets or placeholder keys.
+  A successful configuration check still does not demonstrate a new login.
 - [ ] **Login identity is a review risk.** The CI comment describes `api_id 4`
   with Telegram's official SHA-256 certificate fingerprint. That certificate
-  constant is the fallback in `BuildVars.OFFICIAL_FINGERPRINT`; the recipe's
-  placeholder ID is 12345, not 4. `LoginSpoof` sends package ID
+  constant is the fallback in `BuildVars.OFFICIAL_FINGERPRINT`; the recipe now
+  selects the same ID 4/fingerprint pair explicitly. `LoginSpoof` sends package ID
   `org.telegram.messenger.web` and empty installer on every connection, and
   pre-login identifies as Telegram 10.10.1 / layer 177 before restoring the real
   version. It does not reflect F-Droid's actual signing certificate. Have

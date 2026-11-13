@@ -98,7 +98,9 @@ Android targets, Cargo vendoring, pinned pnpm dependency installation and SDK CM
 build phase cannot. The srclib definitions, Node/pnpm and source-built esbuild
 were checked locally; full native preparation still needs validation against
 the actual fdroiddata/build-server installation. The recipe
-stays disabled pending credentials, asset provenance and a full server build.
+stays disabled pending login/asset review and a full server build. The F-Droid
+profile in `docs/fdroid/API_KEYS.public` supplies the user-selected API ID 4,
+matching public hash and official Android fingerprint independently of CI secrets.
 The 2026-11-13 follow-up validates builtin source generation, npm/esbuild source
 building and prepared-source scanning; see `docs/fdroid/VALIDATION-2026-11-13.md`.
 

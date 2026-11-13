@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # DRAFT fdroiddata/metadata/org.ayuless.messenger.yml; not a submission or a tested build.
-# Resolve CHECKLIST.md before enabling: API credentials, asset provenance and
+# Resolve CHECKLIST.md before enabling: asset provenance, login review and
 # complete server-build/release validation remain open.
 Categories:
   - Internet
@@ -29,7 +29,7 @@ Builds:
   - versionName: 13.2.1
     # gradle.properties APP_VERSION_CODE=7291; afat adds ABI digit 9.
     versionCode: 72919
-    disable: 'Draft: API credentials, asset provenance and complete server build; see CHECKLIST.md'
+    disable: 'Draft: asset provenance, login review and complete server build; see CHECKLIST.md'
     commit: 10a8ff8468c8b864d1a123014396bf2d7cd8dee5
     subdir: TMessagesProj_App
     submodules: true
@@ -78,7 +78,7 @@ Builds:
     scandelete:
       - TMessagesProj/jni/twidget/widget-sandbox/node_modules/.pnpm/playwright-core@*/node_modules/playwright-core/lib/webp_codec.wasm
     prebuild:
-      - (cd .. && cp API_KEYS.example API_KEYS)
+      - (cd .. && cp docs/fdroid/API_KEYS.public API_KEYS)
       - (cd .. && python3 Tools/check_degoogle.py)
       # Networked preparation on the F-Droid server, before source scanning.
       # The sandbox used to edit this recipe has not executed these commands.
