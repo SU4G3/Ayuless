@@ -1,4 +1,4 @@
-# Offline classpath and POM review
+# Classpath and POM review
 
 Local evidence, 2026-11-12. This is not a resolved release graph, an SDK source
 audit, a tracker scan or a network-traffic test.
@@ -60,5 +60,18 @@ artifact hashes and the review results before enabling the recipe.
 
 The requested Java compile probe failed while opening the root Gradle wrapper's
 lock in read-only `~/.gradle`, before configuration or resolution. The missing
-native submodules also prevent a complete release build. No successful classpath
-resolution or scanner run is claimed here. No network was used for this review.
+native submodules also prevented a complete release build. No successful classpath
+resolution or scanner run was claimed by that initial offline review.
+
+## Online follow-up, 2026-11-13
+
+All 19 submodules were initialized and `afatReleaseRuntimeClasspath` resolved
+successfully. No GMS/Firebase/Huawei dependency appeared in the selected graph.
+Java release compilation passed with JDK 21 and public example credentials in
+the process environment. F-Droid scanning of the recipe-prepared source tree
+with installed npm dependencies found zero fatal problems; scanning the previous
+PR #62 test APK also found zero known non-free-code/signing-block problems.
+This supersedes the tooling/access limitations above, but does not establish
+every transitive licence or actual runtime network behaviour. Source-built
+esbuild and the cleanup exceptions are documented in
+[VALIDATION-2026-11-13.md](VALIDATION-2026-11-13.md).

@@ -45,8 +45,23 @@ function(twidget_target_sources target)
         "inline constexpr const char* TW_UA_STYLESHEET = R\"tw-ua(${ua_stylesheet})tw-ua\";\n")
     configure_file("${generated}/tw_ua_stylesheet.h.tmp" "${generated}/tw_ua_stylesheet.h" COPYONLY)
 
+    # Bootstrap the engine's three builtin bytecode arrays from their JS inputs.
+    # Use the copied engine beside the generated headers so quoted includes
+    # cannot silently select the old vendored bytecode headers.
+    find_package(Python3 REQUIRED COMPONENTS Interpreter)
+    set(builtins_generator "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../../../Tools/native/build-quickjs-builtins.py")
+    set(builtins_dir "${CMAKE_CURRENT_BINARY_DIR}/quickjs-builtins")
+    file(GLOB builtin_inputs CONFIGURE_DEPENDS "${qjs}/quickjs/*.js"
+        "${qjs}/quickjs/*.c" "${qjs}/quickjs/*.h")
+    set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+        "${builtins_generator}" "${qjs}/quickjs/quickjs.c" ${builtin_inputs})
+    execute_process(COMMAND "${Python3_EXECUTABLE}" "${builtins_generator}" "${builtins_dir}"
+        RESULT_VARIABLE builtins_result)
+    if(NOT builtins_result EQUAL 0)
+        message(FATAL_ERROR "QuickJS builtin source generation failed: ${builtins_result}")
+    endif()
     set(qjs_sources
-        "${qjs}/quickjs/quickjs.c"
+        "${builtins_dir}/quickjs.c"
         "${qjs}/quickjs/dtoa.c"
         "${qjs}/quickjs/libregexp.c"
         "${qjs}/quickjs/libunicode.c"

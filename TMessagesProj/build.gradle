@@ -307,10 +307,12 @@ preBuild.dependsOn checkVisibility
 // Generated assets are outside src/; stale committed binaries cannot be packaged.
 def widgetAssets = layout.buildDirectory.dir('generated/widgetjs/assets')
 def rebuildWidgetJs = providers.gradleProperty('ayulessRebuildWidgetJs').getOrElse('false').toBoolean()
+def esbuildBinary = providers.gradleProperty('ayulessEsbuildBinary')
 def buildWidgetJs = tasks.register('buildWidgetJs', Exec) {
     inputs.property('rebuildFromTypeScript', rebuildWidgetJs)
     inputs.property('sourceDateEpoch', System.getenv('SOURCE_DATE_EPOCH') ?: '1')
     inputs.file(rootProject.file('Tools/native/build-widgetjs.sh'))
+    inputs.file(rootProject.file('Tools/native/build-quickjs-builtins.py'))
     inputs.dir(file('jni/twidget/widget-sandbox/packages/ios/Sources/CQuickJS'))
     inputs.dir(file('jni/twidget/widget-sandbox/packages/tools/qjsc'))
     inputs.files(fileTree('jni/twidget/widget-sandbox/packages/ios/Sources/WidgetSandbox/WidgetJS') { include '*.js' })
@@ -322,6 +324,11 @@ def buildWidgetJs = tasks.register('buildWidgetJs', Exec) {
         inputs.file(file('jni/twidget/widget-sandbox/VERSION.json'))
     }
     outputs.dir(widgetAssets)
+    if (esbuildBinary.isPresent()) {
+        def binary = rootProject.file(esbuildBinary.get())
+        inputs.file(binary)
+        environment 'ESBUILD_BINARY_PATH', binary.absolutePath
+    }
     workingDir rootProject.projectDir
     commandLine(['bash', rootProject.file('Tools/native/build-widgetjs.sh')] +
             (rebuildWidgetJs ? ['--rebundle'] : []) + [widgetAssets.get().asFile])

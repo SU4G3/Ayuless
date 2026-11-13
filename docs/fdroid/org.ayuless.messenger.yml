@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # DRAFT fdroiddata/metadata/org.ayuless.messenger.yml; not a submission or a tested build.
-# Resolve CHECKLIST.md before enabling: asset provenance, embedded QuickJS
-# builtins, full classpath/scanner and build-server validation remain open.
+# Resolve CHECKLIST.md before enabling: API credentials, asset provenance and
+# complete server-build/release validation remain open.
 Categories:
   - Internet
 License: GPL-3.0-or-later
@@ -29,7 +29,7 @@ Builds:
   - versionName: 13.2.1
     # gradle.properties APP_VERSION_CODE=7291; afat adds ABI digit 9.
     versionCode: 72919
-    disable: 'Draft: asset provenance, QuickJS builtin sources, scanner and build validation; see CHECKLIST.md'
+    disable: 'Draft: API credentials, asset provenance and complete server build; see CHECKLIST.md'
     commit: REPLACE_WITH_REVIEWED_RELEASE_COMMIT
     subdir: TMessagesProj_App
     submodules: true
@@ -37,21 +37,46 @@ Builds:
     # Verify this srclib/version against the target fdroiddata checkout.
     srclibs:
       - rustup@1.28.2
+      - esbuild@v0.28.2
     sudo:
       - apt-get update
-      - apt-get install -y build-essential cmake ninja-build make nasm meson pkg-config gperf python3 perl patch clang nodejs npm
+      - apt-get install -y build-essential cmake ninja-build make nasm meson pkg-config gperf python3 perl patch clang nodejs npm golang-go
       - npm install --global pnpm@12.10.1
     gradle:
       - afat
     gradleprops:
       - ayulessUnsignedRelease=true
       - ayulessRebuildWidgetJs=true
+      - ayulessEsbuildBinary=build/fdroid/esbuild
     # WidgetJS .qbc and unused WASM have been removed from the repository.
     # Do not scanignore executable bytecode, including QuickJS builtin arrays.
     rm:
       - TMessagesProj/config/release.keystore
       - TMessagesProj/jni/twidget/widget-sandbox/apps/android/gradle/wrapper/gradle-wrapper.jar
       - TMessagesProj/jni/twidget/widget-sandbox/packages/android/gradle/wrapper/gradle-wrapper.jar
+      # Unused upstream test corpora, demos and distribution modules. Their
+      # executable fixtures/dependencies are not inputs to the afat APK.
+      - TMessagesProj/jni/third_party/absl/absl/time/internal/cctz/testdata
+      - TMessagesProj/jni/third_party/boringssl/fuzz
+      - TMessagesProj/jni/third_party/boringssl/rust
+      - TMessagesProj/jni/third_party/boringssl/util/ar/testdata
+      - TMessagesProj/jni/third_party/breakpad/src/third_party/protobuf/protobuf/src/google/protobuf/testdata
+      - TMessagesProj/jni/third_party/openh264/autotest
+      - TMessagesProj/jni/third_party/wamr/tests
+      - TMessagesProj/jni/third_party/wamr/test-tools
+      - TMessagesProj/jni/tlottie/examples
+      - TMessagesProj/jni/wallet-engine/examples
+      - TMessagesProj_Modules/media/libraries/cast
+      - TMessagesProj_Modules/media/libraries/datasource_cronet
+      - TMessagesProj_Modules/media/libraries/exoplayer_ima
+    # DiamondRenderer.readFloats reads these nine files as little-endian float
+    # arrays, never as code. This exception does not resolve their asset licence.
+    scanignore:
+      - TMessagesProj/src/main/assets/models/diamond_ios/*.bin
+    # Playwright is a development test tool; its image decoder is not part of
+    # the native WidgetJS build. Do not ignore a precompiled esbuild executable.
+    scandelete:
+      - TMessagesProj/jni/twidget/widget-sandbox/node_modules/.pnpm/playwright-core@*/node_modules/playwright-core/lib/webp_codec.wasm
     prebuild:
       - (cd .. && cp API_KEYS.example API_KEYS)
       - (cd .. && python3 Tools/check_degoogle.py)
@@ -63,7 +88,15 @@ Builds:
       - . $HOME/.cargo/env && rustup target add --toolchain 1.96.1 aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
       - . $HOME/.cargo/env && rustup target add --toolchain 1.98.0 aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
       - (cd .. && . $HOME/.cargo/env && Tools/native/vendor-rust.sh)
-      - (cd ../TMessagesProj/jni/twidget/widget-sandbox && pnpm install --frozen-lockfile --ignore-scripts)
+      - (cd ../TMessagesProj/jni/twidget/widget-sandbox && pnpm install --frozen-lockfile --ignore-scripts --no-optional --filter @telegram/widget-sandbox...)
+      - (cd $$esbuild$$ && go mod vendor)
+      # These modules are not in afatReleaseRuntimeClasspath. Remove their
+      # declarations too, so Gradle never configures a missing distribution.
+      - sed -i '/lib-exoplayer-ima/d; /lib-datasource-cronet/d; /lib-cast/d' ../TMessagesProj_Modules/media/core_settings.gradle
+      # No publishing is performed by an application build. Keep this shared
+      # apply-from target as an empty file; its configurable publication URL
+      # otherwise produces an unrelated scanner warning.
+      - truncate -s 0 ../TMessagesProj_Modules/media/publish.gradle
       # AGP requires the SDK CMake package, not only distro cmake.
       - $$SDK$$/cmdline-tools/latest/bin/sdkmanager 'cmake;3.22.1'
     # Executed from subdir after source scanning. The same source-build wrapper
@@ -72,6 +105,8 @@ Builds:
     # includes gram-wallet, the separate C++ generator workspace, and tlottie.
     # npm's esbuild host binary and source completeness need scanner review.
     build:
+      - (cd $$esbuild$$ && GOTOOLCHAIN=local GOPROXY=off GOSUMDB=off go build -mod=vendor -trimpath -buildvcs=false -o esbuild ./cmd/esbuild)
+      - install -Dm755 $$esbuild$$/esbuild ../build/fdroid/esbuild
       - (cd .. && . $HOME/.cargo/env && export ANDROID_SDK_ROOT=$$SDK$$ ANDROID_NDK_HOME=$$NDK$$ SOURCE_DATE_EPOCH=1 TZ=UTC LC_ALL=C && Tools/native/build-prebuilts.sh --offline)
       - (cd .. && Tools/native/check-prebuilts.sh)
     ndk: 27.2.12479018

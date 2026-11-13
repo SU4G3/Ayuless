@@ -95,10 +95,12 @@ The [draft recipe](fdroid/org.ayuless.messenger.yml) now has explicit preparatio
 the pinned fdroiddata `rustup` srclib installer, Rust 1.96.1 + 1.98.0, the four
 Android targets, Cargo vendoring, pinned pnpm dependency installation and SDK CMake
 3.22.1. Preparation can use the network on F-Droid's server; the native/WidgetJS
-build phase cannot. This editing sandbox used no network. The srclib definition,
-host Node/pnpm compatibility and scanner handling of esbuild's host compiler need
-validation against the actual fdroiddata/build-server installation. The recipe
-stays disabled because those checks, builtin sources and asset licences are open.
+build phase cannot. The srclib definitions, Node/pnpm and source-built esbuild
+were checked locally; full native preparation still needs validation against
+the actual fdroiddata/build-server installation. The recipe
+stays disabled pending credentials, asset provenance and a full server build.
+The 2026-11-13 follow-up validates builtin source generation, npm/esbuild source
+building and prepared-source scanning; see `docs/fdroid/VALIDATION-2026-11-13.md`.
 
 For an unsigned application release, use
 `./gradlew :TMessagesProj_App:assembleAfatRelease -PayulessUnsignedRelease=true`;
@@ -126,10 +128,11 @@ For the complete TypeScript → JS → bytecode build used by the F-Droid recipe
 ```bash
 # Preparation only: install pnpm 12.10.1 as pinned in widget-sandbox/package.json.
 cd TMessagesProj/jni/twidget/widget-sandbox
-pnpm install --frozen-lockfile --ignore-scripts
+pnpm install --frozen-lockfile --ignore-scripts --no-optional --filter @telegram/widget-sandbox...
 cd ../../../..
 ./gradlew :TMessagesProj_App:assembleAfatRelease \
-  -PayulessUnsignedRelease=true -PayulessRebuildWidgetJs=true --offline
+  -PayulessUnsignedRelease=true -PayulessRebuildWidgetJs=true \
+  -PayulessEsbuildBinary=build/fdroid/esbuild --offline
 # Or without Gradle, after dependency preparation:
 Tools/native/build-widgetjs.sh --rebundle /tmp/widget-assets
 ```
@@ -139,16 +142,23 @@ implicit Corepack downloads. `--rebundle` runs the pinned pnpm/tsx/esbuild tooli
 and upstream `build-native-bundles.ts` against `packages/core` and its lockfile.
 The source JS files are regenerated in the shared package, then copied to the
 generated app asset tree. Missing dependencies fail instead of being fetched.
-esbuild's npm host executable still needs F-Droid scanner/build-tool review.
+For F-Droid, esbuild 0.28.2 is compiled from its srclib Go sources with vendored
+dependencies after scanning, then installed to `build/fdroid/esbuild`. The Gradle
+property above passes that executable to both esbuild and tsx; it is not an npm
+binary or an executable scanner exception. For the standalone command, export
+`ESBUILD_BINARY_PATH` with the absolute path to the source-built executable.
 
-**Remaining source blocker:** QuickJS `quickjs.c` includes generated
-`builtin-array-fromasync.h`, `builtin-iterator-zip.h` and
-`builtin-iterator-zip-keyed.h`. Their byte arrays are executable code, not data.
-Their preferred JS inputs and regeneration build rules are absent in this
-checkout. Restore matching upstream sources at a pinned revision and bootstrap
-regeneration for both host and Android builds before enabling F-Droid. Retaining
-them is explicitly an unresolved blocker; deleting or stubbing them would alter
-JavaScript features. No scanner exclusion is used.
+**Builtin source bootstrap:** the three corresponding JS inputs are pinned to
+TelegramMessenger/quickjs `b526a817f188ef861eea7666d68361c7851673a0` and covered by
+the vendored MIT licence. `Tools/native/build-quickjs-builtins.py` creates a host
+compiler whose lazy builtin initializer compiles those JS strings instead of
+reading precompiled arrays. That compiler regenerates all three headers. The
+production engine is copied unchanged beside them, so its quoted includes select
+the generated headers rather than legacy vendored output. Both Android CMake
+and the TWQB compiler use that engine; TypeScript rebundling reuses the TWQB
+compiler through `WIDGET_QJSC`. No JavaScript feature is removed or stubbed, no
+precompiled builtin array is a bootstrap input, and no scanner exclusion is used.
+Run `bash Tools/native/check-quickjs-builtins.sh` for functional regression tests.
 
 ## Reproducibility and comparison
 

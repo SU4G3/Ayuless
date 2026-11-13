@@ -17,24 +17,27 @@ export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1}" TZ=UTC LC_ALL=C
 [[ "$SOURCE_DATE_EPOCH" =~ ^[0-9]+$ ]] || { echo 'Invalid SOURCE_DATE_EPOCH' >&2; exit 1; }
 umask 022
 export COREPACK_ENABLE_NETWORK=0 npm_config_manage_package_manager_versions=false npm_config_offline=true
-if "$rebundle"; then
-    # Dependency installation belongs to preparation, never to this build step.
-    expected=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["packageManager"].split("@")[1])' "$WIDGET/package.json")
-    [[ "$(pnpm --version)" == "$expected" ]] || { echo "Pinned pnpm $expected required" >&2; exit 1; }
-    (cd "$WIDGET/packages/core" && pnpm exec tsx scripts/build-native-bundles.ts ios --out "$input")
-fi
 work="$output/../widgetjs-host"
 rm -rf "$output/WidgetSandbox/WidgetJS"
 mkdir -p "$work" "$output/WidgetSandbox/WidgetJS"
+python3 "$ROOT/Tools/native/build-quickjs-builtins.py" "$work/builtins"
 # Always rebuild: no host binary/cache or mtime is trusted as a compiler input.
 "${HOST_CC:-cc}" -O2 -g0 -fno-ident -fno-strict-aliasing -std=gnu11 \
     -D_GNU_SOURCE -DQUICKJS_NG_BUILD -Wno-unused-parameter \
     "-ffile-prefix-map=$ROOT=/src" "-fdebug-prefix-map=$ROOT=/src" \
     -I "$QJS/include" -I "$QJS/quickjs" \
-    "$QJS/quickjs/quickjs.c" "$QJS/quickjs/dtoa.c" \
+    "$work/builtins/quickjs.c" "$QJS/quickjs/dtoa.c" \
     "$QJS/quickjs/libregexp.c" "$QJS/quickjs/libunicode.c" \
     "$QJS/shim/qjs_shim.c" "$WIDGET/packages/tools/qjsc/qjsc.c" \
     -lm -o "$work/qjsc"
+if "$rebundle"; then
+    # Dependency installation belongs to preparation, never to this build step.
+    expected=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["packageManager"].split("@")[1])' "$WIDGET/package.json")
+    [[ "$(pnpm --version)" == "$expected" ]] || { echo "Pinned pnpm $expected required" >&2; exit 1; }
+    # Reuse the source-bootstrapped compiler; the package's legacy compiler
+    # would otherwise use the old vendored builtin headers as bootstrap input.
+    (cd "$WIDGET/packages/core" && WIDGET_QJSC="$work/qjsc" pnpm exec tsx scripts/build-native-bundles.ts ios --out "$input")
+fi
 for name in renderer sandbox validator; do
     cp "$input/$name-bundle.js" "$output/WidgetSandbox/WidgetJS/"
 done
