@@ -25,7 +25,7 @@ See the [inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/) and
   checks apply the same `VercodeOperation`.
 - [ ] Add actual phone screenshots; each locale has an explanatory README in
   `images/phoneScreenshots/`. These notes are not image assets.
-- [x] The draft recipe pins immutable candidate revision `10a8ff8468c8b864d1a123014396bf2d7cd8dee5`.
+- [x] The draft recipe pins immutable candidate revision `e2a9d4877b0da7c097c94d132195910da824dd11`.
   This is a test candidate, not a published/reviewed release.
 - [ ] Verify final APK versions and choose the release tag scheme. Local tag `v0.1.0-alpha.1` and Gradle version `13.2.1` use different naming
   schemes. `UpdateCheckMode: Tags` is configured; `AutoUpdateMode: None` is

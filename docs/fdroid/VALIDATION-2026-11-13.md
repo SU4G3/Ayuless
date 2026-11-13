@@ -59,6 +59,11 @@ submitted. The build recipe remains disabled.
    is `5f7c2fbf1be63d60fd65aa983ec14fd66bab35e7b26df52dafe061d4e4302b9f`.
    That APK predates this follow-up; it does not prove the new APK is tested.
 
+The selected API ID 4 profile was also used for
+`:TMessagesProj:generateReleaseBuildConfig`; the generated API ID, API hash and
+certificate fingerprint were checked against all three profile values and match.
+This is configuration validation, not a fresh login test.
+
 WidgetJS reproducibility hashes:
 
 | File | SHA-256 |
@@ -110,7 +115,7 @@ it is not hidden with `scanignore`.
   and builtin-header comparisons have been completed here. This is a quality
   goal, not an unconditional inclusion blocker: the recipe does not request
   upstream-signature copying through `Binaries`.
-- **Release identity:** the draft pins candidate `10a8ff8468c8b864d1a123014396bf2d7cd8dee5`;
+- **Release identity:** the draft pins candidate `e2a9d4877b0da7c097c94d132195910da824dd11`;
   select the reviewed release and a tag scheme matching the app's versions. Keep automatic build creation off until
   that scheme and an enabled recipe have passed review.
 - **Device validation:** the user confirmed the previous PR #62 APK and mini-apps
