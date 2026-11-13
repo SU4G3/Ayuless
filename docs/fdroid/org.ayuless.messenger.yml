@@ -30,7 +30,7 @@ Builds:
     # gradle.properties APP_VERSION_CODE=7291; afat adds ABI digit 9.
     versionCode: 72919
     disable: 'Draft: API credentials, asset provenance and complete server build; see CHECKLIST.md'
-    commit: REPLACE_WITH_REVIEWED_RELEASE_COMMIT
+    commit: 10a8ff8468c8b864d1a123014396bf2d7cd8dee5
     subdir: TMessagesProj_App
     submodules: true
     # fdroiddata rustup srclib supplies the reviewed installer; no curl|sh here.

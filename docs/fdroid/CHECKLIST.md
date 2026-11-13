@@ -25,9 +25,9 @@ See the [inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/) and
   checks apply the same `VercodeOperation`.
 - [ ] Add actual phone screenshots; each locale has an explanatory README in
   `images/phoneScreenshots/`. These notes are not image assets.
-- [ ] Replace `REPLACE_WITH_REVIEWED_RELEASE_COMMIT` with the immutable release
-  revision containing these changes; verify version fields in the built APK.
-  Local tag `v0.1.0-alpha.1` and Gradle version `13.2.1` use different naming
+- [x] The draft recipe pins immutable candidate revision `10a8ff8468c8b864d1a123014396bf2d7cd8dee5`.
+  This is a test candidate, not a published/reviewed release.
+- [ ] Verify final APK versions and choose the release tag scheme. Local tag `v0.1.0-alpha.1` and Gradle version `13.2.1` use different naming
   schemes. `UpdateCheckMode: Tags` is configured; `AutoUpdateMode: None` is
   intentional until a tag-to-version scheme and an enabled build are reviewed.
   Then use the appropriate `Version <tag-template>` auto-update mode (there is

@@ -103,8 +103,8 @@ it is not hidden with `scanignore`.
   and builtin-header comparisons have been completed here. This is a quality
   goal, not an unconditional inclusion blocker: the recipe does not request
   upstream-signature copying through `Binaries`.
-- **Release identity:** select the immutable reviewed revision and a release-tag
-  scheme matching the app's versions. Keep automatic build creation off until
+- **Release identity:** the draft pins candidate `10a8ff8468c8b864d1a123014396bf2d7cd8dee5`;
+  select the reviewed release and a tag scheme matching the app's versions. Keep automatic build creation off until
   that scheme and an enabled recipe have passed review.
 - **Device validation:** the user confirmed the previous PR #62 APK and mini-apps
   worked. A new APK containing these native changes still requires validation.
