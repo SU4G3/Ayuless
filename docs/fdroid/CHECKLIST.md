@@ -261,10 +261,13 @@ See the [inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/) and
   environment. This is compile validation, not a login test or full APK build.
 - [x] `fdroid readmeta` and `fdroid lint org.ayuless.messenger` pass with
   fdroidserver 2.4.5 and current fdroiddata category/Anti-Feature definitions.
-- [ ] Complete `fdroid checkupdates` and a full
-  `fdroid build --server org.ayuless.messenger:72919` on enabled, reviewed
-  metadata. The CLI flag is `--server`, not `--on-server`. The disabled draft
-  and a successful Java compile must not be reported as a server build.
+- [x] `fdroid checkupdates --allow-dirty org.ayuless.messenger` completed with
+  exit code 0 in the disposable metadata checkout. Its status JSON lists the
+  application as processed with no failures. This does not enable auto-updates.
+- [ ] Complete `fdroid build --server org.ayuless.messenger:72919` on enabled,
+  reviewed metadata. The CLI flag is `--server`, not `--on-server`. The local
+  builder probe fails because the Vagrant executable is absent. The disabled
+  draft and a successful Java compile must not be reported as a server build.
 - [ ] Full release/native/WidgetJS build, reproducibility comparison, login,
   background notifications, map attribution and feature tests on a device.
 - [ ] Submit an inclusion request and fdroiddata merge request only after the

@@ -27,6 +27,9 @@ submitted. The build recipe remains disabled.
 1. `fdroid readmeta` and `fdroid lint org.ayuless.messenger`, with the real
    fdroiddata category and Anti-Feature definitions. Localized declarations,
    srclib names and `VercodeOperation` parse successfully.
+   `fdroid checkupdates --allow-dirty org.ayuless.messenger` also completed with
+   exit code 0; the status JSON records the application as processed and no
+   failures. Automatic build creation remains disabled.
 2. Complete `:TMessagesProj_App:dependencies --configuration
    afatReleaseRuntimeClasspath` resolution. No GMS, Firebase or Huawei runtime
    dependency was present in that graph.
@@ -98,7 +101,9 @@ it is not hidden with `scanignore`.
 - **Server/native build:** execute the whole enabled recipe in an F-Droid VM,
   including Rust source vendoring, offline native compilation and unsigned APK
   production without a release keystore. Local Java/source checks do not replace
-  that build. The editing host has no configured F-Droid/Vagrant builder.
+  that build. The editing host has no configured F-Droid/Vagrant builder; the
+  Python Vagrant wrapper's box-list probe fails because the Vagrant executable
+  is not installed.
 - **Reproducibility:** compare two clean full APK/native builds; only WidgetJS
   and builtin-header comparisons have been completed here. This is a quality
   goal, not an unconditional inclusion blocker: the recipe does not request
