@@ -72,11 +72,16 @@ See the [inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/) and
   grants are recorded rather than assigned the app's GPL: OCR weights, model
   source scenes, PhoneFormats/grammars/shapes data, gram/num glyph fonts, exact
   versions of several other fonts, inherited artwork/sounds and 337 Lottie JSONs.
-  The emoji generator explicitly uses AppleColorEmoji; establish redistribution
-  permission and provenance for emoji.pack/compound PNGs or regenerate using a
-  free set. Source files for decorative artwork are not an unconditional F-Droid
+  The previous Apple emoji concern is resolved by the Noto replacement below.
+  Source files for decorative artwork are not an unconditional F-Droid
   requirement. Recursive font/dependency notices still need inspection/collection.
   No feature-breaking replacement was made.
+- [x] Replaced the committed Apple-derived emoji pack and all 12 handshake PNGs
+  with assets generated offline from pinned Noto SVGs. All 3,606 EmojiData slots
+  have source mappings; all 36 handshake tone combinations remain available.
+  Copyright, Apache-2.0 and upstream region-flag notices are retained in source
+  and packaged with the app. No Apple font is needed by the build. See
+  [the source and build notes](../../branding/noto-emoji/README.md).
 - [x] All 19 top-level submodules have been initialized at their gitlinks and
   included in the source scan. The recipe removes unused executable test corpora,
   examples and proprietary media distribution modules, without removing native

@@ -103,3 +103,15 @@ This notice records known credits and missing evidence; it grants no rights to
 unresolved assets. The per-file inventory with hashes, sources and licence status
 is docs/fdroid/ASSET-INVENTORY.tsv; the audit and remaining release blockers are
 docs/LICENSE-AUDIT.md and docs/fdroid/CHECKLIST.md in the Ayuless source repository.
+
+Bundled emoji: Noto Emoji by Google and contributors.
+https://github.com/googlefonts/noto-emoji
+Source revision: 99701e07d3d1fe1bdbcdb14964547f0fd592966f
+Noto SVG artwork: Copyright 2013 Google, Inc., Apache License 2.0.
+Flag artwork: public domain / copyright-exempt according to Noto's retained
+region-flags notices. Original SVGs and exact file hashes: branding/noto-emoji.
+Modified for Ayuless: rasterized at 64px; handshake layers separated for the
+existing two-hand skin-tone picker; encoded as lossless WebP in the EPK3 pack.
+Copyright notice: ayuless-notices/noto-copyright.txt
+Apache licence: ayuless-notices/gumbo-Apache-2.0.txt
+Flag notices: ayuless-notices/noto-flags.txt

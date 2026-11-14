@@ -23,6 +23,8 @@ def classify(path):
     if name.startswith("ayuless") or "_ayuless" in name:
         return ("solar" if name.startswith("ayuless_solar_") else "ayuless",
                 "CC-BY-4.0" if name.startswith("ayuless_solar_") else "GPL-3.0-or-later", AYULESS)
+    if name == "emoji.pack" or "/assets/emoji/compound/" in relative:
+        return "noto-emoji", "Apache-2.0; region flags public domain/copyright-exempt", AYULESS + "/tree/ayuless/fdroid-blockers/branding/noto-emoji"
     if "/fonts/" in relative:
         if path.suffix not in (".ttf", ".otf"):
             return "font-map", "UNKNOWN", UPSTREAM + relative
@@ -41,8 +43,6 @@ def classify(path):
         return "model", "UNKNOWN", UPSTREAM + relative
     if name in ("secureid_ocr_nn.dat", "shapes.dat", "grammars.dat", "PhoneFormats.dat"):
         return "binary-data", "UNKNOWN", UPSTREAM + relative
-    if name == "emoji.pack" or "/emoji/" in relative:
-        return "emoji (Apple generator risk)", "UNKNOWN", UPSTREAM + relative
     if "/res/raw/" in relative and path.suffix == ".json":
         return "animation", "UNKNOWN", UPSTREAM + relative
     if path.suffix in (".mp3", ".wav", ".ogg"):
@@ -77,7 +77,7 @@ def main():
             component, licence, source = classify(path)
             writer.writerow((path.relative_to(ROOT), sha256(path.read_bytes()).hexdigest(), component, licence, source))
             counts[component] += 1
-    print(f"{len(paths)} resources inventoried; UNKNOWN/pending entries are release blockers.")
+    print(f"{len(paths)} resources inventoried; UNKNOWN/pending entries need provenance review.")
     for component, count in sorted(counts.items()):
         print(f"{component}: {count}")
 

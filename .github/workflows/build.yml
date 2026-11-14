@@ -54,6 +54,11 @@ jobs:
       - name: Check regenerated QuickJS builtins
         run: bash Tools/native/check-quickjs-builtins.sh
 
+      - name: Install emoji validation tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pil
+
       # Build native libraries from pinned source submodules (cached by input hash).
       # No native archives are stored in Git. See Tools/native/.
       - name: Native libraries from source
@@ -76,6 +81,9 @@ jobs:
 
       - name: Assemble afat release
         run: ./gradlew assembleAfatRelease --stacktrace
+
+      - name: Validate packaged Noto emoji
+        run: python3 Tools/test_noto_emoji.py TMessagesProj_App/build/outputs/apk/afat/release/app.apk
 
       - uses: actions/upload-artifact@v4
         with:

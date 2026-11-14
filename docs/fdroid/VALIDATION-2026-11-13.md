@@ -102,8 +102,11 @@ it is not hidden with `scanignore`.
   Merriweather 2.002/2.101; family licences are available, but exact-file
   correspondence still needs recording. The OCR weights exactly match
   Telegram-FOSS's copy; this is useful provenance evidence, not a separate grant.
-  Apple-derived emoji provenance remains distinct from unknown upstream fonts,
-  models, sounds and animations. Do not automatically label every unknown entry
+  The Apple-derived emoji were subsequently removed: the built-in pack and all
+  handshake layers now build offline from pinned Noto SVGs. Their licences,
+  copyright notices and source hashes are retained in `branding/noto-emoji`.
+  The remaining review concerns upstream fonts, models, sounds and animations.
+  Do not automatically label every unknown entry
   proprietary or claim every licence has been established.
 - **Server/native build:** execute the whole enabled recipe in an F-Droid VM,
   including Rust source vendoring, offline native compilation and unsigned APK
@@ -137,3 +140,19 @@ Useful upstream references:
 - [Roboto 2 licence](https://github.com/googlefonts/roboto-2/blob/main/LICENSE)
 - [Roboto Mono licence](https://github.com/googlefonts/RobotoMono/blob/main/OFL.txt)
 - [Merriweather licence](https://github.com/EbenSorkin/Merriweather4/blob/main/OFL.txt)
+
+## Noto emoji replacement (2026-11-14)
+
+Replaced the Apple-derived pack and all twelve handshake PNGs with Noto artwork
+from revision `99701e07d3d1fe1bdbcdb14964547f0fd592966f`. The original SVG
+subset, individual hashes, mappings and licences are retained in
+`branding/noto-emoji/`. Normal builds use the checked-in generated media;
+`Tools/build-noto-emoji.py` regenerates it offline with CairoSVG and Pillow.
+
+The independent checker decoded all 3,606 EPK3 records and checked all 36
+handshake skin-tone combinations. Gradle asset merging and release Java
+compilation passed. CI also checks the final APK and requires the pack to be
+stored without ZIP compression, as required by `EmojiPack.openFd`.
+
+The pack is 14,798,630 bytes (about 11 MB larger than the previous pack).
+Device rendering and a complete F-Droid server build remain unverified.
