@@ -53,8 +53,8 @@ print_key() {
         git ls-tree HEAD "${SUBMODULES[@]}" TMessagesProj/jni/gram-wallet
         find TMessagesProj/jni/prebuild -maxdepth 1 -name '*.sh' -print0 | sort -z | xargs -0 sha256sum
         find TMessagesProj/jni/prebuild/patches -type f -print0 | sort -z | xargs -0 sha256sum
-        sha256sum Tools/native/build-prebuilts.sh Tools/native/check-prebuilts.sh
-        echo "NDK=${NDK_VERSION:-27.2.12479018} TLOTTIE_RUST=$TLOTTIE_RUST_TOOLCHAIN ABIS=${ABIS:-all}"
+        sha256sum Tools/native/build-prebuilts.sh Tools/native/check-prebuilts.sh Tools/native/rust-env.sh
+        echo "NDK=${NDK_VERSION:-27.2.12479018} TLOTTIE_RUST=$TLOTTIE_RUST_TOOLCHAIN ABIS=${ABIS:-all} API=${API:-21} SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH:-1}"
     )
 }
 
@@ -72,7 +72,7 @@ if "$offline"; then
 fi
 
 missing=()
-for tool in cmake ninja make nasm meson pkg-config gperf python3 perl patch rustup cargo; do
+for tool in cmake ninja make nasm meson pkg-config gperf python3 perl patch; do
     command -v "$tool" >/dev/null 2>&1 || missing+=("$tool")
 done
 if (( ${#missing[@]} )); then
@@ -94,30 +94,28 @@ else
     git -C "$ROOT" submodule update --init --recursive --depth 1 "${SUBMODULES[@]}"
 fi
 
-echo "==> Preparing Rust toolchains"
+# Ayuless: use provided distributions without rustup, or select installed pins.
+source "$ROOT/Tools/native/rust-env.sh"
 wallet_toolchain="$(sed -n 's/^channel *= *"\(.*\)"/\1/p' "$JNI/gram-wallet/rust-toolchain.toml")"
-for toolchain in "$wallet_toolchain" "$TLOTTIE_RUST_TOOLCHAIN"; do
-    if "$offline"; then
-        rustup run "$toolchain" rustc --version
-        installed_targets="$(rustup target list --toolchain "$toolchain" --installed)"
-        for target in "${RUST_ANDROID_TARGETS[@]}"; do
-            if ! grep -qxF "$target" <<< "$installed_targets"; then
-                echo "ERROR: offline build requires Rust $toolchain target $target" >&2
-                exit 1
-            fi
-        done
-    else
-        rustup toolchain install "$toolchain" --profile minimal
-        rustup target add --toolchain "$toolchain" "${RUST_ANDROID_TARGETS[@]}"
+for component in wallet tlottie; do
+    toolchain="$wallet_toolchain"; bindir="${WALLET_RUST_BIN:-}"
+    if [[ "$component" == tlottie ]]; then
+        toolchain="$TLOTTIE_RUST_TOOLCHAIN"; bindir="${TLOTTIE_RUST_BIN:-}"
     fi
+    if (setup_rust_env "$toolchain" "$bindir"); then
+        continue
+    fi
+    if "$offline" || [[ -n "$bindir" ]]; then
+        echo "ERROR: provision Rust $toolchain and its Android targets before building" >&2
+        exit 1
+    fi
+    rustup toolchain install "$toolchain" --profile minimal
+    rustup target add --toolchain "$toolchain" "${RUST_ANDROID_TARGETS[@]}"
+    (setup_rust_env "$toolchain" "$bindir")
 done
 
 echo "==> Building prebuilt libraries (this takes a while)"
 "$PREBUILD/build_all.sh"
-
-# build_all.sh rewrites build_env.txt with host paths and a timestamp; keep the
-# committed copy so a source build does not leave a dirty tree.
-git -C "$ROOT" checkout -- TMessagesProj/jni/prebuild/build_env.txt 2>/dev/null || true
 
 "$ROOT/Tools/native/check-prebuilts.sh"
 

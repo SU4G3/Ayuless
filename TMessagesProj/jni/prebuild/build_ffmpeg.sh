@@ -230,7 +230,8 @@ copy_generated_header_overlay() {
         chmod 0644 "$destination"
         copied=$((copied + 1))
         echo "==> generated/ABI header: $destination"
-    done < <(find "$installed_root" -type f -name '*.h' -print0)
+    # Ayuless: filesystem traversal order must not affect generated outputs.
+    done < <(find "$installed_root" -type f -name '*.h' -print0 | sort -z)
 
     if [[ "$copied" == "0" ]]; then
         echo "==> FFmpeg $abi: no generated/ABI-dependent public headers"

@@ -71,7 +71,7 @@ await emit('validator-bundle.js', validatorBuildOptions(pkgRoot));
 // a web view and has none). The compiler is built from the vendored quickjs-ng, so the bytecode
 // always matches the engine the apps link; each blob carries the source's length and hash and is
 // refused at load time if the .js next to it changed (see qjs_shim.h).
-const qjsc = buildQjsc();
+const qjsc = process.env.WIDGET_QJSC ?? buildQjsc();
 for (const name of ['sandbox-bundle.js', 'validator-bundle.js']) {
   const out = name.replace(/\.js$/, '.qbc');
   execFileSync(qjsc, [path.join(res, name), path.join(res, out), path.basename(name)], { stdio: 'inherit' });

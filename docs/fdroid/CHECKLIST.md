@@ -1,10 +1,16 @@
 # F-Droid submission checklist
 
-Offline source audit: 2026-11-12. **Draft; not submitted, accepted or published.**
-The recipe is deliberately disabled. This audit uses local sources and knowledge
-of F-Droid policy/metadata; current policy, service terms and tool support have
-not been checked online. Anti-Features disclose behaviour; they do not exempt
-proprietary dependencies, missing source or incompatible licences.
+Audit updated: 2026-11-13. **Draft; not submitted, accepted or published.**
+QuickJS source generation, local metadata validation and the prepared source
+scanner now pass; see [VALIDATION-2026-11-13.md](VALIDATION-2026-11-13.md).
+The recipe remains disabled pending login/asset review and a complete F-Droid
+server build. An unknown licence entry
+records missing evidence; it does not prove that an upstream asset is non-free.
+Anti-Features do not replace a licence or complete corresponding source.
+F-Droid permits redistributable non-free artwork/fonts with `NonFreeAssets`;
+its inclusion policy does not require a free licence for every decorative asset.
+See the [inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/) and
+[Anti-Features](https://f-droid.org/en/docs/Anti-Features/#NonFreeAssets).
 
 ## Store metadata and release identity
 
@@ -19,9 +25,9 @@ proprietary dependencies, missing source or incompatible licences.
   checks apply the same `VercodeOperation`.
 - [ ] Add actual phone screenshots; each locale has an explanatory README in
   `images/phoneScreenshots/`. These notes are not image assets.
-- [ ] Replace `REPLACE_WITH_REVIEWED_RELEASE_COMMIT` with the immutable release
-  revision containing these changes; verify version fields in the built APK.
-  Local tag `v0.1.0-alpha.1` and Gradle version `13.2.1` use different naming
+- [x] The draft recipe pins immutable candidate revision `e2a9d4877b0da7c097c94d132195910da824dd11`.
+  This is a test candidate, not a published/reviewed release.
+- [ ] Verify final APK versions and choose the release tag scheme. Local tag `v0.1.0-alpha.1` and Gradle version `13.2.1` use different naming
   schemes. `UpdateCheckMode: Tags` is configured; `AutoUpdateMode: None` is
   intentional until a tag-to-version scheme and an enabled build are reviewed.
   Then use the appropriate `Version <tag-template>` auto-update mode (there is
@@ -40,45 +46,62 @@ proprietary dependencies, missing source or incompatible licences.
   and two unused widget-sandbox Android demo wrappers. No tracked AAR, SO,
   static archive or Google Services JSON remains here. The recipe removes the
   two demo wrappers; F-Droid handles the root wrapper with its build tooling.
-- [ ] **Packaged executable bytecode remains a source-build blocker.**
-  `TMessagesProj/src/main/assets/WidgetSandbox/WidgetJS/{sandbox,validator}-bundle.qbc`
-  are committed QuickJS bytecode used by the APK. Six more `.qbc` copies are
-  under `TMessagesProj/jni/twidget/widget-sandbox/packages/{android,desktop,ios}`.
-  Sources/tooling are in widget-sandbox (`packages/core`, `scripts`, QuickJS);
-  the entry point is `packages/core/scripts/build-native-bundles.ts` (run via
-  the pinned pnpm `build:native android` script, then copy outputs to the app).
-  notices describe bundled linkedom, parse5, css-tree, Chart.js and D3. Add a
-  pinned, offline JS dependency preparation and bytecode generation/copy step,
-  remove committed generated code before scanning, and regenerate after it.
-  Audit generated/minified JS and any bytecode embedded in source arrays too.
-  Rebuilding the native QuickJS interpreter alone does not rebuild these assets.
-  Do not suppress this with `scanignore` or label it `NonFreeComp` to bypass policy.
-- [x] An unused web-demo `packages/quickjs-wasm/dist/emscripten-module.wasm`
-  is identified and removed by the draft recipe, without removing QuickJS C
-  sources used by the Android CMake target. It is still present upstream in Git.
-- [ ] **Data/model/font provenance remains open.** Inventory includes
-  `src/main/assets/models/diamond_ios/*.bin`, `secureid_ocr_nn.dat`,
-  `PhoneFormats.dat`, `grammars.dat`, `emoji.pack`, `shapes.dat`, and fonts
-  `gram.ttf`, `mw_bold.ttf`, `mw_bolditalic.ttf`, `num.otf`, `r*.ttf`.
-  Establish each input's licence, editable/preferred source and generation
-  procedure as applicable. Inventory images, sounds, stickers, Lottie resources,
-  widget resources and bundled font variants too. A binary data file is not
-  automatically proprietary, but the repository licence alone is not proof of
-  rights to every upstream asset. Do not call this a completed asset audit.
-- [ ] All 19 top-level submodules are uninitialised in this checkout. Gitlink
-  hashes pin their revisions, but their recursive files/licences/binaries were
-  not available to audit offline. Initialise recursively in a prepared checkout,
-  inventory binaries there and inspect dependency manifests/lockfiles, including
-  the media and jlatexmath modules and native/Rust transitive dependencies.
-- [ ] Resolve Gradle's complete `afatReleaseRuntimeClasspath` and inspect POMs,
-  licences and transitive SDKs; then run the F-Droid source scanner and an APK
-  scanner (e.g. Exodus signatures). Source guards are not a full dependency or
-  tracker audit. Review the old `com.stripe:stripe-android:2.0.2` SDK especially
-  for licence, telemetry and transitive dependencies.
-- [ ] Historical `TMessagesProj_AppHuawei` is excluded from settings, but still
-  contains HMS declarations/source. Have fdroiddata reviewers decide whether
-  unused distributions and excluded Google implementation files should be
-  removed in recipe `rm` entries. Never blanket-ignore scanner findings.
+- [x] All eight committed WidgetJS `.qbc` files and the unused web-demo WASM
+  have been removed. Gradle `:TMessagesProj:buildWidgetJs` builds qjsc from the
+  tracked QuickJS/shim sources used by JNI, then emits JS/bytecode as generated
+  assets. The original app JS is byte-for-byte identical to the selected shared
+  package input (including its webkit renderer transport). F-Droid enables
+  `ayulessRebuildWidgetJs` for TypeScript → JS → bytecode with pinned pnpm/lockfile.
+  Local bytecode generation succeeded and both blobs match the removed originals.
+- [x] All three QuickJS builtin JS inputs are restored from pinned upstream
+  sources. `Tools/native/build-quickjs-builtins.py` bootstraps the host compiler
+  with JS source evaluation, regenerates the headers, and copies the unchanged
+  production engine beside them. Android CMake and the WidgetJS compiler use
+  that engine; no legacy builtin bytecode header is used as bootstrap input.
+  Functional tests cover all three builtins. Full TypeScript rebundling also
+  passes with esbuild compiled from source. See the validation report for hashes
+  and the distinction between regenerated headers and the old vendored output.
+- [x] Local data/model/font/animation/image/sound inventory is now explicit:
+  [ASSET-INVENTORY.tsv](ASSET-INVENTORY.tsv), regenerated by
+  `Tools/fdroid/asset_inventory.py`, lists 5,471 resources with hashes, source
+  locations and licence status; [LICENSE-AUDIT.md](../LICENSE-AUDIT.md) explains
+  the individual groups. Packaged notices now include known font copyrights,
+  EOX's exact 2016 attribution, QuickJS/litehtml/gumbo/Phosphor/Twidget and
+  PhoneFormat licence texts, plus Roboto Mono's embedded OFL grant and OFL text.
+- [ ] **Asset redistribution evidence remains unresolved.** Unknown/pending
+  grants are recorded rather than assigned the app's GPL: OCR weights, model
+  source scenes, PhoneFormats/grammars/shapes data, gram/num glyph fonts, exact
+  versions of several other fonts, inherited artwork/sounds and 337 Lottie JSONs.
+  The previous Apple emoji concern is resolved by the Noto replacement below.
+  Source files for decorative artwork are not an unconditional F-Droid
+  requirement. Recursive font/dependency notices still need inspection/collection.
+  No feature-breaking replacement was made.
+- [x] Replaced the committed Apple-derived emoji pack and all 12 handshake PNGs
+  with assets generated offline from pinned Noto SVGs. All 3,606 EmojiData slots
+  have source mappings; all 36 handshake tone combinations remain available.
+  Copyright, Apache-2.0 and upstream region-flag notices are retained in source
+  and packaged with the app. No Apple font is needed by the build. See
+  [the source and build notes](../../branding/noto-emoji/README.md).
+- [x] All 19 top-level submodules have been initialized at their gitlinks and
+  included in the source scan. The recipe removes unused executable test corpora,
+  examples and proprietary media distribution modules, without removing native
+  runtime functions. This does not establish every transitive dependency's licence.
+- [x] Cached POMs for 37 direct library/build-tool declarations were inspected,
+  including inherited licence fields: [POM-INVENTORY.tsv](POM-INVENTORY.tsv) and
+  [DEPENDENCIES.md](DEPENDENCIES.md). Stripe 2.0.2 declares MIT and only support
+  annotations; its cached AAR has 40 Stripe classes and no embedded SDK JAR/native library.
+  These checks do not establish the selected transitive graph or network behaviour.
+- [x] Resolved `afatReleaseRuntimeClasspath` successfully. The prepared source
+  tree with installed npm dependencies has zero fatal F-Droid scanner findings;
+  the previous test APK also has zero binary-scanner findings. Nine model `.bin`
+  files are ignored only as non-executable float data read by DiamondRenderer;
+  their licence review remains separate. These scans are not a complete network
+  behaviour audit or proof of all transitive licences.
+- [x] Removed excluded `TMessagesProj_AppHuawei` (HMS code/dependencies,
+  AGConnect config, manifest and build file) and stale Huawei SDK ProGuard rules.
+  DeGoogle audit now rejects reintroducing that module/HMS executable references.
+  OS launcher badge permissions and manufacturer compatibility handling remain;
+  they do not use a proprietary SDK and preserve existing features.
 
 ## Native build and reproducibility
 
@@ -95,28 +118,37 @@ proprietary dependencies, missing source or incompatible licences.
   and rustup installation, checks prepared native gitlink revisions and Android
   Rust targets, disables rustup auto-install and sets `CARGO_NET_OFFLINE=true`.
   CI's default online preparation mode is retained.
-- [ ] **Offline Rust provisioning is unresolved.** The default wrapper installs
-  wallet Rust **1.96.1**, tlottie Rust **1.98.0**, and four Android targets;
-  Cargo uses registry/git dependencies despite `--locked`. Arrange toolchains,
-  checksummed source tarballs/srclibs and Cargo vendoring/configuration through
-  an F-Droid-approved preparation mechanism. Lockfiles are not source archives.
-  The disabled recipe specifies requirements and uses offline mode; it does
-  not pretend an unprovisioned build works. Also provision SDK CMake 3.22.1;
-  distro CMake alone does not satisfy AGP's pinned SDK CMake requirement.
+- [x] Added offline-capable Rust provisioning paths. Native scripts select pinned
+  rustc **and** Cargo without installation, accept `WALLET_RUST_BIN` /
+  `TLOTTIE_RUST_BIN` distributions without rustup, verify versions/Android stdlibs
+  and reuse prepared toolchains. Recipe preparation uses pinned rustup srclib,
+  Rust 1.96.1 / 1.98.0 and all Android targets, then `Tools/native/vendor-rust.sh`
+  for gram-wallet, the C++ generator workspace and tlottie. Cargo source replacement
+  configs preserve registry/git checksums, force offline resolution and are read
+  from the correct workspaces. Recipe also provisions SDK CMake 3.22.1.
+- [ ] Validate preparation on the actual F-Droid server: rustup srclib definition,
+  Node/pnpm compatibility, source scanning of vendored Cargo/npm inputs (including
+  esbuild's host executable), missing submodule manifests/locks, toolchain targets
+  and the full offline native build. No Rust/crate sources were downloaded here.
 - [x] Existing native scripts normalize `SOURCE_DATE_EPOCH` (usually 1), TZ,
   locale and C/C++/Rust source paths; several archives use `ZERO_AR_DATE`.
   The recipe fixes epoch/TZ/locale. No build-time random UUID, current-time
   version code or current-date BuildConfig field was found in the Gradle/buildSrc
   files examined. Runtime message IDs, crypto randomness and cache timestamps
   are necessary runtime behaviour and must not be replaced with fixed values.
-- [ ] `common.sh:write_build_environment` writes wall-clock time and host paths
-  to diagnostic `prebuild/build_env.txt`; the wrapper restores its tracked copy
-  after a successful build. It is not an Android asset/source input in the
-  inspected build. Confirm this on a real build and ensure generated headers,
-  codec configuration strings, Rust dependencies and JS bundles do not leak
-  paths/timestamps. Compare two clean APK builds from different directories
-  with the same credentials/toolchains using diffoscope/apksigcopier as needed.
-  Existing normalization is not proof of bit-for-bit reproducibility.
+- [x] Removed wall-clock date, host executable/SDK paths and job count from
+  `write_build_environment`; diagnostic report now goes to ignored build output.
+  Removed tracked developer-machine report and the wrapper's `git checkout`
+  restoration. Final archives run `llvm-ar sD`, environment uses a fixed umask,
+  epoch/TZ/locale, output searches/header lists are sorted, and JNI CMake now also
+  remaps checkout/build/NDK paths. WidgetJS stack names and output mtimes are fixed.
+  [NATIVE.md](../NATIVE.md) gives unsigned two-checkout manifests/diffoscope steps.
+- [ ] Compare two clean native/APK builds under different directories with identical
+  inputs/toolchains/credentials. Audit generated headers, codec configuration and
+  dependencies for remaining nondeterminism. Local matching WidgetJS blobs and
+  deterministic helper checks are not proof of APK reproducibility. This is a
+  quality/reproducibility goal, not an unconditional inclusion prerequisite for
+  this recipe, which does not enable upstream-signature copying via `Binaries`.
 - [x] `-PayulessUnsignedRelease=true` skips the release signing assignment in
   `TMessagesProj_App`; default developer signing behaviour is retained. The
   recipe removes the committed development `release.keystore`. Neither private
@@ -130,19 +162,20 @@ proprietary dependencies, missing source or incompatible licences.
 ## API credentials, login identity and network behaviour
 
 - [x] Gradle reads ignored root `API_KEYS`, with environment overrides
-  `APP_ID`, `APP_HASH`, `CERT_FINGERPRINT`. The recipe copies `API_KEYS.example`
-  (`APP_ID=12345`, hash `0123456789abcdef0123456789abcdef`): these are public
-  **compile placeholders**, not usable Telegram credentials. Credentials are
+  `APP_ID`, `APP_HASH`, `CERT_FINGERPRINT`. The recipe copies
+  `docs/fdroid/API_KEYS.public`: the user-selected Android API ID 4, its matching
+  archived public API hash and the official Telegram Android fingerprint.
+  `API_KEYS.example` remains a template for independently registered clients.
+  Credentials are
   compiled into the app and cannot be treated as secrets in distributed APKs.
-- [ ] **Choose usable, distributable API credentials with reviewers.** Replace
-  the example during recipe preparation by a documented, authorized credential
-  source or adopt an acceptable user-supplied configuration design. Building
-  with placeholders does not demonstrate login. Do not use CI secrets as an
-  undocumented F-Droid prerequisite.
+- [x] **Select the build credentials.** The user explicitly selected API ID 4
+  and its matching fingerprint. The public build profile is available in the
+  source tree, so F-Droid does not depend on GitHub Secrets or placeholder keys.
+  A successful configuration check still does not demonstrate a new login.
 - [ ] **Login identity is a review risk.** The CI comment describes `api_id 4`
   with Telegram's official SHA-256 certificate fingerprint. That certificate
-  constant is the fallback in `BuildVars.OFFICIAL_FINGERPRINT`; the recipe's
-  placeholder ID is 12345, not 4. `LoginSpoof` sends package ID
+  constant is the fallback in `BuildVars.OFFICIAL_FINGERPRINT`; the recipe now
+  selects the same ID 4/fingerprint pair explicitly. `LoginSpoof` sends package ID
   `org.telegram.messenger.web` and empty installer on every connection, and
   pre-login identifies as Telegram 10.10.1 / layer 177 before restoring the real
   version. It does not reflect F-Droid's actual signing certificate. Have
@@ -196,7 +229,7 @@ proprietary dependencies, missing source or incompatible licences.
   2016**, CC BY 4.0, modified Copernicus Sentinel data; EOX Bright overlay with
   OSM (ODbL) / Natural Earth (public domain) data and EOX/MapServer rendering.
   The overlay's published service permission is not a CC BY grant for rendering.
-- [ ] Reconfirm EOX's exact vintage, rendering licence/redistribution terms,
+- [ ] Reconfirm the original EOX 2016 endpoint vintage, rendering licence/redistribution terms,
   endpoint permission and all street-style/font/sprite notices. Online provider
   terms were not verified in this no-network task. Preserve source attribution
   and clickable map credits in all map modes; do not assume free access means
@@ -216,26 +249,31 @@ proprietary dependencies, missing source or incompatible licences.
 
 ## Validation and submission still required
 
-- Local checks passed: DeGoogle source/manifest audit, YAML parsing, version
-  agreement, summary/changelog character limits, PNG dimensions/content,
-  checklist links, shell syntax and `git diff --check`. Six isolated offline
-  wrapper checks using stubbed tools covered prepared inputs and rejection of
-  uninitialised/wrong/conflicted submodules, missing Rust targets and missing
-  toolchains. They verified no install/update command was invoked and that
-  offline environment flags reached the build. These are control-flow checks,
-  not a native compiler run.
-- The requested offline Java compile command was attempted with JDK 21 and
-  placeholder `APP_ID`, `APP_HASH`, `CERT_FINGERPRINT`. It failed in Gradle
-  wrapper initialization, before configuration or compilation: the lock file
-  `~/.gradle/wrapper/dists/gradle-8.13-bin/5xuhj0ry160q40clulazy9h7d/gradle-8.13-bin.zip.lck`
-  cannot be created on the read-only filesystem. No Android compile success is
-  claimed, and no external cache permissions were changed.
-- [ ] Run `fdroid lint`, `fdroid readmeta`, `fdroid checkupdates` and
-  `fdroid build --on-server org.ayuless.messenger:72919` on the enabled, reviewed
-  metadata in a prepared fdroiddata checkout. Check the mapping form of
-  localized Anti-Features, update-code transformation and scanner removals
-  against the installed fdroidserver version. F-Droid tooling is not installed
-  in this workspace, so schema/build-server validation remains outstanding.
+- Local checks passed: DeGoogle source/manifest audit, YAML parsing, Groovy syntax
+  parsing (not AGP configuration), per-file
+  inventory regeneration, cached POM review, shell syntax and `git diff --check`.
+  The host QuickJS compiler built successfully: both generated `.qbc` blobs match
+  the removed originals byte-for-byte across repeated output directories; all
+  three selected JS inputs match the previous app assets.
+- Eight isolated helper checks passed: provided Rust distributions without rustup,
+  wrong-version/missing-target rejection, installed rustup selection without any
+  install/update command, three-workspace vendoring including generator workspace
+  discovery, preserving existing Cargo config, equal diagnostic reports with
+  different source/SDK/NDK paths and job counts, and deterministic archive metadata.
+  Rust/Cargo calls were stubbed; the archive check used host GNU binutils standing
+  in for missing NDK LLVM tools. These checks are not native/Rust compiler builds.
+- Java compilation now passes: `:TMessagesProj:compileReleaseJavaWithJavac`,
+  JDK 21, two workers, public example credentials provided only in the process
+  environment. This is compile validation, not a login test or full APK build.
+- [x] `fdroid readmeta` and `fdroid lint org.ayuless.messenger` pass with
+  fdroidserver 2.4.5 and current fdroiddata category/Anti-Feature definitions.
+- [x] `fdroid checkupdates --allow-dirty org.ayuless.messenger` completed with
+  exit code 0 in the disposable metadata checkout. Its status JSON lists the
+  application as processed with no failures. This does not enable auto-updates.
+- [ ] Complete `fdroid build --server org.ayuless.messenger:72919` on enabled,
+  reviewed metadata. The CLI flag is `--server`, not `--on-server`. The local
+  builder probe fails because the Vagrant executable is absent. The disabled
+  draft and a successful Java compile must not be reported as a server build.
 - [ ] Full release/native/WidgetJS build, reproducibility comparison, login,
   background notifications, map attribution and feature tests on a device.
 - [ ] Submit an inclusion request and fdroiddata merge request only after the

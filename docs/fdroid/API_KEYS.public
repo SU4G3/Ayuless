@@ -1,0 +1,6 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Public Telegram Android API identity selected for the F-Droid build.
+# These values are compiled into distributed APKs; they are not private secrets.
+APP_ID=4
+APP_HASH=014b35b6184100b085b0d0572f9b5103
+CERT_FINGERPRINT=49C1522548EBACD46CE322B6FD47F6092BB745D0F88082145CAF35E14DCC38E1

@@ -22,6 +22,19 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ffunction-sections -fdata-sections -fvisibi
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffunction-sections -fdata-sections -fvisibility=hidden -fvisibility-inlines-hidden -flto=full")
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -flto=full -Wl,--gc-sections -Wl,--icf=safe -Wl,-Bsymbolic")
 
+# Ayuless: apply path remapping to JNI and its source-built dependencies too.
+# NASM does not accept these flags; restrict them to the C/C++ compiler.
+get_filename_component(AYULESS_SOURCE_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../.." ABSOLUTE)
+set(AYULESS_PATH_MAPS "${AYULESS_SOURCE_ROOT}=/src" "${CMAKE_CURRENT_SOURCE_DIR}=/jni"
+                     "${CMAKE_BINARY_DIR}=/build")
+if(ANDROID_NDK)
+    list(APPEND AYULESS_PATH_MAPS "${ANDROID_NDK}=/android-ndk")
+endif()
+foreach(mapping IN LISTS AYULESS_PATH_MAPS)
+    add_compile_options("$<$<COMPILE_LANGUAGE:C,CXX>:-ffile-prefix-map=${mapping}>"
+                        "$<$<COMPILE_LANGUAGE:C,CXX>:-fdebug-prefix-map=${mapping}>")
+endforeach()
+
 if (${ANDROID_ABI} STREQUAL "armeabi-v7a" OR ${ANDROID_ABI} STREQUAL "arm64-v8a")
     enable_language(ASM)
 else()

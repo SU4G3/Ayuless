@@ -75,7 +75,8 @@ for abi in $ABIS; do
 
     archive="$build_dir/libiwasm.a"
     if [[ ! -f "$archive" ]]; then
-        archive="$(find "$build_dir" -type f -name 'libiwasm.a' -print -quit)"
+        # Ayuless: select outputs independently of filesystem traversal order.
+        archive="$(find "$build_dir" -type f -name 'libiwasm.a' -print | LC_ALL=C sort | head -n 1)"
     fi
 
     if [[ -z "${archive:-}" || ! -f "$archive" ]]; then
