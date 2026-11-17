@@ -8,9 +8,13 @@ body:
   - type: input
     id: version
     attributes:
-      label: Ayuless version / commit
+      label: Ayuless release / Android base version / commit
     validations:
       required: true
+  - type: input
+    id: source
+    attributes:
+      label: Installation source (GitHub release, test APK, or self-built)
   - type: input
     id: device
     attributes:
@@ -19,7 +23,7 @@ body:
     id: area
     attributes:
       label: Area
-      options: [Ghost mode, Anti-delete, Edit history, Settings, Build, Push / UnifiedPush, Maps, Other]
+      options: [Ghost mode, Anti-delete, Edit history, Settings, Build, Push / UnifiedPush, Installation / signature, Security warning, Maps, Other]
   - type: textarea
     id: steps
     attributes:

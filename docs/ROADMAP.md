@@ -4,10 +4,11 @@ Each step is one or more PRs, with a manual test checklist on a test account in 
 
 Updated: 2026-11-17.
 
-Status: ✅ done (merged to `main`) · 🚧 in progress / open PR · ⏳ planned
+Status: ✅ implemented in the released source or merged history · 🚧 integration/review pending · ⏳ planned
 
-The user confirmed that the earlier test APK and mini-apps worked. This does
-not validate every feature or the later QuickJS/Noto changes in open PR #62.
+The 1.0.0 APK includes the tested UnifiedPush/Noto source candidate. The full
+build and APK checks pass, with positive owner device feedback; exhaustive
+feature testing remains pending.
 Ayuless settings live in **Settings → Ayuless**. Anti-delete, saved attachments,
 sponsored-message hiding and background work default on; optional additions
 default off. Explicit saved choices are preserved.
@@ -105,7 +106,7 @@ Private test APKs: [test-cleanroom](https://github.com/SU4G3/Ayuless-reports/rel
 - ⏳ Two-clean-APK reproducibility comparison; individual provenance and login-identity review context remains disclosed.
 
 Detailed status: [F-Droid checklist](fdroid/CHECKLIST.md),
-[validation evidence](fdroid/VALIDATION-2026-11-17.md),
+[validation evidence](https://github.com/SU4G3/Ayuless/blob/v1.0.0/docs/fdroid/VALIDATION-2026-11-17.md),
 [licence audit](LICENSE-AUDIT.md).
 
 ## Not done yet
