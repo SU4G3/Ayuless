@@ -216,3 +216,15 @@ upstream copies byte-for-byte; full native/APK comparison needs prepared inputs.
 For historical audits only, `Tools/native/compare-prebuilts.sh <git-ref>` compares
 fresh outputs with archives in a pre-removal commit. It fails if the reference
 contains no archives; normal builds never need a historical binary baseline.
+
+## WAMR SIMD source dependency
+
+WAMR's fast interpreter uses SIMDe headers. `third_party/simde` is pinned to
+`71fd833d9666141edcd1d3c109a80e228303d8d7` (the same v0.8.2 selected by WAMR).
+The wrapper includes that gitlink in its cache inputs and offline source checks.
+`build_wamr.sh` supplies `FETCHCONTENT_SOURCE_DIR_SIMDE` and enables
+`FETCHCONTENT_FULLY_DISCONNECTED`; missing prepared headers are an error.
+This preserves SIMD and avoids an implicit Git clone during CMake configuration.
+The upstream status message may still say “Fetching simde” even with the local
+source override; that message alone is not evidence of a network request.
+SIMDe's MIT notice is packaged alongside the other native notices.

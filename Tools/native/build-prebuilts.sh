@@ -37,6 +37,7 @@ SUBMODULES=(
     TMessagesProj/jni/wallet-engine
     TMessagesProj/jni/td
     TMessagesProj/jni/third_party/wamr
+    TMessagesProj/jni/third_party/simde
 )
 
 # Rust toolchains. wallet-engine pins its own in gram-wallet/rust-toolchain.toml;

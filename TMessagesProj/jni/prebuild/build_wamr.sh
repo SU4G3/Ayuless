@@ -6,6 +6,7 @@ source "$SCRIPT_DIR/common.sh"
 
 WAMR_SRC="${WAMR_SOURCE_DIR:-$SCRIPT_DIR/../third_party/wamr}"
 BUILD_ROOT="${WAMR_BUILD_ROOT:-$SCRIPT_DIR/build/wamr}"
+SIMDE_SRC="${SIMDE_SOURCE_DIR:-$SCRIPT_DIR/../third_party/simde}"
 
 require_ndk
 require_cmake_ninja
@@ -14,6 +15,14 @@ if [[ ! -f "$WAMR_SRC/CMakeLists.txt" ]]; then
     echo "ERROR: WAMR source tree not found: $WAMR_SRC" >&2
     exit 1
 fi
+
+# FetchContent must use the pinned, prepared headers. WAMR otherwise clones
+# SIMDe during configuration, after F-Droid has scanned the source tree.
+if [[ ! -f "$SIMDE_SRC/simde/wasm/simd128.h" || ! -f "$SIMDE_SRC/COPYING" ]]; then
+    echo "ERROR: SIMDe sources missing: initialize the simde submodule before building." >&2
+    exit 1
+fi
+SIMDE_SRC="$(cd "$SIMDE_SRC" && pwd)"
 
 android_target_for_abi() {
     case "$1" in
@@ -53,12 +62,15 @@ for abi in $ABIS; do
         -S "$WAMR_SRC" \
         -B "$build_dir" \
         -G Ninja \
+        -DCMAKE_MAKE_PROGRAM="$NINJA_BIN" \
         -DCMAKE_TOOLCHAIN_FILE="$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake" \
         -DANDROID_ABI="$abi" \
         -DANDROID_PLATFORM="android-$API" \
         -DANDROID_STL=c++_static \
         -DCMAKE_BUILD_TYPE=Release \
         -DBUILD_SHARED_LIBS=OFF \
+        -DFETCHCONTENT_SOURCE_DIR_SIMDE="$SIMDE_SRC" \
+        -DFETCHCONTENT_FULLY_DISCONNECTED=ON \
         -DWAMR_BUILD_PLATFORM=android \
         -DWAMR_BUILD_TARGET="$target" \
         -DWAMR_BUILD_INTERP=1 \
