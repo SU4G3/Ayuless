@@ -26,7 +26,7 @@ Current release work:
 - Background APK publishing was stopped at the user's request. A new Noto APK
   has not been validated or published by that task.
 
-Public pre-release: [v0.1.0-alpha.1](https://github.com/SU4G3/Ayuless/releases/tag/v0.1.0-alpha.1).
+Latest public release: [v0.1.0-alpha.2](https://github.com/SU4G3/Ayuless/releases/tag/v0.1.0-alpha.2) (early version, tested on one device).
 Private test APKs: [test-cleanroom](https://github.com/SU4G3/Ayuless-reports/releases/tag/test-cleanroom).
 
 ## Step 0: Repository setup ✅
