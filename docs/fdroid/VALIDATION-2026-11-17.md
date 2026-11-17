@@ -1,5 +1,50 @@
 # F-Droid recipe integration, 2026-11-17
 
+**Complete build succeeded.** The corrected candidate
+`afadbaf8fe909ff11e2b2f5086c153ac5dd28c46` completed preparation, source scan,
+all 64 native archives, WidgetJS rebuilding, release APK assembly and F-Droid's
+APK dex-class/signing-block scans. The container exited 0; the log ends
+`1 build succeeded` at 17:24:42 UTC (20:24:42 MSK).
+
+## Final artifact checks
+
+- CLI: `fdroid build --on-server --test --scan-binary --verbose org.ayuless.messenger:72919`.
+- Official buildserver-trixie image, rootless Podman, fdroidserver 2.4.5;
+  image digest and provisioning details are retained below.
+- APK: `org.ayuless.messenger`, versionName `13.2.1`, versionCode `72919`,
+  minimum SDK 23, target SDK 36; all four Android ABIs are packaged.
+- Unsigned APK size: approximately 97.6 MiB. SHA-256:
+  `c6c66c27a41a5fddf0b24714a35f21d45596a94204f193a641e42721bc0c8b9c`.
+- `Tools/test_noto_emoji.py` validates all 3,606 EPK3 images, all 36 handshake
+  tone combinations and the uncompressed APK emoji pack.
+- All 47 files under packaged `assets/ayuless-notices/` match source contents,
+  including application GPL texts, Noto, font and native/SIMDe notices.
+- A separate zipaligned test copy verifies with apksigner v1/v2/v3. Its signing
+  certificate SHA-256 is `a08d7dc323ddf71ef3201944397e0d3cce7d40847263e11f328b68bbe19229ab`,
+  the existing public Telegram test key. This is not F-Droid's release signature.
+  Signed APK SHA-256:
+  `e3e221b1cc6426dd9983c8bcb16269935af3d045e47b84b33329dc5fe1eba2de`.
+- Test copy: private `SU4G3/Ayuless-reports`, release `test-cleanroom`, asset
+  `Ayuless-test-fdroid-final.apk`. The original unsigned APK is preserved.
+- Source tarball and build/tool-version logs are retained with the local build.
+
+## Remaining release steps
+
+Test this exact APK on a phone: installation, login, mini-apps, Noto and ntfy
+notifications including a locked screen. Then finalize the release tag and submit
+the recipe for F-Droid review. No inclusion request has been sent and acceptance
+is not claimed. Two clean APK builds have not been compared; whole-build network
+isolation was not tested. The component-level WAMR network-none test did pass.
+Inherited assets match the existing Forkgram recipe source as documented in
+`ASSET-REVIEW-2026-11-17.md`; they are not treated as confirmed replacement blockers.
+Login identity and the original phone-data provenance remain disclosed review context.
+
+## Earlier attempts and fixes (historical progress below)
+
+The sections below describe intermediate attempts, not the final status above.
+
+### Initial attempt
+
 **In progress. No final APK, successful complete build, submission or publication
 is claimed by this report.** The public build block remains disabled.
 

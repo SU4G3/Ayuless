@@ -3,8 +3,9 @@
 Audit updated: 2026-11-17. **Draft; not submitted, accepted or published.**
 QuickJS source generation, local metadata validation and the prepared source
 scanner now pass; see [VALIDATION-2026-11-13.md](VALIDATION-2026-11-13.md).
-The recipe remains disabled pending login/asset review and a complete F-Droid
-server build. An unknown licence entry
+The complete official-image recipe build and APK scans pass; see
+[VALIDATION-2026-11-17.md](VALIDATION-2026-11-17.md). The recipe remains disabled
+pending the final device test and release submission. An unknown licence entry
 records missing evidence; it does not prove that an upstream asset is non-free.
 Anti-Features do not replace a licence or complete corresponding source.
 F-Droid permits redistributable non-free artwork/fonts with `NonFreeAssets`;
@@ -73,7 +74,7 @@ See the [inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/) and
   the individual groups. Packaged notices now include known font copyrights,
   EOX's exact 2016 attribution, QuickJS/litehtml/gumbo/Phosphor/Twidget and
   PhoneFormat licence texts, plus Roboto Mono's embedded OFL grant and OFL text.
-- [ ] **Asset redistribution evidence remains unresolved.** Unknown/pending
+- [ ] **Individual asset provenance remains review context, not a confirmed replacement blocker.** Unknown/pending
   grants are recorded rather than assigned the app's GPL: OCR weights, model
   source scenes, PhoneFormats/grammars/shapes data, gram/num glyph fonts, exact
   inherited artwork/sounds and 337 Lottie JSONs. Text-font versions/copyrights
@@ -133,10 +134,9 @@ See the [inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/) and
   for gram-wallet, the C++ generator workspace and tlottie. Cargo source replacement
   configs preserve registry/git checksums, force offline resolution and are read
   from the correct workspaces. Recipe also provisions SDK CMake 3.22.1.
-- [ ] Validate preparation on the actual F-Droid server: rustup srclib definition,
-  Node/pnpm compatibility, source scanning of vendored Cargo/npm inputs (including
-  esbuild's host executable), missing submodule manifests/locks, toolchain targets
-  and the full offline native build. No Rust/crate sources were downloaded here.
+- [x] Validate preparation, vendored-source scan, toolchain targets, all 64 native
+  archives and WidgetJS/QuickJS in the official F-Droid buildserver image. The
+  corrected full build succeeds; it is a Podman CI-image run, not a Vagrant VM.
 - [x] Existing native scripts normalize `SOURCE_DATE_EPOCH` (usually 1), TZ,
   locale and C/C++/Rust source paths; several archives use `ZERO_AR_DATE`.
   The recipe fixes epoch/TZ/locale. No build-time random UUID, current-time
@@ -283,14 +283,15 @@ See the [inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/) and
 - [x] `fdroid checkupdates --allow-dirty org.ayuless.messenger` completed with
   exit code 0 in the disposable metadata checkout. Its status JSON lists the
   application as processed with no failures. This does not enable auto-updates.
-- [ ] Complete `fdroid build --server org.ayuless.messenger:72919` on enabled,
-  reviewed metadata. The CLI flag is `--server`, not `--on-server`. The local
-  builder probe fails because the Vagrant executable is absent. The disabled
-  draft and a successful Java compile must not be reported as a server build.
-- [ ] Full release/native/WidgetJS build, reproducibility comparison, login,
-  background notifications, map attribution and feature tests on a device.
-- [ ] Submit an inclusion request and fdroiddata merge request only after the
-  above blockers are resolved. No request, remote issue, upload or publication
-  was performed by this task.
+- [x] Complete the recipe in the official buildserver image using internal
+  `--on-server --test --scan-binary`; exit 0, one build succeeded. No Vagrant
+  `--server` VM is claimed. The unsigned APK and source tarball are retained.
+- [x] Verify APK identity, all four ABIs, Noto pack and packaged notices; sign and
+  verify a separate test copy with the existing test certificate.
+- [ ] Test the final candidate on a device: installation/login, mini-apps, ntfy
+  locked-screen delivery, maps and retained features. Earlier device reports
+  do not establish this artifact's exact revision.
+- [ ] Finalize release tag and submit the fdroiddata merge request. No F-Droid
+  submission/publication has occurred; the signed test APK is uploaded privately.
 
 Release handoff and exact remaining steps: [RELEASE.md](RELEASE.md).

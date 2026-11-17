@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-# DRAFT fdroiddata/metadata/org.ayuless.messenger.yml; not a submission or a tested build.
-# Resolve CHECKLIST.md before enabling: asset provenance, login review and
-# complete server-build/release validation remain open.
+# DRAFT fdroiddata/metadata/org.ayuless.messenger.yml; full official-image build passes.
+# Final device test, release tag and submission remain; see CHECKLIST.md.
 Categories:
   - Internet
 License: GPL-3.0-or-later
@@ -29,7 +28,7 @@ Builds:
   - versionName: 13.2.1
     # gradle.properties APP_VERSION_CODE=7291; afat adds ABI digit 9.
     versionCode: 72919
-    disable: 'Draft: asset provenance, login review and complete server build; see CHECKLIST.md'
+    disable: 'Draft: final candidate device test and release tag pending; see RELEASE.md'
     commit: afadbaf8fe909ff11e2b2f5086c153ac5dd28c46
     # Four native ABIs plus offline Cargo/WidgetJS compilation.
     timeout: 18000
