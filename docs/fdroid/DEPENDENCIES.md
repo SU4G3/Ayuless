@@ -87,3 +87,15 @@ DeGoogle source auditing pass after integration; these do not by themselves
 verify all runtime artifacts, final APK packaging or multi-account delivery.
 The connector and Tink are FLOSS libraries; their Google-related namespace does
 not mean that Firebase or Play Services has been reintroduced.
+
+The external artifacts for `TMessagesProj:releaseRuntimeClasspath` were then
+resolved successfully (96 files). [RUNTIME-ARTIFACTS.tsv](RUNTIME-ARTIFACTS.tsv)
+records Maven coordinates, filenames and SHA-256 without developer-machine
+paths. This is the library release configuration, not an APK contents inventory
+or proof that all transitive licence notices are packaged. An initial Maven
+Central DNS failure was transient; the retry succeeded.
+
+The RFC 8291 section 5 check passed using connector 3.3.5's actual classes,
+Tink 1.23.0, protobuf-java 4.33.6 and error_prone_annotations 2.41.0 from this
+resolved configuration: `RFC 8291 vector OK`. No delivery payload was captured
+from the user's device.

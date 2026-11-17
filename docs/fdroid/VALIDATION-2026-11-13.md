@@ -180,3 +180,11 @@ Apple artwork. Store descriptions now describe UnifiedPush and the background
 fallback. A separate F-Droid tag namespace avoids mistaking the public alpha
 marketing version for Android's `13.2.1`/`72919`. No tag is created and no
 submission is sent. Exact handoff steps are in [RELEASE.md](RELEASE.md).
+
+External runtime resolution subsequently passed for
+`TMessagesProj:releaseRuntimeClasspath`: 96 Maven artifacts, with coordinates
+and SHA-256 in [RUNTIME-ARTIFACTS.tsv](RUNTIME-ARTIFACTS.tsv). A transient Maven
+Central DNS failure was resolved on retry. The connector's RFC 8291 section 5
+check passed with its actual resolved Tink 1.23.0 / protobuf-java 4.33.6 /
+error_prone_annotations 2.41.0 dependencies. This is not APK packaging, a licence
+audit of all transitives or a device delivery trace.

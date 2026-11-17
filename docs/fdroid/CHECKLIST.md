@@ -209,7 +209,10 @@ See the [inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/) and
   resolving conflicts with current `main`. The user reported working delivery
   in their latest tested artifact on 2026-11-17; its exact hash/distributor were
   not supplied. README and store descriptions now describe the implementation.
-  Public alpha.2 does not include #30. Multi-account routing, re-registration
+  Public alpha.2 does not include #30. All 96 external library-release runtime
+  artifacts resolve; the RFC 8291 vector passes with the actual connector/Tink
+  classes. See [DEPENDENCIES.md](DEPENDENCIES.md) and
+  [RUNTIME-ARTIFACTS.tsv](RUNTIME-ARTIFACTS.tsv). Multi-account routing, re-registration
   and fallback still require final-candidate checks; no protocol trace is claimed.
 
 ## Artwork, licences and provenance
