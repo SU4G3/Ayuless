@@ -133,3 +133,13 @@ Original Telegram GPLv2 text is retained separately:
 ayuless-notices/Telegram-GPL-2.0.txt
 Sources and corresponding licence notices: https://github.com/SU4G3/Ayuless
 The application licence does not replace third-party font/artwork licences.
+
+Native and Media3 dependency notices
+Original root LICENSE/COPYING/NOTICE/PATENTS texts are retained under
+ayuless-notices/native/. Exact source paths, pinned revisions and SHA-256:
+docs/fdroid/NATIVE-LICENSE-SOURCES.json in the source repository.
+FFmpeg's licence overview and its GPL/LGPL texts are retained together; the
+presence of these texts is not a claim that every optional FFmpeg component
+is enabled. Boost.Regex headers use Boost-1.0; the matching full text is also
+retained as native/td-LICENSE_1_0.txt.txt.
+These copies supplement per-file notices and do not change dependency licences.
