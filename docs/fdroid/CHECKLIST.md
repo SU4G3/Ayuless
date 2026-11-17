@@ -4,8 +4,8 @@ Audit updated: 2026-11-17. **Draft; not submitted, accepted or published.**
 QuickJS source generation, local metadata validation and the prepared source
 scanner now pass; see [VALIDATION-2026-11-13.md](VALIDATION-2026-11-13.md).
 The complete official-image recipe build and APK scans pass; see
-[VALIDATION-2026-11-17.md](VALIDATION-2026-11-17.md). The recipe remains disabled
-pending the final device test and release submission. An unknown licence entry
+[VALIDATION-2026-11-17.md](VALIDATION-2026-11-17.md). The owner reported that the final test APK works; the source tag is published
+and the recipe is enabled for submission. GitLab submission is pending. An unknown licence entry
 records missing evidence; it does not prove that an upstream asset is non-free.
 Anti-Features do not replace a licence or complete corresponding source.
 F-Droid permits redistributable non-free artwork/fonts with `NonFreeAssets`;
@@ -36,8 +36,8 @@ See the [inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/) and
   (first proposed tag: `fdroid-13.2.1-72919`), matching the APK rather than the
   public alpha marketing version. Tag checks are restricted to this namespace;
   automatic builds remain off until the first reviewed server build.
-- [ ] Verify the final APK versions and create that tag on the reviewed release
-  commit. No F-Droid tag is created by this preparation.
+- [x] Verify the final APK versions and publish `fdroid-13.2.1-72919` on the exact
+  built source commit `afadbaf8fe909ff11e2b2f5086c153ac5dd28c46`.
 
 ## Dependencies, binaries and complete corresponding source
 
@@ -291,7 +291,8 @@ See the [inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/) and
 - [ ] Test the final candidate on a device: installation/login, mini-apps, ntfy
   locked-screen delivery, maps and retained features. Earlier device reports
   do not establish this artifact's exact revision.
-- [ ] Finalize release tag and submit the fdroiddata merge request. No F-Droid
-  submission/publication has occurred; the signed test APK is uploaded privately.
+- [x] Publish the source tag and prepare an enabled recipe and MR description.
+- [ ] Submit the fdroiddata merge request after browser/GitLab access is available.
+  No F-Droid submission/publication has occurred; the test APK is private.
 
 Release handoff and exact remaining steps: [RELEASE.md](RELEASE.md).

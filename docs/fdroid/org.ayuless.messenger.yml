@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-# DRAFT fdroiddata/metadata/org.ayuless.messenger.yml; full official-image build passes.
-# Final device test, release tag and submission remain; see CHECKLIST.md.
+# Submission recipe; full official-image build and general device test pass.
+# Source tag: fdroid-13.2.1-72919. See VALIDATION-2026-11-17.md.
 Categories:
   - Internet
 License: GPL-3.0-or-later
@@ -28,7 +28,6 @@ Builds:
   - versionName: 13.2.1
     # gradle.properties APP_VERSION_CODE=7291; afat adds ABI digit 9.
     versionCode: 72919
-    disable: 'Draft: final candidate device test and release tag pending; see RELEASE.md'
     commit: afadbaf8fe909ff11e2b2f5086c153ac5dd28c46
     # Four native ABIs plus offline Cargo/WidgetJS compilation.
     timeout: 18000
@@ -118,7 +117,7 @@ Builds:
     # (the module explicitly overrides outputFileName to app.apk).
 
 # F-Droid release tags match actual Android versionName and afat versionCode,
-# e.g. fdroid-13.2.1-72919. No tag is created before release validation.
+# First validated source tag: fdroid-13.2.1-72919.
 # Keep automatic builds off until the first reviewed server build.
 AutoUpdateMode: None
 UpdateCheckMode: Tags ^fdroid-[0-9.]+-[0-9]+$
