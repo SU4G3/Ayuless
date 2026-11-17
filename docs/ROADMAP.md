@@ -21,10 +21,10 @@ Current release work:
   [CLEANROOM-REMOVED.md](CLEANROOM-REMOVED.md).
 - F-Droid metadata and recipe draft merged (#61). Source-build improvements and
   the Noto emoji replacement are in [open PR #62](https://github.com/SU4G3/Ayuless/pull/62),
-  not yet in `main`. The recipe remains disabled; Ayuless is not ready for an
-  F-Droid submission.
-- Background APK publishing was stopped at the user's request. A new Noto APK
-  has not been validated or published by that task.
+  not yet in `main`. The complete official-image build and APK checks pass;
+  [packaging request #4819](https://gitlab.com/fdroid/rfp/-/work_items/4819) is submitted.
+- Background APK publishing was stopped at the user's request. The final Noto APK
+  is now validated and uploaded privately; the owner reported it works.
 
 Latest public release: [v0.1.0-alpha.2](https://github.com/SU4G3/Ayuless/releases/tag/v0.1.0-alpha.2) (early version, tested on one device).
 Private test APKs: [test-cleanroom](https://github.com/SU4G3/Ayuless-reports/releases/tag/test-cleanroom).
@@ -94,30 +94,22 @@ Private test APKs: [test-cleanroom](https://github.com/SU4G3/Ayuless-reports/rel
 - ✅ Client identity and AyuGram-style login spoof: during sign-in the client presents itself as an older official build (layer 177), then switches back to the real version without dropping the auth key (#35)
 
 ## Step 10: F-Droid preparation 🚧 (#61, #62)
-- ✅ Store metadata, recipe draft and release checklist (#61).
-- ✅ Solar icon attribution and licence documentation.
-- 🚧 Build WidgetJS and QuickJS builtins from pinned source inputs (#62).
-  Local functional checks, Java compilation, prepared-source scanning and
-  metadata/update checks passed; a complete F-Droid server build is still pending.
-- 🚧 Replace the Apple-derived emoji pack and all 12 handshake PNGs with Noto
-  artwork; retain SVG sources, hashes, mappings and packaged notices (#62).
-  All 3,606 images and 36 hand-tone combinations passed asset checks; repeated
-  generation produced identical files. Final APK/device validation is pending.
-- 🚧 Use the selected API ID 4 profile with its matching hash and official
-  Android fingerprint in the draft recipe (#62). Login identity requires review.
-- ⏳ Resolve remaining resource provenance and notices: fonts, models, sounds,
-  animations and other inherited data; verify map-provider terms.
-- ⏳ Complete the server build, final APK scan and reproducibility comparison.
-- ⏳ Submit to F-Droid after the checklist is satisfied.
+- ✅ Store metadata, five screenshots and source tag `fdroid-13.2.1-72919`.
+- ✅ WidgetJS/QuickJS, all 64 native archives and unsigned APK built in the official F-Droid image; source/APK scans pass.
+- ✅ Noto replaces Apple emoji; retained SVGs/notices, 3,606 images and 36 tone combinations checked in the final APK.
+- ✅ Signed test copy uploaded privately; owner reported it works on a phone.
+- ✅ Known font/native licences packaged; inherited fonts/data and 366 models/animations/sounds compared with the Forkgram recipe source.
+- ✅ [Packaging request #4819](https://gitlab.com/fdroid/rfp/-/work_items/4819) submitted.
+- 🚧 GitLab fork import, metadata MR, pipeline and maintainer review.
+- ⏳ Two-clean-APK reproducibility comparison; individual provenance and login-identity review context remains disclosed.
 
 Detailed status: [F-Droid checklist](fdroid/CHECKLIST.md),
-[validation evidence](fdroid/VALIDATION-2026-11-13.md),
+[validation evidence](fdroid/VALIDATION-2026-11-17.md),
 [licence audit](LICENSE-AUDIT.md).
 
 ## Not done yet
-- Review and finish #62, then validate its final APK and login on a device.
+- Review/merge #62; final APK build/checks and general device feedback are recorded.
 - Finish review/merge of UnifiedPush #30 (#3); verify final-candidate multi-account delivery and fallback.
-- Check `./gradlew assembleAfatRelease` from a clean clone with the native build
-  documented in [NATIVE.md](NATIVE.md), and complete the F-Droid server build.
+- Finish the GitLab metadata MR/pipeline after fork import and answer F-Droid review.
 - Finish remaining resource licence/provenance review and release validation.
 - Remaining AyuGram parity items: [AYUGRAM-PARITY.md](AYUGRAM-PARITY.md).

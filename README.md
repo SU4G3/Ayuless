@@ -72,7 +72,7 @@ ID приложения: `org.ayuless.messenger`. Тестовые APK для р
 
 ### Сборка
 
-> Ниже обычная сборка из исходников. Полная серверная сборка по рецепту F-Droid и воспроизводимость итогового APK ещё не подтверждены. Подробности: [проверки](docs/fdroid/VALIDATION-2026-11-13.md).
+> Ниже обычная сборка из исходников. Полная сборка по рецепту в официальном образе F-Droid и проверки APK прошли. Воспроизводимость двух чистых APK не установлена. Подробности: [проверки](docs/fdroid/VALIDATION-2026-11-17.md).
 
 Нужно: JDK 17, Android SDK 36, NDK 27.2.12479018. Перед Gradle собери native-библиотеки для всех четырёх ABI; инструменты и подробности — в [docs/NATIVE.md](docs/NATIVE.md). Готовые `.a` в Git не хранятся.
 
@@ -89,7 +89,7 @@ Tools/native/build-prebuilts.sh
 
 ### F-Droid
 
-Подготовлен [черновик рецепта сборки](docs/fdroid/org.ayuless.messenger.yml) для официального репозитория F-Droid. Заявка ещё не подана; рецепт отключён до устранения [блокеров и проверок](docs/fdroid/CHECKLIST.md). Метаданные EN/RU находятся в `fastlane/metadata/android/`. Приложение требует несвободные серверы Telegram; UnifiedPush #30 для подачи не обязателен.
+Подан [запрос на включение #4819](https://gitlab.com/fdroid/rfp/-/work_items/4819). Проверенный [рецепт сборки](docs/fdroid/org.ayuless.messenger.yml) включён; тег `fdroid-13.2.1-72919` указывает на исходники протестированного APK. Публикация в F-Droid ожидает ревью; отдельный MR пока ждёт импорта форка GitLab. Метаданные EN/RU находятся в `fastlane/metadata/android/`. Приложение требует несвободные серверы Telegram; UnifiedPush #30 для подачи не обязателен.
 
 
 В [PR #62](https://github.com/SU4G3/Ayuless/pull/62) подготовлены сборка WidgetJS и
@@ -156,7 +156,7 @@ Project code is distributed under GPL-3.0-or-later. Provenance and licence revie
 
 ### Building
 
-> These are the normal source-build steps. A full F-Droid server build and final APK reproducibility have not been established. See the [validation notes](docs/fdroid/VALIDATION-2026-11-13.md).
+> These are the normal source-build steps. The full recipe build in the official F-Droid image and APK checks pass. Two-clean-APK reproducibility has not been established. See the [validation notes](docs/fdroid/VALIDATION-2026-11-17.md).
 
 Requires JDK 17, Android SDK 36, NDK 27.2.12479018. Build native libraries for all four ABIs before Gradle; host tools and details are in [docs/NATIVE.md](docs/NATIVE.md). No `.a` archives are stored in Git.
 
@@ -173,7 +173,7 @@ Tools/native/build-prebuilts.sh
 
 ### F-Droid
 
-A [draft build recipe](docs/fdroid/org.ayuless.messenger.yml) is available for the official F-Droid repository. No submission has been made; the recipe is disabled pending the [blockers and checks](docs/fdroid/CHECKLIST.md). EN/RU store metadata lives in `fastlane/metadata/android/`. The app requires Telegram's proprietary servers; UnifiedPush #30 is not required for submission.
+[Packaging request #4819](https://gitlab.com/fdroid/rfp/-/work_items/4819) is submitted. The validated [build recipe](docs/fdroid/org.ayuless.messenger.yml) is enabled, and `fdroid-13.2.1-72919` tags the tested APK source. F-Droid publication awaits review; a separate metadata MR awaits GitLab fork import. EN/RU store metadata lives in `fastlane/metadata/android/`. The app requires Telegram's proprietary servers; UnifiedPush #30 is not required for submission.
 
 
 [PR #62](https://github.com/SU4G3/Ayuless/pull/62) prepares source-built WidgetJS

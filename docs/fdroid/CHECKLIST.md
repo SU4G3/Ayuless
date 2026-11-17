@@ -1,5 +1,7 @@
 # F-Droid submission checklist
 
+Current submission status (2026-11-17): [F-Droid packaging request #4819](https://gitlab.com/fdroid/rfp/-/work_items/4819) is submitted and verified. The public GitLab fork is importing; no fdroiddata MR or GitLab pipeline exists yet. Earlier statements about no submission refer to preparation before this request.
+
 Audit updated: 2026-11-17. **Draft; not submitted, accepted or published.**
 QuickJS source generation, local metadata validation and the prepared source
 scanner now pass; see [VALIDATION-2026-11-13.md](VALIDATION-2026-11-13.md).

@@ -1,5 +1,7 @@
 # New app: Ayuless
 
+Current submission status (2026-11-17): [F-Droid packaging request #4819](https://gitlab.com/fdroid/rfp/-/work_items/4819) is submitted and verified. The public GitLab fork is importing; no fdroiddata MR or GitLab pipeline exists yet. Earlier statements about no submission refer to preparation before this request.
+
 ## Abstract for new app inclusion
 
 Ayuless is an unofficial, GPL-3.0-or-later Telegram Android client. It adds

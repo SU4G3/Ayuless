@@ -1,5 +1,7 @@
 # Подготовка релиза F-Droid
 
+Current submission status (2026-11-17): [F-Droid packaging request #4819](https://gitlab.com/fdroid/rfp/-/work_items/4819) is submitted and verified. The public GitLab fork is importing; no fdroiddata MR or GitLab pipeline exists yet. Earlier statements about no submission refer to preparation before this request.
+
 Состояние на 2026-11-17: полная сборка по рецепту и проверки APK прошли.
 Пользователь сообщил, что новый тестовый APK работает («ну ворк вроде»).
 Это общий результат проверки, не подтверждение каждого пункта ниже по отдельности.

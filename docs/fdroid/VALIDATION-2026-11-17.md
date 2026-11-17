@@ -1,5 +1,7 @@
 # F-Droid recipe integration, 2026-11-17
 
+Current submission status (2026-11-17): [F-Droid packaging request #4819](https://gitlab.com/fdroid/rfp/-/work_items/4819) is submitted and verified. The public GitLab fork is importing; no fdroiddata MR or GitLab pipeline exists yet. Earlier statements about no submission refer to preparation before this request.
+
 **Complete build succeeded.** The corrected candidate
 `afadbaf8fe909ff11e2b2f5086c153ac5dd28c46` completed preparation, source scan,
 all 64 native archives, WidgetJS rebuilding, release APK assembly and F-Droid's
