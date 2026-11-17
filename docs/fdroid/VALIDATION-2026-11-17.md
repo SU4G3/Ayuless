@@ -72,3 +72,34 @@ The user's ntfy delivery report includes a locked-screen test. However, the
 provided settings screenshot lacks the Notifications entry added by PR #30, so
 it is not sufficient to identify the tested APK or attribute delivery to the
 new UnifiedPush implementation. Test the exact final candidate after assembly.
+
+## Review correction: WAMR SIMDe fetch
+
+The first native pass built 60/64 archives, including all tlottie and wallet
+Android variants, then WAMR CMake started a real `git clone` for SIMDe after the
+source scan. This violated the advertised offline native-build contract. The
+pass was stopped; it is not a completed F-Droid build.
+
+Commit `afadbaf8fe909ff11e2b2f5086c153ac5dd28c46` pins SIMDe as a source submodule
+at `71fd833d9666141edcd1d3c109a80e228303d8d7` (upstream WAMR's v0.8.2). The cache
+key/source checks include that gitlink. WAMR receives an explicit local
+FetchContent source directory and `FETCHCONTENT_FULLY_DISCONNECTED=ON`; SIMD
+remains enabled. Its configured Ninja path is passed explicitly to CMake too.
+
+The corrected WAMR script was built against NDK 27.2 / SDK CMake 3.22.1 in a
+separate rootless container with `--network none`, with no Git metadata in the
+copied input trees. It exited 0 and produced all four `libiwasm.a` files:
+
+- arm64-v8a: 1,179,024 bytes
+- armeabi-v7a: 1,106,174 bytes
+- x86: 894,312 bytes
+- x86_64: 1,193,876 bytes
+
+This proves the corrected component builds without network access. The complete
+recipe must still run on the corrected candidate; the earlier 60 libraries and
+this component check must not be described as a completed final APK build.
+
+The complete recipe was restarted on corrected candidate `afadbaf8` with no
+copied native output archives. Preparation and the full source scan, including
+the new SIMDe submodule, pass. Native compilation is in progress; at 17:19 MSK
+20/64 archives existed. The full result remains pending.

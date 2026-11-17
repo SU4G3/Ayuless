@@ -29,7 +29,7 @@ See the [inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/) and
   the visible settings screen reports version 13.2.1 (72919). Russian screenshots
   are not supplied. These images do not establish the exact source revision or
   validate the newer UnifiedPush/Noto candidate.
-- [x] The draft recipe pins immutable candidate revision `93e246726b67ef4757fee7ac5dc8024f6cda45f9`.
+- [x] The draft recipe pins immutable candidate revision `afadbaf8fe909ff11e2b2f5086c153ac5dd28c46`.
   This is a test candidate, not a published/reviewed release.
 - [x] Documented a separate release tag scheme: `fdroid-<versionName>-<afatCode>`
   (first proposed tag: `fdroid-13.2.1-72919`), matching the APK rather than the
@@ -89,7 +89,7 @@ See the [inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/) and
   Copyright, Apache-2.0 and upstream region-flag notices are retained in source
   and packaged with the app. No Apple font is needed by the build. See
   [the source and build notes](../../branding/noto-emoji/README.md).
-- [x] All 19 top-level submodules have been initialized at their gitlinks and
+- [x] All 20 top-level submodules have been initialized at their gitlinks and
   included in the source scan. The recipe removes unused executable test corpora,
   examples and proprietary media distribution modules, without removing native
   runtime functions. This does not establish every transitive dependency's licence.
