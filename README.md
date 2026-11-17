@@ -19,12 +19,12 @@
 ## Screenshots / Скриншоты
 
 <p>
-  <img src="docs/images/chat.jpg" width="180" alt="Ayuless chat with retained deleted messages / сохранённые удалённые сообщения">
   <img src="docs/images/settings.jpg" width="180" alt="Ayuless settings / настройки клиента">
   <img src="docs/images/ghost.jpg" width="180" alt="Ayuless ghost mode controls / режим призрака">
+  <img src="docs/images/retention.jpg" width="180" alt="Ayuless message retention settings / настройки сохранения сообщений">
 </p>
 
-[Retention / Сохранение сообщений](docs/images/retention.jpg) · [Customization / Оформление](docs/images/customization.jpg)
+[Customization / Оформление](docs/images/customization.jpg)
 
 ## Русский
 
