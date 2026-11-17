@@ -57,3 +57,16 @@ Related evidence and policy:
 [licence audit](../LICENSE-AUDIT.md), [source inventory](ASSET-INVENTORY.tsv),
 [F-Droid inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/),
 [Telegram repository](https://github.com/DrKLO/Telegram/tree/7be672ead283d022812d75c729d3a04dd4c2a2c6).
+
+## Syntax grammar generation
+
+The pinned libprisma generator ran successfully with its locked npm inputs
+(PrismJS 1.29.0 and lodash.isequal 4.5.0) in a disposable copy. Output SHA-256:
+`a49d8280da86f5cd462052b0a6f5ff55fe8f67085495e91f151ac21a0638f583`.
+The inherited app asset has SHA-256
+`45f9933f568884796c17fe57ac832ceb7d9dd072af7cb3291089a331693a9808`.
+The output is therefore not claimed byte-identical or silently substituted.
+The generator, local components and source lock are present; libprisma and
+PrismJS carry the same MIT grant (licence files differ only by final newline).
+Their notice is now packaged. Exact output correspondence remains a separate
+source-generation review item, not a discovered proprietary licence.

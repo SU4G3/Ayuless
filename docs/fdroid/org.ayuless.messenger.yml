@@ -30,7 +30,9 @@ Builds:
     # gradle.properties APP_VERSION_CODE=7291; afat adds ABI digit 9.
     versionCode: 72919
     disable: 'Draft: asset provenance, login review and complete server build; see CHECKLIST.md'
-    commit: d7f079dce6479701295dd4e1a10930045213f865
+    commit: 93e246726b67ef4757fee7ac5dc8024f6cda45f9
+    # Four native ABIs plus offline Cargo/WidgetJS compilation.
+    timeout: 18000
     subdir: TMessagesProj_App
     submodules: true
     # fdroiddata rustup srclib supplies the reviewed installer; no curl|sh here.
@@ -81,8 +83,9 @@ Builds:
       - (cd .. && cp docs/fdroid/API_KEYS.public API_KEYS)
       - (cd .. && python3 Tools/check_degoogle.py)
       # Networked preparation on the F-Droid server, before source scanning.
-      # The sandbox used to edit this recipe has not executed these commands.
-      - $$rustup$$/rustup-init.sh -y --no-modify-path --profile minimal --default-toolchain 1.96.1
+      # Executed in the pinned official buildserver-trixie container; see
+      # VALIDATION-2026-11-17.md for completed stages and current limitations.
+      - RUSTUP_VERSION=1.28.2 $$rustup$$/rustup-init.sh -y --no-modify-path --profile minimal --default-toolchain 1.96.1
       - . $HOME/.cargo/env && rustup set auto-self-update disable
       - . $HOME/.cargo/env && rustup toolchain install 1.98.0 --profile minimal
       - . $HOME/.cargo/env && rustup target add --toolchain 1.96.1 aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android

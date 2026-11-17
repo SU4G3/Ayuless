@@ -29,7 +29,7 @@ See the [inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/) and
   the visible settings screen reports version 13.2.1 (72919). Russian screenshots
   are not supplied. These images do not establish the exact source revision or
   validate the newer UnifiedPush/Noto candidate.
-- [x] The draft recipe pins immutable candidate revision `d7f079dce6479701295dd4e1a10930045213f865`.
+- [x] The draft recipe pins immutable candidate revision `93e246726b67ef4757fee7ac5dc8024f6cda45f9`.
   This is a test candidate, not a published/reviewed release.
 - [x] Documented a separate release tag scheme: `fdroid-<versionName>-<afatCode>`
   (first proposed tag: `fdroid-13.2.1-72919`), matching the APK rather than the
