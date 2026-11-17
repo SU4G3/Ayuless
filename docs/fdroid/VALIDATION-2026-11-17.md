@@ -28,6 +28,12 @@ APK dex-class/signing-block scans. The container exited 0; the log ends
   `Ayuless-test-fdroid-final.apk`. The original unsigned APK is preserved.
 - Source tarball and build/tool-version logs are retained with the local build.
 
+## Device feedback
+
+After receiving the final signed APK link, the owner reported that it appears
+to work. This records general positive feedback for that candidate; no separate
+claim is made that every login/mini-app/locked-screen test was completed.
+
 ## Remaining release steps
 
 Test this exact APK on a phone: installation, login, mini-apps, Noto and ntfy
