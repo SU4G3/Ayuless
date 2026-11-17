@@ -1,5 +1,7 @@
 # License audit
 
+> Release status: Ayuless 1.0.0 is published. This document also contains development/history details; use the [tagged release documentation](https://github.com/SU4G3/Ayuless/tree/v1.0.0/docs) for the exact shipped source and [current FAQ](https://github.com/SU4G3/Ayuless/blob/main/docs/FAQ.md#f-droid) for F-Droid status. Earlier pending-build or no-device-test statements are historical.
+
 Snapshot of upstream DrKLO/Telegram at `7be672ea` (13.2.1, build 7291), done 2026-11-07.
 
 ## Can the combined work be GPL-3.0-or-later?

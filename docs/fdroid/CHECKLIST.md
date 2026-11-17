@@ -1,5 +1,7 @@
 # F-Droid submission checklist
 
+> Release status: Ayuless 1.0.0 is published. This document also contains development/history details; use the [tagged release documentation](https://github.com/SU4G3/Ayuless/tree/v1.0.0/docs) for the exact shipped source and [current FAQ](https://github.com/SU4G3/Ayuless/blob/main/docs/FAQ.md#f-droid) for F-Droid status. Earlier pending-build or no-device-test statements are historical.
+
 Offline source audit: 2026-11-12. **Draft; not submitted, accepted or published.**
 The recipe is deliberately disabled. This audit uses local sources and knowledge
 of F-Droid policy/metadata; current policy, service terms and tool support have

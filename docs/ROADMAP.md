@@ -2,15 +2,33 @@
 
 Each step is one or more PRs, with a manual test checklist on a test account in the PR description.
 
-Status: ✅ done (merged to `main`) · ✅ in progress · ⏳ planned
+Updated: 2026-11-17.
 
-Nothing has been tested on a device yet. Ayuless settings live in **Settings → Ayuless**. Anti-delete, saved attachments, sponsored-message hiding and background work default on; optional additions default off. Explicit saved choices are preserved.
+Status: ✅ implemented in the released source or merged history · 🚧 integration/review pending · ⏳ planned
 
-> **Known issues**
-> - Signing in with a new session may fail on current builds (reported after the first device test, cause not known yet). An existing session works.
-> - Ported AyuGram4A code is GPLv2 without "or later", while Ayuless is GPL-3.0-or-later: needs Radolyn's permission or a license decision.
+The 1.0.0 APK includes the tested UnifiedPush/Noto source candidate. The full
+build and APK checks pass, with positive owner device feedback; exhaustive
+feature testing remains pending.
+Ayuless settings live in **Settings → Ayuless**. Anti-delete, saved attachments,
+sponsored-message hiding and background work default on; optional additions
+default off. Explicit saved choices are preserved.
 
-First test build: [v0.1.0-alpha.1](https://github.com/SU4G3/Ayuless/releases/tag/v0.1.0-alpha.1) (pre-release).
+Current release work:
+- Login fingerprint fix merged (#56); the earlier new-session login report is
+  no longer an unresolved implementation task. Login still needs regression
+  testing on the final release candidate.
+- The clean-room rewrite replaced the AyuGram-derived implementation (#60),
+  keeping GPL-3.0-or-later. Source provenance remains subject to review; see
+  [CLEANROOM-REMOVED.md](CLEANROOM-REMOVED.md).
+- F-Droid metadata and recipe draft merged (#61). Source-build improvements and
+  the Noto emoji replacement are in [open PR #62](https://github.com/SU4G3/Ayuless/pull/62),
+  not yet in `main`. The complete official-image build and APK checks pass;
+  [packaging request #4819](https://gitlab.com/fdroid/rfp/-/work_items/4819) is submitted.
+- Background APK publishing was stopped at the user's request. The final Noto APK
+  is now validated and uploaded privately; the owner reported it works.
+
+Latest public release: [v1.0.0](https://github.com/SU4G3/Ayuless/releases/tag/v1.0.0). Android retains Telegram base version 13.2.1 (72919). The release includes the tested UnifiedPush/Noto candidate; exhaustive feature testing remains pending.
+Private test APKs: [test-cleanroom](https://github.com/SU4G3/Ayuless-reports/releases/tag/test-cleanroom).
 
 ## Step 0: Repository setup ✅
 - Fork, README, license audit, icon, CI, CodeQL, Dependabot, issue templates.
@@ -20,7 +38,7 @@ First test build: [v0.1.0-alpha.1](https://github.com/SU4G3/Ayuless/releases/tag
 - ✅ Remove Play Services, Firebase, ML Kit, Play Integrity, Billing, SafetyNet; dependency guard in CI (#14)
 - ✅ New app id, name and launcher icon (#15)
 - ✅ Maps via MapLibre (#17)
-- 🚧 Push via UnifiedPush (#3): draft #30, needs a device test (blocked by the login issue above)
+- 🚧 Push via UnifiedPush (#3, PR #30): user reported delivery in a tested artifact on 2026-11-17; conflicts with current `main` resolved and integrated into the F-Droid branch. Final-candidate multi-account/fallback checks remain.
 - ✅ Rebuild all native libs from source in CI, drop prebuilt `.a` (#5). CI builds them from source and links the APK against them, see [NATIVE.md](NATIVE.md) (#26); committed `.a` files removed (#47).
 - ⏳ `./gradlew assembleAfatRelease` from a clean clone with no proprietary blobs
 
@@ -58,7 +76,7 @@ First test build: [v0.1.0-alpha.1](https://github.com/SU4G3/Ayuless/releases/tag
 - ✅ Keyword / regex filters (case-insensitive, inverse), shadow ban, hide messages from blocked users
 - ✅ Apply filters to the chat list preview and notifications (#32)
 - ✅ Apply filters in secret chats too (#45)
-- ⏳ Re-apply filters to an already open chat without reopening it
+- ✅ Re-apply filters to an already open chat without reopening it (#48)
 
 ## Step 6 (optional): Backup ✅
 - ✅ Export / import / clear the local DB (#23)
@@ -76,9 +94,24 @@ First test build: [v0.1.0-alpha.1](https://github.com/SU4G3/Ayuless/releases/tag
 ## Step 9: Login ✅
 - ✅ Client identity and AyuGram-style login spoof: during sign-in the client presents itself as an older official build (layer 177), then switches back to the real version without dropping the auth key (#35)
 
+## Step 10: F-Droid preparation 🚧 (#61, #62)
+- ✅ Store metadata, five screenshots and source tag `fdroid-13.2.1-72919`.
+- ✅ WidgetJS/QuickJS, all 64 native archives and unsigned APK built in the official F-Droid image; source/APK scans pass.
+- ✅ Noto replaces Apple emoji; retained SVGs/notices, 3,606 images and 36 tone combinations checked in the final APK.
+- ✅ Signed test copy uploaded privately; owner reported it works on a phone.
+- ✅ Known font/native licences packaged; inherited fonts/data and 366 models/animations/sounds compared with the Forkgram recipe source.
+- ✅ [Packaging request #4819](https://gitlab.com/fdroid/rfp/-/work_items/4819) submitted.
+- ✅ [Metadata MR !57850](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/57850) submitted and linked to RFP #4819.
+- ⏳ MR closed by a maintainer: the required MR template was not followed and the project does not yet meet the three-month maintenance criterion. Revisit inclusion with the required history or evidence for a policy exception. GitHub releases continue independently.
+- ⏳ Two-clean-APK reproducibility comparison; individual provenance and login-identity review context remains disclosed.
+
+Detailed status: [F-Droid checklist](fdroid/CHECKLIST.md),
+[validation evidence](https://github.com/SU4G3/Ayuless/blob/v1.0.0/docs/fdroid/VALIDATION-2026-11-17.md),
+[licence audit](LICENSE-AUDIT.md).
+
 ## Not done yet
-- Fix new-session login, then test everything on a device.
-- UnifiedPush device test and merge of draft #30 (#3).
-- Check `./gradlew assembleAfatRelease` from a clean clone with the native build documented in [NATIVE.md](NATIVE.md).
-- Resolve the AyuGram4A license question.
+- Review/merge #62; final APK build/checks and general device feedback are recorded.
+- Finish review/merge of UnifiedPush #30 (#3); verify final-candidate multi-account delivery and fallback.
+- Follow the submitted GitLab metadata MR, obtain a maintainer CI run and answer F-Droid review.
+- Finish remaining resource licence/provenance review and release validation.
 - Remaining AyuGram parity items: [AYUGRAM-PARITY.md](AYUGRAM-PARITY.md).

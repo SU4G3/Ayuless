@@ -1,1 +1,11 @@
 blank_issues_enabled: false
+contact_links:
+  - name: Download the latest Ayuless APK
+    url: https://github.com/SU4G3/Ayuless/releases/latest
+    about: Official project releases and installation notes
+  - name: FAQ / Частые вопросы
+    url: https://github.com/SU4G3/Ayuless/blob/main/docs/FAQ.md
+    about: Installation, updates, notifications and F-Droid status
+  - name: Report a security vulnerability privately
+    url: https://github.com/SU4G3/Ayuless/security/advisories/new
+    about: Do not publish session data or security-sensitive details in a public issue

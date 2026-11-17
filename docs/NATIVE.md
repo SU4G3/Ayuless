@@ -1,5 +1,7 @@
 # Native libraries
 
+> Release status: Ayuless 1.0.0 is published. This document also contains development/history details; use the [tagged release documentation](https://github.com/SU4G3/Ayuless/tree/v1.0.0/docs) for the exact shipped source and [current FAQ](https://github.com/SU4G3/Ayuless/blob/main/docs/FAQ.md#f-droid) for F-Droid status. Earlier pending-build or no-device-test statements are historical.
+
 The app links 16 static libraries per ABI from `TMessagesProj/jni/prebuild/lib/<abi>/`:
 BoringSSL (`libcrypto`, `libssl`), FFmpeg (`libavcodec`, `libavformat`, `libavutil`,
 `libswresample`, `libswscale`), libvpx, dav1d, opus, openh264, tdlib (`libtde2e`,

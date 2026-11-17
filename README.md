@@ -1,160 +1,118 @@
 <p align="center">
-  <img src="branding/ayuless-icon-rounded-256.png" width="128" alt="Ayuless icon">
+  <img src="branding/ayuless-icon-rounded-256.png" width="112" alt="Ayuless Android messenger icon">
 </p>
 
-<h1 align="center">Ayuless</h1>
+# Ayuless — Telegram client for Android
 
-<p align="center">
-  A fully open-source unofficial Android messenger client with ghost mode, anti-delete, edit history and message filters.<br>
-  <a href="#русский">Русский</a> · <a href="#english">English</a>
+**An open-source unofficial Telegram messenger with ghost mode, anti-delete, edit history, message filters and UnifiedPush. No Google Play Services or Firebase.**
+
+**Неофициальный Telegram-клиент для Android с режимом призрака, сохранением удалённых сообщений, историей правок, фильтрами и UnifiedPush. Без Google Play Services и Firebase.**
+
+[![Latest release](https://img.shields.io/github/v/release/SU4G3/Ayuless?label=release)](https://github.com/SU4G3/Ayuless/releases/latest)
+[![License](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)](LICENSE)
+[![Android](https://img.shields.io/badge/Android-6.0%2B-green)](https://github.com/SU4G3/Ayuless/releases/latest)
+
+**[Download APK / Скачать APK](https://github.com/SU4G3/Ayuless/releases/latest)** · [Telegram](https://t.me/ayulessapp) · [Changelog](docs/CHANGELOG.md) · [FAQ](docs/FAQ.md) · [Report a bug](https://github.com/SU4G3/Ayuless/issues/new?template=bug_report.yml)
+
+[Русский](#русский) · [English](#english)
+
+## Screenshots / Скриншоты
+
+<p>
+  <img src="docs/images/chat.jpg" width="180" alt="Ayuless chat with retained deleted messages / сохранённые удалённые сообщения">
+  <img src="docs/images/settings.jpg" width="180" alt="Ayuless settings / настройки клиента">
+  <img src="docs/images/ghost.jpg" width="180" alt="Ayuless ghost mode controls / режим призрака">
 </p>
 
-<p align="center">
-  <a href="https://github.com/SU4G3/Ayuless/actions/workflows/build.yml"><img src="https://github.com/SU4G3/Ayuless/actions/workflows/build.yml/badge.svg?branch=main" alt="Build"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0--or--later-blue" alt="License: GPL-3.0-or-later"></a>
-  <img src="https://img.shields.io/badge/status-pre--alpha-orange" alt="Status: pre-alpha">
-</p>
-
-> [!IMPORTANT]
-> **Неофициальный клиент. Не связан с Telegram, AyuGram и Radolyn Labs. Идея названия от exteraless.**
->
-> **Unofficial client. Not affiliated with Telegram, AyuGram or Radolyn Labs. Name idea from exteraless.**
-
-> [!WARNING]
-> Pre-alpha. No releases yet, nothing tested on a device. Features below are merged to `main` but unreleased. See [docs/ROADMAP.md](docs/ROADMAP.md).
-
----
+[Retention / Сохранение сообщений](docs/images/retention.jpg) · [Customization / Оформление](docs/images/customization.jpg)
 
 ## Русский
 
-### Что это
+Ayuless — бесплатный Telegram-клиент с открытым исходным кодом для Android 6.0 и новее. Основан на официальных исходниках Telegram; идеи некоторых возможностей вдохновлены AyuGram. Ayuless не связан с Telegram, AyuGram или Radolyn Labs.
 
-Ayuless — неофициальный Android-клиент с функциями в духе AyuGram, но полностью открытый: без закрытых бинарников, без Google Play Services и не основанный на exteraGram. Подход тот же, что у AyuGramDesktop: тонкий слой патчей поверх чистых официальных исходников ([DrKLO/Telegram](https://github.com/DrKLO/Telegram)).
+### Скачать и установить
 
-Весь собственный код живёт в пакете `org.ayuless`. Правки в исходных файлах минимальны, чтобы ребейз на новые версии апстрима оставался простым.
+**[Скачать последнюю версию Ayuless](https://github.com/SU4G3/Ayuless/releases/latest)** · [APK 1.0.0](https://github.com/SU4G3/Ayuless/releases/download/v1.0.0/Ayuless-v1.0.0.apk)
 
-### Функции v0.1 (в разработке)
+Текущий релиз — **Ayuless 1.0.0**. В настройках Android отображается базовая версия Telegram **13.2.1 (72919)**. Один APK включает arm64-v8a, armeabi-v7a, x86 и x86_64. ID приложения: `org.ayuless.messenger`; можно установить рядом с официальным Telegram.
 
-Все функции включаются отдельными переключателями в разделе настроек **Ayuless** (по аккаунтам, где это уместно). Путь: **Настройки → Ayuless**. По умолчанию всё выключено. На устройстве пока ничего не тестировалось.
+> **Переход с alpha/test APK:** в 1.0.0 используется новый личный ключ подписи. Перед удалением старой версии экспортируйте локальную базу Ayuless и сохранённые вложения. Секретные чаты при удалении приложения потеряются; облачные чаты доступны после входа. Обновление поверх старой подписи не установится. [Подпись и проверка APK](docs/RELEASE-SIGNING.md).
 
-- **Ghost mode** — не отправлять «онлайн», «прочитано», «печатает», просмотры историй; уходить в офлайн сразу после отправки. Профили (общий и по аккаунтам), переключатель «N/5», закрепление отдельных опций, кнопка в списке чатов, предложение ghost mode перед просмотром историй.
-- **Отложенная отправка** — сообщения, пересылки, ответы на истории уходят с задержкой.
-- **Анти-удаление** — сообщение, удалённое собеседником или сервером, остаётся в чате с пометкой. Сохраняются и вложения (с лимитом размера). Удаление самим пользователем работает как обычно.
-- **История правок** — все прошлые версии изменённого сообщения из меню сообщения.
-- **Шпион** — локально сохраняет дату прочтения твоих сообщений и время последнего онлайна; исключения для выбранных чатов.
-- **Фильтры** — ключевые слова и regex, теневой бан, скрытие сообщений заблокированных; работают и в превью списка чатов, и в уведомлениях.
-- **Запрет сохранения** — в группах и каналах можно сохранять, копировать и пересылать копией.
-- **Дополнительно** — скрытие спонсорских сообщений, локальный Premium (перевод чата), работа в фоне.
-- **Инструменты чата** — меню Ayuless для отдельного чата и экспорт переписки.
-- **Карты** — выбор обычной, спутниковой или гибридной карты.
-- **Профили** — ID и примерная дата регистрации пользователя или дата создания чата.
-- **Бэкап** — экспорт, импорт и очистка локальной базы.
+### Возможности
 
-В работе (открытые PR): секретные чаты, TTL и «посмотреть один раз» (#43, #44, #45), новый вид настроек (#42), вход с подменой клиента (#35). Подробно: [ROADMAP](docs/ROADMAP.md).
+- **Режим призрака:** управление отправкой статуса «онлайн», прочтений, набора текста и просмотров историй; общие и отдельные профили аккаунтов.
+- **Анти-удаление и история правок:** локальное сохранение полученных сообщений, вложений и прошлых редакций. Неполученное содержимое восстановить нельзя.
+- **Отложенная отправка:** задержка сообщений, пересылок и ответов на истории; для секретных чатов — локальная задержка.
+- **Фильтры сообщений:** ключевые слова, регулярные выражения и скрытие заблокированных пользователей, включая превью и уведомления.
+- **Инструменты чата:** просмотр сохранённых сообщений, экспорт переписки в HTML/JSON, очистка и действие «Прочитать».
+- **UnifiedPush:** уведомления через ntfy и другие совместимые дистрибьюторы. Выбор: **Настройки → Ayuless → Уведомления**. Без дистрибьютора используется фоновое соединение.
+- **Оформление и карты:** эмодзи Noto со всеми сочетаниями тонов рук; MapLibre с обычной картой, спутником и гибридом.
+- **Локальная база:** экспорт, импорт и очистка; дополнительные настройки сохранения для секретных чатов, TTL и медиа «посмотреть один раз».
 
-### Открытость
+Настройки находятся в **Настройки → Ayuless**. Анти-удаление, сохранение вложений, скрытие спонсорских сообщений и работа в фоне включены по умолчанию; остальные возможности настраиваются отдельно. Ранее сохранённые значения не сбрасываются при обновлении.
 
-- Все нативные библиотеки (BoringSSL, FFmpeg, libvpx, dav1d и др.) собираются из исходников.
-- Без Google Play Services, Firebase и ML Kit. Карты через [MapLibre](https://maplibre.org); поддержка [UnifiedPush](https://unifiedpush.org) пока в черновике #30 и не включена.
+### Открытость и состояние проекта
 
-### Сборка
+Код — **GPL-3.0-or-later**. Нативные библиотеки, WidgetJS и QuickJS релиза 1.0.0 собираются из закреплённых исходников; эмодзи Noto и необходимые известные лицензии сохранены. Для работы требуется аккаунт и несвободные серверы Telegram. Аудит отдельных унаследованных ресурсов продолжается; не обещаем отсутствие любых бинарных данных или полную анонимность.
 
-> Пока идёт этап отвязки от Google-зависимостей, инструкция может не работать полностью. Статус: [ROADMAP](docs/ROADMAP.md).
+Полная сборка и проверки APK прошли, владелец подтвердил работу на телефоне. Это не исчерпывающая проверка всех функций. Две чистые APK-сборки на воспроизводимость не сравнивались.
 
-Нужно: JDK 17, Android SDK 36, NDK 27.2.12479018. Перед Gradle собери native-библиотеки для всех четырёх ABI; инструменты и подробности — в [docs/NATIVE.md](docs/NATIVE.md). Готовые `.a` в Git не хранятся.
+**В официальном каталоге F-Droid приложения пока нет.** Первая заявка закрыта: требуется история сопровождения проекта и соблюдение шаблона MR. Релизы распространяются через GitHub. [Статус F-Droid и FAQ](docs/FAQ.md#f-droid).
 
-```bash
-git clone --recursive --shallow-submodules https://github.com/SU4G3/Ayuless.git
-cd Ayuless
-cp API_KEYS.example API_KEYS   # впиши свои APP_ID / APP_HASH с https://my.telegram.org/apps
-export ANDROID_SDK_ROOT=~/Android/Sdk
-Tools/native/build-prebuilts.sh
-./gradlew assembleAfatRelease
-```
-
-Файл `API_KEYS` в git-ignore и никогда не коммитится. APK появится в `TMessagesProj_App/build/outputs/apk/afat/release/app.apk`. ID приложения: `org.ayuless.messenger`.
-
-### F-Droid
-
-Подготовлен [черновик рецепта сборки](docs/fdroid/org.ayuless.messenger.yml) для официального репозитория F-Droid. Заявка ещё не подана; рецепт отключён до устранения [блокеров и проверок](docs/fdroid/CHECKLIST.md). Метаданные EN/RU находятся в `fastlane/metadata/android/`. Приложение требует несвободные серверы Telegram; UnifiedPush #30 для подачи не обязателен.
-
-### Участие
-
-Правила кода и лицензирования: [CONTRIBUTING.md](CONTRIBUTING.md). Код из exteraGram не используется. Порт на основе AyuGram удалён, а функции заново реализованы независимо по письменной спецификации [docs/CLEANROOM-SPEC.md](docs/CLEANROOM-SPEC.md), без доступа к исходникам AyuGram. Более ранняя история Git (до этого изменения) всё ещё содержит прежний порт.
-
-### Благодарности
-
-Спасибо команде [AyuGram](https://github.com/AyuGram) (Radolyn Labs): их клиент вдохновил Ayuless, набор функций и устройство настроек взяты у них за образец. Спасибо [exteraless](https://github.com/exteraless) за идею названия. Остальные авторы и лицензии: [docs/CREDITS.md](docs/CREDITS.md).
-
----
+[Что нового](docs/CHANGELOG.md) · [Планы](docs/ROADMAP.md) · [Исходники 1.0.0](https://github.com/SU4G3/Ayuless/tree/v1.0.0) · [Отчёт о сборке](https://github.com/SU4G3/Ayuless/blob/v1.0.0/docs/fdroid/VALIDATION-2026-11-17.md)
 
 ## English
 
-### What it is
+Ayuless is a free, open-source Telegram client for Android 6.0 and newer. It is based on official Telegram sources, with some feature ideas inspired by AyuGram. It is not affiliated with Telegram, AyuGram or Radolyn Labs.
 
-Ayuless is an unofficial Android client with AyuGram-like features, but fully open source: no proprietary blobs, no Google Play Services, and not based on exteraGram. Same approach as AyuGramDesktop: a thin patch layer on top of clean official sources ([DrKLO/Telegram](https://github.com/DrKLO/Telegram)).
+### Download and install
 
-All Ayuless code lives in the `org.ayuless` package. Edits to upstream files are kept minimal so rebasing on new upstream releases stays easy.
+**[Download the latest Ayuless APK](https://github.com/SU4G3/Ayuless/releases/latest)** · [APK 1.0.0](https://github.com/SU4G3/Ayuless/releases/download/v1.0.0/Ayuless-v1.0.0.apk)
 
-### v0.1 features (in progress)
+Current release: **Ayuless 1.0.0**. Android displays Telegram base version **13.2.1 (72919)**. The universal APK includes arm64-v8a, armeabi-v7a, x86 and x86_64. Application ID: `org.ayuless.messenger`; it can coexist with official Telegram.
 
-Every feature has its own toggle in the **Ayuless** settings section (per account where it makes sense). Path: **Settings → Ayuless**. Everything is off by default. Nothing has been tested on a device yet.
+> **Upgrading from alpha/test APKs:** 1.0.0 uses a new private signing key. Export your local Ayuless database and saved attachments before uninstalling the old version. Secret chats are lost on uninstall; cloud chats remain available after signing in. The new APK cannot update the old signature in place. [Signing and APK verification](docs/RELEASE-SIGNING.md).
 
-- **Ghost mode** — don't send online status, read receipts, typing or story views; go offline right after sending. Profiles (global and per account), "N/5" master switch, lockable options, a chat list button, ghost prompt before opening stories.
-- **Delayed send** — messages, forwards and story replies are sent after a delay.
-- **Anti-delete** — messages deleted by the other side or the server stay in the chat, marked. Attachments are kept too (with a size limit). Deleting your own messages works as usual.
-- **Edit history** — all previous versions of an edited message, from the message menu.
-- **Spy** — locally saves when your messages were read and users' last online time; exceptions for chosen chats.
-- **Filters** — keywords and regex, shadow ban, hide blocked users; also in chat list previews and notifications.
-- **Restricted saving** — save, copy and forward as copy in groups and channels.
-- **Extras** — hide sponsored messages, local Premium (chat translation), work in background.
-- **Chat tools** — a per-chat Ayuless menu and chat export.
-- **Maps** — choose map, satellite or hybrid view.
-- **Profiles** — IDs and approximate user registration dates or chat creation dates.
-- **Backup** — export, import and clear the local database.
+### Features
 
-In progress (open PRs): secret chats, TTL and view-once (#43, #44, #45), new settings look (#42), login with client spoof (#35). Details: [ROADMAP](docs/ROADMAP.md).
+- **Ghost mode:** control online status, read receipts, typing and story views, with global and per-account profiles.
+- **Anti-delete and edit history:** locally retain received messages, attachments and previous edits. Content never received by the device cannot be recovered.
+- **Delayed send:** delay messages, forwards and story replies; secret chats use a local delay.
+- **Message filters:** keywords, regular expressions and blocked-user filtering, including chat previews and notifications.
+- **Chat tools:** retained-message browser, HTML/JSON chat export, cleanup and a mark-as-read action.
+- **UnifiedPush:** notifications through ntfy and other compatible distributors. Choose one in **Settings → Ayuless → Notifications**. Without a distributor, the app uses a background connection.
+- **Customization and maps:** Noto emoji with all handshake skin-tone combinations; MapLibre maps with satellite and hybrid views.
+- **Local database:** export, import and cleanup, plus optional retention settings for secret chats, TTL and view-once media.
 
-### Openness
+Controls live in **Settings → Ayuless**. Anti-delete, saved attachments, sponsored-message hiding and background work default on; other features are configured separately. Existing saved choices are preserved across updates.
 
-- All native libraries (BoringSSL, FFmpeg, libvpx, dav1d, etc.) are built from source.
-- No Google Play Services, Firebase or ML Kit. Maps via [MapLibre](https://maplibre.org); [UnifiedPush](https://unifiedpush.org) support is still draft #30 and is not included.
+### Open source and project status
 
-### Building
+Code is **GPL-3.0-or-later**. The 1.0.0 release builds native libraries, WidgetJS and QuickJS from pinned sources and retains Noto artwork and known licence notices. A Telegram account and Telegram's proprietary service are required. Individual inherited-resource provenance remains under review; we do not claim the absence of all binary data or full anonymity.
 
-> De-Googling is in progress, so these steps may not fully work yet. Status: [ROADMAP](docs/ROADMAP.md).
+The full build and APK checks pass, and the owner reported the APK works on a phone. This is not exhaustive feature testing. Two clean final APK builds have not been compared for reproducibility.
 
-Requires JDK 17, Android SDK 36, NDK 27.2.12479018. Build native libraries for all four ABIs before Gradle; host tools and details are in [docs/NATIVE.md](docs/NATIVE.md). No `.a` archives are stored in Git.
+**Ayuless is not in the official F-Droid catalog.** The first request was closed over the project's maintenance history and MR template requirements. Releases are distributed through GitHub. [F-Droid status and FAQ](docs/FAQ.md#f-droid).
 
-```bash
-git clone --recursive --shallow-submodules https://github.com/SU4G3/Ayuless.git
+[Changelog](docs/CHANGELOG.md) · [Roadmap](docs/ROADMAP.md) · [1.0.0 source](https://github.com/SU4G3/Ayuless/tree/v1.0.0) · [Build report](https://github.com/SU4G3/Ayuless/blob/v1.0.0/docs/fdroid/VALIDATION-2026-11-17.md)
+
+## Build from source / Сборка из исходников
+
+To build the published release rather than the development branch, check out its tag:
+
+```sh
+git clone --branch v1.0.0 --depth 1 --recursive --shallow-submodules https://github.com/SU4G3/Ayuless.git
 cd Ayuless
-cp API_KEYS.example API_KEYS   # put your own APP_ID / APP_HASH from https://my.telegram.org/apps
-export ANDROID_SDK_ROOT=~/Android/Sdk
-Tools/native/build-prebuilts.sh
-./gradlew assembleAfatRelease
 ```
 
-`API_KEYS` is git-ignored and must never be committed. The APK ends up in `TMessagesProj_App/build/outputs/apk/afat/release/app.apk`. Application ID: `org.ayuless.messenger`.
+The validated environment uses JDK 21, Android SDK 36, NDK 27.2.12479018 and SDK CMake 3.22.1. Native build tools and pinned Rust/Node inputs are described in the [release's native-build guide](https://github.com/SU4G3/Ayuless/blob/v1.0.0/docs/NATIVE.md); the complete [F-Droid recipe](https://github.com/SU4G3/Ayuless/blob/v1.0.0/docs/fdroid/org.ayuless.messenger.yml) records provisioning and source-build steps.
 
-### F-Droid
+Build output: `TMessagesProj_App/build/outputs/apk/afat/release/app.apk`. Local Gradle test signing is separate from the private public-release key; see [release signing](docs/RELEASE-SIGNING.md). Never publish the private key or session data.
 
-A [draft build recipe](docs/fdroid/org.ayuless.messenger.yml) is available for the official F-Droid repository. No submission has been made; the recipe is disabled pending the [blockers and checks](docs/fdroid/CHECKLIST.md). EN/RU store metadata lives in `fastlane/metadata/android/`. The app requires Telegram's proprietary servers; UnifiedPush #30 is not required for submission.
+## Contributing and credits / Участие и благодарности
 
-### Contributing
+[Contribution rules](CONTRIBUTING.md) · [Bug reports](https://github.com/SU4G3/Ayuless/issues) · [Security reports](SECURITY.md)
 
-Code and licensing rules: [CONTRIBUTING.md](CONTRIBUTING.md). No exteraGram code is used. The AyuGram-derived port was removed, and the features were re-implemented independently from the written specification [docs/CLEANROOM-SPEC.md](docs/CLEANROOM-SPEC.md), without access to AyuGram sources. Older Git history (before this change) still contains the earlier port.
+Thanks to [Telegram](https://github.com/DrKLO/Telegram) for the upstream client, [AyuGram / Radolyn Labs](https://github.com/AyuGram) for feature inspiration, and [exteraless](https://github.com/exteraless) for the name idea. AyuGram-derived implementation code was removed and independently reimplemented from a written specification; earlier Git history still contains that port. [Clean-room notes](docs/CLEANROOM-REMOVED.md).
 
-### Thanks
-
-Thanks to the [AyuGram](https://github.com/AyuGram) team (Radolyn Labs): their client inspired Ayuless, and its feature set and settings layout served as the model. Thanks to [exteraless](https://github.com/exteraless) for the name idea. Other authors and licenses: [docs/CREDITS.md](docs/CREDITS.md).
-
----
-
-## License
-
-Ayuless as a whole is distributed under **GPL-3.0-or-later** ([LICENSE](LICENSE)). Upstream sources are "GPL v2 or later" ([LICENSE.GPL-2.0](LICENSE.GPL-2.0)), which permits this. Details and third-party compatibility: [docs/LICENSE-AUDIT.md](docs/LICENSE-AUDIT.md).
-
-Icons: [Solar Icons Set](https://www.figma.com/community/file/1166831539721848736/solar-icons-set) by 480 Design and R4IN80W, licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Full credits: [docs/CREDITS.md](docs/CREDITS.md).
-
-Original upstream README: [docs/UPSTREAM_README.md](docs/UPSTREAM_README.md).
+Ayuless: [GPL-3.0-or-later](LICENSE). Telegram upstream: [GPL-2.0-or-later](LICENSE.GPL-2.0). Solar icons by 480 Design and R4IN80W: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Credits](docs/CREDITS.md) · [Release resource audit](https://github.com/SU4G3/Ayuless/blob/v1.0.0/docs/LICENSE-AUDIT.md).
