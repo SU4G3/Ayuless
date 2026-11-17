@@ -1,6 +1,6 @@
 # F-Droid recipe integration, 2026-11-17
 
-Current submission status (2026-11-17): [F-Droid packaging request #4819](https://gitlab.com/fdroid/rfp/-/work_items/4819) is submitted and verified. [Metadata MR !57850](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/57850) is submitted and linked to that request. The fork pipeline is blocked by GitLab identity verification before any jobs run; a maintainer-side CI run has been requested in the MR. Earlier no-submission/import-pending statements describe previous preparation.
+Current submission status (2026-11-17): [F-Droid packaging request #4819](https://gitlab.com/fdroid/rfp/-/work_items/4819) is submitted and verified. [Metadata MR !57850](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/57850) is submitted and linked to that request. The MR was closed over template and maintenance-history requirements; resubmission is deferred. Ayuless 1.0.0 is published on GitHub, and its application source is now integrated into main through GitHub PR #62. Earlier submission/CI-pending statements describe historical preparation.
 
 **Complete build succeeded.** The corrected candidate
 `afadbaf8fe909ff11e2b2f5086c153ac5dd28c46` completed preparation, source scan,

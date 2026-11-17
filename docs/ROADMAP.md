@@ -21,11 +21,11 @@ Current release work:
   keeping GPL-3.0-or-later. Source provenance remains subject to review; see
   [CLEANROOM-REMOVED.md](CLEANROOM-REMOVED.md).
 - F-Droid metadata and recipe draft merged (#61). Source-build improvements and
-  the Noto emoji replacement are in [open PR #62](https://github.com/SU4G3/Ayuless/pull/62),
-  not yet in `main`. The complete official-image build and APK checks pass;
+  the Noto emoji replacement are merged into `main` via [PR #62](https://github.com/SU4G3/Ayuless/pull/62),
+  including the implementation from PR #30. The complete official-image build and APK checks pass;
   [packaging request #4819](https://gitlab.com/fdroid/rfp/-/work_items/4819) is submitted.
-- Background APK publishing was stopped at the user's request. The final Noto APK
-  is now validated and uploaded privately; the owner reported it works.
+- Ayuless 1.0.0 is published with the private release signing key. Its APK was
+  validated and the owner reported it works. No automatic APK publisher is running.
 
 Latest public release: [v1.0.0](https://github.com/SU4G3/Ayuless/releases/tag/v1.0.0). Android retains Telegram base version 13.2.1 (72919). The release includes the tested UnifiedPush/Noto candidate; exhaustive feature testing remains pending.
 Private test APKs: [test-cleanroom](https://github.com/SU4G3/Ayuless-reports/releases/tag/test-cleanroom).
@@ -38,9 +38,9 @@ Private test APKs: [test-cleanroom](https://github.com/SU4G3/Ayuless-reports/rel
 - ✅ Remove Play Services, Firebase, ML Kit, Play Integrity, Billing, SafetyNet; dependency guard in CI (#14)
 - ✅ New app id, name and launcher icon (#15)
 - ✅ Maps via MapLibre (#17)
-- 🚧 Push via UnifiedPush (#3, PR #30): user reported delivery in a tested artifact on 2026-11-17; conflicts with current `main` resolved and integrated into the F-Droid branch. Final-candidate multi-account/fallback checks remain.
+- ✅ UnifiedPush (#3, PR #30) is released in 1.0.0 and merged into `main` through #62. The standalone PR is closed as incorporated. Additional multi-account/fallback regression coverage remains.
 - ✅ Rebuild all native libs from source in CI, drop prebuilt `.a` (#5). CI builds them from source and links the APK against them, see [NATIVE.md](NATIVE.md) (#26); committed `.a` files removed (#47).
-- ⏳ `./gradlew assembleAfatRelease` from a clean clone with no proprietary blobs
+- ✅ Full source-built native/WidgetJS/afat release APK and scanner checks completed in the official F-Droid image.
 
 ## Step 2: Ghost mode ✅ (#16, #23, #28, #29, #33)
 - ✅ Block `account.updateStatus` (online), read receipts, `messages.setTyping`, story views
@@ -95,7 +95,7 @@ Private test APKs: [test-cleanroom](https://github.com/SU4G3/Ayuless-reports/rel
 - ✅ Client identity and AyuGram-style login spoof: during sign-in the client presents itself as an older official build (layer 177), then switches back to the real version without dropping the auth key (#35)
 
 ## Step 10: F-Droid preparation 🚧 (#61, #62)
-- ✅ Store metadata, five screenshots and source tag `fdroid-13.2.1-72919`.
+- ✅ Store metadata, four current screenshots and source tag `fdroid-13.2.1-72919`.
 - ✅ WidgetJS/QuickJS, all 64 native archives and unsigned APK built in the official F-Droid image; source/APK scans pass.
 - ✅ Noto replaces Apple emoji; retained SVGs/notices, 3,606 images and 36 tone combinations checked in the final APK.
 - ✅ Signed test copy uploaded privately; owner reported it works on a phone.
@@ -110,8 +110,7 @@ Detailed status: [F-Droid checklist](fdroid/CHECKLIST.md),
 [licence audit](LICENSE-AUDIT.md).
 
 ## Not done yet
-- Review/merge #62; final APK build/checks and general device feedback are recorded.
-- Finish review/merge of UnifiedPush #30 (#3); verify final-candidate multi-account delivery and fallback.
-- Follow the submitted GitLab metadata MR, obtain a maintainer CI run and answer F-Droid review.
+- Broaden final-candidate UnifiedPush multi-account delivery, distributor lifecycle and fallback tests.
+- Revisit F-Droid submission after maintenance-history/template requirements or a policy exception are addressed.
 - Finish remaining resource licence/provenance review and release validation.
 - Remaining AyuGram parity items: [AYUGRAM-PARITY.md](AYUGRAM-PARITY.md).
