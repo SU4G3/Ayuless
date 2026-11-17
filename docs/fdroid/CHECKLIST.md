@@ -25,7 +25,7 @@ See the [inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/) and
   checks apply the same `VercodeOperation`.
 - [ ] Add actual phone screenshots; each locale has an explanatory README in
   `images/phoneScreenshots/`. These notes are not image assets.
-- [x] The draft recipe pins immutable candidate revision `e2a9d4877b0da7c097c94d132195910da824dd11`.
+- [x] The draft recipe pins immutable candidate revision `d7f079dce6479701295dd4e1a10930045213f865`.
   This is a test candidate, not a published/reviewed release.
 - [x] Documented a separate release tag scheme: `fdroid-<versionName>-<afatCode>`
   (first proposed tag: `fdroid-13.2.1-72919`), matching the APK rather than the
