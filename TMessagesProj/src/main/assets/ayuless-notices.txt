@@ -147,3 +147,10 @@ Root notice: ayuless-notices/jlatexmath-LICENSE.txt
 Individual bundled font notices remain under
 org/scilab/forge/jlatexmath/fonts/licences/ in the packaged assets.
 The separate jlatexmath-font-greek module is not configured as an app dependency.
+
+libprisma and PrismJS 1.29.0 syntax grammars: MIT.
+Copyright (c) 2012 Lea Verou.
+https://github.com/TelegramMessenger/libprisma
+https://github.com/PrismJS/prism/tree/v1.29.0
+Licence: ayuless-notices/libprisma-MIT.txt
+The pinned libprisma submodule includes the grammar generator and npm lockfile.
