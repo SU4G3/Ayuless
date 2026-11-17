@@ -1535,6 +1535,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
     @SuppressLint("Range")
     private boolean handleIntent(Intent intent, boolean isNew, boolean restore, boolean fromPassword, Browser.Progress progress, boolean rebuildFragments, boolean openedTelegram) {
+        org.ayuless.ghost.GhostShortcut.handleIntent(intent);
         if (GiftInfoBottomSheet.handleIntent(intent, progress)) {
             return true;
         }
@@ -7185,6 +7186,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     @Override
     protected void onResume() {
         super.onResume();
+        org.ayuless.extras.KeepAliveService.apply(); // Ayuless: retry foreground service startup while visible
         WidgetMedia.onAppPaused(false);
         isResumed = true;
         PipCoordinator.getInstance().onActivityResume(this);

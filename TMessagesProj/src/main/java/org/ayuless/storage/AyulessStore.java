@@ -5,8 +5,6 @@
 package org.ayuless.storage;
 
 import android.content.ContentValues;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -32,13 +30,9 @@ import java.util.ArrayList;
  * Local store for deleted messages and edit history of one account.
  *
  * <p>All database work runs on a dedicated single-thread queue; results are delivered on the
- * UI thread. Secret-chat and self-destructing messages are never written (see {@link #isStorable}).
+ * UI thread. All message categories follow the main feature switches and chat exceptions.
  */
 public final class AyulessStore {
-
-    public static final String PREFS = "ayuless_storage";
-    public static final String KEY_LIMIT_BYTES = "limit_bytes";
-    public static final long DEFAULT_LIMIT_BYTES = 100L * 1024 * 1024;
 
     /** Run the size check after this many writes, not on every insert. */
     private static final int CLEANUP_EVERY_WRITES = 50;
@@ -78,32 +72,16 @@ public final class AyulessStore {
 
     // ---- privacy policy ----
 
-    /**
-     * Hard privacy rule: secret chats and anything with a self-destruct / auto-delete timer is
-     * never stored.
-     */
-    public static boolean isStorable(TLRPC.Message message) {
-        if (message == null) {
-            return false;
-        }
-        long dialogId = MessageObject.getDialogId(message);
-        if (DialogObject.isEncryptedDialog(dialogId)) {
-            return false;
-        }
-        if (message.ttl != 0 || message.ttl_period != 0 || message.destroyTime != 0 || message.destroyTimeMillis != 0) {
-            return false;
-        }
-        if (message.media != null && message.media.ttl_seconds != 0) {
-            return false;
-        }
-        return !(message.action instanceof TLRPC.TL_messageEncryptedAction);
+    /** Eligibility for a Spy feature, controlled by its main switch and chat exceptions. */
+    public static boolean isStorable(int account, TLRPC.Message message, String purpose) {
+        return org.ayuless.content.RetentionConfig.storable(account, message, purpose);
     }
 
     // ---- writes ----
 
     /** Save a message that was deleted on the server side. No-op for non-storable messages. */
     public void saveDeleted(TLRPC.Message message) {
-        if (!isStorable(message)) {
+        if (!isStorable(account, message, org.ayuless.content.RetentionConfig.DELETE)) {
             return;
         }
         final long dialogId = MessageObject.getDialogId(message);
@@ -114,7 +92,7 @@ public final class AyulessStore {
         final Long topicId = topicIdOf(message);
         final int date = message.date;
         final Long fromId = message.from_id != null ? MessageObject.getPeerId(message.from_id) : null;
-        final byte[] data = serialize(message);
+        final byte[] data = serialize(org.ayuless.spy.MessageSavingConfig.snapshot(account, message));
         if (data == null) {
             return;
         }
@@ -146,7 +124,7 @@ public final class AyulessStore {
      * before applying the server edit.
      */
     public void saveEdit(TLRPC.Message before) {
-        if (!isStorable(before)) {
+        if (!isStorable(account, before, org.ayuless.content.RetentionConfig.EDIT)) {
             return;
         }
         final long dialogId = MessageObject.getDialogId(before);
@@ -156,7 +134,7 @@ public final class AyulessStore {
         final int msgId = before.id;
         final int editDate = before.edit_date;
         final String text = before.message;
-        final byte[] entities = serializeEntities(before.entities);
+        final byte[] entities = org.ayuless.spy.MessageSavingConfig.keepFormatting(account) ? serializeEntities(before.entities) : null;
         final byte[] media = before.media != null && !(before.media instanceof TLRPC.TL_messageMediaEmpty) ? serialize(before.media) : null;
         queue.postRunnable(() -> {
             try {
@@ -187,20 +165,66 @@ public final class AyulessStore {
     }
 
     public void deleteDialog(long dialogId) {
+        org.ayuless.spy.SavedAttachments.clearDialog(account, dialogId);
         queue.postRunnable(() -> {
             try {
                 String[] args = {String.valueOf(dialogId)};
                 SQLiteDatabase db = db();
                 db.delete("deleted_messages", "dialog_id = ?", args);
                 db.delete("edit_history", "dialog_id = ?", args);
+                db.delete("read_outbox", "dialog_id = ?", args);
             } catch (Exception e) {
                 FileLog.e(e);
             }
         });
     }
 
+    /** Clear only Spy data, leaving observed read dates intact. Completion follows the DB commit. */
+    public void clearSavedDialog(long dialogId, Callback<Boolean> completion) {
+        queue.postRunnable(() -> {
+            try {
+                SQLiteDatabase database = db();
+                database.beginTransaction();
+                try {
+                    String[] args = {String.valueOf(dialogId)};
+                    database.delete("deleted_messages", "dialog_id = ?", args);
+                    database.delete("edit_history", "dialog_id = ?", args);
+                    database.setTransactionSuccessful();
+                } finally { database.endTransaction(); }
+                org.ayuless.spy.SavedAttachments.clearDialog(account, dialogId, result -> {
+                    org.ayuless.antidelete.DeletedCache.reload(account);
+                    org.ayuless.edits.EditedCache.reload(account);
+                    completion.run(result);
+                });
+            } catch (Exception e) {
+                FileLog.e(e);
+                AndroidUtilities.runOnUIThread(() -> completion.run(false));
+            }
+        });
+    }
+
+    /** Bounded keyset page, including negative secret-chat ids. Null signals a storage error. */
+    public void deletedPage(long dialogId, long beforeDate, long beforeId, Callback<ArrayList<TLRPC.Message>> callback) {
+        queue.postRunnable(() -> {
+            ArrayList<TLRPC.Message> result = new ArrayList<>();
+            try (Cursor c = db().rawQuery("SELECT data FROM deleted_messages WHERE dialog_id = ? AND (date < ? OR (date = ? AND msg_id < ?)) ORDER BY date DESC, msg_id DESC LIMIT 100",
+                    new String[]{"" + dialogId, "" + beforeDate, "" + beforeDate, "" + beforeId})) {
+                while (c.moveToNext()) {
+                    TLRPC.Message message = deserializeMessage(c.getBlob(0));
+                    if (message == null) throw new IllegalStateException("Invalid saved message");
+                    message.dialog_id = dialogId;
+                    result.add(message);
+                }
+            } catch (Exception e) { FileLog.e(e); result = null; }
+            final ArrayList<TLRPC.Message> page = result;
+            AndroidUtilities.runOnUIThread(() -> callback.run(page));
+        });
+    }
+
     /** Remove all stored data and delete the database file (used on logout). */
     public void clearAll() {
+        org.ayuless.spy.LastSeen.reset(account);
+        org.ayuless.spy.SavedAttachments.clear(account);
         queue.postRunnable(() -> {
             try {
                 if (helper != null) {
@@ -216,8 +240,6 @@ public final class AyulessStore {
 
     // ---- export / import ----
 
-    /** Encrypted-dialog bit pattern, see DialogObject.isEncryptedDialog. Used in SQL. */
-    private static final String NOT_ENCRYPTED = "(dialog_id < 0 OR (dialog_id & 4611686018427387904) = 0)";
 
     /**
      * Copy the database to a user-chosen document. Callback gets true on success (UI thread).
@@ -244,8 +266,7 @@ public final class AyulessStore {
     }
 
     /**
-     * Merge an exported database into this one. Existing rows win; rows of secret chats are
-     * skipped. Callback gets the number of imported rows, or -1 if the file is not a valid
+     * Merge an exported database into this one. Existing rows win, including secret-chat and timed rows. Callback gets the number of imported rows, or -1 if the file is not a valid
      * Ayuless database (UI thread).
      */
     public void importFrom(Uri uri, Callback<Integer> callback) {
@@ -262,6 +283,7 @@ public final class AyulessStore {
                 }
                 if (isValidExport(tmp)) {
                     imported = merge(tmp);
+                    org.ayuless.spy.LastSeen.reset(account);
                 }
             } catch (Exception e) {
                 FileLog.e(e);
@@ -315,6 +337,13 @@ public final class AyulessStore {
             try {
                 added += copyTable(src, db, "deleted_messages", new String[]{"dialog_id", "msg_id", "topic_id", "date", "deleted_at", "from_id", "data"});
                 added += copyTable(src, db, "edit_history", new String[]{"dialog_id", "msg_id", "edit_date", "version", "text", "entities", "media"});
+                if (hasColumns(src, "read_outbox", "dialog_id", "min_id", "max_id", "read_at")) {
+                    // Read receipts are metadata, kept for secret chats too.
+                    added += copyTable(src, db, "read_outbox", new String[]{"dialog_id", "min_id", "max_id", "read_at"}, null);
+                }
+                if (hasColumns(src, "last_seen", "user_id", "seen_at")) {
+                    added += mergeLastSeen(src, db);
+                }
                 db.setTransactionSuccessful();
             } finally {
                 db.endTransaction();
@@ -323,9 +352,43 @@ public final class AyulessStore {
         return added;
     }
 
-    private static int copyTable(SQLiteDatabase src, SQLiteDatabase dst, String table, String[] columns) {
+    /**
+     * last_seen keeps the newest time per user: imported rows win only if they are newer.
+     * Plain SELECT + INSERT/UPDATE because UPSERT needs SQLite 3.24 (API 30+).
+     */
+    private static int mergeLastSeen(SQLiteDatabase src, SQLiteDatabase dst) {
         int added = 0;
-        try (Cursor c = src.query(table, columns, NOT_ENCRYPTED, null, null, null, null)) {
+        try (Cursor c = src.rawQuery("SELECT user_id, seen_at FROM last_seen WHERE user_id > 0", null)) {
+            ContentValues values = new ContentValues();
+            while (c.moveToNext()) {
+                long userId = c.getLong(0);
+                long seenAt = c.getLong(1);
+                long current = -1;
+                try (Cursor e = dst.rawQuery("SELECT seen_at FROM last_seen WHERE user_id = ?", new String[]{String.valueOf(userId)})) {
+                    if (e.moveToFirst()) {
+                        current = e.getLong(0);
+                    }
+                }
+                if (current >= seenAt) {
+                    continue;
+                }
+                values.clear();
+                values.put("user_id", userId);
+                values.put("seen_at", seenAt);
+                dst.insertWithOnConflict("last_seen", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+                added++;
+            }
+        }
+        return added;
+    }
+
+    private static int copyTable(SQLiteDatabase src, SQLiteDatabase dst, String table, String[] columns) {
+        return copyTable(src, dst, table, columns, null);
+    }
+
+    private static int copyTable(SQLiteDatabase src, SQLiteDatabase dst, String table, String[] columns, String where) {
+        int added = 0;
+        try (Cursor c = src.query(table, columns, where, null, null, null, null)) {
             ContentValues values = new ContentValues();
             while (c.moveToNext()) {
                 values.clear();
@@ -358,6 +421,87 @@ public final class AyulessStore {
         while ((n = in.read(buffer)) > 0) {
             out.write(buffer, 0, n);
         }
+    }
+
+    // ---- read dates and last online (Spy > Additional) ----
+
+    /**
+     * Records that outgoing messages in (minId, maxId] of a private dialog were read at readAt.
+     * For secret chats the range holds message dates instead of message ids.
+     * Ignored when the range is empty or already covered by a newer record.
+     */
+    public void saveReadOutbox(long dialogId, int minId, int maxId, int readAt) {
+        if (dialogId <= 0 || maxId <= minId || readAt <= 0) {
+            return;
+        }
+        queue.postRunnable(() -> {
+            try {
+                SQLiteDatabase db = db();
+                int lastMax = 0;
+                try (Cursor c = db.rawQuery("SELECT MAX(max_id) FROM read_outbox WHERE dialog_id = ?", new String[]{String.valueOf(dialogId)})) {
+                    if (c.moveToFirst() && !c.isNull(0)) {
+                        lastMax = c.getInt(0);
+                    }
+                }
+                if (maxId <= lastMax) {
+                    return;
+                }
+                ContentValues v = new ContentValues();
+                v.put("dialog_id", dialogId);
+                v.put("min_id", Math.max(minId, lastMax));
+                v.put("max_id", maxId);
+                v.put("read_at", readAt);
+                db.insertWithOnConflict("read_outbox", null, v, SQLiteDatabase.CONFLICT_IGNORE);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+    }
+
+    /** Locally recorded read time of an outgoing message (by date in secret chats), or 0 if unknown. */
+    public void getReadDate(long dialogId, int msgId, Callback<Integer> callback) {
+        queue.postRunnable(() -> {
+            int result = 0;
+            try (Cursor c = db().rawQuery("SELECT read_at FROM read_outbox WHERE dialog_id = ? AND min_id < ? AND max_id >= ? ORDER BY max_id ASC LIMIT 1",
+                    new String[]{String.valueOf(dialogId), String.valueOf(msgId), String.valueOf(msgId)})) {
+                if (c.moveToFirst()) {
+                    result = c.getInt(0);
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            final int r = result;
+            AndroidUtilities.runOnUIThread(() -> callback.run(r));
+        });
+    }
+
+    /** Stores the last time a user was seen online. Callers only pass newer values. */
+    public void saveLastSeen(long userId, int seenAt) {
+        queue.postRunnable(() -> {
+            try {
+                ContentValues v = new ContentValues();
+                v.put("user_id", userId);
+                v.put("seen_at", seenAt);
+                db().insertWithOnConflict("last_seen", null, v, SQLiteDatabase.CONFLICT_REPLACE);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+    }
+
+    /** All stored last-online times, user id to unix time. Runs the callback on the UI thread. */
+    public void loadLastSeen(Callback<java.util.HashMap<Long, Integer>> callback) {
+        queue.postRunnable(() -> {
+            java.util.HashMap<Long, Integer> result = new java.util.HashMap<>();
+            try (Cursor c = db().rawQuery("SELECT user_id, seen_at FROM last_seen", null)) {
+                while (c.moveToNext()) {
+                    result.put(c.getLong(0), c.getInt(1));
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            AndroidUtilities.runOnUIThread(() -> callback.run(result));
+        });
     }
 
     // ---- reads ----
@@ -453,6 +597,20 @@ public final class AyulessStore {
         });
     }
 
+    public void getDeleteDate(long dialogId, int msgId, Callback<Long> callback) {
+        queue.postRunnable(() -> {
+            long result = 0;
+            try (Cursor cursor = db().rawQuery("SELECT deleted_at FROM deleted_messages WHERE dialog_id = ? AND msg_id = ?",
+                    new String[]{String.valueOf(dialogId), String.valueOf(msgId)})) {
+                if (cursor.moveToFirst()) result = cursor.getLong(0);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            final long timestamp = result;
+            AndroidUtilities.runOnUIThread(() -> callback.run(timestamp));
+        });
+    }
+
     public void sizeBytes(Callback<Long> callback) {
         queue.postRunnable(() -> {
             final long size = sizeBytesInternal();
@@ -460,14 +618,46 @@ public final class AyulessStore {
         });
     }
 
+    /** Total saved-message storage, matching the attachments slider's app-wide scope. */
+    public static void totalSizeBytes(Callback<Long> callback) {
+        queue.postRunnable(() -> {
+            long size = totalSizeBytesInternal();
+            AndroidUtilities.runOnUIThread(() -> callback.run(size));
+        });
+    }
+
+    private static long totalSizeBytesInternal() {
+        long size = 0;
+        for (int account = 0; account < UserConfig.MAX_ACCOUNT_COUNT; account++) {
+            AyulessStore store = getInstance(account);
+            if (store.dbFile().exists()) {
+                size += store.sizeBytesInternal();
+            }
+        }
+        return size;
+    }
+
     // ---- size limit ----
 
     public static long getLimitBytes() {
-        return prefs().getLong(KEY_LIMIT_BYTES, DEFAULT_LIMIT_BYTES);
+        return org.ayuless.spy.SavedAttachments.getLimitBytes();
     }
 
     public static void setLimitBytes(long bytes) {
-        prefs().edit().putLong(KEY_LIMIT_BYTES, bytes).apply();
+        org.ayuless.spy.SavedAttachments.setLimitBytes(bytes);
+        enforceStorageLimit();
+    }
+
+    private static void enforceStorageLimit() {
+        queue.postRunnable(() -> {
+            for (int account = 0; account < UserConfig.MAX_ACCOUNT_COUNT; account++) {
+                AyulessStore store = getInstance(account);
+                if (store.dbFile().exists()) {
+                    store.enforceLimit();
+                }
+            }
+            org.ayuless.spy.SavedAttachments.checkLimit();
+        });
     }
 
     private void afterWrite() {
@@ -475,7 +665,7 @@ public final class AyulessStore {
             return;
         }
         writesSinceCleanup = 0;
-        enforceLimit();
+        enforceStorageLimit();
     }
 
     private void enforceLimit() {
@@ -486,7 +676,7 @@ public final class AyulessStore {
         SQLiteDatabase db = db();
         boolean removed = false;
         int guard = 0;
-        while (sizeBytesInternal() > limit && guard++ < 1000) {
+        while (totalSizeBytesInternal() > limit && guard++ < 1000) {
             int deleted = db.delete("deleted_messages",
                     "rowid IN (SELECT rowid FROM deleted_messages ORDER BY deleted_at ASC LIMIT " + CLEANUP_BATCH + ")", null);
             int edits = db.delete("edit_history",
@@ -547,10 +737,6 @@ public final class AyulessStore {
             dir.mkdirs();
         }
         return new File(dir, "ayuless_" + account + ".db");
-    }
-
-    private static SharedPreferences prefs() {
-        return ApplicationLoader.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
     }
 
     private static Long topicIdOf(TLRPC.Message message) {

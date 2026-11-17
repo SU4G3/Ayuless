@@ -368,6 +368,7 @@ public class ApplicationLoader extends Application {
     });
 
     public static void startPushService() {
+        org.ayuless.extras.KeepAliveService.apply(); // Ayuless: work in background
         SharedPreferences preferences = MessagesController.getGlobalNotificationsSettings();
         boolean enabled;
         if (preferences.contains("pushService")) {

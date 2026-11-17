@@ -665,6 +665,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int infoHeaderRow;
     private int infoHeaderRowEmpty;
     private int infoEndRowEmpty;
+    // Ayuless: separate copyable identity values in the profile information section.
+    private int ayulessIdRow = -1, ayulessRegistrationRow = -1;
     private int phoneRow;
     private int noteRow;
     private int locationRow;
@@ -2361,6 +2363,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     @Override
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
+        // Ayuless: release any pending server self-status request.
+        if (ayulessSelfStatus != null) ayulessSelfStatus.stop();
         if (sharedMediaLayout != null) {
             sharedMediaLayout.onDestroy();
         }
@@ -4302,6 +4306,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return;
             }
             listView.stopScroll();
+            // Ayuless: tap copies exactly the displayed ID or approximate date.
+            if (position == ayulessIdRow || position == ayulessRegistrationRow) {
+                String value = position == ayulessIdRow ? Long.toString(userId != 0 ? userId : chatId)
+                        : org.ayuless.profile.ProfileIdentity.date(userId, currentChat);
+                if (AndroidUtilities.addToClipboard(value)) {
+                    BulletinFactory.of(this).createCopyBulletin(getString(R.string.TextCopied)).show();
+                }
+                return;
+            }
             if (position == affiliateRow) {
                 TLRPC.User user = getMessagesController().getUser(userId);
                 if (userInfo != null && userInfo.starref_program != null) {
@@ -9793,9 +9806,21 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
     }
 
+    // Ayuless: keep server self status separate from the locally online user.
+    private org.ayuless.ghost.SelfStatus ayulessSelfStatus;
+
     @Override
     public void onResume() {
         super.onResume();
+        // Ayuless: apply profile visibility immediately after returning from settings.
+        updateRowsIds();
+        // Ayuless: refresh only while the own profile is visible.
+        if (userId == getUserConfig().getClientUserId()) {
+            if (ayulessSelfStatus == null) {
+                ayulessSelfStatus = new org.ayuless.ghost.SelfStatus(currentAccount, () -> updateProfileData(false));
+            }
+            ayulessSelfStatus.start();
+        }
         if (sharedMediaLayout != null) {
             sharedMediaLayout.onResume();
         }
@@ -9845,6 +9870,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     @Override
     public void onPause() {
         super.onPause();
+        // Ayuless: stop polling when the profile leaves the screen.
+        if (ayulessSelfStatus != null) ayulessSelfStatus.stop();
         if (undoView != null) {
             undoView.hide(true, 0);
         }
@@ -10768,6 +10795,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         infoHeaderRow = -1;
         infoHeaderRowEmpty = -1;
         infoEndRowEmpty = -1;
+        // Ayuless: rows are rebuilt when the customization preference changes.
+        ayulessIdRow = ayulessRegistrationRow = -1;
         phoneRow = -1;
         noteRow = -1;
         userInfoRow = -1;
@@ -10875,6 +10904,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 numberSectionRow = rowCount++;
                 numberRow = rowCount++;
+                // Ayuless: also show identity on the own-account settings profile.
+                if (org.ayuless.settings.ProfileMapConfig.showProfileIdentity()) {
+                    ayulessIdRow = rowCount++;
+                    ayulessRegistrationRow = rowCount++;
+                }
                 setUsernameRow = rowCount++;
                 bioRow = rowCount++;
 
@@ -10959,6 +10993,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     }
                 }
                 infoStartRow = rowCount;
+                // Ayuless: user IDs use a local, explicitly approximate date model.
+                if (org.ayuless.settings.ProfileMapConfig.showProfileIdentity()) {
+                    ayulessIdRow = rowCount++;
+                    ayulessRegistrationRow = rowCount++;
+                }
                 if (!isBot && (hasPhone || !hasInfo)) {
                     phoneRow = rowCount++;
                 }
@@ -11103,7 +11142,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 sharedMediaRow = rowCount++;
             }
         } else if (chatId != 0) {
-            if (chatInfo != null && (!TextUtils.isEmpty(chatInfo.about) || chatInfo.location instanceof TLRPC.TL_channelLocation) || ChatObject.isPublic(currentChat)) {
+            // Ayuless: private chats without a bio still need the identity section.
+            if (org.ayuless.settings.ProfileMapConfig.showProfileIdentity() || chatInfo != null && (!TextUtils.isEmpty(chatInfo.about) || chatInfo.location instanceof TLRPC.TL_channelLocation) || ChatObject.isPublic(currentChat)) {
                 if (emptyRow < 0 && emptyRow2 < 0) {
                     if (hasMusic || hasBalance || peerColor != null || actionsView == null) {
                         emptyRow2 = rowCount++;
@@ -11114,6 +11154,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
                 if (actionsView == null) {
                     infoHeaderRow = rowCount++;
+                }
+                // Ayuless: chat IDs have a separate namespace; use Telegram's creation date.
+                if (org.ayuless.settings.ProfileMapConfig.showProfileIdentity()) {
+                    ayulessIdRow = rowCount++;
+                    ayulessRegistrationRow = rowCount++;
                 }
                 if (chatInfo != null) {
                     if (!TextUtils.isEmpty(chatInfo.about)) {
@@ -11776,6 +11821,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 description.append(LocaleController.getString(user.photo != null && user.photo.personal && user.photo.has_video ? R.string.CustomAvatarTooltipVideo : R.string.CustomAvatarTooltip));
                 description.setSpan(new DotDividerSpan(), newString2.length() + 1, newString2.length() + 2, 0);
                 photoDescriptionText = description;
+            }
+            // Ayuless: show the server status while this account hides online presence.
+            if (user.id == getUserConfig().getClientUserId() && org.ayuless.ghost.GhostConfig.hideOnline(currentAccount)) {
+                newString2 = ayulessSelfStatus == null ? getString(R.string.AyulessGhostSelfOfflineUnknown) : ayulessSelfStatus.text();
+                isOnline[0] = false;
             }
             profileStatusText = newString2;
             updateOnlineText(true);
@@ -13513,7 +13563,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     TextDetailCell detailCell = (TextDetailCell) holder.itemView;
                     boolean containsQr = false;
                     boolean containsGift = false;
-                    if (position == birthdayRow) {
+                    // Ayuless: reuse Telegram's themed detail cells for identity values.
+                    if (position == ayulessIdRow) {
+                        detailCell.setTextAndValue(Long.toString(userId != 0 ? userId : chatId), getString(R.string.AyulessNumericId), true);
+                    } else if (position == ayulessRegistrationRow) {
+                        detailCell.setTextAndValue(org.ayuless.profile.ProfileIdentity.date(userId, currentChat),
+                                getString(userId != 0 ? R.string.AyulessRegistrationDate : R.string.AyulessCreationDate), true);
+                    } else if (position == birthdayRow) {
                         TLRPC.UserFull userFull = getMessagesController().getUserFull(userId);
                         if (userFull != null && userFull.birthday != null) {
                             final boolean today = BirthdayController.isToday(userFull);
@@ -14336,6 +14392,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
+            // Ayuless: identity values remain copyable on the own-account profile.
+            if (holder.getAdapterPosition() >= 0 && (holder.getAdapterPosition() == ayulessIdRow || holder.getAdapterPosition() == ayulessRegistrationRow)) return true;
             if (notificationRow != -1) {
                 int position = holder.getAdapterPosition();
                 return position == notificationRow || position == numberRow || position == privacyRow ||
@@ -14374,7 +14432,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (position == infoHeaderRow || position == membersHeaderRow || position == settingsSectionRow2 ||
                     position == numberSectionRow || position == helpHeaderRow || position == debugHeaderRow || position == botPermissionsHeader) {
                 return VIEW_TYPE_HEADER;
-            } else if (position == phoneRow || position == locationRow || position == numberRow || position == birthdayRow) {
+            // Ayuless: identity rows use the standard profile detail layout.
+            } else if (position == ayulessIdRow || position == ayulessRegistrationRow || position == phoneRow || position == locationRow || position == numberRow || position == birthdayRow) {
                 return VIEW_TYPE_TEXT_DETAIL;
             } else if (position == usernameRow || position == setUsernameRow) {
                 return VIEW_TYPE_TEXT_DETAIL_MULTILINE;
@@ -15691,6 +15750,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             put(++pointer, infoHeaderRow, sparseIntArray);
             put(++pointer, infoHeaderRowEmpty, sparseIntArray);
             put(++pointer, infoEndRowEmpty, sparseIntArray);
+            // Ayuless: stable identities for animated profile updates.
+            put(++pointer, ayulessIdRow, sparseIntArray);
+            put(++pointer, ayulessRegistrationRow, sparseIntArray);
             put(++pointer, phoneRow, sparseIntArray);
             put(++pointer, noteRow, sparseIntArray);
             put(++pointer, locationRow, sparseIntArray);

@@ -1,0 +1,15 @@
+Ayuless is a free and open source, unofficial Android client for the Telegram network, based on the official Telegram Android sources.
+
+Features include:
+• Privacy controls for online status, read receipts, typing indicators and story views.
+• Delayed sending, local retention of deleted messages and edit history.
+• Message filters using keywords and regular expressions.
+• Chat export and local database backup, import and cleanup.
+• MapLibre maps, with optional satellite and hybrid views.
+• Additional chat tools and appearance settings in Settings → Ayuless.
+
+Ayuless is pre-alpha. Features are under development and have not been fully tested on devices. Retention stores only content received by this device; it cannot recover messages that were never received. Review the settings before use.
+
+A Telegram account and access to Telegram's proprietary servers are required. Telegram may display sponsored messages when their local hiding setting is disabled. Maps contact OpenFreeMap and, for optional imagery, EOX. Payments and embedded web content can contact third-party services. Google Play Services and Firebase are not required. UnifiedPush support is still a draft and is not included in this release.
+
+Ayuless is not affiliated with Telegram, AyuGram or Radolyn Labs. Distributed under GPL-3.0-or-later; third-party asset notices are retained in the project credits.

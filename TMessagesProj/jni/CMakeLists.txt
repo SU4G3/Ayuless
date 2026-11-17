@@ -1,5 +1,16 @@
 cmake_minimum_required(VERSION 3.16)
 
+# Ayuless: require outputs from Tools/native or the CI cache before configuring.
+execute_process(
+        COMMAND "${CMAKE_COMMAND}" -E env "ABIS=${ANDROID_ABI}"
+                bash "${CMAKE_CURRENT_SOURCE_DIR}/../../Tools/native/check-prebuilts.sh"
+        RESULT_VARIABLE AYULESS_NATIVE_STATUS
+        OUTPUT_VARIABLE AYULESS_NATIVE_OUTPUT
+        ERROR_VARIABLE AYULESS_NATIVE_ERROR)
+if(NOT AYULESS_NATIVE_STATUS EQUAL 0)
+    message(FATAL_ERROR "${AYULESS_NATIVE_OUTPUT}${AYULESS_NATIVE_ERROR}")
+endif()
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)

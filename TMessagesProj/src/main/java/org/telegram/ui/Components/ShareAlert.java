@@ -2562,7 +2562,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                         }
                         params.payStars = price == null ? 0 : price;
                         params.monoForumPeer = monoForumPeerId;
-                        SendMessagesHelper.getInstance(currentAccount).sendMessage(params);
+                        // Ayuless: protected-story opt-in sends a downloaded media copy.
+                        if (!org.ayuless.content.ProtectedContent.sendStoryCopy(currentAccount, storyItem, key, replyTopMsg, withSound, params.payStars, monoForumPeerId)) {
+                            SendMessagesHelper.getInstance(currentAccount).sendMessage(params);
+                        }
                     }
                 } else if (sendingText[num] != null) {
                     for (int a = 0; a < selectedDialogs.size(); a++) {

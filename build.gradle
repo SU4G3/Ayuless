@@ -24,12 +24,12 @@ repositories {
 // that consume it. Using subprojects keeps it in one place.
 //   keep:  base/, latin/, maths/, euler/  (\mathbb, \mathcal, \mathfrak still work)
 //   drop:  latin/optional/, maths/optional/  (~290 KB; \textbf/\textit/\mathds fall back)
-//          licences/                          (~20 KB; pure license text files)
+// Ayuless: retain licences/ so dependency attribution is included in the APK.
 subprojects {
     plugins.withId('com.android.application') {
         android {
             androidResources {
-                ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:!CVS:!thumbs.db:!picasa.ini:!*~:!optional:!licences:!*stmary*:!*eufb*'
+                ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:!CVS:!thumbs.db:!picasa.ini:!*~:!optional:!*stmary*:!*eufb*'
             }
         }
     }

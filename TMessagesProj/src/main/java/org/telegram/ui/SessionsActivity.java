@@ -758,7 +758,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         session.platform = "Android";
         session.device_model = Build.MANUFACTURER + " " + Build.MODEL;
         session.system_version = "SDK " + Build.VERSION.SDK_INT;
-        session.app_name = "Telegram Android";
+        // Ayuless: local placeholder for this installation; remote sessions retain their names.
+        session.app_name = "Ayuless Android";
         session.app_version = "";
         try {
             final PackageInfo pInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);

@@ -382,6 +382,7 @@ public class Switch extends View implements Theme.Colorable {
             return;
         }
 
+        // Ayuless: settings use this upstream renderer too, including OFF colors and ripple.
         int width = AndroidUtilities.dp(31);
         int thumb = AndroidUtilities.dp(20);
         int x = (getMeasuredWidth() - width) / 2;

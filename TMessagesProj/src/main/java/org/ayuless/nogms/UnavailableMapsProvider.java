@@ -47,7 +47,7 @@ public final class UnavailableMapsProvider implements IMapsProvider {
         private final TextView view;
         MapView(Context context) {
             view=new TextView(context); view.setGravity(Gravity.CENTER);
-            view.setText(R.string.AyulessMapsUnavailable);
+            view.setText(org.telegram.messenger.LocaleController.getString(R.string.AyulessMapsUnavailable));
         }
         @Override public View getView() { return view; }
         // Do not announce a functional map: existing UI must not use fictitious coordinates.

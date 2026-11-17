@@ -308,6 +308,8 @@ public class StoryViewer implements NotificationCenter.NotificationCenterDelegat
         }
     }
 
+    private boolean ayulessPromptAnswered; // Ayuless
+
     public void open(Context context, TL_stories.StoryItem storyItem, PlaceProvider placeProvider) {
         open(UserConfig.selectedAccount, context, storyItem, placeProvider);
     }
@@ -378,6 +380,17 @@ public class StoryViewer implements NotificationCenter.NotificationCenterDelegat
         }
         if (isShowing) {
             doOnAnimationReadyRunnables.clear();
+            return;
+        }
+        // Ayuless: offer ghost mode before opening stories
+        if (!ayulessPromptAnswered && org.ayuless.ghost.StoryGhostPrompt.intercept(account, context, peerIds, () -> {
+            ayulessPromptAnswered = true;
+            try {
+                open(account, context, storyItem, peerIds, position, storiesList, userStories, placeProvider, reversed);
+            } finally {
+                ayulessPromptAnswered = false;
+            }
+        })) {
             return;
         }
         setSpeed(1f);
@@ -2875,7 +2888,7 @@ public class StoryViewer implements NotificationCenter.NotificationCenterDelegat
         if (BuildVars.DEBUG_PRIVATE_VERSION) {
             return;
         }
-        allowScreenshots = !isShowing || allowScreenshots;
+        allowScreenshots = true; // Ayuless: screenshots are available for every story.
         if (this.allowScreenshots != allowScreenshots) {
             this.allowScreenshots = allowScreenshots;
 

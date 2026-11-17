@@ -4,8 +4,18 @@ name: Build
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+      - 'LICENSE*'
+      - '.github/ISSUE_TEMPLATE/**'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+      - 'LICENSE*'
+      - '.github/ISSUE_TEMPLATE/**'
   workflow_dispatch:
 
 permissions:
@@ -41,6 +51,11 @@ jobs:
       - name: Install SDK and NDK
         run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "platforms;android-36" "build-tools;36.0.0" "ndk;27.2.12479018" "cmake;3.22.1"
 
+      # Build native libraries from pinned source submodules (cached by input hash).
+      # No native archives are stored in Git. See Tools/native/.
+      - name: Native libraries from source
+        uses: ./.github/actions/native-prebuilts
+
       - uses: gradle/actions/setup-gradle@748248ddd2a24f49513d8f472f81c3a07d4d50e1 # v4.4.4
 
       - name: Write API_KEYS
@@ -48,6 +63,8 @@ jobs:
           APP_ID: ${{ secrets.APP_ID }}
           APP_HASH: ${{ secrets.APP_HASH }}
         run: |
+          # CERT_FINGERPRINT is intentionally not passed: BuildVars defaults to the
+          # official Telegram Android cert, which api_id 4 requires (see #53/login).
           if [ -n "$APP_ID" ]; then
             printf 'APP_ID=%s\nAPP_HASH=%s\n' "$APP_ID" "$APP_HASH" > API_KEYS
           else

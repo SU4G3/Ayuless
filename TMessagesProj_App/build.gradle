@@ -101,7 +101,10 @@ android {
         release {
             debuggable false
             jniDebuggable false
-            signingConfig signingConfigs.release
+            // Ayuless: F-Droid signs its own APK; allow a release without a local keystore.
+            if (!project.providers.gradleProperty('ayulessUnsignedRelease').getOrElse('false').toBoolean()) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled true
             shrinkResources true
             multiDexEnabled true

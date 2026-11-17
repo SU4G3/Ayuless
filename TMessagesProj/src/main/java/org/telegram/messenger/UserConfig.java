@@ -271,7 +271,7 @@ public class UserConfig extends BaseController {
     private void checkPremiumSelf(TLRPC.User oldUser, TLRPC.User newUser) {
         if (oldUser != null && newUser != null && oldUser.premium != newUser.premium) {
             AndroidUtilities.runOnUIThread(() -> {
-                getMessagesController().updatePremium(newUser.premium);
+                getMessagesController().updatePremium(newUser.premium || org.ayuless.extras.ExtrasConfig.localPremium());
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.currentUserPremiumStatusChanged);
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.premiumStatusChangedGlobal);
 
@@ -281,7 +281,7 @@ public class UserConfig extends BaseController {
             });
         } else if (oldUser == null) {
             AndroidUtilities.runOnUIThread(() -> {
-                getMessagesController().updatePremium(newUser.premium);
+                getMessagesController().updatePremium(newUser.premium || org.ayuless.extras.ExtrasConfig.localPremium());
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.currentUserPremiumStatusChanged);
                 getMediaDataController().loadPremiumPromo(true);
             });
@@ -577,7 +577,7 @@ public class UserConfig extends BaseController {
         if (user == null) {
             return false;
         }
-        return user.premium;
+        return user.premium || org.ayuless.extras.ExtrasConfig.localPremium();
     }
 
     public Long getEmojiStatus() {

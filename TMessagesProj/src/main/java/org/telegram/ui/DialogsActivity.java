@@ -502,6 +502,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private ValueAnimator contactsAlphaAnimator;
     private ViewPage[] viewPages;
     private ActionBarMenuItem passcodeItem;
+    private ActionBarMenuItem ayulessGhostItem; // Ayuless: ghost button
     private ActionBarMenuItem downloadsItem;
     private DownloadProgressIcon downloadProgressIcon;
     private boolean downloadsItemVisible;
@@ -590,7 +591,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     @Nullable
     private ActionBarMenuSubItem clearItem;
     @Nullable
-    private ActionBarMenuSubItem readItem;
+    private ActionBarMenuSubItem ayulessUnreadItem; // Ayuless: preserve the separate bulk unread action.
     @Nullable
     private ActionBarMenuSubItem blockItem;
 
@@ -704,6 +705,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     private final static int pin = 100;
     private final static int read = 101;
+    private static final int AYULESS_MARK_UNREAD = 9001; // Ayuless: separate bulk unread action.
     private final static int delete = 102;
     private final static int clear = 103;
     private final static int mute = 104;
@@ -2805,6 +2807,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
 
         observersGroup = getNotificationCenter().createObserversGroup(this);
+        observersGroup.add(org.ayuless.filters.MessageFilters.SETTINGS_CHANGED); // Ayuless: refresh filtered previews
 
         if (searchString == null) {
             currentConnectionState = getConnectionsManager().getConnectionState();
@@ -3190,6 +3193,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
             passcodeItem = menu.addItem(1, R.drawable.outline_header_lock_24);
             passcodeItem.setContentDescription(getString(R.string.AccDescrPasscodeLock));
+            ayulessGhostItem = org.ayuless.ghost.GhostBadge.create(menu); // Ayuless: ghost button
 
             downloadsItem = menu.addItem(3, new ColorDrawable(Color.TRANSPARENT));
             downloadsItem.addView(downloadProgressIcon = new DownloadProgressIcon(currentAccount, context));
@@ -3434,14 +3438,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             } else {
                 statusDrawable = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(null, dp(26));
                 statusDrawable.center = true;
-                logoDrawable = context.getResources().getDrawable(R.drawable.telegram_logo_2).mutate();
-                logoDrawable.setBounds(0, dp(2), logoDrawable.getIntrinsicWidth(), dp(2) + logoDrawable.getIntrinsicHeight());
-                // a new drawable (also when the view is recreated after a theme switch made elsewhere): remember its tint, the
-                // theme hook only recolors when the color differs from the last one applied
-                logoDrawable.setColorFilter(lastLogoDrawableColor = getThemedColor(Theme.key_telegram_color_dialogsLogo), PorterDuff.Mode.MULTIPLY);
-                SpannableStringBuilder ssb = new SpannableStringBuilder(getString(R.string.AppName));
-                ssb.setSpan(new ImageSpan(logoDrawable), 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                actionBar.setTitle(ssb, statusDrawable);
+                // Ayuless: show the app name instead of Telegram's wordmark.
+                actionBar.setTitle(getString(R.string.AppName), statusDrawable);
                 updateStatus(UserConfig.getInstance(currentAccount).getCurrentUser(), false);
             }
             if (folderId == 0) {
@@ -3792,6 +3790,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     searchViewPager.onActionBarItemClick(id);
                     return;
                 }
+                if (id == org.ayuless.ghost.GhostBadge.ITEM_ID) { // Ayuless: ghost button
+                    org.ayuless.ghost.GhostBadge.toggle(DialogsActivity.this, currentAccount, ayulessGhostItem);
+                    return;
+                }
                 if (id == -1) {
                     if (rightSlidingDialogContainer != null && rightSlidingDialogContainer.hasFragment()) {
                         if (actionBar.isActionModeShowed()) {
@@ -3931,7 +3933,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         undoView.showWithAction(did, UndoView.ACTION_REMOVED_FROM_FOLDER, neverShow.size(), filter, null, null);
                     }
                     hideActionMode(false);
-                } else if (id == pin || id == read || id == delete || id == clear || id == mute || id == archive || id == block || id == archive2 || id == pin2) {
+                } else if (id == pin || id == read || id == AYULESS_MARK_UNREAD || id == delete || id == clear || id == mute || id == archive || id == block || id == archive2 || id == pin2) { // Ayuless: retain bulk mark unread.
                     performSelectedDialogsAction(selectedDialogs, id, true, false);
                 }
             }
@@ -6669,7 +6671,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         pin2Item = otherItem.addSubItem(pin2, R.drawable.msg_pin, LocaleController.getString(R.string.DialogPin));
         addToFolderItem = otherItem.addSubItem(add_to_folder, R.drawable.msg_addfolder, LocaleController.getString(R.string.FilterAddTo));
         removeFromFolderItem = otherItem.addSubItem(remove_from_folder, R.drawable.msg_removefolder, LocaleController.getString(R.string.FilterRemoveFrom));
-        readItem = otherItem.addSubItem(read, R.drawable.msg_markread, LocaleController.getString(R.string.MarkAsRead));
+        ayulessUnreadItem = otherItem.addSubItem(AYULESS_MARK_UNREAD, R.drawable.msg_markunread, LocaleController.getString(R.string.MarkAsUnread)); // Ayuless: keep the upstream unread action.
         clearItem = otherItem.addSubItem(clear, R.drawable.msg_clear, LocaleController.getString(R.string.ClearHistory));
         blockItem = otherItem.addSubItem(block, R.drawable.msg_block, LocaleController.getString(R.string.BlockUser));
 
@@ -6942,6 +6944,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     @Override
     public void onResume() {
         super.onResume();
+        checkUi_itemPasscodeVisibility(); // Ayuless: refresh ghost button after settings changes
         if (dialogStoriesCell != null) {
             dialogStoriesCell.onResume();
         }
@@ -8566,19 +8569,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
 
         if (!isCommunityCell) {
+            // Ayuless: reading is available from a message context menu.
             ActionBarMenuSubItem markAsUnreadItem = new ActionBarMenuSubItem(getParentActivity(), !hasFolders, false);
-            if (cell.getHasUnread()) {
-                markAsUnreadItem.setTextAndIcon(LocaleController.getString(R.string.MarkAsRead), R.drawable.msg_markread);
-            } else {
-                markAsUnreadItem.setTextAndIcon(LocaleController.getString(R.string.MarkAsUnread), R.drawable.msg_markunread);
-            }
+            markAsUnreadItem.setTextAndIcon(LocaleController.getString(R.string.MarkAsUnread), R.drawable.msg_markunread); // Ayuless: preserve mark unread.
             markAsUnreadItem.setMinimumWidth(160);
             markAsUnreadItem.setOnClickListener(e -> {
-                if (cell.getHasUnread()) {
-                    markAsRead(dialogId);
-                } else {
-                    markAsUnread(dialogId);
-                }
+                markAsUnread(dialogId);
                 finishPreviewFragment();
             });
             previewMenu[0].addView(markAsUnreadItem);
@@ -9336,9 +9332,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     pinnedActionCount++;
                     pinDialog(selectedDialog, false, filter, minPinnedNum, count == 1);
                 }
-            } else if (action == read) {
+            } else if (action == AYULESS_MARK_UNREAD) { // Ayuless: preserve upstream bulk unread behavior.
+                markAsUnread(selectedDialog);
+            } else if (action == read) { // Ayuless: preserve the configured upstream swipe action without a ghost bypass.
                 if (canReadCount != 0) {
-                    markAsRead(selectedDialog);
+                    getMessagesController().markMentionsAsRead(selectedDialog, 0);
+                    getMessagesController().markReactionsAsRead(selectedDialog, 0);
+                    getMessagesController().markPollVotesAsRead(selectedDialog, 0);
+                    getMessagesController().markDialogAsRead(selectedDialog, dialog.top_message, dialog.top_message,
+                            dialog.last_message_date, false, 0, 0, true, 0);
                 } else {
                     markAsUnread(selectedDialog);
                 }
@@ -9892,18 +9894,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 muteItem.setContentDescription(LocaleController.getString(R.string.ChatsMute));
             }
         }
-        if (readItem != null) {
-            if (canReadCount != 0) {
-                readItem.setTextAndIcon(LocaleController.getString(R.string.MarkAsRead), R.drawable.msg_markread);
-                readItem.setVisibility(View.VISIBLE);
-            } else {
-                if (forumCount == 0 && communitiesCount == 0) {
-                    readItem.setTextAndIcon(LocaleController.getString(R.string.MarkAsUnread), R.drawable.msg_markunread);
-                    readItem.setVisibility(View.VISIBLE);
-                } else {
-                    readItem.setVisibility(View.GONE);
-                }
-            }
+        if (ayulessUnreadItem != null) { // Ayuless: same eligibility as the upstream unread action.
+            ayulessUnreadItem.setVisibility(canReadCount == 0 && forumCount == 0 && communitiesCount == 0 ? View.VISIBLE : View.GONE);
         }
         if (pinItem != null && pin2Item != null) {
             if (canPinCount != 0) {
@@ -10445,7 +10437,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     @SuppressWarnings("unchecked")
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.dialogsNeedReload) {
+        if (id == org.ayuless.filters.MessageFilters.SETTINGS_CHANGED) { // Ayuless: force preview layout rebuild
+            if (viewPages != null) {
+                for (ViewPage page : viewPages) {
+                    if (page != null && page.dialogsAdapter != null) {
+                        page.dialogsAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+            if (searchViewPager != null && searchViewPager.dialogsSearchAdapter != null) {
+                searchViewPager.dialogsSearchAdapter.notifyDataSetChanged();
+            }
+        } else if (id == NotificationCenter.dialogsNeedReload) {
             if (viewPages == null || dialogsListFrozen) {
                 return;
             }
@@ -13452,6 +13455,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
         }
 
+        if (org.ayuless.extras.ExtrasConfig.get(org.ayuless.extras.ExtrasConfig.KEY_GHOST_IN_MENU)) {
+            io.add(R.drawable.ayuless_solar_ghost, getString(org.ayuless.ghost.GhostConfig.isEnabled(currentAccount)
+                    ? R.string.AyulessDisableGhost : R.string.AyulessEnableGhost), () -> {
+                org.ayuless.ghost.GhostBadge.toggle(this, currentAccount, ayulessGhostItem);
+            });
+        }
         io.show();
         io.setTranslationY(-dp(64));
     }
@@ -13767,6 +13776,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         final float factor3 = 1f - animatorDoneButtonVisible.getFloatValue();
         final float factor = factor0 * factor1 * factor2 * factor3;
         FragmentFloatingButton.setAnimatedVisibility(passcodeItem, factor);
+        if (ayulessGhostItem != null) { // Ayuless: ghost button follows the same search/animation state
+            final float ghostFactor = (org.ayuless.ghost.GhostBadge.shouldShow(currentAccount) ? 1 : 0) * factor1 * factor2 * factor3;
+            FragmentFloatingButton.setAnimatedVisibility(ayulessGhostItem, ghostFactor);
+            org.ayuless.ghost.GhostBadge.updateIcon(ayulessGhostItem, currentAccount);
+        }
     }
 
     private void checkUi_itemDownloadsVisibility() {

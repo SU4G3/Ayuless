@@ -650,7 +650,9 @@ public class MessageObject {
     }
 
     public boolean hasMediaSpoilers() {
-        return !isRepostPreview && (messageOwner.media != null && messageOwner.media.spoiler || needDrawBluredPreview()) || isHiddenSensitive();
+        // Ayuless: retained TTL previews do not imply a spoiler; explicit spoilers still apply.
+        return !isRepostPreview && (messageOwner.media != null && messageOwner.media.spoiler
+                || needDrawBluredPreview() && !org.ayuless.content.RetainedMedia.showPreview(this)) || isHiddenSensitive();
     }
 
     public Boolean isSensitiveCached;
@@ -2075,6 +2077,8 @@ public class MessageObject {
 
         currentAccount = accountNum;
         messageOwner = message;
+        org.ayuless.ghost.GhostSeen.applyMessage(currentAccount, message); // Ayuless: restore local ghost receipts.
+        org.ayuless.content.ProtectedContent.onMessageObject(currentAccount, message); // Ayuless: opt-in saving restrictions
         replyMessageObject = replyToMessage;
         eventId = eid;
         wasUnread = !messageOwner.out && messageOwner.unread;
@@ -11954,7 +11958,8 @@ public class MessageObject {
     public boolean canForwardMessage() {
         if (isQuickReply()) return false;
         if (type == TYPE_GIFT_STARS || type == TYPE_GIFT_THEME_UPDATE || type == TYPE_SUGGEST_BIRTHDAY || type == TYPE_GIFT_OFFER || type == TYPE_SHARING_OFFER || type == TYPE_COMMUNITY_CHANGED) return false;
-        return !(messageOwner instanceof TLRPC.TL_message_secret) && !needDrawBluredPreview() && !isLiveLocation() && type != MessageObject.TYPE_PHONE_CALL && !isSponsored() && !messageOwner.noforwards;
+        return (!(messageOwner instanceof TLRPC.TL_message_secret) && !needDrawBluredPreview() || org.ayuless.content.ProtectedContent.canUnlock(currentAccount, messageOwner)) && !isLiveLocation() // Ayuless: forward unlocked media as copies
+                && type != MessageObject.TYPE_PHONE_CALL && !isSponsored() && !messageOwner.noforwards;
     }
 
     public boolean canEditMedia() {
@@ -12336,6 +12341,9 @@ public class MessageObject {
                 }
                 mediaExists = FileLoader.getInstance(currentAccount).getPathToAttach(photo.video_sizes.get(0), null, true, useFileDatabaseQueue).exists();
             }
+        }
+        if (!mediaExists && !attachPathExists) { // Ayuless: restore saved media of kept deleted messages
+            org.ayuless.spy.SavedAttachments.onMediaMissing(this);
         }
         updateQualitiesCached(useFileDatabaseQueue);
     }

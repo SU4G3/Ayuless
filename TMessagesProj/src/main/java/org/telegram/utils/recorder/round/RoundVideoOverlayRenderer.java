@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.R;
-import org.telegram.ui.Components.RLottieNative;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -993,21 +992,18 @@ final class RoundVideoOverlayRenderer {
         int atlasWidth = Math.max(logoAtlasWidth, textSize);
         int atlasHeight = logoAtlasHeight + textSize;
 
-        RLottieNative lottie = RLottieNative.createFromRawJson(
-                AndroidUtilities.readRes(R.raw.plane_logo_plain)
-        );
-        if (lottie == null) throw new IllegalStateException("Unable to load watermark animation");
-        Bitmap frameBitmap = Bitmap.createBitmap(logoSize, logoSize, Bitmap.Config.ARGB_8888);
+        // Ayuless: all watermark frames carry this app's vector identity.
+        Bitmap frameBitmap = org.ayuless.branding.BrandingArtwork.mark(logoSize);
         Bitmap atlasBitmap = Bitmap.createBitmap(atlasWidth, atlasHeight, Bitmap.Config.ALPHA_8);
         Canvas canvas = new Canvas(atlasBitmap);
         for (int frame = 0; frame < LOGO_FRAME_COUNT; frame++) {
             int x = frame % 8;
             int y = frame / 8;
-            lottie.getFrame(frame * 2, frameBitmap, true);
             canvas.drawBitmap(frameBitmap, frameSize * x - logoOffset, frameSize * y - logoOffset, null);
         }
 
-        Bitmap text = AndroidUtilities.getBitmapFromRaw(R.raw.round_blur_overlay_text);
+        // Ayuless: draw our wordmark instead of the baked Telegram text.
+        Bitmap text = org.ayuless.branding.BrandingArtwork.wordmark();
         if (text != null) {
             Bitmap scaled = Bitmap.createScaledBitmap(text, textSize, textSize, true);
             Bitmap alpha = scaled.extractAlpha();
@@ -1020,7 +1016,6 @@ final class RoundVideoOverlayRenderer {
         if (atlasBitmap.getRowBytes() != atlasWidth) {
             atlasBitmap.recycle();
             frameBitmap.recycle();
-            lottie.recycle();
             throw new IllegalStateException("Unexpected watermark atlas stride");
         }
         ByteBuffer pixels = ByteBuffer.allocateDirect(atlasWidth * atlasHeight);
@@ -1036,7 +1031,6 @@ final class RoundVideoOverlayRenderer {
         );
         atlasBitmap.recycle();
         frameBitmap.recycle();
-        lottie.recycle();
         if (outputSize == 360) cachedWatermark360 = result;
         else if (outputSize == 480) cachedWatermark480 = result;
         return result;

@@ -11,5 +11,5 @@
 ## Rules
 
 - [ ] New files have `SPDX-License-Identifier: GPL-3.0-or-later`
-- [ ] No code copied from AyuGram4A / exteraGram / AyuGramDesktop
+- [ ] No code copied from exteraGram; code from AyuGram keeps its original header and is listed in docs/CREDITS.md
 - [ ] No secrets, no proprietary deps

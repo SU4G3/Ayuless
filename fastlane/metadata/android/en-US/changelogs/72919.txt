@@ -1,0 +1,6 @@
+Pre-alpha preparation for F-Droid review (13.2.1, afat versionCode 72919).
+• Privacy settings, local message retention and edit history.
+• Message filters, chat tools and local database export/import.
+• MapLibre maps with optional satellite/hybrid views.
+• Native-library source build and build metadata preparation.
+Not yet published in the official F-Droid repository. Device testing and submission review remain pending; UnifiedPush draft #30 is not included.

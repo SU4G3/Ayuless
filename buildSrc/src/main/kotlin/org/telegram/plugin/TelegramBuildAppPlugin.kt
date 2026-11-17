@@ -27,6 +27,9 @@ class TelegramBuildAppPlugin : Plugin<Project> {
                 stringsXml.from(
                     telegramModule.fileTree("src/main/res/values") {
                         include("strings.xml")
+                        // Ayuless: own strings live in ayuless.xml; without this they are
+                        // missing from localization_*.bin and LocaleController shows LOC_ERR.
+                        include("ayuless.xml")
                     },
                     project.fileTree("src/main/res/values") {
                         include("strings.xml")
@@ -36,6 +39,8 @@ class TelegramBuildAppPlugin : Plugin<Project> {
                 localizationFiles.from(
                     telegramModule.fileTree("src/main/res") {
                         include("values-*/strings.xml")
+                        // Ayuless: include translations in the same binary assets as EN.
+                        include("values-*/ayuless.xml")
                     },
                     project.fileTree("src/main/res") {
                         include("values-*/strings.xml")

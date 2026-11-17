@@ -41,6 +41,8 @@ public class NotificationCenter {
     public static final int closeChats = totalEvents++;
     public static final int closeChatActivity = totalEvents++;
     public static final int closeProfileActivity = totalEvents++;
+    // Ayuless: retained deletions update live objects without replacing their content.
+    public static final int ayulessMessagesKept = totalEvents++;
     public static final int messagesDeleted = totalEvents++;
     public static final int historyCleared = totalEvents++;
     public static final int messagesRead = totalEvents++;
@@ -684,6 +686,7 @@ public class NotificationCenter {
                 }
             }
         }
+        if (!org.ayuless.ghost.GhostSeen.beforeNotification(currentAccount, id, args)) return; // Ayuless: overlay counters and discard stale local recounts before UI observers.
         broadcasting++;
         ArrayList<NotificationCenterDelegate> objects = observers.get(id);
         if (objects != null && !objects.isEmpty()) {

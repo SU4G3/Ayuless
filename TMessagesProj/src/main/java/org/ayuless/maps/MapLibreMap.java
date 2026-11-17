@@ -7,15 +7,19 @@ package org.ayuless.maps;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.location.Location;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.ZoomControls;
 
 import androidx.core.util.Consumer;
 
 import org.ayuless.nogms.PlatformLocationProvider;
+import org.ayuless.settings.ProfileMapConfig;
 import org.maplibre.android.camera.CameraUpdateFactory;
 import org.maplibre.android.maps.MapLibreMap.CancelableCallback;
 import org.maplibre.android.maps.Style;
@@ -33,6 +37,9 @@ final class MapLibreMap implements IMapsProvider.IMap, IMapsProvider.IUISettings
     final List<MapLibreOverlays.Circle> circles = new ArrayList<>();
     Style style;
     private String styleUrl;
+    private int mapType = IMapsProvider.MAP_TYPE_NORMAL;
+    private boolean darkStyle;
+    private final TextView rasterAttribution;
     private int styleGeneration, nextId;
     private boolean resumed, destroyed, locationEnabled, locationSubscribed, rendered;
     private Runnable loadedCallback;
@@ -86,7 +93,16 @@ final class MapLibreMap implements IMapsProvider.IMap, IMapsProvider.IUISettings
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(dp(48), dp(48), Gravity.RIGHT | Gravity.TOP);
         params.setMargins(dp(8), dp(8), dp(8), dp(8));
         view.addView(locationButton, params);
-        setStyleUrl(MapLibreMapsProvider.LIGHT_STYLE_URL);
+        rasterAttribution = new TextView(view.getContext());
+        rasterAttribution.setTextSize(10);
+        rasterAttribution.setTextColor(0xff111111);
+        rasterAttribution.setLinkTextColor(0xff0645ad);
+        rasterAttribution.setBackgroundColor(0xe6ffffff);
+        rasterAttribution.setPadding(dp(4), dp(2), dp(4), dp(2));
+        rasterAttribution.setMovementMethod(LinkMovementMethod.getInstance());
+        rasterAttribution.setVisibility(View.GONE);
+        view.addView(rasterAttribution, new FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM | Gravity.LEFT));
+        applyStyle();
     }
 
     int dp(float value) { return Math.round(value * view.getResources().getDisplayMetrics().density); }
@@ -98,7 +114,12 @@ final class MapLibreMap implements IMapsProvider.IMap, IMapsProvider.IUISettings
         style = null;
         rendered = false;
         int generation = ++styleGeneration;
-        nativeMap.setStyle(new Style.Builder().fromUri(url), loaded -> {
+        boolean raster = mapType != IMapsProvider.MAP_TYPE_NORMAL;
+        rasterAttribution.setVisibility(raster ? View.VISIBLE : View.GONE);
+        if (raster) rasterAttribution.setText(Html.fromHtml(MapLibreRasterStyles.attribution(mapType == IMapsProvider.MAP_TYPE_HYBRID)));
+        Style.Builder builder = raster ? new Style.Builder().fromJson(MapLibreRasterStyles.json(mapType == IMapsProvider.MAP_TYPE_HYBRID))
+                : new Style.Builder().fromUri(url);
+        nativeMap.setStyle(builder, loaded -> {
             if (destroyed || generation != styleGeneration) return;
             style = loaded;
             // Circles belong below markers, including after a theme change.
@@ -109,11 +130,17 @@ final class MapLibreMap implements IMapsProvider.IMap, IMapsProvider.IUISettings
     }
 
     @Override public void setMapType(int type) {
-        // The keyless source provides street maps; satellite/hybrid use the same style.
-        // Keep the selected theme when the upstream map-type menu changes.
+        mapType = ProfileMapConfig.validType(type);
+        applyStyle();
     }
     @Override public void setMapStyle(IMapsProvider.IMapStyleOptions value) {
-        setStyleUrl(value == null ? MapLibreMapsProvider.LIGHT_STYLE_URL : MapLibreMapsProvider.DARK_STYLE_URL);
+        darkStyle = value != null;
+        applyStyle();
+    }
+    private void applyStyle() {
+        setStyleUrl(mapType == IMapsProvider.MAP_TYPE_NORMAL
+                ? (darkStyle ? MapLibreMapsProvider.DARK_STYLE_URL : MapLibreMapsProvider.LIGHT_STYLE_URL)
+                : "ayuless-raster-" + mapType);
     }
     private static org.maplibre.android.camera.CameraUpdate update(IMapsProvider.ICameraUpdate update) {
         return ((MapLibreMapsProvider.Update) update).value;
@@ -187,6 +214,9 @@ final class MapLibreMap implements IMapsProvider.IMap, IMapsProvider.IUISettings
         // Keep the source attribution within the visible map above Telegram's sheet.
         nativeMap.getUiSettings().setAttributionGravity(Gravity.BOTTOM | Gravity.LEFT);
         nativeMap.getUiSettings().setAttributionMargins(left + dp(8), top + dp(8), right + dp(8), bottom + dp(8));
+        FrameLayout.LayoutParams attributionParams = (FrameLayout.LayoutParams) rasterAttribution.getLayoutParams();
+        attributionParams.setMargins(left + dp(28), top + dp(4), right + dp(4), bottom + dp(4));
+        rasterAttribution.setLayoutParams(attributionParams);
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) locationButton.getLayoutParams();
         params.setMargins(left + dp(8), top + dp(8), right + dp(8), bottom + dp(8));
         locationButton.setLayoutParams(params);

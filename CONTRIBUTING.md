@@ -2,13 +2,13 @@
 
 ## Rules
 
-1. **No copied code** from AyuGram4A, exteraGram or AyuGramDesktop. Reimplement behaviour from its description. Telegram-FOSS and Mercurygram may be read to understand an approach, not copied.
+1. **Clean-room boundary.** Do not introduce code, comments or resource wording derived from AyuGram4A or exteraGram. Phase-B contributors use [docs/CLEANROOM-SPEC.md](docs/CLEANROOM-SPEC.md) and the remaining independent sources, without opening the reference checkout, removed implementation, or historical Git patches/objects containing it. Keep independent Ayuless code and Telegram's GPL-2.0-or-later code and notices. Source-export handoffs must exclude Git history and the reference checkout.
 2. **Isolation.** New code goes in `org.ayuless` (`TMessagesProj/src/main/java/org/ayuless/`). Upstream files get the smallest possible hook, marked with a comment:
    ```java
    // Ayuless: <short reason>
    ```
    This keeps `git rebase upstream/master` manageable.
-3. **License header.** Every new file starts with:
+3. **License header.** Every new file written for Ayuless starts with:
    ```java
    /*
     * SPDX-License-Identifier: GPL-3.0-or-later

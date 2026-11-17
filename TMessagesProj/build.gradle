@@ -116,6 +116,7 @@ if (apiKeysFile.exists()) {
 }
 def appId = (System.getenv('APP_ID') ?: apiKeys.getProperty('APP_ID'))?.trim()
 def appHash = (System.getenv('APP_HASH') ?: apiKeys.getProperty('APP_HASH'))?.trim()
+def certFingerprint = (System.getenv('CERT_FINGERPRINT') ?: apiKeys.getProperty('CERT_FINGERPRINT'))?.trim() ?: ''
 if (!appId || !appHash) {
     throw new GradleException('Missing APP_ID or APP_HASH. Copy API_KEYS.example to API_KEYS at the repository root and fill in your credentials, or set APP_ID and APP_HASH environment variables.')
 }
@@ -169,6 +170,7 @@ android {
         // Ayuless: Generate credentials in the library's org.telegram.messenger.BuildConfig.
         buildConfigField "int", "APP_ID", appIdValue.toString()
         buildConfigField "String", "APP_HASH", groovy.json.JsonOutput.toJson(appHash)
+        buildConfigField "String", "CERT_FINGERPRINT", groovy.json.JsonOutput.toJson(certFingerprint)
         minSdkVersion 23
         targetSdkVersion 36
 

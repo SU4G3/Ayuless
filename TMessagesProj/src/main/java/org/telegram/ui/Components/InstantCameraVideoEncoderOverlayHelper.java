@@ -71,8 +71,8 @@ public class InstantCameraVideoEncoderOverlayHelper {
                 final int logoOffset = Math.round(width * 28 / 1536f);
                 final int trueSize = logoSize - logoOffset - logoOffset;
 
-                final RLottieNative rLottie = RLottieNative.createFromRawJson(AndroidUtilities.readRes(R.raw.plane_logo_plain));
-                final Bitmap logoBitmap = Bitmap.createBitmap(logoSize, logoSize, Bitmap.Config.ARGB_8888);
+                // Ayuless: static vector identity in every atlas frame.
+                final Bitmap logoBitmap = org.ayuless.branding.BrandingArtwork.mark(logoSize);
 
                 Bitmap bitmap = Bitmap.createBitmap(trueSize * 8, trueSize * 4, Bitmap.Config.ALPHA_8);
                 Canvas canvas = new Canvas(bitmap);
@@ -90,7 +90,6 @@ public class InstantCameraVideoEncoderOverlayHelper {
                         b = (y + 1) / 4f;
 
                         setTextureCords(texData, TEXTURE_BUFFER_WATERMARK_LOGO_POSITION + index * 8, l, t, r, b);
-                        rLottie.getFrame(index * 2, logoBitmap, true);
                         canvas.drawBitmap(logoBitmap, trueSize * x - logoOffset, trueSize * y - logoOffset, null);
                     }
                 }
@@ -102,13 +101,13 @@ public class InstantCameraVideoEncoderOverlayHelper {
 
                 bitmap.recycle();
                 logoBitmap.recycle();
-                rLottie.recycle();
             } else if (i == TEXTURE_INDEX_WATERMARK_TEXT) {
                 final int logoSize = Math.round(width * 372f / 1536f);
                 float scale = (float) logoSize / videoWidth;
                 setVertexCords(verData, VERTEX_BUFFER_WATERMARK_TEXT_POSITION, 1f - scale * 2f, -1f + scale * 2f, 1, -1);
 
-                Bitmap bitmap = AndroidUtilities.getBitmapFromRaw(R.raw.round_blur_overlay_text);
+                // Ayuless: use our wordmark in the video overlay.
+                Bitmap bitmap = org.ayuless.branding.BrandingArtwork.wordmark();
                 if (bitmap != null) {
                     Bitmap sBitmap = Bitmap.createScaledBitmap(bitmap, logoSize, logoSize, true);
                     Bitmap aBitmap = sBitmap.extractAlpha();

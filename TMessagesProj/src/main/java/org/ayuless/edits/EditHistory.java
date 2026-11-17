@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import org.ayuless.spy.SpyExceptions;
 import org.ayuless.storage.AyulessStore;
 import org.telegram.SQLite.SQLiteCursor;
-import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesStorage;
@@ -36,7 +35,7 @@ public final class EditHistory {
             return;
         }
         final long dialogId = MessageObject.getDialogId(edited);
-        if (DialogObject.isEncryptedDialog(dialogId) || SpyExceptions.isExcepted(account, dialogId)) {
+        if (SpyExceptions.isExcepted(account, dialogId)) {
             return;
         }
         final int msgId = edited.id;
@@ -45,27 +44,34 @@ public final class EditHistory {
         final long newMediaId = mediaId(edited.media);
         MessagesStorage storage = MessagesStorage.getInstance(account);
         storage.getStorageQueue().postRunnable(() -> {
-            TLRPC.Message old = readStored(storage, dialogId, msgId);
-            if (old == null || !AyulessStore.isStorable(old)) {
+            TLRPC.Message old = readStored(account, storage, dialogId, msgId);
+            if (old == null || !AyulessStore.isStorable(account, old, org.ayuless.content.RetentionConfig.EDIT)) {
                 return;
             }
             if (!contentChanged(old, newText, newEntities, newMediaId)) {
                 return;
             }
             AyulessStore.getInstance(account).saveEdit(old);
+            org.ayuless.spy.SavedAttachments.onKept(account, old);
             EditedCache.mark(account, dialogId, msgId);
         });
     }
 
-    private static TLRPC.Message readStored(MessagesStorage storage, long dialogId, int msgId) {
+    private static TLRPC.Message readStored(int account, MessagesStorage storage, long dialogId, int msgId) {
         SQLiteCursor cursor = null;
         try {
             cursor = storage.getDatabase().queryFinalized("SELECT data FROM messages_v2 WHERE uid = " + dialogId + " AND mid = " + msgId + " LIMIT 1");
             if (cursor.next()) {
                 NativeByteBuffer data = cursor.byteBufferValue(0);
                 if (data != null) {
-                    TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                    data.reuse();
+                    TLRPC.Message message;
+                    try {
+                        message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
+                        if (message != null) message.readAttachPath(data,
+                                org.telegram.messenger.UserConfig.getInstance(account).getClientUserId());
+                    } finally {
+                        data.reuse();
+                    }
                     if (message != null) {
                         message.dialog_id = dialogId;
                     }
@@ -90,7 +96,7 @@ public final class EditHistory {
             return true;
         }
         long oldMediaId = mediaId(old.media);
-        return oldMediaId != 0 && newMediaId != 0 && oldMediaId != newMediaId;
+        return oldMediaId != newMediaId;
     }
 
     private static String nonNull(String s) {

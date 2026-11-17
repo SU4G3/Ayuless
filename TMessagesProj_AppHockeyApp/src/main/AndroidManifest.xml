@@ -7,30 +7,6 @@
         <!-- Ayuless: removed proprietary SDK declaration. -->
         <!-- Ayuless: removed proprietary SDK component. -->
 
-        <activity
-            android:name="com.microsoft.appcenter.distribute.DeepLinkActivity"
-            android:exported="true"
-            android:theme="@android:style/Theme.NoDisplay">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="updates"
-                    android:path="/"
-                    android:scheme="appcenter" />
-            </intent-filter>
-        </activity>
-
-        <receiver
-            android:name="com.microsoft.appcenter.distribute.DownloadManagerReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
-                <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
-            </intent-filter>
-        </receiver>
+        <!-- Ayuless: AppCenter SDK is absent; remove stale update components. -->
     </application>
 </manifest>

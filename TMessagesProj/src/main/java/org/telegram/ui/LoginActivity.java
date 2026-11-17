@@ -99,6 +99,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 
+import org.ayuless.login.LoginSpoof;
 import org.ayuless.nogms.Billing.BillingClient; // Ayuless: local fallback without proprietary SDK.
 import org.ayuless.nogms.Billing.BillingFlowParams; // Ayuless: local fallback without proprietary SDK.
 import org.ayuless.nogms.Billing.ProductDetails; // Ayuless: local fallback without proprietary SDK.
@@ -1675,6 +1676,10 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     private boolean pendingSwitchingAccount;
 
     private void onAuthSuccess(TLRPC.TL_auth_authorization res, boolean afterSignup) {
+        // Ayuless: authorized now, restore the real client version (auth key is kept).
+        if (ConnectionsManager.isLoginSpoofActive(currentAccount)) {
+            ConnectionsManager.setLoginSpoofEnabled(currentAccount, false);
+        }
         MessagesController.getInstance(currentAccount).cleanup();
         ConnectionsManager.getInstance(currentAccount).setUserId(res.user.id);
         UserConfig.getInstance(currentAccount).clearConfig();
@@ -1725,7 +1730,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         needHideProgress(false);
         isRequestingFirebaseSms = false;
 
-        TLRPC.TL_auth_resendCode req = new TLRPC.TL_auth_resendCode();
+        TLRPC.TL_auth_resendCode req = LoginSpoof.newResendCode(currentAccount);
         req.phone_number = params.getString("phoneFormated");
         req.phone_code_hash = res.phone_code_hash;
         if (reason != null) {
@@ -3000,7 +3005,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 }
             }
 
-            TLRPC.TL_codeSettings settings = new TLRPC.TL_codeSettings();
+            TLRPC.TL_codeSettings settings = LoginSpoof.newCodeSettings(currentAccount);
             settings.allow_flashcall = simcardAvailable && allowCall && allowCancelCall && allowReadCallLog;
             settings.allow_missed_call = simcardAvailable && allowCall;
             settings.allow_app_hash = settings.allow_firebase = PushListenerController.GooglePushListenerServiceProvider.INSTANCE.hasServices();
@@ -3159,6 +3164,14 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                             needShowAlert(getString(R.string.RestorePasswordNoEmailTitle), getString("CodeExpired", R.string.CodeExpired));
                         } else if (error.text.startsWith("FLOOD_WAIT")) {
                             needShowAlert(getString(R.string.RestorePasswordNoEmailTitle), getString("FloodWait", R.string.FloodWait));
+                        } else if ("APP_VERSION_OUTDATED".equals(error.text) && ConnectionsManager.isLoginSpoofActive(currentAccount)) {
+                            // Fallback: disable login spoof and retry once with the real version
+                            ConnectionsManager.setLoginSpoofEnabled(currentAccount, false);
+                            // Posted so it runs after this callback hides the progress; skips the confirm dialog.
+                            AndroidUtilities.runOnUIThread(() -> {
+                                confirmedNumber = true;
+                                onNextPressed(code);
+                            });
                         } else if (error.code != -1000) {
                             AlertsCreator.processError(currentAccount, error, LoginActivity.this, req, phoneInputData.phoneNumber);
                         }
@@ -3941,7 +3954,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     params.putInt("prevType", currentType);
 
                     createCodeTimer();
-                    TLRPC.TL_auth_resendCode req = new TLRPC.TL_auth_resendCode();
+                    TLRPC.TL_auth_resendCode req = LoginSpoof.newResendCode(currentAccount);
                     req.phone_number = requestPhone;
                     req.phone_code_hash = phoneHash;
                     ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
@@ -4288,7 +4301,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
             nextPressed = true;
 
-            TLRPC.TL_auth_resendCode req = new TLRPC.TL_auth_resendCode();
+            TLRPC.TL_auth_resendCode req = LoginSpoof.newResendCode(currentAccount);
             req.phone_number = requestPhone;
             req.phone_code_hash = phoneHash;
             int reqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
@@ -4326,6 +4339,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                             needShowAlert(getString(R.string.RestorePasswordNoEmailTitle), getString(R.string.CodeExpired));
                         } else if (error.text.startsWith("FLOOD_WAIT")) {
                             needShowAlert(getString(R.string.RestorePasswordNoEmailTitle), getString(R.string.FloodWait));
+                        } else if ("APP_VERSION_OUTDATED".equals(error.text) && ConnectionsManager.isLoginSpoofActive(currentAccount)) {
+                            ConnectionsManager.setLoginSpoofEnabled(currentAccount, false);
+                            resendCode();
                         } else if (error.code != -1000) {
                             needShowAlert(getString(R.string.RestorePasswordNoEmailTitle), getString(R.string.ErrorOccurred) + "\n" + error.text);
                         }
@@ -6618,7 +6634,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                 showResendCodeView(false);
 
-                TLRPC.TL_auth_resendCode req = new TLRPC.TL_auth_resendCode();
+                TLRPC.TL_auth_resendCode req = LoginSpoof.newResendCode(currentAccount);
                 req.phone_number = requestPhone;
                 req.phone_code_hash = phoneHash;
 
@@ -9353,7 +9369,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     params.putInt("prevType", currentType);
 
 //                    createCodeTimer();
-                    TLRPC.TL_auth_resendCode req = new TLRPC.TL_auth_resendCode();
+                    TLRPC.TL_auth_resendCode req = LoginSpoof.newResendCode(currentAccount);
                     req.phone_number = requestPhone;
                     req.phone_code_hash = phoneHash;
                     ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
@@ -9744,7 +9760,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
             nextPressed = true;
 
-            TLRPC.TL_auth_resendCode req = new TLRPC.TL_auth_resendCode();
+            TLRPC.TL_auth_resendCode req = LoginSpoof.newResendCode(currentAccount);
             req.phone_number = requestPhone;
             req.phone_code_hash = phoneHash;
             int reqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
@@ -9763,6 +9779,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                             needShowAlert(getString(R.string.RestorePasswordNoEmailTitle), getString(R.string.CodeExpired));
                         } else if (error.text.startsWith("FLOOD_WAIT")) {
                             needShowAlert(getString(R.string.RestorePasswordNoEmailTitle), getString(R.string.FloodWait));
+                        } else if ("APP_VERSION_OUTDATED".equals(error.text) && ConnectionsManager.isLoginSpoofActive(currentAccount)) {
+                            ConnectionsManager.setLoginSpoofEnabled(currentAccount, false);
+                            resendCode();
                         } else if (error.code != -1000) {
                             needShowAlert(getString(R.string.RestorePasswordNoEmailTitle), getString(R.string.ErrorOccurred) + "\n" + error.text);
                         }

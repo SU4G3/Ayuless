@@ -65,6 +65,7 @@ for manifest in manifests:
         if FORBIDDEN.search(name) or any(part in name for part in (
             "GcmPushListenerService", "WearAuthListenerService", "GoogleVoiceClient",
             "com.android.vending.BILLING", "permission.MAPS_RECEIVE",
+            "com.microsoft.appcenter.",
         )):
             errors.append(f"{manifest.relative_to(ROOT)}: SDK manifest entry {name}")
 

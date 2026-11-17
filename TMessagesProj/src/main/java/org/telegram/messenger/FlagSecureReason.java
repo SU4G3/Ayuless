@@ -74,7 +74,7 @@ public class FlagSecureReason {
     }
 
     public static boolean isSecuredNow(Window window) {
-        return currentSecureReasons != null && currentSecureReasons.get(window) != null;
+        return false; // Ayuless: screenshots remain available for all content.
     }
 
     public interface FlagSecureCondition {

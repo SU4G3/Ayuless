@@ -12,7 +12,6 @@ import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
@@ -59,7 +58,7 @@ public final class AntiDelete {
                     long key = deleted.keyAt(a);
                     ArrayList<Integer> candidates = new ArrayList<>();
                     for (Integer id : deleted.valueAt(a)) {
-                        if (!LocalDeletes.contains(account, key, id)) {
+                        if (!LocalDeletes.contains(account, org.telegram.messenger.DialogObject.isEncryptedDialog(key) ? 0 : key, id)) {
                             candidates.add(id);
                         }
                     }
@@ -81,7 +80,7 @@ public final class AntiDelete {
                             if (message != null) {
                                 message.readAttachPath(data, selfId);
                                 message.dialog_id = uid;
-                                if (AyulessStore.isStorable(message) && !SpyExceptions.isExcepted(account, uid)) {
+                                if (AyulessStore.isStorable(account, message, org.ayuless.content.RetentionConfig.DELETE) && !SpyExceptions.isExcepted(account, uid)) {
                                     kept.add(message);
                                 }
                             }
@@ -111,7 +110,7 @@ public final class AntiDelete {
 
         HashSet<String> keptKeys = new HashSet<>();
         for (TLRPC.Message m : kept) {
-            keptKeys.add(LocalDeletes.updateKey(account, m.dialog_id) + ":" + m.id);
+            keptKeys.add((org.telegram.messenger.DialogObject.isEncryptedDialog(m.dialog_id) ? m.dialog_id : LocalDeletes.updateKey(account, m.dialog_id)) + ":" + m.id);
         }
         LongSparseArray<ArrayList<Integer>> result = new LongSparseArray<>();
         for (int a = 0; a < deleted.size(); a++) {
@@ -130,11 +129,44 @@ public final class AntiDelete {
         AyulessStore store = AyulessStore.getInstance(account);
         for (TLRPC.Message m : kept) {
             store.saveDeleted(m);
+            org.ayuless.spy.SavedAttachments.onKept(account, m);
             DeletedCache.mark(account, m.dialog_id, m.id);
         }
-        AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(account)
-                .postNotificationName(NotificationCenter.updateInterfaces, MessagesController.UPDATE_MASK_AVATAR));
+        notifyKept(account, kept);
         return result.size() == 0 ? null : result;
+    }
+
+    /** Called on the storage queue for secret-chat random-id deletion batches. */
+    public static boolean keepLoaded(int account, TLRPC.Message message) {
+        if (!AntiDeleteConfig.isEnabled(account)
+                || !AyulessStore.isStorable(account, message, org.ayuless.content.RetentionConfig.DELETE)
+                || SpyExceptions.isExcepted(account, message.dialog_id)
+                || LocalDeletes.contains(account, LocalDeletes.updateKey(account, message.dialog_id), message.id)) return false;
+        AyulessStore.getInstance(account).saveDeleted(message);
+        org.ayuless.spy.SavedAttachments.onKept(account, message);
+        DeletedCache.mark(account, message.dialog_id, message.id);
+        ArrayList<TLRPC.Message> kept = new ArrayList<>();
+        kept.add(message);
+        notifyKept(account, kept);
+        return true;
+    }
+
+    private static void notifyKept(int account, ArrayList<TLRPC.Message> messages) {
+        LongSparseArray<ArrayList<Integer>> idsByDialog = new LongSparseArray<>();
+        for (TLRPC.Message message : messages) {
+            long dialogId = MessageObject.getDialogId(message);
+            ArrayList<Integer> ids = idsByDialog.get(dialogId);
+            if (ids == null) idsByDialog.put(dialogId, ids = new ArrayList<>());
+            ids.add(message.id);
+        }
+        AndroidUtilities.runOnUIThread(() -> {
+            NotificationCenter center = NotificationCenter.getInstance(account);
+            for (int i = 0; i < idsByDialog.size(); i++) {
+                center.postNotificationName(NotificationCenter.ayulessMessagesKept,
+                        idsByDialog.keyAt(i), idsByDialog.valueAt(i));
+            }
+            center.postNotificationName(NotificationCenter.dialogsNeedReload);
+        });
     }
 
     /** Prefixes the time label of a kept message with the deleted mark (see DeletedStyle). */

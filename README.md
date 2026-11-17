@@ -5,7 +5,7 @@
 <h1 align="center">Ayuless</h1>
 
 <p align="center">
-  A fully open-source unofficial Android messenger client with ghost mode, anti-delete and edit history.<br>
+  A fully open-source unofficial Android messenger client with ghost mode, anti-delete, edit history and message filters.<br>
   <a href="#русский">Русский</a> · <a href="#english">English</a>
 </p>
 
@@ -21,7 +21,7 @@
 > **Unofficial client. Not affiliated with Telegram, AyuGram or Radolyn Labs. Name idea from exteraless.**
 
 > [!WARNING]
-> Pre-alpha. No releases yet. Features below are the plan for v0.1, not shipped functionality. See [docs/ROADMAP.md](docs/ROADMAP.md).
+> Pre-alpha. No releases yet, nothing tested on a device. Features below are merged to `main` but unreleased. See [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ---
 
@@ -35,37 +35,56 @@ Ayuless — неофициальный Android-клиент с функциям�
 
 ### Функции v0.1 (в разработке)
 
-Все функции включаются отдельными переключателями в разделе настроек **Ayuless** (по аккаунтам, где это уместно). Путь: **Настройки → Ayuless**. По умолчанию всё выключено.
+Все функции включаются отдельными переключателями в разделе настроек **Ayuless** (по аккаунтам, где это уместно). Путь: **Настройки → Ayuless**. По умолчанию всё выключено. На устройстве пока ничего не тестировалось.
 
-- **Ghost mode** — не отправлять статус «онлайн», «прочитано», «печатает», не отмечать просмотры историй; опция «уйти в офлайн сразу после отправки».
-- **Анти-удаление** — сообщение, удалённое собеседником или сервером, остаётся в чате и выделяется серым. Удаление самим пользователем работает как обычно.
-- **История правок** — все прошлые версии изменённого сообщения доступны из меню сообщения.
-- **Секретные чаты и самоуничтожающиеся сообщения** никогда не сохраняются.
-- **Бэкап** локальной истории удалённых и изменённых сообщений (опционально).
+- **Ghost mode** — не отправлять «онлайн», «прочитано», «печатает», просмотры историй; уходить в офлайн сразу после отправки. Профили (общий и по аккаунтам), переключатель «N/5», закрепление отдельных опций, кнопка в списке чатов, предложение ghost mode перед просмотром историй.
+- **Отложенная отправка** — сообщения, пересылки, ответы на истории уходят с задержкой.
+- **Анти-удаление** — сообщение, удалённое собеседником или сервером, остаётся в чате с пометкой. Сохраняются и вложения (с лимитом размера). Удаление самим пользователем работает как обычно.
+- **История правок** — все прошлые версии изменённого сообщения из меню сообщения.
+- **Шпион** — локально сохраняет дату прочтения твоих сообщений и время последнего онлайна; исключения для выбранных чатов.
+- **Фильтры** — ключевые слова и regex, теневой бан, скрытие сообщений заблокированных; работают и в превью списка чатов, и в уведомлениях.
+- **Запрет сохранения** — в группах и каналах можно сохранять, копировать и пересылать копией.
+- **Дополнительно** — скрытие спонсорских сообщений, локальный Premium (перевод чата), работа в фоне.
+- **Инструменты чата** — меню Ayuless для отдельного чата и экспорт переписки.
+- **Карты** — выбор обычной, спутниковой или гибридной карты.
+- **Профили** — ID и примерная дата регистрации пользователя или дата создания чата.
+- **Бэкап** — экспорт, импорт и очистка локальной базы.
+
+В работе (открытые PR): секретные чаты, TTL и «посмотреть один раз» (#43, #44, #45), новый вид настроек (#42), вход с подменой клиента (#35). Подробно: [ROADMAP](docs/ROADMAP.md).
 
 ### Открытость
 
 - Все нативные библиотеки (BoringSSL, FFmpeg, libvpx, dav1d и др.) собираются из исходников.
-- Без Google Play Services, Firebase и ML Kit. Пуши через [UnifiedPush](https://unifiedpush.org), карты через [MapLibre](https://maplibre.org).
+- Без Google Play Services, Firebase и ML Kit. Карты через [MapLibre](https://maplibre.org); поддержка [UnifiedPush](https://unifiedpush.org) пока в черновике #30 и не включена.
 
 ### Сборка
 
 > Пока идёт этап отвязки от Google-зависимостей, инструкция может не работать полностью. Статус: [ROADMAP](docs/ROADMAP.md).
 
-Нужно: JDK 17, Android SDK 36, NDK 27.2.12479018.
+Нужно: JDK 17, Android SDK 36, NDK 27.2.12479018. Перед Gradle собери native-библиотеки для всех четырёх ABI; инструменты и подробности — в [docs/NATIVE.md](docs/NATIVE.md). Готовые `.a` в Git не хранятся.
 
 ```bash
 git clone --recursive --shallow-submodules https://github.com/SU4G3/Ayuless.git
 cd Ayuless
 cp API_KEYS.example API_KEYS   # впиши свои APP_ID / APP_HASH с https://my.telegram.org/apps
+export ANDROID_SDK_ROOT=~/Android/Sdk
+Tools/native/build-prebuilts.sh
 ./gradlew assembleAfatRelease
 ```
 
 Файл `API_KEYS` в git-ignore и никогда не коммитится. APK появится в `TMessagesProj_App/build/outputs/apk/afat/release/app.apk`. ID приложения: `org.ayuless.messenger`.
 
+### F-Droid
+
+Подготовлен [черновик рецепта сборки](docs/fdroid/org.ayuless.messenger.yml) для официального репозитория F-Droid. Заявка ещё не подана; рецепт отключён до устранения [блокеров и проверок](docs/fdroid/CHECKLIST.md). Метаданные EN/RU находятся в `fastlane/metadata/android/`. Приложение требует несвободные серверы Telegram; UnifiedPush #30 для подачи не обязателен.
+
 ### Участие
 
-Правила кода и лицензирования: [CONTRIBUTING.md](CONTRIBUTING.md). Код из AyuGram4A, exteraGram и AyuGramDesktop не копируется — логика реализуется самостоятельно.
+Правила кода и лицензирования: [CONTRIBUTING.md](CONTRIBUTING.md). Код из exteraGram не используется. Порт на основе AyuGram удалён, а функции заново реализованы независимо по письменной спецификации [docs/CLEANROOM-SPEC.md](docs/CLEANROOM-SPEC.md), без доступа к исходникам AyuGram. Более ранняя история Git (до этого изменения) всё ещё содержит прежний порт.
+
+### Благодарности
+
+Спасибо команде [AyuGram](https://github.com/AyuGram) (Radolyn Labs): их клиент вдохновил Ayuless, набор функций и устройство настроек взяты у них за образец. Спасибо [exteraless](https://github.com/exteraless) за идею названия. Остальные авторы и лицензии: [docs/CREDITS.md](docs/CREDITS.md).
 
 ---
 
@@ -79,37 +98,56 @@ All Ayuless code lives in the `org.ayuless` package. Edits to upstream files are
 
 ### v0.1 features (in progress)
 
-Every feature has its own toggle in the **Ayuless** settings section (per account where it makes sense). Path: **Settings → Ayuless**. Everything is off by default.
+Every feature has its own toggle in the **Ayuless** settings section (per account where it makes sense). Path: **Settings → Ayuless**. Everything is off by default. Nothing has been tested on a device yet.
 
-- **Ghost mode** — don't send online status, read receipts, typing status or story views; optional "go offline right after sending".
-- **Anti-delete** — messages deleted by the other side or the server stay in the chat, greyed out. Deleting your own messages works as usual.
-- **Edit history** — all previous versions of an edited message, available from the message menu.
-- **Secret chats and self-destructing messages** are never stored.
-- **Backup** of the local deleted/edited history (optional).
+- **Ghost mode** — don't send online status, read receipts, typing or story views; go offline right after sending. Profiles (global and per account), "N/5" master switch, lockable options, a chat list button, ghost prompt before opening stories.
+- **Delayed send** — messages, forwards and story replies are sent after a delay.
+- **Anti-delete** — messages deleted by the other side or the server stay in the chat, marked. Attachments are kept too (with a size limit). Deleting your own messages works as usual.
+- **Edit history** — all previous versions of an edited message, from the message menu.
+- **Spy** — locally saves when your messages were read and users' last online time; exceptions for chosen chats.
+- **Filters** — keywords and regex, shadow ban, hide blocked users; also in chat list previews and notifications.
+- **Restricted saving** — save, copy and forward as copy in groups and channels.
+- **Extras** — hide sponsored messages, local Premium (chat translation), work in background.
+- **Chat tools** — a per-chat Ayuless menu and chat export.
+- **Maps** — choose map, satellite or hybrid view.
+- **Profiles** — IDs and approximate user registration dates or chat creation dates.
+- **Backup** — export, import and clear the local database.
+
+In progress (open PRs): secret chats, TTL and view-once (#43, #44, #45), new settings look (#42), login with client spoof (#35). Details: [ROADMAP](docs/ROADMAP.md).
 
 ### Openness
 
 - All native libraries (BoringSSL, FFmpeg, libvpx, dav1d, etc.) are built from source.
-- No Google Play Services, Firebase or ML Kit. Push via [UnifiedPush](https://unifiedpush.org), maps via [MapLibre](https://maplibre.org).
+- No Google Play Services, Firebase or ML Kit. Maps via [MapLibre](https://maplibre.org); [UnifiedPush](https://unifiedpush.org) support is still draft #30 and is not included.
 
 ### Building
 
 > De-Googling is in progress, so these steps may not fully work yet. Status: [ROADMAP](docs/ROADMAP.md).
 
-Requires JDK 17, Android SDK 36, NDK 27.2.12479018.
+Requires JDK 17, Android SDK 36, NDK 27.2.12479018. Build native libraries for all four ABIs before Gradle; host tools and details are in [docs/NATIVE.md](docs/NATIVE.md). No `.a` archives are stored in Git.
 
 ```bash
 git clone --recursive --shallow-submodules https://github.com/SU4G3/Ayuless.git
 cd Ayuless
 cp API_KEYS.example API_KEYS   # put your own APP_ID / APP_HASH from https://my.telegram.org/apps
+export ANDROID_SDK_ROOT=~/Android/Sdk
+Tools/native/build-prebuilts.sh
 ./gradlew assembleAfatRelease
 ```
 
 `API_KEYS` is git-ignored and must never be committed. The APK ends up in `TMessagesProj_App/build/outputs/apk/afat/release/app.apk`. Application ID: `org.ayuless.messenger`.
 
+### F-Droid
+
+A [draft build recipe](docs/fdroid/org.ayuless.messenger.yml) is available for the official F-Droid repository. No submission has been made; the recipe is disabled pending the [blockers and checks](docs/fdroid/CHECKLIST.md). EN/RU store metadata lives in `fastlane/metadata/android/`. The app requires Telegram's proprietary servers; UnifiedPush #30 is not required for submission.
+
 ### Contributing
 
-Code and licensing rules: [CONTRIBUTING.md](CONTRIBUTING.md). No code is copied from AyuGram4A, exteraGram or AyuGramDesktop; behaviour is reimplemented independently.
+Code and licensing rules: [CONTRIBUTING.md](CONTRIBUTING.md). No exteraGram code is used. The AyuGram-derived port was removed, and the features were re-implemented independently from the written specification [docs/CLEANROOM-SPEC.md](docs/CLEANROOM-SPEC.md), without access to AyuGram sources. Older Git history (before this change) still contains the earlier port.
+
+### Thanks
+
+Thanks to the [AyuGram](https://github.com/AyuGram) team (Radolyn Labs): their client inspired Ayuless, and its feature set and settings layout served as the model. Thanks to [exteraless](https://github.com/exteraless) for the name idea. Other authors and licenses: [docs/CREDITS.md](docs/CREDITS.md).
 
 ---
 

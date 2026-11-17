@@ -7,40 +7,36 @@ package org.ayuless.settings;
 
 import static org.telegram.messenger.LocaleController.getString;
 
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
+import android.text.TextUtils;
 import android.view.View;
 
 import org.ayuless.appearance.AppearanceConfig;
+import org.ayuless.extras.ExtrasConfig;
+import org.ayuless.extras.KeepAliveService;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UniversalAdapter;
-import org.telegram.ui.Components.UniversalFragment;
 
 import java.util.ArrayList;
 
 /** Ayuless > Customization: how deleted messages look in chats. */
-public class AppearanceSettingsActivity extends UniversalFragment {
+public class AppearanceSettingsActivity extends AyulessSettingsFragment {
 
     private static final int ID_TRANSLUCENT = 1;
     private static final int ID_MARK_STYLE = 2;
-    private static final int ID_MARK_COLOR = 3;
+    private static final int ID_GHOST_IN_DIALOGS = 4;
+    private static final int ID_HIDE_SPONSORED = 10;
+    private static final int ID_LOCAL_PREMIUM = 11;
+    private static final int ID_WORK_IN_BACKGROUND = 12;
+    private static final int ID_PROFILE_IDENTITY = 13;
 
-    /** Names for AppearanceConfig.PALETTE, same order. */
-    private static final int[] COLOR_NAMES = {
-            R.string.AyulessColorDefault,
-            R.string.AyulessColorGrey,
-            R.string.AyulessColorRed,
-            R.string.AyulessColorCrimson,
-            R.string.AyulessColorPink,
-            R.string.AyulessColorPurple,
-            R.string.AyulessColorBlue,
-            R.string.AyulessColorGreen,
-            R.string.AyulessColorOrange,
-    };
+    private DeletedMessagePreview preview;
+    private DeletedMarkColors colors;
 
     @Override
     protected CharSequence getTitle() {
@@ -48,26 +44,62 @@ public class AppearanceSettingsActivity extends UniversalFragment {
     }
 
     @Override
-    protected void fillItems(ArrayList<UItem> items, UniversalAdapter adapter) {
+    protected void fillSettingsItems(ArrayList<UItem> items, UniversalAdapter adapter) {
+        if (preview == null && getParentActivity() != null) {
+            preview = new DeletedMessagePreview(getParentActivity(), getResourceProvider());
+            colors = new DeletedMarkColors(getParentActivity(), getResourceProvider(), this::update);
+        }
+        if (preview != null) {
+            preview.refresh();
+            items.add(UItem.asCustomShadow(preview, 150));
+        }
         items.add(UItem.asHeader(getString(R.string.AyulessDeletedHeader)));
         items.add(UItem.asCheck(ID_TRANSLUCENT, getString(R.string.AyulessTranslucentDeleted)).setChecked(AppearanceConfig.translucentDeleted()));
-        items.add(UItem.asButton(ID_MARK_STYLE, R.drawable.ayuless_solar_msg_delete, getString(R.string.AyulessDeletedMarkStyle), styleName(AppearanceConfig.markStyle())));
-        items.add(UItem.asButton(ID_MARK_COLOR, getString(R.string.AyulessDeletedMarkColor), colorLabel(indexOfColor(AppearanceConfig.markColor()))));
+        items.add(UItem.asButton(ID_MARK_STYLE, R.drawable.ayuless_solar_msg_delete, getString(R.string.AyulessDeletedMarkStyle), TextUtils.isEmpty(AppearanceConfig.markEmoji()) ? getString(R.string.AyulessSpyExceptionsNone) : AppearanceConfig.markEmoji()));
+        if (colors != null) items.add(UItem.asCustom(colors));
         items.add(UItem.asShadow(getString(R.string.AyulessDeletedAppearanceInfo)));
+        items.add(UItem.asHeader(getString(R.string.AyulessUsefulHeader)));
+        items.add(UItem.asCheck(ID_PROFILE_IDENTITY, getString(R.string.AyulessShowProfileIdentity)).setChecked(ProfileMapConfig.showProfileIdentity()));
+        items.add(UItem.asShadow(getString(R.string.AyulessRegistrationInfo)));
+        items.add(UItem.asCheck(ID_GHOST_IN_DIALOGS, getString(R.string.AyulessGhostInDialogs)).setChecked(AppearanceConfig.ghostInDialogs()));
+        items.add(UItem.asShadow(getString(R.string.AyulessGhostInDialogsInfo)));
+        items.add(UItem.asCheck(ID_HIDE_SPONSORED, getString(R.string.AyulessHideSponsored)).setChecked(ExtrasConfig.hideSponsored()));
+        items.add(UItem.asCheck(ID_LOCAL_PREMIUM, getString(R.string.AyulessLocalPremium)).setChecked(ExtrasConfig.localPremium()));
+        items.add(UItem.asCheck(ID_WORK_IN_BACKGROUND, getString(R.string.AyulessWorkInBackground)).setChecked(ExtrasConfig.workInBackground()));
+        items.add(UItem.asShadow(getString(R.string.AyulessUsefulFeaturesInfo)));
     }
 
     @Override
     protected void onClick(UItem item, View view, int position, float x, float y) {
         switch (item.id) {
+            case ID_PROFILE_IDENTITY:
+                ProfileMapConfig.setShowProfileIdentity(!ProfileMapConfig.showProfileIdentity());
+                update();
+                break;
             case ID_TRANSLUCENT:
                 AppearanceConfig.setTranslucentDeleted(!AppearanceConfig.translucentDeleted());
+                update();
+                break;
+            case ID_GHOST_IN_DIALOGS:
+                AppearanceConfig.setGhostInDialogs(!AppearanceConfig.ghostInDialogs());
                 update();
                 break;
             case ID_MARK_STYLE:
                 showStylePicker();
                 break;
-            case ID_MARK_COLOR:
-                showColorPicker();
+            case ID_HIDE_SPONSORED:
+                ExtrasConfig.set(ExtrasConfig.KEY_HIDE_SPONSORED, !ExtrasConfig.hideSponsored());
+                update();
+                break;
+            case ID_LOCAL_PREMIUM:
+                ExtrasConfig.set(ExtrasConfig.KEY_LOCAL_PREMIUM, !ExtrasConfig.localPremium());
+                org.ayuless.extras.LocalPremium.refresh();
+                update();
+                break;
+            case ID_WORK_IN_BACKGROUND:
+                ExtrasConfig.set(ExtrasConfig.KEY_WORK_IN_BACKGROUND, !ExtrasConfig.workInBackground());
+                KeepAliveService.apply();
+                update();
                 break;
         }
     }
@@ -78,60 +110,57 @@ public class AppearanceSettingsActivity extends UniversalFragment {
     }
 
     private void update() {
+        if (preview != null) preview.refresh();
+        if (colors != null) colors.refresh();
         if (listView != null && listView.adapter != null) {
             listView.adapter.update(true);
         }
     }
 
-    private static String styleName(int style) {
-        return getString(style == AppearanceConfig.MARK_TEXT ? R.string.AyulessDeletedMarkText : R.string.AyulessDeletedMarkIcon);
-    }
-
-    private static int indexOfColor(int color) {
-        for (int i = 0; i < AppearanceConfig.PALETTE.length; i++) {
-            if (AppearanceConfig.PALETTE[i] == color) {
-                return i;
-            }
-        }
-        return 0;
-    }
-
-    /** Color name with a colored dot in front. */
-    private CharSequence colorLabel(int index) {
-        int color = AppearanceConfig.PALETTE[index];
-        if (color == AppearanceConfig.COLOR_DEFAULT) {
-            color = Theme.getColor(Theme.key_chat_inTimeText, getResourceProvider());
-        }
-        SpannableStringBuilder sb = new SpannableStringBuilder("● ");
-        sb.setSpan(new ForegroundColorSpan(color), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        sb.append(getString(COLOR_NAMES[index]));
-        return sb;
-    }
-
     private void showStylePicker() {
         if (getParentActivity() == null) return;
-        CharSequence[] labels = {styleName(AppearanceConfig.MARK_ICON), styleName(AppearanceConfig.MARK_TEXT)};
-        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity(), getResourceProvider());
-        builder.setTitle(getString(R.string.AyulessDeletedMarkStyle));
-        builder.setItems(labels, (dialog, which) -> {
-            AppearanceConfig.setMarkStyle(which == 1 ? AppearanceConfig.MARK_TEXT : AppearanceConfig.MARK_ICON);
-            update();
-        });
-        showDialog(builder.create());
+        String[] emojis = {"", "🗑️", "❌", "👻", "🚫", "💀", "✖️", "🫥"};
+        CharSequence[] labels = new CharSequence[emojis.length + 1];
+        for (int i = 0; i < emojis.length; i++) {
+            labels[i] = i == 0 ? getString(R.string.AyulessSpyExceptionsNone) : emojis[i];
+        }
+        labels[emojis.length] = getString(R.string.AyulessChooseEmoji);
+        showDialog(new AlertDialog.Builder(getParentActivity(), getResourceProvider())
+                .setTitle(getString(R.string.AyulessDeletedMarkStyle))
+                .setItems(labels, (dialog, which) -> {
+                    if (which == emojis.length) {
+                        showCustomEmoji();
+                    } else {
+                        AppearanceConfig.setMarkEmoji(emojis[which]);
+                        update();
+                    }
+                }).create());
     }
 
-    private void showColorPicker() {
-        if (getParentActivity() == null) return;
-        CharSequence[] labels = new CharSequence[AppearanceConfig.PALETTE.length];
-        for (int i = 0; i < labels.length; i++) {
-            labels[i] = colorLabel(i);
-        }
-        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity(), getResourceProvider());
-        builder.setTitle(getString(R.string.AyulessDeletedMarkColor));
-        builder.setItems(labels, (dialog, which) -> {
-            AppearanceConfig.setMarkColor(AppearanceConfig.PALETTE[which]);
+    private void showCustomEmoji() {
+        EditTextBoldCursor input = new EditTextBoldCursor(getParentActivity());
+        input.setTextSize(24);
+        input.setTextColor(Theme.getColor(Theme.key_dialogTextBlack, getResourceProvider()));
+        input.setSingleLine(true);
+        input.setText(AppearanceConfig.markEmoji());
+        input.setPadding(AndroidUtilities.dp(24), AndroidUtilities.dp(12), AndroidUtilities.dp(24), AndroidUtilities.dp(12));
+        AlertDialog dialog = new AlertDialog.Builder(getParentActivity(), getResourceProvider())
+                .setTitle(getString(R.string.AyulessChooseEmoji))
+                .setView(input)
+                .setPositiveButton(getString(R.string.Save), null)
+                .setNegativeButton(getString(R.string.Cancel), null).create();
+        showDialog(dialog);
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            String value = input.getText().toString().trim();
+            if (!value.isEmpty() && (!Emoji.fullyConsistsOfEmojis(value) || Emoji.parseEmojis(value).size() != 1)) {
+                input.setError(getString(R.string.AyulessChooseOneEmoji));
+                return;
+            }
+            AppearanceConfig.setMarkEmoji(value);
             update();
+            dialog.dismiss();
         });
-        showDialog(builder.create());
+        input.requestFocus();
+        AndroidUtilities.showKeyboard(input);
     }
 }

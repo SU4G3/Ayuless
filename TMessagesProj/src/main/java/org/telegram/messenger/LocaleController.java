@@ -1667,7 +1667,15 @@ public class LocaleController {
             if (res != 0) {
                 // a broken language pack string (bad placeholders): show the built-in one instead of LOC_ERR
                 try {
-                    return String.format(ApplicationLoader.applicationContext.getString(res), args);
+                    // Ayuless: the built-in fallback also lives in binary assets, not Android Resources.
+                    LocaleController controller = getInstance();
+                    controller.checkLocalizationInternal();
+                    String builtIn = controller.localizationInternalDefault.getByResNameOrResId(
+                            ApplicationLoader.applicationContext, key, res);
+                    if (builtIn != null) {
+                        int keyHash = key != null ? key.hashCode() : Localization.getStringResHash(ApplicationLoader.applicationContext, res);
+                        return String.format(org.ayuless.branding.AppBranding.localize(keyHash, builtIn), args);
+                    }
                 } catch (Exception ignore) {}
             }
             return "LOC_ERR: " + key;
@@ -2982,6 +2990,12 @@ public class LocaleController {
                 }
                 return getString("Online", R.string.Online);
             } else {
+                if (user.status.expires <= -100) { // Ayuless: locally saved last online for hidden statuses
+                    String local = org.ayuless.spy.LastSeen.formatHidden(currentAccount, user.id);
+                    if (local != null) {
+                        return local;
+                    }
+                }
                 if (user.status.expires == -1) {
                     return getString("Invisible", R.string.Invisible);
                 } else if (user.status.expires == -100 || user.status.expires == -1000) {
@@ -4781,6 +4795,12 @@ public class LocaleController {
 
     @Nullable
     private String getStringV2(String key, @StringRes int stringRes, String fallback) {
+        // Ayuless: binary-only strings have no Android resource entry, even though R.string IDs exist.
+        int keyHash = key != null ? key.hashCode() : Localization.getStringResHash(ApplicationLoader.applicationContext, stringRes);
+        return org.ayuless.branding.AppBranding.localize(keyHash, getUnbrandedStringV2(key, stringRes, fallback));
+    }
+
+    private String getUnbrandedStringV2(String key, @StringRes int stringRes, String fallback) {
         final Context context = ApplicationLoader.applicationContext;
         String value;
 

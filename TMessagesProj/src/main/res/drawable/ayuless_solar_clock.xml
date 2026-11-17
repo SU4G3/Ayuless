@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Clock adapted in the Solar Linear style (480 Design / R4IN80W, CC BY 4.0).
+     See docs/CREDITS.md. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <path android:pathData="M22,12A10,10 0,1 1,2 12A10,10 0,1 1,22 12Z"
+        android:strokeColor="#FFFFFFFF" android:strokeWidth="1.5" />
+    <path android:pathData="M12,8L12,12L15,14"
+        android:strokeColor="#FFFFFFFF" android:strokeWidth="1.5"
+        android:strokeLineCap="round" android:strokeLineJoin="round" />
+</vector>

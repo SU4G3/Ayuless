@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="AppName">تيليجرام</string>
-    <string name="AppNameBeta">(Beta) تيليجرام</string>
+    <string name="AppName">Ayuless</string>
+    <string name="AppNameBeta">(Beta) Ayuless</string>
     <string name="LanguageName">العربية</string>
     <string name="English">الإنجليزية</string>
     <string name="LanguageNameInEnglish">Arabic</string>
@@ -180,8 +180,8 @@
     <string name="NotificationGroupFew">أرسل %1$s %3$s لمجموعة %2$s</string>
     <string name="NotificationGroupAlbum">أرسل %1$s حُزمة وسائط لمجموعة %2$s</string>
     <string name="NotificationGroupForwardedFew">أعاد %1$s تحويل %3$s لمجموعة %2$s</string>
-    <string name="NotificationHiddenName">تيليجرام</string>
-    <string name="NotificationHiddenChatName">تيليجرام</string>
+    <string name="NotificationHiddenName">Ayuless</string>
+    <string name="NotificationHiddenChatName">Ayuless</string>
     <string name="NotificationHiddenChatUserName">مستخدم</string>
     <string name="NotificationHiddenMessage">رسالة جديدة</string>
     <string name="Reply">رد</string>
@@ -245,7 +245,7 @@
     <string name="NotificationActionPinnedGeoLiveUser">ثبّت %1$s موقعًا مباشرًا</string>
     <string name="NotificationActionPinnedGifUser">ثبّت %1$s صورة متحركة</string>
     <string name="NotificationActionPinnedMusicUser">ثبّت %1$s ملفًا صوتيًا</string>
-    <string name="SecretChatName">تيليجرام</string>
+    <string name="SecretChatName">Ayuless</string>
     <!--usernames-->
     <string name="Username">اسم المستخدم</string>
     <string name="UsernameAlso">أيضًا %1$s</string>
@@ -300,7 +300,7 @@
     <string name="NotificationsAndSounds">الإشعارات والأصوات</string>
     <string name="CustomNotifications">الإشعارات المخصصة</string>
     <string name="ProfilePopupNotification">الإشعارات المنبثقة</string>
-    <string name="ProfilePopupNotificationInfo">ستظهر الرسائل الجديدة من هذا المستخدم على الشاشة حتى لو كنت خارج تطبيق تيليجرام.</string>
+    <string name="ProfilePopupNotificationInfo">ستظهر الرسائل الجديدة من هذا المستخدم على الشاشة حتى لو كنت خارج تطبيق Ayuless.</string>
     <string name="NotificationsLed">الضوء</string>
     <string name="NotificationsLedColor">اللون</string>
     <string name="ColorBlue">أزرق</string>
@@ -556,7 +556,7 @@
     <string name="DirectShareInfo">إظهار آخر المحادثات في قائمة المشاركة</string>
     <string name="Emoji">الرموز التعبيرية</string>
     <string name="LargeEmoji">رموز تعبيرية كبيرة</string>
-    <string name="TelegramVersion">تيليجرام للأندرويد %1$s</string>
+    <string name="TelegramVersion">Ayuless للأندرويد %1$s</string>
     <string name="ChangeLanguageLater">يمكنك تغيير لغة التطبيق لاحقًا من الإعدادات.</string>
     <string name="ChooseYourLanguage">اختيار اللغة</string>
     <string name="ChooseYourLanguageOther">أخرى</string>
@@ -592,7 +592,7 @@
     <string name="UseProxyTelegram">بروكسي MTProto</string>
     <string name="UseProxyTelegramError">لم يتم إعداد البروكسي الذي تستخدمه بشكل صحيح وسيتم تعطيله. يرجى العثور على واحد آخر.</string>
     <string name="UseProxySponsor">راعي البروكسي</string>
-    <string name="UseProxySponsorInfo">تُعرض هذه القناة من قبل البروكسي. يمكنك إزالة هذه القناة من قائمة محادثاتك بتعطيل اتصال البروكسي من إعدادات تيليجرام&gt; البيانات والتخزين.</string>
+    <string name="UseProxySponsorInfo">تُعرض هذه القناة من قبل البروكسي. يمكنك إزالة هذه القناة من قائمة محادثاتك بتعطيل اتصال البروكسي من إعدادات Ayuless&gt; البيانات والتخزين.</string>
     <string name="UseProxyInfo">إعدادات بروكسي SOCKS5</string>
     <string name="UseProxyTelegramInfo">إعدادات بروكسي MTProto.</string>
     <string name="UseProxyTelegramInfo2">قد يعرض هذا البروكسي قناة إعلانية في قائمة محادثاتك.\nلن يكشف هذا عن نشاطك في تيليجرام.</string>
@@ -600,7 +600,7 @@
     <string name="UseProxyForCallsInfo">قد تقلل خوادم البروكسي من جودة مكالماتك.</string>
     <string name="ConnectingToProxyEnable">تفعيل</string>
     <string name="LowDiskSpaceTitle">ملحوظة</string>
-    <string name="LowDiskSpaceMessage">مساحة جهازك ممتلئة تقريبًا، لتحرير مساحة إضافية يمكنك جعل تيليجرام يقوم بالتخزين المؤقت للوسائط الحديثة فقط.</string>
+    <string name="LowDiskSpaceMessage">مساحة جهازك ممتلئة تقريبًا، لتحرير مساحة إضافية يمكنك جعل Ayuless يقوم بالتخزين المؤقت للوسائط الحديثة فقط.</string>
     <string name="LowDiskSpaceMessage2">مساحة القرص على جهازك على وشك النفاد. يمكنك استخدام إعدادات ذاكرة التخزين المؤقت لإزالة الوسائط غير الضرورية. يمكنك إعادة تنزيل الملفات إذا احتجت إليها مرة أخرى.</string>
     <string name="LowDiskSpaceButton">إدارة ذاكرة التخزين المؤقت</string>
     <string name="AutodownloadContacts">جهات الاتصال</string>
@@ -635,7 +635,7 @@
     <string name="ClearSelectedCache">مسح المُحددة</string>
     <string name="ClearCacheInfo">"تفريغ بعض المساحة من جهازك؛ ستبقى وسائطك في السحابة. "</string>
     <string name="ClearingCache">يتم مسح التخزين المؤقت</string>
-    <string name="ClearingCacheDescription">يرجى إبقاء النافذة مفتوحة أثناء قيام تيليجرام بتنظيف تخزينك المؤقت.</string>
+    <string name="ClearingCacheDescription">يرجى إبقاء النافذة مفتوحة أثناء قيام Ayuless بتنظيف تخزينك المؤقت.</string>
     <string name="ChangePhoneNumber">تغيير رقم الهاتف</string>
     <string name="ChangePhoneNumberInfo">نقلُ حسابك مع ما يحويه من محادثات ووسائطَ لرقمٍ آخر.</string>
     <string name="ChangePhoneNumberSuccessWithPhone">تم تغيير رقم هاتفك بنجاح إلى %1$s.</string>
@@ -664,9 +664,9 @@
     <string name="AuthAnotherClientInfo2">يرجى فتح تيليجرام على سطح المكتب للحصول على رمز QR.</string>
     <string name="AuthAnotherClientInfo3">امسح رمز الـ QR لربط حسابك.</string>
     <string name="AuthAnotherClientUrl">يمكن استخدام هذا الرمز للسماح لشخص ما بتسجيل الدخول إلى حسابك في تيليجرام.\n\nلتأكيد عملية تسجيل الدخول؛ يرجى الذهاب إلى الإعدادات &gt; الأجهزة &gt; مسح QR وامسح الرمز.</string>
-    <string name="QRCodePermissionNoCameraWithHint">يحتاج **تيليجرام** الوصول للكاميرا ليتمكن من مسح رموز QR. يرجى الذهاب إلى الإعدادات &gt; الأذونات &gt; تشغيل **الكاميرا**.</string>
+    <string name="QRCodePermissionNoCameraWithHint">يحتاج **Ayuless** الوصول للكاميرا ليتمكن من مسح رموز QR. يرجى الذهاب إلى الإعدادات &gt; الأذونات &gt; تشغيل **الكاميرا**.</string>
     <string name="SetProfilePhoto">"تعيين صورة للملف الشخصي "</string>
-    <string name="AppUpdate">تحديث تيليجرام</string>
+    <string name="AppUpdate">تحديث Ayuless</string>
     <string name="AppUpdateVersionAndSize">الإصدار %1$s • %2$s</string>
     <string name="AppUpdateDownloading">يتم التنزيل… %1$d%%</string>
     <string name="AppUpdateNow">تحديثه الآن</string>
@@ -707,23 +707,23 @@
     <string name="CheckPhoneNumberYes">نعم</string>
     <string name="CheckPhoneNumberNo">لا</string>
     <!--permissions-->
-    <string name="PermissionStorageWithHint">يحتاج تيليجرام الوصول إلى التخزين للتمكّن من إرسال وحفظ: الصور، الفيديو، الوسائط والمستندات. يرجى تمكين **الملفات والوسائط** في إعدادات الهاتف &gt; الأذونات.</string>
-    <string name="PermissionNoAudioWithHint">يحتاج تيليجرام الوصول إلى المايكروفون لتتمكنوا من إرسال الرسائل الصوتية. يرجى تمكين **المايكروفون** في إعدادات الهاتف &gt; الأذونات.</string>
-    <string name="PermissionNoAudioVideoWithHint">يحتاج تيليجرام الوصول إلى المايكروفون لتتمكنوا من إرسال الرسائل الصوتية. يرجى تمكين **المايكروفون** في إعدادات الهاتف &gt; الأذونات.</string>
-    <string name="PermissionNoCameraWithHint">يحتاج تيليجرام الوصول إلى الكاميرا لتتمكنوا من التقاط الصور والمقاطع المرئية. يرجى تمكين **الكاميرا** في إعدادات الهاتف &gt; الأذونات.</string>
-    <string name="PermissionNoCameraMicVideo">يحتاج تيليجرام الوصول إلى المايكروفون لتتمكنوا من إرسال الرسائل المرئية. يرجى تمكين **المايكروفون** في إعدادات الهاتف &gt; الأذونات.</string>
-    <string name="PermissionNoLocation">يحتاج تيليجرام إلى السماح له بتحديد موقعك لتتمكن من مشاركته مع أصدقائك.</string>
-    <string name="PermissionNoLocationStory">يحتاج تيليجرام الوصول إلى موقعك الجغرافي للتمكن من إضافة أداة الطقس إلى قصصك.</string>
-    <string name="PermissionNoLocationFriends">يحتاج **تيليجرام** الوصول إلى الموقع لتتمكنوا من مشاركته مع أصدقائكم. يرجى تمكين **الموقع** في إعدادات الهاتف &gt; الأذونات.</string>
-    <string name="PermissionNoLocationNavigation">يحتاج **تيليجرام** الوصول إلى الموقع لتتمكنوا من معرفة الاتجاهات. يرجى تمكين **الموقع** في إعدادات الهاتف &gt; الأذونات.</string>
-    <string name="PermissionNoContactsSharing">يحتاج **تيليجرام** الوصول إلى جهات الاتصال كي تتمكنوا من مشاركتها مع أصدقائكم. يرجى تمكين **جهات الاتصال** في إعدادات الهاتف &gt; الأذونات.</string>
-    <string name="PermissionNoStorageAvatar">يحتاج تيليجرام الوصول إلى التخزين لتمكينك من رفع صور للملف الشخصي. يرجى تمكين **الملفات والوسائط** في إعدادات الهاتف &gt; الأذونات.</string>
-    <string name="PermissionNoAudioStorageStory">يحتاج **تيليجرام** الوصول إلى الملفات الصوتية لإضافتها إلى قصتك. يرجى الذهاب إلى الإعدادات &gt; الأذونات وتشغيل **الموسيقى والصوت**.</string>
-    <string name="PermissionDrawAboveOtherApps">يحتاج تيليجرام إلى صلاحية الظهور فوق التطبيقات لتشغيل المقاطع المرئية في وضع (صورة في الصورة).</string>
-    <string name="PermissionDrawAboveOtherAppsGroupCall">"يتيح لك الوضع العائم استخدام المايكروفون ومعرفة من الذي يتحدث عندما تكون خارج تيليجرام. "</string>
+    <string name="PermissionStorageWithHint">يحتاج Ayuless الوصول إلى التخزين للتمكّن من إرسال وحفظ: الصور، الفيديو، الوسائط والمستندات. يرجى تمكين **الملفات والوسائط** في إعدادات الهاتف &gt; الأذونات.</string>
+    <string name="PermissionNoAudioWithHint">يحتاج Ayuless الوصول إلى المايكروفون لتتمكنوا من إرسال الرسائل الصوتية. يرجى تمكين **المايكروفون** في إعدادات الهاتف &gt; الأذونات.</string>
+    <string name="PermissionNoAudioVideoWithHint">يحتاج Ayuless الوصول إلى المايكروفون لتتمكنوا من إرسال الرسائل الصوتية. يرجى تمكين **المايكروفون** في إعدادات الهاتف &gt; الأذونات.</string>
+    <string name="PermissionNoCameraWithHint">يحتاج Ayuless الوصول إلى الكاميرا لتتمكنوا من التقاط الصور والمقاطع المرئية. يرجى تمكين **الكاميرا** في إعدادات الهاتف &gt; الأذونات.</string>
+    <string name="PermissionNoCameraMicVideo">يحتاج Ayuless الوصول إلى المايكروفون لتتمكنوا من إرسال الرسائل المرئية. يرجى تمكين **المايكروفون** في إعدادات الهاتف &gt; الأذونات.</string>
+    <string name="PermissionNoLocation">يحتاج Ayuless إلى السماح له بتحديد موقعك لتتمكن من مشاركته مع أصدقائك.</string>
+    <string name="PermissionNoLocationStory">يحتاج Ayuless الوصول إلى موقعك الجغرافي للتمكن من إضافة أداة الطقس إلى قصصك.</string>
+    <string name="PermissionNoLocationFriends">يحتاج **Ayuless** الوصول إلى الموقع لتتمكنوا من مشاركته مع أصدقائكم. يرجى تمكين **الموقع** في إعدادات الهاتف &gt; الأذونات.</string>
+    <string name="PermissionNoLocationNavigation">يحتاج **Ayuless** الوصول إلى الموقع لتتمكنوا من معرفة الاتجاهات. يرجى تمكين **الموقع** في إعدادات الهاتف &gt; الأذونات.</string>
+    <string name="PermissionNoContactsSharing">يحتاج **Ayuless** الوصول إلى جهات الاتصال كي تتمكنوا من مشاركتها مع أصدقائكم. يرجى تمكين **جهات الاتصال** في إعدادات الهاتف &gt; الأذونات.</string>
+    <string name="PermissionNoStorageAvatar">يحتاج Ayuless الوصول إلى التخزين لتمكينك من رفع صور للملف الشخصي. يرجى تمكين **الملفات والوسائط** في إعدادات الهاتف &gt; الأذونات.</string>
+    <string name="PermissionNoAudioStorageStory">يحتاج **Ayuless** الوصول إلى الملفات الصوتية لإضافتها إلى قصتك. يرجى الذهاب إلى الإعدادات &gt; الأذونات وتشغيل **الموسيقى والصوت**.</string>
+    <string name="PermissionDrawAboveOtherApps">يحتاج Ayuless إلى صلاحية الظهور فوق التطبيقات لتشغيل المقاطع المرئية في وضع (صورة في الصورة).</string>
+    <string name="PermissionDrawAboveOtherAppsGroupCall">"يتيح لك الوضع العائم استخدام المايكروفون ومعرفة من الذي يتحدث عندما تكون خارج Ayuless. "</string>
     <string name="PermissionOpenSettings">الإعدادات</string>
-    <string name="PermissionXiaomiLockscreen">يرجى السماح لتيليجرام بالظهور على شاشة القفل للتمكن من إجراء المكالمات دون مشاكل.</string>
-    <string name="PermissionBackgroundLocation">"لمشاركة موقعك المباشر في هذه المحادثة؛ يحتاج تيليجرام الوصول إلى موقعك باستمرار، بما في ذلك أثناء عمل التطبيق في الخلفية.\n\n سنستخدم موقعك للمدة التي تختارها أنت فقط ويمكنك التوقف عن مشاركته في أي وقت. لن نستخدم موقعك لأي غرض بخلاف مشاركته في هذه المحادثة. "</string>
+    <string name="PermissionXiaomiLockscreen">يرجى السماح لAyuless بالظهور على شاشة القفل للتمكن من إجراء المكالمات دون مشاكل.</string>
+    <string name="PermissionBackgroundLocation">"لمشاركة موقعك المباشر في هذه المحادثة؛ يحتاج Ayuless الوصول إلى موقعك باستمرار، بما في ذلك أثناء عمل التطبيق في الخلفية.\n\n سنستخدم موقعك للمدة التي تختارها أنت فقط ويمكنك التوقف عن مشاركته في أي وقت. لن نستخدم موقعك لأي غرض بخلاف مشاركته في هذه المحادثة. "</string>
     <string name="PermissionDrawAboveOtherAppsTitle">صورة داخل&#160;صورة</string>
     <string name="PermissionDrawAboveOtherAppsGroupCallTitle">المحادثة المرئية العائمة</string>
     <!--media view-->
@@ -1003,7 +1003,7 @@
     <string name="ActionBotDocumentRentalAgreement">عقد الإيجار</string>
     <string name="ActionBotDocumentPhone">رقم الهاتف</string>
     <string name="ActionBotDocumentEmail">عنوان البريد الإلكتروني</string>
-    <string name="UnsupportedMedia2">نسختك الحالية من تيليجرام لا تدعم هذه الرسالة. يرجى تحديث التطبيق إلى أحدث نسخة.</string>
+    <string name="UnsupportedMedia2">نسختك الحالية من Ayuless لا تدعم هذه الرسالة. يرجى تحديث التطبيق إلى أحدث نسخة.</string>
     <string name="YourVersionIsLatest">نسختك محدثة.</string>
     <string name="AttachPhoto">صورة</string>
     <string name="AttachVideo">مقطع مرئي</string>
@@ -1037,8 +1037,8 @@
     <string name="DeleteAll">حذف الكل</string>
     <string name="StopLoadingTitle">إيقاف التحميل؟</string>
     <string name="StopLoading">هل تريدون إلغاء التحميل؟</string>
-    <string name="UpdateTelegram">تحديث تيليجرام</string>
-    <string name="UpdateAppAlert">عذرًا، تطبيق تيليجرام الذي تملكه قديم ولا يمكنه التعامل مع هذا الطلب، يرجى القيام بتحديثه.</string>
+    <string name="UpdateTelegram">تحديث Ayuless</string>
+    <string name="UpdateAppAlert">عذرًا، تطبيق Ayuless الذي تملكه قديم ولا يمكنه التعامل مع هذا الطلب، يرجى القيام بتحديثه.</string>
     <string name="InvalidPhoneNumber">رقم هاتف غير صالح، يرجى التحقق من الرقم والمحاولة مرة أخرى.</string>
     <string name="PleaseLoginPassport">يرجى تسجيل الدخول إلى حسابك في تيليجرام لتتمكن من استخدام جواز تيليجرام.</string>
     <string name="BannedPhoneNumber">"هذا الرقم محظور "</string>
@@ -1153,10 +1153,10 @@
     <string name="SecretLinkPreviewAlert">هل ترغبون في تفعيل معاينة الروابط المطولة في المحادثات السرية؟ مع العلم أن معاينة الروابط يتم توليدها على خوادم تيليجرام.</string>
     <string name="SecretChatContextBotAlert">يرجى ملاحظة أن بوتات المحتوى الاستعلامي يتم تطويرها من مطورين مستقلين. لكي تعمل هذه البوتات، ما تكتبه بعد اسم مستخدم البوت يذهب لمطور البوت.</string>
     <string name="EditMessageError">المعذرة، لا يمكنك تعديل هذه الرسالة.</string>
-    <string name="AllowReadCall">يرجى السماح لتيليجرام باستلام المكالمات ليتمكن من إدخال الرمز لك تلقائيًا.</string>
-    <string name="AllowReadCallAndLog">يرجى السماح لتيليجرام بتلقي وقراءة سجل المكالمات لنتمكن من إدخال الرمز لك تلقائيًا.</string>
-    <string name="AllowReadCallLog">يرجى السماح لتيليجرام بقراءة سجل المكالمات لنتمكن من إدخال الرمز لك تلقائيًا.</string>
-    <string name="AllowFillNumber">يرجى السماح لتيليجرام بتلقي المكالمات لنتمكن من تفعيل رقم هاتفك تلقائيًا.</string>
+    <string name="AllowReadCall">يرجى السماح لAyuless باستلام المكالمات ليتمكن من إدخال الرمز لك تلقائيًا.</string>
+    <string name="AllowReadCallAndLog">يرجى السماح لAyuless بتلقي وقراءة سجل المكالمات لنتمكن من إدخال الرمز لك تلقائيًا.</string>
+    <string name="AllowReadCallLog">يرجى السماح لAyuless بقراءة سجل المكالمات لنتمكن من إدخال الرمز لك تلقائيًا.</string>
+    <string name="AllowFillNumber">يرجى السماح لAyuless بتلقي المكالمات لنتمكن من تفعيل رقم هاتفك تلقائيًا.</string>
     <string name="UserRestricted">المعذرة، ليس مسموحًا لك القيام بهذا.</string>
     <string name="YouBlockedUser">المعذرة، لا يمكنك إضافة هذا المستخدم أو البوت للمجموعات بسبب أنك قمت بحظره. فضلًا قم بإزالة الحظر للاستمرار.</string>
     <string name="AddAdminErrorNotAMember">لا يمكنك إضافة هذا المستخدم كمشرف لأنه ليس عضوًا في هذه المجموعة وغير مسموح لك بإضافته.</string>
@@ -1191,18 +1191,18 @@
     <string name="TosUpdateDecline">للأسف، لا توجد خيارات أخرى. على عكس التطبيقات الأخرى؛ لا تستخدم تيليجرام بيانات المستخدمين لاستهدافهم بالإعلانات أو لأغراض تجارية أخرى. يخزن تيليجرام فقط المعلومات التي يحتاجها للعمل كخدمة سحابية غنية بالميزات. يمكنك ضبط كيفية استخدام بياناتك في إعدادات الخصوصية والأمان.\n\nإذا لم تكن مرتاحًا لاحتياجات تيليجرام المتواضعة؛ لن نتمكن من تزويدك بهذه الخدمة.</string>
     <string name="TosDeclineDeleteAccount">تحذير، سيؤدي هذا إلى حذف حسابك في تيليجرام بشكل نهائي بالإضافة لجميع البيانات التي تخزنها في سحابة تيليجرام.\n\nهام: يمكنك الإلغاء الآن وتصدير بياناتك قبل حذف حسابك عوضًا عن خسارتها كلها. (للقيام بذلك، افتح النسخة الأخيرة من تيليجرام لسطح المكتب وتوجه إلى الإعدادات &gt; إعدادات متقدمة &gt; تصدير بيانات تيليجرام).</string>
     <!--Intro view-->
-    <string name="Page1Title">تيليجرام</string>
+    <string name="Page1Title">Ayuless</string>
     <string name="Page2Title">سريع</string>
     <string name="Page3Title">مجاني</string>
     <string name="Page4Title">آمن</string>
     <string name="Page5Title">قوي</string>
     <string name="Page6Title">تخزين سحابي</string>
     <string name="Page1Message">تطبيق المراسلة **الأسرعُ** عالميًّا.\nإنه **مجانيٌّ** و**آمنٌ** كذلك.</string>
-    <string name="Page2Message">**تيليجرام** يوصل الرسائل\nأسرع من أي تطبيق آخر.</string>
-    <string name="Page3Message">**تيليجرام** يقدم تخزينًا سحابيًا مجانيًا\nغير محدود للمحادثات والوسائط.</string>
-    <string name="Page4Message">يحمي **تيليجرام** رسائلك\nمن هجمات المخترقين.</string>
-    <string name="Page5Message">لا يفرض **تيليجرام** قيودًا على\nحجم وسائطك ومحادثاتك.</string>
-    <string name="Page6Message">**تيليجرام** يتيح لك الوصول\nلرسائلك من أجهزة متعددة.</string>
+    <string name="Page2Message">**Ayuless** يوصل الرسائل\nأسرع من أي تطبيق آخر.</string>
+    <string name="Page3Message">**Ayuless** يقدم تخزينًا سحابيًا مجانيًا\nغير محدود للمحادثات والوسائط.</string>
+    <string name="Page4Message">يحمي **Ayuless** رسائلك\nمن هجمات المخترقين.</string>
+    <string name="Page5Message">لا يفرض **Ayuless** قيودًا على\nحجم وسائطك ومحادثاتك.</string>
+    <string name="Page6Message">**Ayuless** يتيح لك الوصول\nلرسائلك من أجهزة متعددة.</string>
     <string name="StartMessaging">بدء المراسلة</string>
     <!--date formatters-->
     <string name="formatterBoostExpired">MMM dd, yyyy</string>
