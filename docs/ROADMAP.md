@@ -2,15 +2,32 @@
 
 Each step is one or more PRs, with a manual test checklist on a test account in the PR description.
 
-Status: ✅ done (merged to `main`) · ✅ in progress · ⏳ planned
+Updated: 2026-11-17.
 
-Nothing has been tested on a device yet. Ayuless settings live in **Settings → Ayuless**. Anti-delete, saved attachments, sponsored-message hiding and background work default on; optional additions default off. Explicit saved choices are preserved.
+Status: ✅ done (merged to `main`) · 🚧 in progress / open PR · ⏳ planned
 
-> **Known issues**
-> - Signing in with a new session may fail on current builds (reported after the first device test, cause not known yet). An existing session works.
-> - Ported AyuGram4A code is GPLv2 without "or later", while Ayuless is GPL-3.0-or-later: needs Radolyn's permission or a license decision.
+The user confirmed that the earlier test APK and mini-apps worked. This does
+not validate every feature or the later QuickJS/Noto changes in open PR #62.
+Ayuless settings live in **Settings → Ayuless**. Anti-delete, saved attachments,
+sponsored-message hiding and background work default on; optional additions
+default off. Explicit saved choices are preserved.
 
-First test build: [v0.1.0-alpha.1](https://github.com/SU4G3/Ayuless/releases/tag/v0.1.0-alpha.1) (pre-release).
+Current release work:
+- Login fingerprint fix merged (#56); the earlier new-session login report is
+  no longer an unresolved implementation task. Login still needs regression
+  testing on the final release candidate.
+- The clean-room rewrite replaced the AyuGram-derived implementation (#60),
+  keeping GPL-3.0-or-later. Source provenance remains subject to review; see
+  [CLEANROOM-REMOVED.md](CLEANROOM-REMOVED.md).
+- F-Droid metadata and recipe draft merged (#61). Source-build improvements and
+  the Noto emoji replacement are in [open PR #62](https://github.com/SU4G3/Ayuless/pull/62),
+  not yet in `main`. The recipe remains disabled; Ayuless is not ready for an
+  F-Droid submission.
+- Background APK publishing was stopped at the user's request. A new Noto APK
+  has not been validated or published by that task.
+
+Public pre-release: [v0.1.0-alpha.1](https://github.com/SU4G3/Ayuless/releases/tag/v0.1.0-alpha.1).
+Private test APKs: [test-cleanroom](https://github.com/SU4G3/Ayuless-reports/releases/tag/test-cleanroom).
 
 ## Step 0: Repository setup ✅
 - Fork, README, license audit, icon, CI, CodeQL, Dependabot, issue templates.
@@ -20,7 +37,7 @@ First test build: [v0.1.0-alpha.1](https://github.com/SU4G3/Ayuless/releases/tag
 - ✅ Remove Play Services, Firebase, ML Kit, Play Integrity, Billing, SafetyNet; dependency guard in CI (#14)
 - ✅ New app id, name and launcher icon (#15)
 - ✅ Maps via MapLibre (#17)
-- 🚧 Push via UnifiedPush (#3): draft #30, needs a device test (blocked by the login issue above)
+- 🚧 Push via UnifiedPush (#3): draft #30, needs a distributor/device test
 - ✅ Rebuild all native libs from source in CI, drop prebuilt `.a` (#5). CI builds them from source and links the APK against them, see [NATIVE.md](NATIVE.md) (#26); committed `.a` files removed (#47).
 - ⏳ `./gradlew assembleAfatRelease` from a clean clone with no proprietary blobs
 
@@ -58,7 +75,7 @@ First test build: [v0.1.0-alpha.1](https://github.com/SU4G3/Ayuless/releases/tag
 - ✅ Keyword / regex filters (case-insensitive, inverse), shadow ban, hide messages from blocked users
 - ✅ Apply filters to the chat list preview and notifications (#32)
 - ✅ Apply filters in secret chats too (#45)
-- ⏳ Re-apply filters to an already open chat without reopening it
+- ✅ Re-apply filters to an already open chat without reopening it (#48)
 
 ## Step 6 (optional): Backup ✅
 - ✅ Export / import / clear the local DB (#23)
@@ -76,9 +93,31 @@ First test build: [v0.1.0-alpha.1](https://github.com/SU4G3/Ayuless/releases/tag
 ## Step 9: Login ✅
 - ✅ Client identity and AyuGram-style login spoof: during sign-in the client presents itself as an older official build (layer 177), then switches back to the real version without dropping the auth key (#35)
 
+## Step 10: F-Droid preparation 🚧 (#61, #62)
+- ✅ Store metadata, recipe draft and release checklist (#61).
+- ✅ Solar icon attribution and licence documentation.
+- 🚧 Build WidgetJS and QuickJS builtins from pinned source inputs (#62).
+  Local functional checks, Java compilation, prepared-source scanning and
+  metadata/update checks passed; a complete F-Droid server build is still pending.
+- 🚧 Replace the Apple-derived emoji pack and all 12 handshake PNGs with Noto
+  artwork; retain SVG sources, hashes, mappings and packaged notices (#62).
+  All 3,606 images and 36 hand-tone combinations passed asset checks; repeated
+  generation produced identical files. Final APK/device validation is pending.
+- 🚧 Use the selected API ID 4 profile with its matching hash and official
+  Android fingerprint in the draft recipe (#62). Login identity requires review.
+- ⏳ Resolve remaining resource provenance and notices: fonts, models, sounds,
+  animations and other inherited data; verify map-provider terms.
+- ⏳ Complete the server build, final APK scan and reproducibility comparison.
+- ⏳ Submit to F-Droid after the checklist is satisfied.
+
+Detailed status: [F-Droid checklist](fdroid/CHECKLIST.md),
+[validation evidence](fdroid/VALIDATION-2026-11-13.md),
+[licence audit](LICENSE-AUDIT.md).
+
 ## Not done yet
-- Fix new-session login, then test everything on a device.
-- UnifiedPush device test and merge of draft #30 (#3).
-- Check `./gradlew assembleAfatRelease` from a clean clone with the native build documented in [NATIVE.md](NATIVE.md).
-- Resolve the AyuGram4A license question.
+- Review and finish #62, then validate its final APK and login on a device.
+- UnifiedPush distributor/device test and merge of draft #30 (#3).
+- Check `./gradlew assembleAfatRelease` from a clean clone with the native build
+  documented in [NATIVE.md](NATIVE.md), and complete the F-Droid server build.
+- Finish remaining resource licence/provenance review and release validation.
 - Remaining AyuGram parity items: [AYUGRAM-PARITY.md](AYUGRAM-PARITY.md).
