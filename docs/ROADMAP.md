@@ -26,7 +26,7 @@ Current release work:
 - Background APK publishing was stopped at the user's request. The final Noto APK
   is now validated and uploaded privately; the owner reported it works.
 
-Latest public release: [v0.1.0-alpha.2](https://github.com/SU4G3/Ayuless/releases/tag/v0.1.0-alpha.2) (early version, tested on one device).
+Latest public release: [v1.0.0](https://github.com/SU4G3/Ayuless/releases/tag/v1.0.0). Android retains Telegram base version 13.2.1 (72919). The release includes the tested UnifiedPush/Noto candidate; exhaustive feature testing remains pending.
 Private test APKs: [test-cleanroom](https://github.com/SU4G3/Ayuless-reports/releases/tag/test-cleanroom).
 
 ## Step 0: Repository setup ✅
@@ -101,7 +101,7 @@ Private test APKs: [test-cleanroom](https://github.com/SU4G3/Ayuless-reports/rel
 - ✅ Known font/native licences packaged; inherited fonts/data and 366 models/animations/sounds compared with the Forkgram recipe source.
 - ✅ [Packaging request #4819](https://gitlab.com/fdroid/rfp/-/work_items/4819) submitted.
 - ✅ [Metadata MR !57850](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/57850) submitted and linked to RFP #4819.
-- 🚧 Maintainer CI/review: GitLab blocks the fork pipeline on identity verification before any jobs run; a maintainer-side run was requested.
+- ⏳ MR closed by a maintainer: the required MR template was not followed and the project does not yet meet the three-month maintenance criterion. Revisit inclusion with the required history or evidence for a policy exception. GitHub releases continue independently.
 - ⏳ Two-clean-APK reproducibility comparison; individual provenance and login-identity review context remains disclosed.
 
 Detailed status: [F-Droid checklist](fdroid/CHECKLIST.md),

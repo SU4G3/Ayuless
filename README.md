@@ -12,7 +12,7 @@
 <p align="center">
   <a href="https://github.com/SU4G3/Ayuless/actions/workflows/build.yml"><img src="https://github.com/SU4G3/Ayuless/actions/workflows/build.yml/badge.svg?branch=main" alt="Build"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0--or--later-blue" alt="License: GPL-3.0-or-later"></a>
-  <img src="https://img.shields.io/badge/status-pre--alpha-orange" alt="Status: pre-alpha">
+  <img src="https://img.shields.io/badge/release-1.0.0-blue" alt="Release: 1.0.0">
 </p>
 
 > [!IMPORTANT]
@@ -21,9 +21,9 @@
 > **Unofficial client. Not affiliated with Telegram, AyuGram or Radolyn Labs. Name idea from exteraless.**
 
 > [!WARNING]
-> Ранняя версия: [v0.1.0-alpha.2](https://github.com/SU4G3/Ayuless/releases/tag/v0.1.0-alpha.2), проверена на одном устройстве. Полная проверка функций ещё не завершена. Изменения из открытого PR #62 не входят в этот APK.
+> Релиз: [v1.0.0](https://github.com/SU4G3/Ayuless/releases/tag/v1.0.0). Включает UnifiedPush, Noto-эмодзи и сборку нативных библиотек/WidgetJS из исходников. Полная сборка и проверки APK прошли; владелец подтвердил работу на телефоне. Полная проверка всех функций ещё не завершена.
 >
-> Early version: [v0.1.0-alpha.2](https://github.com/SU4G3/Ayuless/releases/tag/v0.1.0-alpha.2), tested on one device. Full feature validation is pending. Changes in open PR #62 are not included in this APK.
+> Release: [v1.0.0](https://github.com/SU4G3/Ayuless/releases/tag/v1.0.0). Includes UnifiedPush, Noto emoji and native/WidgetJS builds from source. The full build and APK checks pass; the owner confirmed it works on a phone. Exhaustive feature testing remains pending.
 
 ---
 
@@ -37,9 +37,9 @@ Ayuless — неофициальный Android-клиент с функциям�
 
 ### Скачать
 
-[Скачать APK v0.1.0-alpha.2](https://github.com/SU4G3/Ayuless/releases/download/v0.1.0-alpha.2/Ayuless-v0.1.0-alpha.2.apk) · [Все релизы](https://github.com/SU4G3/Ayuless/releases)
+[Скачать APK v1.0.0](https://github.com/SU4G3/Ayuless/releases/download/v1.0.0/Ayuless-v1.0.0.apk) · [Все релизы](https://github.com/SU4G3/Ayuless/releases)
 
-ID приложения: `org.ayuless.messenger`. Тестовые APK для разработки размещаются
+ID приложения: `org.ayuless.messenger`. Версия GitHub-релиза — 1.0.0; Android сохраняет базовую версию Telegram 13.2.1 (72919). Тестовые APK для разработки размещаются
 в [приватном репозитории отчётов](https://github.com/SU4G3/Ayuless-reports/releases/tag/test-cleanroom)
 и доступны участникам с правами доступа. В F-Droid приложение пока не опубликовано.
 
@@ -68,7 +68,7 @@ ID приложения: `org.ayuless.messenger`. Тестовые APK для р
 Код проекта распространяется под GPL-3.0-or-later. Проверка происхождения и лицензий отдельных унаследованных ресурсов продолжается: [аудит](docs/LICENSE-AUDIT.md). Для работы нужны несвободные серверы Telegram.
 
 - Все нативные библиотеки (BoringSSL, FFmpeg, libvpx, dav1d и др.) собираются из исходников.
-- Без Google Play Services, Firebase и ML Kit. Карты через [MapLibre](https://maplibre.org); поддержка [UnifiedPush](https://unifiedpush.org) добавлена в PR #30 и объединена с этой F-Droid-веткой. Выбор дистрибьютора: **Настройки → Ayuless → Уведомления**. Пользователь подтвердил доставку в тестовом артефакте; публичный APK alpha.2 не содержит этот PR.
+- Без Google Play Services, Firebase и ML Kit. Карты через [MapLibre](https://maplibre.org); поддержка [UnifiedPush](https://unifiedpush.org) добавлена в PR #30 и объединена с этой F-Droid-веткой. Выбор дистрибьютора: **Настройки → Ayuless → Уведомления**. Пользователь подтвердил доставку в тестовом артефакте; публичный APK 1.0.0 включает эту реализацию.
 
 ### Сборка
 
@@ -85,7 +85,7 @@ Tools/native/build-prebuilts.sh
 ./gradlew assembleAfatRelease
 ```
 
-Файл `API_KEYS` в git-ignore и никогда не коммитится. APK появится в `TMessagesProj_App/build/outputs/apk/afat/release/app.apk`. ID приложения: `org.ayuless.messenger`.
+Файл `API_KEYS` в git-ignore и никогда не коммитится. APK появится в `TMessagesProj_App/build/outputs/apk/afat/release/app.apk`. ID приложения: `org.ayuless.messenger`. Версия GitHub-релиза — 1.0.0; Android сохраняет базовую версию Telegram 13.2.1 (72919).
 
 ### F-Droid
 
@@ -121,9 +121,9 @@ All Ayuless code lives in the `org.ayuless` package. Edits to upstream files are
 
 ### Download
 
-[Download APK v0.1.0-alpha.2](https://github.com/SU4G3/Ayuless/releases/download/v0.1.0-alpha.2/Ayuless-v0.1.0-alpha.2.apk) · [All releases](https://github.com/SU4G3/Ayuless/releases)
+[Download APK v1.0.0](https://github.com/SU4G3/Ayuless/releases/download/v1.0.0/Ayuless-v1.0.0.apk) · [All releases](https://github.com/SU4G3/Ayuless/releases)
 
-Application ID: `org.ayuless.messenger`. Development test APKs are shared through
+Application ID: `org.ayuless.messenger`. GitHub release version is 1.0.0; Android retains Telegram base version 13.2.1 (72919). Development test APKs are shared through
 the [private reports repository](https://github.com/SU4G3/Ayuless-reports/releases/tag/test-cleanroom)
 with collaborators who have access. Ayuless is not yet available in F-Droid.
 
@@ -152,7 +152,7 @@ Secret chats, TTL, view-once media, updated settings and the login fingerprint f
 Project code is distributed under GPL-3.0-or-later. Provenance and licence review of individual inherited resources is ongoing: [audit](docs/LICENSE-AUDIT.md). The app requires Telegram’s proprietary servers.
 
 - All native libraries (BoringSSL, FFmpeg, libvpx, dav1d, etc.) are built from source.
-- No Google Play Services, Firebase or ML Kit. Maps via [MapLibre](https://maplibre.org); [UnifiedPush](https://unifiedpush.org) support is implemented in PR #30 and integrated into this F-Droid branch. Select a distributor in **Settings → Ayuless → Notifications**. The user reported delivery in a test artifact; the public alpha.2 APK does not include this PR.
+- No Google Play Services, Firebase or ML Kit. Maps via [MapLibre](https://maplibre.org); [UnifiedPush](https://unifiedpush.org) support is implemented in PR #30 and integrated into this F-Droid branch. Select a distributor in **Settings → Ayuless → Notifications**. The user reported delivery in a test artifact; the public 1.0.0 APK includes this implementation.
 
 ### Building
 
@@ -169,7 +169,7 @@ Tools/native/build-prebuilts.sh
 ./gradlew assembleAfatRelease
 ```
 
-`API_KEYS` is git-ignored and must never be committed. The APK ends up in `TMessagesProj_App/build/outputs/apk/afat/release/app.apk`. Application ID: `org.ayuless.messenger`.
+`API_KEYS` is git-ignored and must never be committed. The APK ends up in `TMessagesProj_App/build/outputs/apk/afat/release/app.apk`. Application ID: `org.ayuless.messenger`. GitHub release version is 1.0.0; Android retains Telegram base version 13.2.1 (72919).
 
 ### F-Droid
 
