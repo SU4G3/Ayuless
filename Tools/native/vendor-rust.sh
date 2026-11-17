@@ -23,6 +23,7 @@ for project in gram-wallet wallet-engine/bindgen/cpp/bindgen tlottie; do
         "$CARGO" vendor --manifest-path "$manifest" --locked --versioned-dirs vendor-fdroid > .cargo/config.toml.tmp
         printf '\n[net]\noffline = true\n' >> .cargo/config.toml.tmp
         mv .cargo/config.toml.tmp .cargo/config.toml
+        python3 "$ROOT/Tools/native/prune-cargo-test-data.py" "$directory/vendor-fdroid"
         "$CARGO" metadata --locked --offline --format-version 1 > /dev/null
     )
 done
