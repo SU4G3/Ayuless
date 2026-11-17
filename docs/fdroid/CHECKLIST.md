@@ -23,8 +23,12 @@ See the [inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/) and
   application module overrides the APK code to `7291 * 10 + 9 = 72919` for
   `afat`; changelogs are therefore **72919.txt**, not 7291.txt. Recipe update
   checks apply the same `VercodeOperation`.
-- [ ] Add actual phone screenshots; each locale has an explanatory README in
-  `images/phoneScreenshots/`. These notes are not image assets.
+- [x] Added five real user-provided English screenshots under
+  `fastlane/metadata/android/en-US/images/phoneScreenshots/`: retention in chat,
+  Ayuless settings, Ghost, Spy and Customization. Original JPEGs are unchanged;
+  the visible settings screen reports version 13.2.1 (72919). Russian screenshots
+  are not supplied. These images do not establish the exact source revision or
+  validate the newer UnifiedPush/Noto candidate.
 - [x] The draft recipe pins immutable candidate revision `d7f079dce6479701295dd4e1a10930045213f865`.
   This is a test candidate, not a published/reviewed release.
 - [x] Documented a separate release tag scheme: `fdroid-<versionName>-<afatCode>`
