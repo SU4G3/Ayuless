@@ -1,0 +1,41 @@
+{
+  "advisory": "GHSA-fc5q-39xc-vjpf",
+  "release": "v1.0.0",
+  "application_source": "afadbaf8fe909ff11e2b2f5086c153ac5dd28c46",
+  "esbuild_version": "0.28.2",
+  "excluded_packages": [
+    "picomatch",
+    "vite",
+    "tinyglobby",
+    "fdir"
+  ],
+  "bundles": [
+    {
+      "name": "sandbox",
+      "input_count": 255,
+      "forbidden_inputs": [],
+      "sha256": "282dcf4bf8152c34aeff86fb32561bb461a4b72263d369e26d6e4e5faadad470",
+      "apk_entry": "assets/WidgetSandbox/WidgetJS/sandbox-bundle.js",
+      "apk_sha256": "282dcf4bf8152c34aeff86fb32561bb461a4b72263d369e26d6e4e5faadad470",
+      "byte_identical_to_apk": true
+    },
+    {
+      "name": "renderer",
+      "input_count": 10,
+      "forbidden_inputs": [],
+      "sha256": "27f90b22b0f2e0878e605555d9b1ccbcaa1f5a16288ac447f6aa1ff0bbf6e14e",
+      "apk_entry": "assets/WidgetSandbox/WidgetJS/renderer-bundle.js",
+      "apk_sha256": "27f90b22b0f2e0878e605555d9b1ccbcaa1f5a16288ac447f6aa1ff0bbf6e14e",
+      "byte_identical_to_apk": true
+    },
+    {
+      "name": "validator",
+      "input_count": 137,
+      "forbidden_inputs": [],
+      "sha256": "87be4493ccb87e6dcfcaff3370b4a8e9c65cbc96d0a74970ea950c3ebc9693a2",
+      "apk_entry": "assets/WidgetSandbox/WidgetJS/validator-bundle.js",
+      "apk_sha256": "87be4493ccb87e6dcfcaff3370b4a8e9c65cbc96d0a74970ea950c3ebc9693a2",
+      "byte_identical_to_apk": true
+    }
+  ]
+}

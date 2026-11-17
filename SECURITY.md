@@ -23,3 +23,10 @@ retention despite the corresponding setting being disabled, and ghost controls
 sending events that the selected profile should block. Vulnerabilities in the
 upstream MTProto client should also be reported to Telegram:
 https://core.telegram.org/bug-bounty
+
+## Dependency assessments
+
+- [picomatch ReDoS, GHSA-fc5q-39xc-vjpf](docs/security/GHSA-fc5q-39xc-vjpf.md):
+  present in Vite development tooling, absent from all three inspected 1.0.0
+  WidgetJS bundles. Upstream has no patched release as of the assessment date;
+  the Dependabot alert remains open.
