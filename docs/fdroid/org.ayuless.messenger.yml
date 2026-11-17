@@ -115,11 +115,11 @@ Builds:
     # artifact handling: TMessagesProj_App/build/outputs/apk/afat/release/app.apk
     # (the module explicitly overrides outputFileName to app.apk).
 
-# Tags are checked, but automatic build creation stays off until review. The
-# existing v0.1.0-alpha.1 tag does not match APP_VERSION_NAME=13.2.1, so do not
-# invent a Version v%v tag template. Select a release-tag naming scheme first.
+# F-Droid release tags match actual Android versionName and afat versionCode,
+# e.g. fdroid-13.2.1-72919. No tag is created before release validation.
+# Keep automatic builds off until the first reviewed server build.
 AutoUpdateMode: None
-UpdateCheckMode: Tags
+UpdateCheckMode: Tags ^fdroid-[0-9.]+-[0-9]+$
 UpdateCheckData: 'gradle.properties|APP_VERSION_CODE=(\d+)|.|APP_VERSION_NAME=(.+)'
 VercodeOperation:
   - '%c * 10 + 9'

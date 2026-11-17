@@ -37,7 +37,7 @@ Private test APKs: [test-cleanroom](https://github.com/SU4G3/Ayuless-reports/rel
 - ✅ Remove Play Services, Firebase, ML Kit, Play Integrity, Billing, SafetyNet; dependency guard in CI (#14)
 - ✅ New app id, name and launcher icon (#15)
 - ✅ Maps via MapLibre (#17)
-- 🚧 Push via UnifiedPush (#3): draft #30, needs a distributor/device test
+- 🚧 Push via UnifiedPush (#3, PR #30): user reported delivery in a tested artifact on 2026-11-17; conflicts with current `main` resolved and integrated into the F-Droid branch. Final-candidate multi-account/fallback checks remain.
 - ✅ Rebuild all native libs from source in CI, drop prebuilt `.a` (#5). CI builds them from source and links the APK against them, see [NATIVE.md](NATIVE.md) (#26); committed `.a` files removed (#47).
 - ⏳ `./gradlew assembleAfatRelease` from a clean clone with no proprietary blobs
 
@@ -116,7 +116,7 @@ Detailed status: [F-Droid checklist](fdroid/CHECKLIST.md),
 
 ## Not done yet
 - Review and finish #62, then validate its final APK and login on a device.
-- UnifiedPush distributor/device test and merge of draft #30 (#3).
+- Finish review/merge of UnifiedPush #30 (#3); verify final-candidate multi-account delivery and fallback.
 - Check `./gradlew assembleAfatRelease` from a clean clone with the native build
   documented in [NATIVE.md](NATIVE.md), and complete the F-Droid server build.
 - Finish remaining resource licence/provenance review and release validation.

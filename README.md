@@ -68,7 +68,7 @@ ID приложения: `org.ayuless.messenger`. Тестовые APK для р
 Код проекта распространяется под GPL-3.0-or-later. Проверка происхождения и лицензий отдельных унаследованных ресурсов продолжается: [аудит](docs/LICENSE-AUDIT.md). Для работы нужны несвободные серверы Telegram.
 
 - Все нативные библиотеки (BoringSSL, FFmpeg, libvpx, dav1d и др.) собираются из исходников.
-- Без Google Play Services, Firebase и ML Kit. Карты через [MapLibre](https://maplibre.org); поддержка [UnifiedPush](https://unifiedpush.org) пока в черновике #30 и не включена.
+- Без Google Play Services, Firebase и ML Kit. Карты через [MapLibre](https://maplibre.org); поддержка [UnifiedPush](https://unifiedpush.org) добавлена в PR #30 и объединена с этой F-Droid-веткой. Выбор дистрибьютора: **Настройки → Ayuless → Уведомления**. Пользователь подтвердил доставку в тестовом артефакте; публичный APK alpha.2 не содержит этот PR.
 
 ### Сборка
 
@@ -98,6 +98,8 @@ QuickJS builtins из исходников, профиль API ID 4 с соот�
 ресурсов и компиляция прошли; итоговый APK с Noto и работа на устройстве ещё не
 проверены. Остаются проверка прав на остальные ресурсы, review идентификации
 при входе, полная серверная сборка и проверка воспроизводимости.
+
+Порядок завершения релиза и подачи: [RELEASE.md](docs/fdroid/RELEASE.md).
 
 ### Участие
 
@@ -150,7 +152,7 @@ Secret chats, TTL, view-once media, updated settings and the login fingerprint f
 Project code is distributed under GPL-3.0-or-later. Provenance and licence review of individual inherited resources is ongoing: [audit](docs/LICENSE-AUDIT.md). The app requires Telegram’s proprietary servers.
 
 - All native libraries (BoringSSL, FFmpeg, libvpx, dav1d, etc.) are built from source.
-- No Google Play Services, Firebase or ML Kit. Maps via [MapLibre](https://maplibre.org); [UnifiedPush](https://unifiedpush.org) support is still draft #30 and is not included.
+- No Google Play Services, Firebase or ML Kit. Maps via [MapLibre](https://maplibre.org); [UnifiedPush](https://unifiedpush.org) support is implemented in PR #30 and integrated into this F-Droid branch. Select a distributor in **Settings → Ayuless → Notifications**. The user reported delivery in a test artifact; the public alpha.2 APK does not include this PR.
 
 ### Building
 
@@ -180,6 +182,8 @@ and Noto emoji with SVG sources and licences in place of Apple-derived artwork.
 Local asset checks and compilation passed; the final Noto APK and device rendering
 remain unverified. Remaining work includes other resource rights, login-identity
 review, a complete server build and reproducibility verification.
+
+Release completion and submission steps: [RELEASE.md](docs/fdroid/RELEASE.md).
 
 ### Contributing
 

@@ -170,21 +170,24 @@ timing on the device; neither can be established by these offline checks.
   upstream keep-alive service is switched on, unless the user already set that
   option. It is switched off again once a distributor works.
 
-Not verified yet: real delivery from the server to a distributor, the exact
-payload format the server sends for type 10 tokens, and multi-account routing
+The user reported working UnifiedPush in their latest tested artifact on
+2026-11-17. The distributor, artifact hash and exact payload format were not
+recorded, so this is a user delivery report, not a captured protocol trace.
+Still unverified: multi-account routing
 (one endpoint is shared by all accounts, as with FCM; if the payload has no
 `user_id`, the selected account is used).
 
 ## Remaining work
 
-- Issue #3 follow-up: test UnifiedPush delivery on a device with a distributor
-  (see above).
+- Issue #3 follow-up: retain the reported device success and verify multi-account
+  delivery, distributor removal/re-registration and fallback on the final APK.
 - Issue #4: compile the MapLibre 11.8.0 integration when dependency downloads are
   available, then test rendering/OSM attribution, location selection, live marker
   rotation/clicks, proximity circles, bounds fitting, permissions and lifecycle
   on a device without Google services. Verify the resolved graph contains no GMS.
   Verify a keyless dark style before changing the Liberty fallback. Satellite and
-  hybrid imagery remain unconfigured.
+  hybrid modes now use EOX imagery and an optional label overlay; verify their
+  attribution and lifecycle on the final APK.
 - Test login alternatives on a test account. The server decides which methods
   are offered; a mandatory Integrity/reCAPTCHA challenge cannot be satisfied by
   an SDK-free client. Platform passkeys require a compatible Android provider.

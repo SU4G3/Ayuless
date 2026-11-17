@@ -156,3 +156,27 @@ stored without ZIP compression, as required by `EmojiPack.openFd`.
 
 The pack is 14,798,630 bytes (about 11 MB larger than the previous pack).
 Device rendering and a complete F-Droid server build remain unverified.
+
+## UnifiedPush integration and release handoff (2026-11-17)
+
+UnifiedPush PR #30 was updated by merging current `main` (`2214b2c8`) into its
+branch, preserving both manifest services and all current translations. Its
+implementation was merged into the F-Droid candidate without further delivery
+logic changes. The user reported working UnifiedPush in their latest artifact;
+no exact artifact hash, distributor or packet trace was provided.
+
+Validation after integration:
+
+- `:TMessagesProj:compileReleaseJavaWithJavac`, JDK 21, offline, two workers:
+  **BUILD SUCCESSFUL**, 3m 25s, 137 tasks (7 executed).
+- `Tools/check_degoogle.py`: passes for five configured modules.
+- Updated metadata: `fdroid readmeta` and `fdroid lint org.ayuless.messenger`
+  pass in the configured disposable metadata checkout.
+- EN/RU strings have unique names; manifest/XML parsing and documentation links
+  pass. No new full APK or F-Droid server build is claimed.
+
+The source and packaged notices no longer classify the replaced Noto emoji as
+Apple artwork. Store descriptions now describe UnifiedPush and the background
+fallback. A separate F-Droid tag namespace avoids mistaking the public alpha
+marketing version for Android's `13.2.1`/`72919`. No tag is created and no
+submission is sent. Exact handoff steps are in [RELEASE.md](RELEASE.md).

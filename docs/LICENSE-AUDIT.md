@@ -65,7 +65,7 @@ but their licences and the final merged APK still need individual review.
 | Bundled component / paths | Licence and evidence | Source / preferred source / action |
 |---|---|---|
 | Ayuless launcher artwork, `*ayuless*` drawables and store icons | GPL-3.0-or-later, own artwork | `branding/generate.py`, SVGs and Android vectors in this repo; preserve those sources |
-| `ayuless_solar_*.xml` (14) | CC BY 4.0; conversion attribution in XML and packaged notices | [480 Design / R4IN80W Solar set](https://www.figma.com/community/file/1166831539721848736/solar-icons-set); vectors are editable, colors/style adapted |
+| `ayuless_solar_*.xml` (15) | CC BY 4.0; conversion attribution in XML and packaged notices | [480 Design / R4IN80W Solar set](https://www.figma.com/community/file/1166831539721848736/solar-icons-set); vectors are editable, colors/style adapted |
 | `fonts/rmono_var.ttf` | **OFL-1.1**, explicit embedded name IDs 13/14; copyright 2015 Roboto Mono Project Authors | [Roboto Mono](https://github.com/googlefonts/RobotoMono); retain font, copyright and packaged OFL text; exact source revision/build recipe still needs mapping |
 | `fonts/rmono.ttf` | Roboto Mono copyright embedded; OFL-1.1 family, exact file grant/source revision pending | Same family source; obtain matching source/release and confirm licence |
 | `fonts/r{medium,mediumitalic,italic,condensedbold}.ttf` | Embedded Google 2011 copyright / Roboto names; older Roboto family Apache-2.0, exact file provenance pending | [Roboto Classic](https://github.com/googlefonts/roboto-classic); match original version, do not assume newer family licence applies retroactively |

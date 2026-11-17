@@ -93,10 +93,10 @@ Sources/distribution: https://github.com/DrKLO/Telegram/tree/7be672ea/TMessagesP
 No individual grant/preferred source has been established here for:
 secureid_ocr_nn.dat (OCR weights); PhoneFormats.dat, grammars.dat, shapes.dat;
 models/diamond_ios/*.bin and models/*.binobj/model textures; gram.ttf/num.otf;
-emoji.pack and emoji/compound PNGs; raw Lottie JSON animations and MP3/WAV sounds;
+raw Lottie JSON animations and MP3/WAV sounds;
 inherited drawable/mipmap art, themes, wallet textures, backgrounds and stickers.
-The AppleColorEmoji renderer in Tools/EmojiTextureMaker.html is a non-free
-provenance risk: its code licence grants no rights to Apple's rendered glyphs.
+The previous Apple-derived emoji pack and handshake PNGs have been replaced
+with Noto artwork; its sources and notices are listed below.
 Obtain free sources/grants or replace the affected assets before release.
 
 This notice records known credits and missing evidence; it grants no rights to
@@ -115,3 +115,11 @@ existing two-hand skin-tone picker; encoded as lossless WebP in the EPK3 pack.
 Copyright notice: ayuless-notices/noto-copyright.txt
 Apache licence: ayuless-notices/gumbo-Apache-2.0.txt
 Flag notices: ayuless-notices/noto-flags.txt
+
+UnifiedPush Android connector 3.3.5
+https://codeberg.org/UnifiedPush/android-connector
+Apache License 2.0; publisher: UnifiedPush / S1m.
+The connector includes its Web Push decryptor derived from Google Tink
+(Apache License 2.0); the runtime also declares com.google.crypto.tink:tink:1.23.0.
+https://github.com/tink-crypto/tink-java
+Full Apache licence text: ayuless-notices/gumbo-Apache-2.0.txt

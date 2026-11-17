@@ -75,3 +75,15 @@ This supersedes the tooling/access limitations above, but does not establish
 every transitive licence or actual runtime network behaviour. Source-built
 esbuild and the cleanup exceptions are documented in
 [VALIDATION-2026-11-13.md](VALIDATION-2026-11-13.md).
+
+## UnifiedPush integration (2026-11-17)
+
+The current candidate declares `org.unifiedpush.android:connector:3.3.5`.
+Its cached POM and Gradle module metadata declare Apache-2.0, Kotlin stdlib
+2.2.10 and runtime Tink 1.23.0. The cached AAR SHA-256 is
+`fa017cdfabbdc9af021e1f8c8eff2c8098e701d7a2c599937dce0b4ecf1e929b`.
+The declaration inventory now covers 38 entries. Release Java compilation and
+DeGoogle source auditing pass after integration; these do not by themselves
+verify all runtime artifacts, final APK packaging or multi-account delivery.
+The connector and Tink are FLOSS libraries; their Google-related namespace does
+not mean that Firebase or Play Services has been reintroduced.
