@@ -25,6 +25,10 @@
 >
 > Release: [v1.0.0](https://github.com/SU4G3/Ayuless/releases/tag/v1.0.0). Includes UnifiedPush, Noto emoji and native/WidgetJS builds from source. The full build and APK checks pass; the owner confirmed it works on a phone. Exhaustive feature testing remains pending.
 
+> **Смена подписи в 1.0.0:** перед установкой вместо alpha/test APK экспортируйте локальную базу и вложения, затем удалите старую версию. Секретные чаты при удалении потеряются. Новый личный ключ используется для дальнейших GitHub-релизов; [подробности](docs/RELEASE-SIGNING.md).
+>
+> **New signing key in 1.0.0:** export your local database and attachments before uninstalling an old alpha/test APK. Secret chats are lost on uninstall. Future GitHub releases use the new private key; [details](docs/RELEASE-SIGNING.md).
+
 ---
 
 ## Русский
