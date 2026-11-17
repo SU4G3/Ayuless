@@ -70,3 +70,49 @@ The generator, local components and source lock are present; libprisma and
 PrismJS carry the same MIT grant (licence files differ only by final newline).
 Their notice is now packaged. Exact output correspondence remains a separate
 source-generation review item, not a discovered proprietary licence.
+
+
+## Additional upstream research
+
+The current F-Droid Forkgram recipe was fetched on 2026-11-17. Its latest
+13.2.3.0 entries reference Forkgram/TelegramAndroid commit
+`26dbf897e92ed64b5b6033df6484e05e427fa4d7`. Direct downloads at that exact revision
+match this tree byte-for-byte for `fonts/gram.ttf`, `fonts/num.otf`,
+`secureid_ocr_nn.dat`, `PhoneFormats.dat`, `shapes.dat`, `models/star.binobj` and
+`models/diamond_ios/main.bin`. Full hashes/URLs are recorded in
+`ADDITIONAL-ASSET-PROVENANCE.json`. The recipe has no `NonFreeAssets` declaration
+and explicitly scanignores the diamond model directory. Scanignore is a scanner
+exception, not a copyright licence. This establishes a relevant existing recipe
+and source precedent; it does not prove which files ship in its APK, independently
+clear their rights, or guarantee Ayuless inclusion.
+
+An initial comparison against Forkgram's `master` branch had missing/older files.
+It is not the recipe revision and is not used for the conclusions above.
+Likewise, paths queried in the current Telegram Desktop tree returned 404; no
+Desktop byte-identity or resource licence conclusion is drawn from those paths.
+
+The OCR reader constructs a Genann network with 150 inputs, one 90-node hidden
+layer and 37 outputs, then reads its weights directly from the DAT asset.
+`jni/genann.h` retains Lewis Van Winkle's zlib-style licence. That grants the
+inference library; it does not establish the separate model/training provenance.
+No model-specific grant or training recipe was found in this research.
+
+RMPhoneFormat's own README explicitly describes obtaining `Default.phoneformat`
+from Apple's private AppSupport framework and renaming it `PhoneFormats.dat`.
+Its BSD notice covers the reader, with no express Apple data grant in that README.
+This is a concrete origin concern for the original database; the current Ayuless
+file's exact relationship to a particular Apple SDK file remains unestablished.
+The identical Forkgram file is useful provenance, not proof of Apple's permission.
+No formatter or data is replaced based solely on that unresolved relationship.
+
+Sources:
+- https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/org.forkgram.messenger.yml
+- https://github.com/Forkgram/TelegramAndroid/tree/26dbf897e92ed64b5b6033df6484e05e427fa4d7
+- https://github.com/rmaddy/RMPhoneFormat/blob/master/README.md
+- Local `TMessagesProj/jni/{genann.h,secureid_ocr.cpp}`
+
+A complete Git-blob comparison of the model directory and raw JSON/MP3/WAV
+resources found **366 of 366 identical files** at the same Forkgram revision.
+`FORKGRAM-ASSET-COMPARISON.json` records every path and both blob IDs.
+This strengthens the source precedent for animations and sounds as well; it
+does not assign individual authorship or prove the contents of a shipped APK.

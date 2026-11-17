@@ -1,0 +1,2205 @@
+{
+  "checked_on": "2026-11-17",
+  "repository": "Forkgram/TelegramAndroid",
+  "revision": "26dbf897e92ed64b5b6033df6484e05e427fa4d7",
+  "recipe_url": "https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/org.forkgram.messenger.yml",
+  "note": "Source-tree correspondence, not independent copyright clearance or verification of shipped Forkgram APK contents.",
+  "files": [
+    {
+      "path": "TMessagesProj/src/main/assets/models/coin_border.png",
+      "local_git_blob": "03a5254f5689472e31b89db6058830eeb1afc581",
+      "upstream_git_blob": "03a5254f5689472e31b89db6058830eeb1afc581",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/assets/models/coin_inner.binobj",
+      "local_git_blob": "1753bd58dbede1a2393c1313a04128877c931e8d",
+      "upstream_git_blob": "1753bd58dbede1a2393c1313a04128877c931e8d",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/assets/models/coin_logo.binobj",
+      "local_git_blob": "603ced6933dc7111f187d72e6c36e4dc448b2126",
+      "upstream_git_blob": "603ced6933dc7111f187d72e6c36e4dc448b2126",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/assets/models/coin_outer.binobj",
+      "local_git_blob": "1f47c60f0982b39504bdd90ec0949486b9bf1dc5",
+      "upstream_git_blob": "1f47c60f0982b39504bdd90ec0949486b9bf1dc5",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/assets/models/coin_stars.binobj",
+      "local_git_blob": "a3f49980a11a30d8041a1f8b1706d1c4695a2264",
+      "upstream_git_blob": "a3f49980a11a30d8041a1f8b1706d1c4695a2264",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/assets/models/deal_border.png",
+      "local_git_blob": "02cb191b8223b8e0247f7aa9e3ce7c5c35250931",
+      "upstream_git_blob": "02cb191b8223b8e0247f7aa9e3ce7c5c35250931",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/assets/models/deal_logo.binobj",
+      "local_git_blob": "db37f31d2814586b6773c8e24389210970e844b3",
+      "upstream_git_blob": "db37f31d2814586b6773c8e24389210970e844b3",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/assets/models/diamond_ios/anchors.bin",
+      "local_git_blob": "1f65e7e8ace44cb55d627a98b65653b8e9a44648",
+      "upstream_git_blob": "1f65e7e8ace44cb55d627a98b65653b8e9a44648",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/assets/models/diamond_ios/camera.bin",
+      "local_git_blob": "0cf4234a034680f8c8e4ae5a7a3426c241faf74d",
+      "upstream_git_blob": "0cf4234a034680f8c8e4ae5a7a3426c241faf74d",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/assets/models/diamond_ios/facetProjection.bin",
+      "local_git_blob": "90425f283d5592836025092ca1814fbff2d061eb",
+      "upstream_git_blob": "90425f283d5592836025092ca1814fbff2d061eb",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/assets/models/diamond_ios/frames.bin",
+      "local_git_blob": "7a2f7438b5092fefbcd7da831c11a1e5bf28327f",
+      "upstream_git_blob": "7a2f7438b5092fefbcd7da831c11a1e5bf28327f",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/assets/models/diamond_ios/main.bin",
+      "local_git_blob": "efa50398f00afabfbcadff103125d8e55644d73c",
+      "upstream_git_blob": "efa50398f00afabfbcadff103125d8e55644d73c",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/assets/models/diamond_ios/planes.bin",
+      "local_git_blob": "ad2f19757972560869d595437964534a5834db9f",
+      "upstream_git_blob": "ad2f19757972560869d595437964534a5834db9f",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/assets/models/diamond_ios/small.bin",
+      "local_git_blob": "323e401a0015624260330c3794eea027f43f54a8",
+      "upstream_git_blob": "323e401a0015624260330c3794eea027f43f54a8",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/assets/models/diamond_ios/vertices.bin",
+      "local_git_blob": "9121351674b1cc2555f9205dde76253ebcdcd5b4",
+      "upstream_git_blob": "9121351674b1cc2555f9205dde76253ebcdcd5b4",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/assets/models/diamond_ios/widths.bin",
+      "local_git_blob": "26c2d28c1c5951b833bcf6c2faba158571f47b1a",
+      "upstream_git_blob": "26c2d28c1c5951b833bcf6c2faba158571f47b1a",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/assets/models/star.binobj",
+      "local_git_blob": "4b08238200bdcb2af04665a5f16524d82154075e",
+      "upstream_git_blob": "4b08238200bdcb2af04665a5f16524d82154075e",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/addone_icon.json",
+      "local_git_blob": "2c0230da5ec0f48f744e9fac38c0e9304e9eeada",
+      "upstream_git_blob": "2c0230da5ec0f48f744e9fac38c0e9304e9eeada",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/android_30.json",
+      "local_git_blob": "8c521446745dc379d873f7dcf4f47a3c0eac7fe0",
+      "upstream_git_blob": "8c521446745dc379d873f7dcf4f47a3c0eac7fe0",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/auto_night_off.json",
+      "local_git_blob": "a729365e20dda6c884f1e90c63099ffd7b4473d5",
+      "upstream_git_blob": "a729365e20dda6c884f1e90c63099ffd7b4473d5",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/biz_clock.json",
+      "local_git_blob": "762ca468714ff97646343f43777c710bf487fd4e",
+      "upstream_git_blob": "762ca468714ff97646343f43777c710bf487fd4e",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/biz_links.json",
+      "local_git_blob": "156b24c7a20daf345e5ea009bea02dbd47305ed6",
+      "upstream_git_blob": "156b24c7a20daf345e5ea009bea02dbd47305ed6",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/biz_map.json",
+      "local_git_blob": "ac9c878baf4d007f963be53103971e12483ddec5",
+      "upstream_git_blob": "ac9c878baf4d007f963be53103971e12483ddec5",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/boosts.json",
+      "local_git_blob": "306770b485ed6a50de31244d4ca03628430b054e",
+      "upstream_git_blob": "306770b485ed6a50de31244d4ca03628430b054e",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/bot_webview_sheet_to_cross.json",
+      "local_git_blob": "f7b3df250603560a623403602379c3885a20d89d",
+      "upstream_git_blob": "f7b3df250603560a623403602379c3885a20d89d",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/bt_to_speaker.json",
+      "local_git_blob": "369a9132fefa2b3ad63b10d0285d2ebf5f32fa05",
+      "upstream_git_blob": "369a9132fefa2b3ad63b10d0285d2ebf5f32fa05",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/bubble.json",
+      "local_git_blob": "76098aabc1282d00e2680a38db849db289d3b6a3",
+      "upstream_git_blob": "76098aabc1282d00e2680a38db849db289d3b6a3",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/cake.json",
+      "local_git_blob": "5a6ad97f524fe3f9370b028701fddb91446ff525",
+      "upstream_git_blob": "5a6ad97f524fe3f9370b028701fddb91446ff525",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/call_accept.json",
+      "local_git_blob": "6d3775113343867f86b82b2650056d7e38b77a93",
+      "upstream_git_blob": "6d3775113343867f86b82b2650056d7e38b77a93",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/call_mute.json",
+      "local_git_blob": "2154708412bc6a78fdce8a6e224acf7aebc76684",
+      "upstream_git_blob": "2154708412bc6a78fdce8a6e224acf7aebc76684",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/calls_log.json",
+      "local_git_blob": "d9e0f73df88eb41a5f468a384db5354ccf164034",
+      "upstream_git_blob": "d9e0f73df88eb41a5f468a384db5354ccf164034",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/camera.json",
+      "local_git_blob": "2d1ef4a249f96d12e95aeb05cee455be18989ab8",
+      "upstream_git_blob": "2d1ef4a249f96d12e95aeb05cee455be18989ab8",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/camera_flip.json",
+      "local_git_blob": "385b073e3898b027baaadfa5a8f65428ea8bf87a",
+      "upstream_git_blob": "385b073e3898b027baaadfa5a8f65428ea8bf87a",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/camera_flip2.json",
+      "local_git_blob": "1d7dcf49bd1d53942a9916570c5c774a58c4d0b0",
+      "upstream_git_blob": "1d7dcf49bd1d53942a9916570c5c774a58c4d0b0",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/camera_outline.json",
+      "local_git_blob": "d5a5e74ffe04a104143921ab5e9062df6feea048",
+      "upstream_git_blob": "d5a5e74ffe04a104143921ab5e9062df6feea048",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/camera_wait.json",
+      "local_git_blob": "77304c46cb9c26e47a3c93d628373eb4a744103b",
+      "upstream_git_blob": "77304c46cb9c26e47a3c93d628373eb4a744103b",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/caption_down.json",
+      "local_git_blob": "cdc96a818a4aebd1aa07c30cd0af893b4a2fc2fc",
+      "upstream_git_blob": "cdc96a818a4aebd1aa07c30cd0af893b4a2fc2fc",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/caption_hide.json",
+      "local_git_blob": "cb76d2e6c777ff61350681e12636c5532c1702be",
+      "upstream_git_blob": "cb76d2e6c777ff61350681e12636c5532c1702be",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/caption_limit.json",
+      "local_git_blob": "897c7beab8c777ced08d6a90ebffef78763350af",
+      "upstream_git_blob": "897c7beab8c777ced08d6a90ebffef78763350af",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/caption_show.json",
+      "local_git_blob": "22193f89bc0dd005973a0d4af13575bc720e44c7",
+      "upstream_git_blob": "22193f89bc0dd005973a0d4af13575bc720e44c7",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/caption_up.json",
+      "local_git_blob": "efc171ebcfae16c1cb77fc401114ac0d28e720bc",
+      "upstream_git_blob": "efc171ebcfae16c1cb77fc401114ac0d28e720bc",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/channel_create.json",
+      "local_git_blob": "7142eb9b4d65b521a37c23d9410f2f197cde6c24",
+      "upstream_git_blob": "7142eb9b4d65b521a37c23d9410f2f197cde6c24",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/chat_audio_record_delete.json",
+      "local_git_blob": "81e886a28ab16d1c535c70e6498f70dfa02b549a",
+      "upstream_git_blob": "81e886a28ab16d1c535c70e6498f70dfa02b549a",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/chat_audio_record_delete_2.json",
+      "local_git_blob": "481ada9c1d7764a16dd53c93e5515f4aa66bbc13",
+      "upstream_git_blob": "481ada9c1d7764a16dd53c93e5515f4aa66bbc13",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/chat_audio_record_delete_3.json",
+      "local_git_blob": "76c7f87e70f069d2c2dabb63b63ced736844b7a9",
+      "upstream_git_blob": "76c7f87e70f069d2c2dabb63b63ced736844b7a9",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/chats_archive.json",
+      "local_git_blob": "75964e575d109f960188c73f2e1949c8ac18f016",
+      "upstream_git_blob": "75964e575d109f960188c73f2e1949c8ac18f016",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/chats_archiveavatar.json",
+      "local_git_blob": "e38fd53a721adad57fc560d321a4bb3fb3912c34",
+      "upstream_git_blob": "e38fd53a721adad57fc560d321a4bb3fb3912c34",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/chats_archived.json",
+      "local_git_blob": "4f39bfc997834eb13cd0ea2191a1916391c0499b",
+      "upstream_git_blob": "4f39bfc997834eb13cd0ea2191a1916391c0499b",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/chats_hide.json",
+      "local_git_blob": "4660b0865188b9335f6cdbde0b893ca7f8b4fe43",
+      "upstream_git_blob": "4660b0865188b9335f6cdbde0b893ca7f8b4fe43",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/chats_infotip.json",
+      "local_git_blob": "bb65af0d5a855829355474fbb6e842bdf9facf22",
+      "upstream_git_blob": "bb65af0d5a855829355474fbb6e842bdf9facf22",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/chats_swipearchive.json",
+      "local_git_blob": "298f3b065d55884c497d3ea1de0245e10bdf6780",
+      "upstream_git_blob": "298f3b065d55884c497d3ea1de0245e10bdf6780",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/chats_unarchive.json",
+      "local_git_blob": "c49e36d93dc586d2024d83d28253467e173f97da",
+      "upstream_git_blob": "c49e36d93dc586d2024d83d28253467e173f97da",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/chats_unhide.json",
+      "local_git_blob": "369520228ab57b940975e8ec250c8cc5b841c01a",
+      "upstream_git_blob": "369520228ab57b940975e8ec250c8cc5b841c01a",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/chrome_30.json",
+      "local_git_blob": "ff936eb6394fcc6d033a2a9804af4f5f5d5f13c1",
+      "upstream_git_blob": "ff936eb6394fcc6d033a2a9804af4f5f5d5f13c1",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/code_laptop.json",
+      "local_git_blob": "07223dd1a19fa4967c0e3ad94e7277754303b017",
+      "upstream_git_blob": "07223dd1a19fa4967c0e3ad94e7277754303b017",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/contact_check.json",
+      "local_git_blob": "6248347bcb865b196baab6e5bfdc640b52cc5d46",
+      "upstream_git_blob": "6248347bcb865b196baab6e5bfdc640b52cc5d46",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/contacts_sync_off.json",
+      "local_git_blob": "da55eb03a636d8120ea845200db5282b4538b02c",
+      "upstream_git_blob": "da55eb03a636d8120ea845200db5282b4538b02c",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/contacts_sync_on.json",
+      "local_git_blob": "6fe0501df72668130defe46b95a11bd75f559582",
+      "upstream_git_blob": "6fe0501df72668130defe46b95a11bd75f559582",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/convert_video.json",
+      "local_git_blob": "5d698852d75bf45b286c5ed41ef74c3721569633",
+      "upstream_git_blob": "5d698852d75bf45b286c5ed41ef74c3721569633",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/copy.json",
+      "local_git_blob": "e3d5dab32f4a4762995429d2df9940c7cff3e54f",
+      "upstream_git_blob": "e3d5dab32f4a4762995429d2df9940c7cff3e54f",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/custom_emoji_reaction.json",
+      "local_git_blob": "5df552b85acb4c16f9ec12c9c785d460d9da9600",
+      "upstream_git_blob": "5df552b85acb4c16f9ec12c9c785d460d9da9600",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/dartloop.json",
+      "local_git_blob": "21d328b151bdda3fbbcab62bc02d49e810c062d9",
+      "upstream_git_blob": "21d328b151bdda3fbbcab62bc02d49e810c062d9",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/db_migration_placeholder.json",
+      "local_git_blob": "cd0cb6a267c78084173f1702d8e0d49bd6da9d2b",
+      "upstream_git_blob": "cd0cb6a267c78084173f1702d8e0d49bd6da9d2b",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/diceloop.json",
+      "local_git_blob": "0619284adf71adb889eab8633296f86f6d7d0647",
+      "upstream_git_blob": "0619284adf71adb889eab8633296f86f6d7d0647",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/done.json",
+      "local_git_blob": "46bf3cba3299a9063e85c7ee3a2176b42fe30688",
+      "upstream_git_blob": "46bf3cba3299a9063e85c7ee3a2176b42fe30688",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/dots_loading.json",
+      "local_git_blob": "63e9f971a4962acc3c08d656c6c49310c68cdde3",
+      "upstream_git_blob": "63e9f971a4962acc3c08d656c6c49310c68cdde3",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/double_icon.json",
+      "local_git_blob": "55fd5e2ed4fb58276684b9f8221109e1dd716a2b",
+      "upstream_git_blob": "55fd5e2ed4fb58276684b9f8221109e1dd716a2b",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/download_arrow.json",
+      "local_git_blob": "74090c732770ca7215939fcf3fd650804cda001a",
+      "upstream_git_blob": "74090c732770ca7215939fcf3fd650804cda001a",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/download_finish.json",
+      "local_git_blob": "c78b9c91b1841bbd0d2d0627415648cd33ca0bb2",
+      "upstream_git_blob": "c78b9c91b1841bbd0d2d0627415648cd33ca0bb2",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/download_progress.json",
+      "local_git_blob": "7fdf1c1eaf3fad8a1f9d575381a69de93472fcc9",
+      "upstream_git_blob": "7fdf1c1eaf3fad8a1f9d575381a69de93472fcc9",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/e_hand_2.json",
+      "local_git_blob": "2d0cbe3ace4098e9b0244bfd5bcf4b6f2bc6a0c9",
+      "upstream_git_blob": "2d0cbe3ace4098e9b0244bfd5bcf4b6f2bc6a0c9",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/edge_30.json",
+      "local_git_blob": "69fa2ca9dd6c6897c3c072b69e4ff517afd5e949",
+      "upstream_git_blob": "69fa2ca9dd6c6897c3c072b69e4ff517afd5e949",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/email_check_inbox.json",
+      "local_git_blob": "1a25d3c1e3b79b717aae26f39ba4628d6c96e41c",
+      "upstream_git_blob": "1a25d3c1e3b79b717aae26f39ba4628d6c96e41c",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/email_setup_heart.json",
+      "local_git_blob": "b981a7c0dac14101d0a3e36ef6418a04d5d38d7d",
+      "upstream_git_blob": "b981a7c0dac14101d0a3e36ef6418a04d5d38d7d",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/emoji_stars.json",
+      "local_git_blob": "1627c0a96399afec2b3b7288343a16ad19419e3c",
+      "upstream_git_blob": "1627c0a96399afec2b3b7288343a16ad19419e3c",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/error.json",
+      "local_git_blob": "eb5dc1564160e08dbfea9a5ec57c736a3335f3a6",
+      "upstream_git_blob": "eb5dc1564160e08dbfea9a5ec57c736a3335f3a6",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/filter_new.json",
+      "local_git_blob": "38b7df1d25b8174669108cde640ab3b7d8efeaef",
+      "upstream_git_blob": "38b7df1d25b8174669108cde640ab3b7d8efeaef",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/filter_no_chats.json",
+      "local_git_blob": "f201434abe97849471910012b51068e2911e28eb",
+      "upstream_git_blob": "f201434abe97849471910012b51068e2911e28eb",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/filter_reorder.json",
+      "local_git_blob": "25c420576d71bbf8d6e08386cbf076b784e5a590",
+      "upstream_git_blob": "25c420576d71bbf8d6e08386cbf076b784e5a590",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/filters.json",
+      "local_git_blob": "62c15f31b7261081850177d0a32d302cf7bd5d70",
+      "upstream_git_blob": "62c15f31b7261081850177d0a32d302cf7bd5d70",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/fire_off.json",
+      "local_git_blob": "c3b24c99fd02b66c2daa524fc3c49796ca58061d",
+      "upstream_git_blob": "c3b24c99fd02b66c2daa524fc3c49796ca58061d",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/fire_on.json",
+      "local_git_blob": "1145a411d130ba32778d2ab3cde416be915a9d3b",
+      "upstream_git_blob": "1145a411d130ba32778d2ab3cde416be915a9d3b",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/fire_once.json",
+      "local_git_blob": "478c9905646ce287d7d36c6adfd18b07b8a4da55",
+      "upstream_git_blob": "478c9905646ce287d7d36c6adfd18b07b8a4da55",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/firefox_30.json",
+      "local_git_blob": "cd60a75aa26a89357b42aeb738f2b1475551039b",
+      "upstream_git_blob": "cd60a75aa26a89357b42aeb738f2b1475551039b",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/folder_in.json",
+      "local_git_blob": "d6a6f34a0cebe78a4cecbb49f97f7d973a4c2146",
+      "upstream_git_blob": "d6a6f34a0cebe78a4cecbb49f97f7d973a4c2146",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/folder_out.json",
+      "local_git_blob": "5ca19d8603c1f4abe7207d7b52dc37800c501647",
+      "upstream_git_blob": "5ca19d8603c1f4abe7207d7b52dc37800c501647",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/folder_share.json",
+      "local_git_blob": "93b976a33aa3707b7ad0dbadc9d1f548d06ad45a",
+      "upstream_git_blob": "93b976a33aa3707b7ad0dbadc9d1f548d06ad45a",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/forward.json",
+      "local_git_blob": "017fc1b83d7eeb3c799112fe8ef2d038c99214c4",
+      "upstream_git_blob": "017fc1b83d7eeb3c799112fe8ef2d038c99214c4",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/fragment.json",
+      "local_git_blob": "d9a764851e3a81384a90ac6bf55455f74bb7ac82",
+      "upstream_git_blob": "d9a764851e3a81384a90ac6bf55455f74bb7ac82",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/fragment_username.json",
+      "local_git_blob": "2fb75b4d79e6d096d3a65f5f37bf70c899f754c8",
+      "upstream_git_blob": "2fb75b4d79e6d096d3a65f5f37bf70c899f754c8",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/gif_to_keyboard.json",
+      "local_git_blob": "ee0dff7391f94953d8ac4479bc884c4991420843",
+      "upstream_git_blob": "ee0dff7391f94953d8ac4479bc884c4991420843",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/gif_to_smile.json",
+      "local_git_blob": "e626ed453ba528d8668f6bba9527cee5ef21289f",
+      "upstream_git_blob": "e626ed453ba528d8668f6bba9527cee5ef21289f",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/gift.json",
+      "local_git_blob": "27bd32cb2e3ea499f9c2a4505fac0279b2741651",
+      "upstream_git_blob": "27bd32cb2e3ea499f9c2a4505fac0279b2741651",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/gift_broken.json",
+      "local_git_blob": "11854afa00fd80eb5b7aa2574ee32f2ed2ae9cb1",
+      "upstream_git_blob": "11854afa00fd80eb5b7aa2574ee32f2ed2ae9cb1",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/gift_crafting.json",
+      "local_git_blob": "c91702d8295f28e605ce21a7141ba3cd92343a2a",
+      "upstream_git_blob": "c91702d8295f28e605ce21a7141ba3cd92343a2a",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/gift_upgrade.json",
+      "local_git_blob": "ec8605e64ec5d0b42f48eeefb94e82f20c53229e",
+      "upstream_git_blob": "ec8605e64ec5d0b42f48eeefb94e82f20c53229e",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/gigagroup_convert.json",
+      "local_git_blob": "54a43ff1c83aa152ea72592d00250e26af797b69",
+      "upstream_git_blob": "54a43ff1c83aa152ea72592d00250e26af797b69",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/giveaway_results.json",
+      "local_git_blob": "8f2d79a64cc82091b8ef64c51dff9622a70e8786",
+      "upstream_git_blob": "8f2d79a64cc82091b8ef64c51dff9622a70e8786",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/gram.json",
+      "local_git_blob": "88d60f6705396a9e9f97d365191a42e4005f8ede",
+      "upstream_git_blob": "88d60f6705396a9e9f97d365191a42e4005f8ede",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/gram_reverse.json",
+      "local_git_blob": "1f5661631c0516f0a77620e4f402584089c4d71e",
+      "upstream_git_blob": "1f5661631c0516f0a77620e4f402584089c4d71e",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/group_pip_delete_icon.json",
+      "local_git_blob": "4360f7f75165987546a3bad7bcdeae969a0a6c83",
+      "upstream_git_blob": "4360f7f75165987546a3bad7bcdeae969a0a6c83",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/hand_1.json",
+      "local_git_blob": "536085469aac0204dc2a9531721b5d68578a800b",
+      "upstream_git_blob": "536085469aac0204dc2a9531721b5d68578a800b",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/hand_2.json",
+      "local_git_blob": "04bf1afee8d21dff81070cc7e7c0f0f5e4ad79c8",
+      "upstream_git_blob": "04bf1afee8d21dff81070cc7e7c0f0f5e4ad79c8",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/hint_swipe_reply.json",
+      "local_git_blob": "21899c4022e4d66af884880954ceaa27e4b42f61",
+      "upstream_git_blob": "21899c4022e4d66af884880954ceaa27e4b42f61",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/ic_admin.json",
+      "local_git_blob": "a5563ecfbe98efc4a544ff7a6da88acf8891f8ba",
+      "upstream_git_blob": "a5563ecfbe98efc4a544ff7a6da88acf8891f8ba",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/ic_ban.json",
+      "local_git_blob": "83b4988d30ae442157213f6596a1923a6219beaa",
+      "upstream_git_blob": "83b4988d30ae442157213f6596a1923a6219beaa",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/ic_boosts_replace.json",
+      "local_git_blob": "7acf76a8b39773685f51fce0e13549bdf78c689d",
+      "upstream_git_blob": "7acf76a8b39773685f51fce0e13549bdf78c689d",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/ic_delete.json",
+      "local_git_blob": "320728272af1a899384c059283596f6e000f461c",
+      "upstream_git_blob": "320728272af1a899384c059283596f6e000f461c",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/ic_download.json",
+      "local_git_blob": "eab3454c47e2b8025ce1849ccfed638bf4a06b64",
+      "upstream_git_blob": "eab3454c47e2b8025ce1849ccfed638bf4a06b64",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/ic_mute.json",
+      "local_git_blob": "14ef7b39a5b41709b96dc3f3c1e64c74e120ff1c",
+      "upstream_git_blob": "14ef7b39a5b41709b96dc3f3c1e64c74e120ff1c",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/ic_pin.json",
+      "local_git_blob": "fcf5648624c81d5cd0c7b5b2e9012b076c451666",
+      "upstream_git_blob": "fcf5648624c81d5cd0c7b5b2e9012b076c451666",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/ic_save_to_gallery.json",
+      "local_git_blob": "6aa34a5727c5202baf79c36dc8bc33bdbec5ffc9",
+      "upstream_git_blob": "6aa34a5727c5202baf79c36dc8bc33bdbec5ffc9",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/ic_save_to_gifs.json",
+      "local_git_blob": "57f18429a1718954887f7f5907db1bbee43511cf",
+      "upstream_git_blob": "57f18429a1718954887f7f5907db1bbee43511cf",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/ic_save_to_music.json",
+      "local_git_blob": "91c44b36cc38d483d8ffd2c461298e23b7cc60d0",
+      "upstream_git_blob": "91c44b36cc38d483d8ffd2c461298e23b7cc60d0",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/ic_unban.json",
+      "local_git_blob": "7146942a2beae7b9bc2fc275bacd7da75fc07bfa",
+      "upstream_git_blob": "7146942a2beae7b9bc2fc275bacd7da75fc07bfa",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/ic_unmute.json",
+      "local_git_blob": "3f42edeb7cdf1fdb4522e128ea81df8b0532bf35",
+      "upstream_git_blob": "3f42edeb7cdf1fdb4522e128ea81df8b0532bf35",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/ic_unpin.json",
+      "local_git_blob": "b83a4b89d7f44b44783dfe30a7920bdacba165b8",
+      "upstream_git_blob": "b83a4b89d7f44b44783dfe30a7920bdacba165b8",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/import_check.json",
+      "local_git_blob": "077e3135b7497bb91f73320e52d5fae3a4d75ba4",
+      "upstream_git_blob": "077e3135b7497bb91f73320e52d5fae3a4d75ba4",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/import_finish.json",
+      "local_git_blob": "48c257b28ef501402f3de5f6cb02aa438b4958f8",
+      "upstream_git_blob": "48c257b28ef501402f3de5f6cb02aa438b4958f8",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/import_loop.json",
+      "local_git_blob": "4064626c24d03d835928691cd78062e1543618c5",
+      "upstream_git_blob": "4064626c24d03d835928691cd78062e1543618c5",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/import_progress.json",
+      "local_git_blob": "c1c3cf846487c6d4eda886f53fb84e95ce90d305",
+      "upstream_git_blob": "c1c3cf846487c6d4eda886f53fb84e95ce90d305",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/imported.json",
+      "local_git_blob": "324c08477856181642178626fbe2bb827469fe5e",
+      "upstream_git_blob": "324c08477856181642178626fbe2bb827469fe5e",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/incoming_calls.json",
+      "local_git_blob": "d1741eeab5b0f140558ebca958fbae5f6003b0fb",
+      "upstream_git_blob": "d1741eeab5b0f140558ebca958fbae5f6003b0fb",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/info.json",
+      "local_git_blob": "7ba33826b92a20fb1622846e5c05bddebb46f2ea",
+      "upstream_git_blob": "7ba33826b92a20fb1622846e5c05bddebb46f2ea",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/ipad_30.json",
+      "local_git_blob": "22579ec6f5a2278b24b3d3082b2f2899cfd9695c",
+      "upstream_git_blob": "22579ec6f5a2278b24b3d3082b2f2899cfd9695c",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/iphone_30.json",
+      "local_git_blob": "b214044d1803aba60ffdbe53e37b0a6797b455b4",
+      "upstream_git_blob": "b214044d1803aba60ffdbe53e37b0a6797b455b4",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/keyboard_to_gif.json",
+      "local_git_blob": "8ba5505b6a427d1f4cd579f0c9b3d17132165d1a",
+      "upstream_git_blob": "8ba5505b6a427d1f4cd579f0c9b3d17132165d1a",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/keyboard_to_smile.json",
+      "local_git_blob": "27fcb67e295f41c41e8354a71cec3a2f84d61789",
+      "upstream_git_blob": "27fcb67e295f41c41e8354a71cec3a2f84d61789",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/keyboard_to_sticker.json",
+      "local_git_blob": "48e6d102101b999f159ff57d6d227866fa450d2a",
+      "upstream_git_blob": "48e6d102101b999f159ff57d6d227866fa450d2a",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/large_lastseen.json",
+      "local_git_blob": "09948f7dc7068945d941f86ec41d1dce2984d591",
+      "upstream_git_blob": "09948f7dc7068945d941f86ec41d1dce2984d591",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/large_message_lock.json",
+      "local_git_blob": "bf1d6a1fb912812166b2feec6079877792fdb880",
+      "upstream_git_blob": "bf1d6a1fb912812166b2feec6079877792fdb880",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/large_readtime.json",
+      "local_git_blob": "aef5be7b8b7a91bc57c38c18670dfae5aeb3ae8a",
+      "upstream_git_blob": "aef5be7b8b7a91bc57c38c18670dfae5aeb3ae8a",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/linkbroken.json",
+      "local_git_blob": "11b13cbb3552514c86496a99430830b6df3b107b",
+      "upstream_git_blob": "11b13cbb3552514c86496a99430830b6df3b107b",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/linux_30.json",
+      "local_git_blob": "fe9dfc342ea6a998c52252b8bb3a02952bfdd6b6",
+      "upstream_git_blob": "fe9dfc342ea6a998c52252b8bb3a02952bfdd6b6",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/mac_30.json",
+      "local_git_blob": "1761fec2fbece801e40aa8db1716f7bdb66360da",
+      "upstream_git_blob": "1761fec2fbece801e40aa8db1716f7bdb66360da",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/mapstyle_night.json",
+      "local_git_blob": "cd956d36e9b1c811893f3d10c033e906e0e31787",
+      "upstream_git_blob": "cd956d36e9b1c811893f3d10c033e906e0e31787",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/media_enlarge.json",
+      "local_git_blob": "7ab051e063ea69c33eae8e48e25a1fcc079850a3",
+      "upstream_git_blob": "7ab051e063ea69c33eae8e48e25a1fcc079850a3",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/media_forbidden.json",
+      "local_git_blob": "b1846cd5db0d2ba1b75c6d00764ec6fd71dc04ac",
+      "upstream_git_blob": "b1846cd5db0d2ba1b75c6d00764ec6fd71dc04ac",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/media_mute_unmute.json",
+      "local_git_blob": "d5e9a7e06abeb8e6bb7f142370954a71a23028e5",
+      "upstream_git_blob": "d5e9a7e06abeb8e6bb7f142370954a71a23028e5",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/media_shrink.json",
+      "local_git_blob": "b41780c5762fff523231e39a4693ce642ba7b48c",
+      "upstream_git_blob": "b41780c5762fff523231e39a4693ce642ba7b48c",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/monetize.json",
+      "local_git_blob": "55cfad2a5f31be706de6cb9a4f349831c58d9355",
+      "upstream_git_blob": "55cfad2a5f31be706de6cb9a4f349831c58d9355",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/msg_antispam.json",
+      "local_git_blob": "2e28cfb50014123f16b1b05c12834c0a50860d6f",
+      "upstream_git_blob": "2e28cfb50014123f16b1b05c12834c0a50860d6f",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/msg_emoji_activities.json",
+      "local_git_blob": "7616eb1d8c17dab4c2120d2c2b16c0e115e6e3b2",
+      "upstream_git_blob": "7616eb1d8c17dab4c2120d2c2b16c0e115e6e3b2",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/msg_emoji_cat.json",
+      "local_git_blob": "e504b13918e1931339ab5cd8319ded8748e73fd1",
+      "upstream_git_blob": "e504b13918e1931339ab5cd8319ded8748e73fd1",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/msg_emoji_flags.json",
+      "local_git_blob": "c121b0909514c27c2c5a9dc0163d5584a1330b10",
+      "upstream_git_blob": "c121b0909514c27c2c5a9dc0163d5584a1330b10",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/msg_emoji_food.json",
+      "local_git_blob": "048d11f2304fd8166746459c067858ee2fa89943",
+      "upstream_git_blob": "048d11f2304fd8166746459c067858ee2fa89943",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/msg_emoji_objects.json",
+      "local_git_blob": "2384802e0a3cf22aa600fde804ec3f4bb12a7d48",
+      "upstream_git_blob": "2384802e0a3cf22aa600fde804ec3f4bb12a7d48",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/msg_emoji_other.json",
+      "local_git_blob": "34270ee4b9573af832a087d0cd3b4c0ccea05936",
+      "upstream_git_blob": "34270ee4b9573af832a087d0cd3b4c0ccea05936",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/msg_emoji_smiles.json",
+      "local_git_blob": "dd2a6d35256fe9364a48712d9cb7b92b71d910c8",
+      "upstream_git_blob": "dd2a6d35256fe9364a48712d9cb7b92b71d910c8",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/msg_emoji_travel.json",
+      "local_git_blob": "2ccddf8ef6375c89b214e72675dad4e1176e6665",
+      "upstream_git_blob": "2ccddf8ef6375c89b214e72675dad4e1176e6665",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/msg_stories_archive.json",
+      "local_git_blob": "143adc7adade5b4bb42f3430667a6744e4d34484",
+      "upstream_git_blob": "143adc7adade5b4bb42f3430667a6744e4d34484",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/msg_stories_saved.json",
+      "local_git_blob": "6b7180a9c246b9ee8fd08df4e5111c8b0f554077",
+      "upstream_git_blob": "6b7180a9c246b9ee8fd08df4e5111c8b0f554077",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/msg_story_keep.json",
+      "local_git_blob": "7e7031a50f9d50b3e5e177cc8639f14313c61766",
+      "upstream_git_blob": "7e7031a50f9d50b3e5e177cc8639f14313c61766",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/msg_translate.json",
+      "local_git_blob": "f6be1fc8472a3116d2fac5d20a74820c6862dc71",
+      "upstream_git_blob": "f6be1fc8472a3116d2fac5d20a74820c6862dc71",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/mute_for.json",
+      "local_git_blob": "1ec4f52fdb62925ac49042dbe5343aeb33898c1e",
+      "upstream_git_blob": "1ec4f52fdb62925ac49042dbe5343aeb33898c1e",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/name_hide.json",
+      "local_git_blob": "6a9282a19b71909121565256eb143b6129043ed0",
+      "upstream_git_blob": "6a9282a19b71909121565256eb143b6129043ed0",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/name_show.json",
+      "local_git_blob": "7bb609916613aa8ca0f239b3d38fa5103886c903",
+      "upstream_git_blob": "7bb609916613aa8ca0f239b3d38fa5103886c903",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/not_available.json",
+      "local_git_blob": "d5df5274990b5b6fc0ecc7662d60109ef62e7dfe",
+      "upstream_git_blob": "d5df5274990b5b6fc0ecc7662d60109ef62e7dfe",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/notify_toggle.json",
+      "local_git_blob": "e6004d6823fefc9904f4f28bb4af5acb06ee9887",
+      "upstream_git_blob": "e6004d6823fefc9904f4f28bb4af5acb06ee9887",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/options_to_search.json",
+      "local_git_blob": "e7163ada4c85d0ec930f850d1528bb347b649975",
+      "upstream_git_blob": "e7163ada4c85d0ec930f850d1528bb347b649975",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/passcode_lock.json",
+      "local_git_blob": "e14096f6b52692f86e7b99995b686fb143bcbac4",
+      "upstream_git_blob": "e14096f6b52692f86e7b99995b686fb143bcbac4",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/passcode_lock_close.json",
+      "local_git_blob": "345f26f41977795b7787a8a00d064a3d2075b113",
+      "upstream_git_blob": "345f26f41977795b7787a8a00d064a3d2075b113",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/passkey.json",
+      "local_git_blob": "2805d3893da1f696a9f8fd109263c0164a45b4bb",
+      "upstream_git_blob": "2805d3893da1f696a9f8fd109263c0164a45b4bb",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/payment_success.json",
+      "local_git_blob": "d0dee855cbd85f2dbe2cf717b5bafddd69ac4be3",
+      "upstream_git_blob": "d0dee855cbd85f2dbe2cf717b5bafddd69ac4be3",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/permission_request_apk.json",
+      "local_git_blob": "f3b1b587429a3d7c8663172ab453d3eb8d265389",
+      "upstream_git_blob": "f3b1b587429a3d7c8663172ab453d3eb8d265389",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/permission_request_camera.json",
+      "local_git_blob": "b63b3da40a05df25399005a1cdd69b17500d822f",
+      "upstream_git_blob": "b63b3da40a05df25399005a1cdd69b17500d822f",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/permission_request_contacts.json",
+      "local_git_blob": "a8c7d398a26139c448d755e0f03f69e24bd913fd",
+      "upstream_git_blob": "a8c7d398a26139c448d755e0f03f69e24bd913fd",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/permission_request_folder.json",
+      "local_git_blob": "9d2b49dec81d3239d67de14bf7daa24528727134",
+      "upstream_git_blob": "9d2b49dec81d3239d67de14bf7daa24528727134",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/permission_request_location.json",
+      "local_git_blob": "8cdc528a3de94a969c0d8b033f63448ed3bfa960",
+      "upstream_git_blob": "8cdc528a3de94a969c0d8b033f63448ed3bfa960",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/permission_request_microphone.json",
+      "local_git_blob": "d95d3f12e6f7026adb2b6dadd134bb6370878a3d",
+      "upstream_git_blob": "d95d3f12e6f7026adb2b6dadd134bb6370878a3d",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/phone_dots.json",
+      "local_git_blob": "6b062cd705b30daf0af62edfeae82c47cdf921d8",
+      "upstream_git_blob": "6b062cd705b30daf0af62edfeae82c47cdf921d8",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/phone_dots_to_stars.json",
+      "local_git_blob": "ea00a8a7717ec27366f406c17719c719fcad0146",
+      "upstream_git_blob": "ea00a8a7717ec27366f406c17719c719fcad0146",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/phone_flash_call.json",
+      "local_git_blob": "662401b9f7a2cd419768f85eef8713423488f819",
+      "upstream_git_blob": "662401b9f7a2cd419768f85eef8713423488f819",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/phone_stars_to_dots.json",
+      "local_git_blob": "969739f5c0093607e1909f00e73ebced8a9dabca",
+      "upstream_git_blob": "969739f5c0093607e1909f00e73ebced8a9dabca",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/photo_arrow.json",
+      "local_git_blob": "6bbee6229b236865f568b1ff897d30e3611caa30",
+      "upstream_git_blob": "6bbee6229b236865f568b1ff897d30e3611caa30",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/photo_blur.json",
+      "local_git_blob": "d09616aeafa9a37adbb020d45d4c833c215fbc7e",
+      "upstream_git_blob": "d09616aeafa9a37adbb020d45d4c833c215fbc7e",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/photo_eraser.json",
+      "local_git_blob": "aa5a497394896810892f0a341d4b716b1b40d392",
+      "upstream_git_blob": "aa5a497394896810892f0a341d4b716b1b40d392",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/photo_marker.json",
+      "local_git_blob": "835d6667b854c08b2fe9f987fd3f9b264f5ce5c3",
+      "upstream_git_blob": "835d6667b854c08b2fe9f987fd3f9b264f5ce5c3",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/photo_neon.json",
+      "local_git_blob": "5f16ccddd532a4190e1d7c2d6c4ec37d4fe41c08",
+      "upstream_git_blob": "5f16ccddd532a4190e1d7c2d6c4ec37d4fe41c08",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/photo_pen.json",
+      "local_git_blob": "44563d049c0ec8fab72b6b4b10052d004b2803c2",
+      "upstream_git_blob": "44563d049c0ec8fab72b6b4b10052d004b2803c2",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/photo_spoiler.json",
+      "local_git_blob": "b75d9fee7bbf39fbf3cc2b2f5df014e42e8e96e8",
+      "upstream_git_blob": "b75d9fee7bbf39fbf3cc2b2f5df014e42e8e96e8",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/photo_suggest_icon.json",
+      "local_git_blob": "78aa5ba0d6b5682744d6c8a0262cadfbee369f5c",
+      "upstream_git_blob": "78aa5ba0d6b5682744d6c8a0262cadfbee369f5c",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/photo_text_allign.json",
+      "local_git_blob": "9577ad1e8c58abdfe14e9d39a1ceda0a108e6946",
+      "upstream_git_blob": "9577ad1e8c58abdfe14e9d39a1ceda0a108e6946",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/plane_logo_plain.json",
+      "local_git_blob": "eace78810c2c1ef1a420e46b1183aa7a89931187",
+      "upstream_git_blob": "eace78810c2c1ef1a420e46b1183aa7a89931187",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/player_prev.json",
+      "local_git_blob": "50890ec88b60cd0243bc78118b45c271eb49ffd6",
+      "upstream_git_blob": "50890ec88b60cd0243bc78118b45c271eb49ffd6",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/position_above.json",
+      "local_git_blob": "c3a6df6d8f235cb5e41ec650399d44f9cf6e1171",
+      "upstream_git_blob": "c3a6df6d8f235cb5e41ec650399d44f9cf6e1171",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/position_below.json",
+      "local_git_blob": "3f26da654dcfd25e615cdb476ca155a4c9648d8b",
+      "upstream_git_blob": "3f26da654dcfd25e615cdb476ca155a4c9648d8b",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/premium_gift.json",
+      "local_git_blob": "5f1d8ca9a81fdc68c046103a953a0e1a7ecc8a21",
+      "upstream_git_blob": "5f1d8ca9a81fdc68c046103a953a0e1a7ecc8a21",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/profile_leave.json",
+      "local_git_blob": "dd73443bb73f554000139c19778ee64137f71cc6",
+      "upstream_git_blob": "dd73443bb73f554000139c19778ee64137f71cc6",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/profile_muting.json",
+      "local_git_blob": "9b8923ccada84e6b867e8e5a966d2e1fb81a285a",
+      "upstream_git_blob": "9b8923ccada84e6b867e8e5a966d2e1fb81a285a",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/profile_unmuting.json",
+      "local_git_blob": "52accdebab4653f4edcc0905e6b6dc7454a2a73a",
+      "upstream_git_blob": "52accdebab4653f4edcc0905e6b6dc7454a2a73a",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/profile_voicechat.json",
+      "local_git_blob": "b8441c271cc2e7305b57eab5dcd2708691982554",
+      "upstream_git_blob": "b8441c271cc2e7305b57eab5dcd2708691982554",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/qr_code_logo.json",
+      "local_git_blob": "5b92c85398acf4710832aa8cd24f2a9e4e46d42e",
+      "upstream_git_blob": "5b92c85398acf4710832aa8cd24f2a9e4e46d42e",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/qr_login.json",
+      "local_git_blob": "fba481632992c8b98ff20880af146cfec032ef9f",
+      "upstream_git_blob": "fba481632992c8b98ff20880af146cfec032ef9f",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/qr_matrix.json",
+      "local_git_blob": "ef25e61fc574a671dcd1b9b63c84c4654fd0ddfb",
+      "upstream_git_blob": "ef25e61fc574a671dcd1b9b63c84c4654fd0ddfb",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/qr_resistance_dog.json",
+      "local_git_blob": "833f71a1728ee7e5bcdc0eb0e01835adbda50225",
+      "upstream_git_blob": "833f71a1728ee7e5bcdc0eb0e01835adbda50225",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/raised_hand.json",
+      "local_git_blob": "50297301dc9a326b7e0dbee732106386b548727c",
+      "upstream_git_blob": "50297301dc9a326b7e0dbee732106386b548727c",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/rate.json",
+      "local_git_blob": "eee84206d6413cec896c7701a33f10ce4f3b75e7",
+      "upstream_git_blob": "eee84206d6413cec896c7701a33f10ce4f3b75e7",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/report_police.json",
+      "local_git_blob": "a7c9a5f3c217b1785a6fe9f5341f38fe0bae23ae",
+      "upstream_git_blob": "a7c9a5f3c217b1785a6fe9f5341f38fe0bae23ae",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/roundcamera_flash_off.json",
+      "local_git_blob": "a87128fc4deb5c77f68561f624d8b6664ece08ad",
+      "upstream_git_blob": "a87128fc4deb5c77f68561f624d8b6664ece08ad",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/roundcamera_flash_on.json",
+      "local_git_blob": "0db9ca13275c3a32e2a40ed82ae3ecdec9d88d57",
+      "upstream_git_blob": "0db9ca13275c3a32e2a40ed82ae3ecdec9d88d57",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/roundcamera_flip.json",
+      "local_git_blob": "4005960a907cd102a199c60bf2e86608bdc6bfe3",
+      "upstream_git_blob": "4005960a907cd102a199c60bf2e86608bdc6bfe3",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/safari_30.json",
+      "local_git_blob": "3ef6883b887bfe351a7aa04c75c2d9f08f77987a",
+      "upstream_git_blob": "3ef6883b887bfe351a7aa04c75c2d9f08f77987a",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/sandclock.json",
+      "local_git_blob": "d99ca623d4b85282ca35650351a34d354821f35e",
+      "upstream_git_blob": "d99ca623d4b85282ca35650351a34d354821f35e",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/saved_messages.json",
+      "local_git_blob": "c160f8e9f57639a9b737d66a434455ff4b45c964",
+      "upstream_git_blob": "c160f8e9f57639a9b737d66a434455ff4b45c964",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/seek_speed_hint.json",
+      "local_git_blob": "9911aaee13b0688e31b799d24a8a79c2758c1b26",
+      "upstream_git_blob": "9911aaee13b0688e31b799d24a8a79c2758c1b26",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/shared_link_enter.json",
+      "local_git_blob": "5199de449de06cff82f7f89cd3b6047862c03ae9",
+      "upstream_git_blob": "5199de449de06cff82f7f89cd3b6047862c03ae9",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/silent_mute.json",
+      "local_git_blob": "d9dab3258dc8a131f6d7e323a26040cc7672e520",
+      "upstream_git_blob": "d9dab3258dc8a131f6d7e323a26040cc7672e520",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/silent_unmute.json",
+      "local_git_blob": "376c0555c612f86c399f0cad56abee52694db612",
+      "upstream_git_blob": "376c0555c612f86c399f0cad56abee52694db612",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/smile_to_gif.json",
+      "local_git_blob": "fda599e8e52287ee48217782a7b92f938f4fa3aa",
+      "upstream_git_blob": "fda599e8e52287ee48217782a7b92f938f4fa3aa",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/smile_to_keyboard.json",
+      "local_git_blob": "99bbe6c6ffe62bc68dc64a3bf8f9a36ec2460060",
+      "upstream_git_blob": "99bbe6c6ffe62bc68dc64a3bf8f9a36ec2460060",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/smile_to_sticker.json",
+      "local_git_blob": "96a235eb16b8321b1eff18a5be59951e7b5c3f47",
+      "upstream_git_blob": "96a235eb16b8321b1eff18a5be59951e7b5c3f47",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/sms_incoming_info.json",
+      "local_git_blob": "23b384df80b6a83a92b1c46712e207360f251670",
+      "upstream_git_blob": "23b384df80b6a83a92b1c46712e207360f251670",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/sound_download.json",
+      "local_git_blob": "d323a10f4f4730b990eb3df96ebfdbd6bc6521d8",
+      "upstream_git_blob": "d323a10f4f4730b990eb3df96ebfdbd6bc6521d8",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/sound_in.wav",
+      "local_git_blob": "dd59215441841e4dcec313dd867dd9656dd66b7c",
+      "upstream_git_blob": "dd59215441841e4dcec313dd867dd9656dd66b7c",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/sound_off.json",
+      "local_git_blob": "cca176358fce5d1000eb08e1a5df63ab28c8f03c",
+      "upstream_git_blob": "cca176358fce5d1000eb08e1a5df63ab28c8f03c",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/sound_on.json",
+      "local_git_blob": "f5a9ccb5a513a1a1b42c77668ec956497b345ee1",
+      "upstream_git_blob": "f5a9ccb5a513a1a1b42c77668ec956497b345ee1",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/sound_out.wav",
+      "local_git_blob": "ccfa86963aad4918dc632af2d6fc3234a5a1f814",
+      "upstream_git_blob": "ccfa86963aad4918dc632af2d6fc3234a5a1f814",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/speaker.json",
+      "local_git_blob": "d25b58d406f722311a571a82bcee9efbaa2b2655",
+      "upstream_git_blob": "d25b58d406f722311a571a82bcee9efbaa2b2655",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/speaker_to_bt.json",
+      "local_git_blob": "90a6ba022b42440df1a6cb059a0513a9b05c3f09",
+      "upstream_git_blob": "90a6ba022b42440df1a6cb059a0513a9b05c3f09",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/speed_15to2.json",
+      "local_git_blob": "2913491a5f01211b43501ab81dca082ab5ea6b0c",
+      "upstream_git_blob": "2913491a5f01211b43501ab81dca082ab5ea6b0c",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/speed_1to15.json",
+      "local_git_blob": "5ebc2935b4a6287739edd76e0c192c5ca2261812",
+      "upstream_git_blob": "5ebc2935b4a6287739edd76e0c192c5ca2261812",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/speed_2to1.json",
+      "local_git_blob": "ec61f8aa060398d6583363524377e788485f556e",
+      "upstream_git_blob": "ec61f8aa060398d6583363524377e788485f556e",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/speed_fast.json",
+      "local_git_blob": "e9c9af2cdeb3147dc53b580a0f21c3e74809363f",
+      "upstream_git_blob": "e9c9af2cdeb3147dc53b580a0f21c3e74809363f",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/speed_limit.json",
+      "local_git_blob": "5882f494be6563aaa3532cc5724db17a444a7b46",
+      "upstream_git_blob": "5882f494be6563aaa3532cc5724db17a444a7b46",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/speed_slow.json",
+      "local_git_blob": "fbde01c614d7b40dbe8184f3c2d2fb2978961baf",
+      "upstream_git_blob": "fbde01c614d7b40dbe8184f3c2d2fb2978961baf",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/star_fill.json",
+      "local_git_blob": "cbaa4c8bf9c9e97352ab326cfdf67d4ab1fb7c0b",
+      "upstream_git_blob": "cbaa4c8bf9c9e97352ab326cfdf67d4ab1fb7c0b",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/star_premium_2.json",
+      "local_git_blob": "333652f41ee1e71d7f2d998bc2dcc6c225704f70",
+      "upstream_git_blob": "333652f41ee1e71d7f2d998bc2dcc6c225704f70",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/star_reaction.json",
+      "local_git_blob": "7570b795da3240e25cb9997f733e2fc5228bd06e",
+      "upstream_git_blob": "7570b795da3240e25cb9997f733e2fc5228bd06e",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/star_reaction_click.json",
+      "local_git_blob": "c58988d2539339b3e9ab6e2780fb74342ca502ae",
+      "upstream_git_blob": "c58988d2539339b3e9ab6e2780fb74342ca502ae",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/star_reaction_effect1.json",
+      "local_git_blob": "3931d34fdbf15713505a54a171d9c511dab03bfb",
+      "upstream_git_blob": "3931d34fdbf15713505a54a171d9c511dab03bfb",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/star_reaction_effect2.json",
+      "local_git_blob": "36922059dc774554ddd05e25b05e5cee921f3da8",
+      "upstream_git_blob": "36922059dc774554ddd05e25b05e5cee921f3da8",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/star_reaction_effect3.json",
+      "local_git_blob": "1c32b5cc09ee7d5a56aea73593ba4ae11bd3ec40",
+      "upstream_git_blob": "1c32b5cc09ee7d5a56aea73593ba4ae11bd3ec40",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/star_reaction_effect4.json",
+      "local_git_blob": "cc6b8713deed795a71ce2f990d18a43205b7d998",
+      "upstream_git_blob": "cc6b8713deed795a71ce2f990d18a43205b7d998",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/star_reaction_effect5.json",
+      "local_git_blob": "a7933bddcbc8224964ca439c88c81bef6160cf92",
+      "upstream_git_blob": "a7933bddcbc8224964ca439c88c81bef6160cf92",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/star_stroke.json",
+      "local_git_blob": "5a24482b40935328f5cf52f5a5a4c7ac887ec457",
+      "upstream_git_blob": "5a24482b40935328f5cf52f5a5a4c7ac887ec457",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/stars_send.json",
+      "local_git_blob": "d737d67a747da11496004d508cc771229ab387fa",
+      "upstream_git_blob": "d737d67a747da11496004d508cc771229ab387fa",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/stars_topup.json",
+      "local_git_blob": "c04633491fb8ecc8bc6fabbc48c87b3028d4db82",
+      "upstream_git_blob": "c04633491fb8ecc8bc6fabbc48c87b3028d4db82",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/statistic_preload.json",
+      "local_git_blob": "0702ae14b0fcdf639bed2db67f5d577a343321a8",
+      "upstream_git_blob": "0702ae14b0fcdf639bed2db67f5d577a343321a8",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/sticker_to_keyboard.json",
+      "local_git_blob": "36caff27f7f5e7e94bfae055202c67cbaeda5e53",
+      "upstream_git_blob": "36caff27f7f5e7e94bfae055202c67cbaeda5e53",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/sticker_to_smile.json",
+      "local_git_blob": "fa82f66a41a9fabec0f51c1ca275ec9d39218491",
+      "upstream_git_blob": "fa82f66a41a9fabec0f51c1ca275ec9d39218491",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/stories_intro_go_back.json",
+      "local_git_blob": "276b86f074cea0afde8a3ddb1aeed4819fe6e597",
+      "upstream_git_blob": "276b86f074cea0afde8a3ddb1aeed4819fe6e597",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/stories_intro_go_forward.json",
+      "local_git_blob": "03ab793bdef85db62360e27aba81dab80fab0053",
+      "upstream_git_blob": "03ab793bdef85db62360e27aba81dab80fab0053",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/stories_intro_go_to_next.json",
+      "local_git_blob": "8445bf840794dc0848cbd2cad125ef59da50797c",
+      "upstream_git_blob": "8445bf840794dc0848cbd2cad125ef59da50797c",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/stories_intro_pause.json",
+      "local_git_blob": "565bec2139489485ba46a76625d0eb7557ea8735",
+      "upstream_git_blob": "565bec2139489485ba46a76625d0eb7557ea8735",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/story_bomb1.json",
+      "local_git_blob": "e1f94c1026627ccc742aaf958d55452c50a4e065",
+      "upstream_git_blob": "e1f94c1026627ccc742aaf958d55452c50a4e065",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/story_bomb2.json",
+      "local_git_blob": "4f08e5e01dadb4925c2d1373b0e60c192002b74b",
+      "upstream_git_blob": "4f08e5e01dadb4925c2d1373b0e60c192002b74b",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/story_repost.json",
+      "local_git_blob": "673fc165dd047c680588ef0a18d11c5d393f0221",
+      "upstream_git_blob": "673fc165dd047c680588ef0a18d11c5d393f0221",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/sun.json",
+      "local_git_blob": "5bb3fb5e36846d126bbe8826afaf68ec7f50d0b7",
+      "upstream_git_blob": "5bb3fb5e36846d126bbe8826afaf68ec7f50d0b7",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/sun_outline.json",
+      "local_git_blob": "9f77f97befe9b5678b5046ab1a6a1fd084a9ffc2",
+      "upstream_git_blob": "9f77f97befe9b5678b5046ab1a6a1fd084a9ffc2",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/swipe_community_ungroup.json",
+      "local_git_blob": "0630496e9c28199626585b13e9ec90cb093a1ec2",
+      "upstream_git_blob": "0630496e9c28199626585b13e9ec90cb093a1ec2",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/swipe_delete.json",
+      "local_git_blob": "26c64ea128bfa8017b14eb0adfc765a4ff2145b5",
+      "upstream_git_blob": "26c64ea128bfa8017b14eb0adfc765a4ff2145b5",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/swipe_disabled.json",
+      "local_git_blob": "844bbaf2b592f9822e9b1c062e2d128225987bf0",
+      "upstream_git_blob": "844bbaf2b592f9822e9b1c062e2d128225987bf0",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/swipe_mute.json",
+      "local_git_blob": "41d3d652cab0558b0e860a19b43c7539dc279c10",
+      "upstream_git_blob": "41d3d652cab0558b0e860a19b43c7539dc279c10",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/swipe_pin.json",
+      "local_git_blob": "4c8772884ba694760870f75d68c261aeafe4b721",
+      "upstream_git_blob": "4c8772884ba694760870f75d68c261aeafe4b721",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/swipe_read.json",
+      "local_git_blob": "035e4f55912ee25af68172ee81bf7abcaf3d45dd",
+      "upstream_git_blob": "035e4f55912ee25af68172ee81bf7abcaf3d45dd",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/swipe_unmute.json",
+      "local_git_blob": "b5b163cc926911f1f1b87a261ee0d3be90564a25",
+      "upstream_git_blob": "b5b163cc926911f1f1b87a261ee0d3be90564a25",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/swipe_unpin.json",
+      "local_git_blob": "83498533ca6643f036ffb0832a9cf941536273df",
+      "upstream_git_blob": "83498533ca6643f036ffb0832a9cf941536273df",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/swipe_unread.json",
+      "local_git_blob": "936588b9276198c87acffcfec5aa8f61103cdad2",
+      "upstream_git_blob": "936588b9276198c87acffcfec5aa8f61103cdad2",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_article.json",
+      "local_git_blob": "e5a0a7cdc0cad985f771bd34e2f58624ba4c2765",
+      "upstream_git_blob": "e5a0a7cdc0cad985f771bd34e2f58624ba4c2765",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_article_reverse.json",
+      "local_git_blob": "35addd52fb5adface83edf89019b2910c3494d1d",
+      "upstream_git_blob": "35addd52fb5adface83edf89019b2910c3494d1d",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_calls.json",
+      "local_git_blob": "297f460ca9a8392f7d97f2ff0f091e7f45ecab8c",
+      "upstream_git_blob": "297f460ca9a8392f7d97f2ff0f091e7f45ecab8c",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_chats.json",
+      "local_git_blob": "b286731bd3feb2c3dc6551b34682088f82130561",
+      "upstream_git_blob": "b286731bd3feb2c3dc6551b34682088f82130561",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_checklist.json",
+      "local_git_blob": "1de97073e0e5267ec2c1f8f4f17bbdc65f8ea9a6",
+      "upstream_git_blob": "1de97073e0e5267ec2c1f8f4f17bbdc65f8ea9a6",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_checklist_reverse.json",
+      "local_git_blob": "8d7b31b946075995b0f7c41f793d10ed5dd0e17f",
+      "upstream_git_blob": "8d7b31b946075995b0f7c41f793d10ed5dd0e17f",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_colors.json",
+      "local_git_blob": "0f2c3bdfcc0fcb19b624114f63264343afe6dd02",
+      "upstream_git_blob": "0f2c3bdfcc0fcb19b624114f63264343afe6dd02",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_colors_reverse.json",
+      "local_git_blob": "e0ff2755dd08bae1235386f7d9b55fedbf4d3583",
+      "upstream_git_blob": "e0ff2755dd08bae1235386f7d9b55fedbf4d3583",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_contacts.json",
+      "local_git_blob": "4014f1d60b8ee286b081308ba4a297a465bb506f",
+      "upstream_git_blob": "4014f1d60b8ee286b081308ba4a297a465bb506f",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_emoji.json",
+      "local_git_blob": "bd43115cc35cdd6172f8809ab16c6616ce10ee30",
+      "upstream_git_blob": "bd43115cc35cdd6172f8809ab16c6616ce10ee30",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_emoji_reverse.json",
+      "local_git_blob": "e328247f70f919466a407c31804e6a634839b17c",
+      "upstream_git_blob": "e328247f70f919466a407c31804e6a634839b17c",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_files.json",
+      "local_git_blob": "4722b3a95db437545ec95b20ba01f590816cac38",
+      "upstream_git_blob": "4722b3a95db437545ec95b20ba01f590816cac38",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_files_reverse.json",
+      "local_git_blob": "80a1a00c285b9b6936766ddec9de0ab6ed3d5f96",
+      "upstream_git_blob": "80a1a00c285b9b6936766ddec9de0ab6ed3d5f96",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_gallery.json",
+      "local_git_blob": "d97a05163d82829490295a13a6f247224f8dcbdb",
+      "upstream_git_blob": "d97a05163d82829490295a13a6f247224f8dcbdb",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_gallery_reverse.json",
+      "local_git_blob": "d64d0454045d9ff31c4e688e496bfad5452b5964",
+      "upstream_git_blob": "d64d0454045d9ff31c4e688e496bfad5452b5964",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_gift.json",
+      "local_git_blob": "9ae9903c3b40ac5be2e4d627253dbb0ff07678be",
+      "upstream_git_blob": "9ae9903c3b40ac5be2e4d627253dbb0ff07678be",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_gift_reverse.json",
+      "local_git_blob": "35311cb9dd96039140458a89ef1ad6ffb14f7372",
+      "upstream_git_blob": "35311cb9dd96039140458a89ef1ad6ffb14f7372",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_location.json",
+      "local_git_blob": "09ab7d0bd75ca10fb26c84553e65fcef96d14629",
+      "upstream_git_blob": "09ab7d0bd75ca10fb26c84553e65fcef96d14629",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_location_reverse.json",
+      "local_git_blob": "365a3876a8e588fc6e78ce9da371a2e5ea2c2180",
+      "upstream_git_blob": "365a3876a8e588fc6e78ce9da371a2e5ea2c2180",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_models.json",
+      "local_git_blob": "5ef6ff41cc6ab0e94e89ebf143187faeca0575f3",
+      "upstream_git_blob": "5ef6ff41cc6ab0e94e89ebf143187faeca0575f3",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_models_reverse.json",
+      "local_git_blob": "de0a91c62169dd4a96c12123bc1094f8ab2f9b4e",
+      "upstream_git_blob": "de0a91c62169dd4a96c12123bc1094f8ab2f9b4e",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_music.json",
+      "local_git_blob": "1514173c7233b4e599e7ec93e9176ac1dac7ab17",
+      "upstream_git_blob": "1514173c7233b4e599e7ec93e9176ac1dac7ab17",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_music_reverse.json",
+      "local_git_blob": "a1c9215e7878adae0b2c9c6099291c1ac48b89a0",
+      "upstream_git_blob": "a1c9215e7878adae0b2c9c6099291c1ac48b89a0",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_poll.json",
+      "local_git_blob": "534e47ff4a36f62c42470331501c74e16958c0c1",
+      "upstream_git_blob": "534e47ff4a36f62c42470331501c74e16958c0c1",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_poll_reverse.json",
+      "local_git_blob": "30a555790a9526a7cf1124c1d933f90135a27f8f",
+      "upstream_git_blob": "30a555790a9526a7cf1124c1d933f90135a27f8f",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_reply.json",
+      "local_git_blob": "96830e4cfa75b95566e7e06880800ca5502bcd74",
+      "upstream_git_blob": "96830e4cfa75b95566e7e06880800ca5502bcd74",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_reply_reverse.json",
+      "local_git_blob": "2c78f77593f9202a8883fe1b90562c65166a1164",
+      "upstream_git_blob": "2c78f77593f9202a8883fe1b90562c65166a1164",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_settings.json",
+      "local_git_blob": "af0d841d556a50aaaa2936ebe2e8461e8cb98bcc",
+      "upstream_git_blob": "af0d841d556a50aaaa2936ebe2e8461e8cb98bcc",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_sticker.json",
+      "local_git_blob": "4e82d232b14d99fda1baa8236c1b35f876895afc",
+      "upstream_git_blob": "4e82d232b14d99fda1baa8236c1b35f876895afc",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_sticker_reverse.json",
+      "local_git_blob": "5a18609d18936aaf16b1c5df7b77be2fa115c8b9",
+      "upstream_git_blob": "5a18609d18936aaf16b1c5df7b77be2fa115c8b9",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_symbols.json",
+      "local_git_blob": "20de47fc879ebbbea9f4210e3a9782bf610a38a3",
+      "upstream_git_blob": "20de47fc879ebbbea9f4210e3a9782bf610a38a3",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_symbols_reverse.json",
+      "local_git_blob": "9acc3a3b917e8ee81d17572e0637ab2f31a206c1",
+      "upstream_git_blob": "9acc3a3b917e8ee81d17572e0637ab2f31a206c1",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_wallet.json",
+      "local_git_blob": "8e6fbd6ab0bbd4a85d13bcb229321779c91f80f5",
+      "upstream_git_blob": "8e6fbd6ab0bbd4a85d13bcb229321779c91f80f5",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tab_wallet_reverse.json",
+      "local_git_blob": "23e1278e14f048b5c386990593c609e94498e897",
+      "upstream_git_blob": "23e1278e14f048b5c386990593c609e94498e897",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tag_icon_3.json",
+      "local_git_blob": "5e044579e93f8a695e31b95623a03ab156d55266",
+      "upstream_git_blob": "5e044579e93f8a695e31b95623a03ab156d55266",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/ticks_double.json",
+      "local_git_blob": "b94bf98fc32b4b66373b4b2d766ab11fd1c07d11",
+      "upstream_git_blob": "b94bf98fc32b4b66373b4b2d766ab11fd1c07d11",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/ticks_single.json",
+      "local_git_blob": "d42597019b1d177a95fe14ddf53eb4d46d41b299",
+      "upstream_git_blob": "d42597019b1d177a95fe14ddf53eb4d46d41b299",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/timer_3.json",
+      "local_git_blob": "9c648db3fe9251714278cd6d81a8a834a1d28c1c",
+      "upstream_git_blob": "9c648db3fe9251714278cd6d81a8a834a1d28c1c",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/timer_toast.json",
+      "local_git_blob": "4efc0d3e27ac3edd0a2f30c71438a32d77eccfe2",
+      "upstream_git_blob": "4efc0d3e27ac3edd0a2f30c71438a32d77eccfe2",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/topics.json",
+      "local_git_blob": "d447d3c55fe4e33f3a7e69fbce79ec23615ac91a",
+      "upstream_git_blob": "d447d3c55fe4e33f3a7e69fbce79ec23615ac91a",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/topics_list.json",
+      "local_git_blob": "9ed5f09dce6a97a1c588eca5daa28f3d2a97b6fb",
+      "upstream_git_blob": "9ed5f09dce6a97a1c588eca5daa28f3d2a97b6fb",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/topics_sidebar.json",
+      "local_git_blob": "c17a104d738b1743e60975fc5d962aee15154255",
+      "upstream_git_blob": "c17a104d738b1743e60975fc5d962aee15154255",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/topics_tabs.json",
+      "local_git_blob": "44f7b4fecf3e59b2d94e1247ce3c02302c59e2d7",
+      "upstream_git_blob": "44f7b4fecf3e59b2d94e1247ce3c02302c59e2d7",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/topics_top.json",
+      "local_git_blob": "f4f3be8a263f02c638034ba53511d3400c2a06b4",
+      "upstream_git_blob": "f4f3be8a263f02c638034ba53511d3400c2a06b4",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/transcribe.json",
+      "local_git_blob": "5065c247dc0c851e7ac2d2c9d7718cb777f104ad",
+      "upstream_git_blob": "5065c247dc0c851e7ac2d2c9d7718cb777f104ad",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/transcribe_in.json",
+      "local_git_blob": "f3371c880cb999ce1ba369413804cd8b76e2bfd3",
+      "upstream_git_blob": "f3371c880cb999ce1ba369413804cd8b76e2bfd3",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/transcribe_out.json",
+      "local_git_blob": "23716e6fa98c7f112d5c9242ffdac51425bdc9e8",
+      "upstream_git_blob": "23716e6fa98c7f112d5c9242ffdac51425bdc9e8",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tsv_monkey_close.json",
+      "local_git_blob": "2c50181da410bb4dda5ef71861f9c9ba3fbeb2c3",
+      "upstream_git_blob": "2c50181da410bb4dda5ef71861f9c9ba3fbeb2c3",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tsv_setup_email_sent.json",
+      "local_git_blob": "38b593bdc8612829ba9e1a94841444efb0b81c0f",
+      "upstream_git_blob": "38b593bdc8612829ba9e1a94841444efb0b81c0f",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tsv_setup_hint.json",
+      "local_git_blob": "ad47f750a7364bfcc710114287f29e4e58df12ff",
+      "upstream_git_blob": "ad47f750a7364bfcc710114287f29e4e58df12ff",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tsv_setup_intro.json",
+      "local_git_blob": "0ab1df837c28c37e634ba1714b4297187ec21d27",
+      "upstream_git_blob": "0ab1df837c28c37e634ba1714b4297187ec21d27",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tsv_setup_mail.json",
+      "local_git_blob": "95eb3dc76bad919f9da6fc1ebccacb014aa3bfd8",
+      "upstream_git_blob": "95eb3dc76bad919f9da6fc1ebccacb014aa3bfd8",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tsv_setup_monkey_close_and_peek.json",
+      "local_git_blob": "cc60a3edc55cd8c0f2f01b7e486feed73ac793c1",
+      "upstream_git_blob": "cc60a3edc55cd8c0f2f01b7e486feed73ac793c1",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tsv_setup_monkey_close_and_peek_to_idle.json",
+      "local_git_blob": "e53ea9ac9a868ca8e116ee983f74829ba75a038d",
+      "upstream_git_blob": "e53ea9ac9a868ca8e116ee983f74829ba75a038d",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tsv_setup_monkey_idle1.json",
+      "local_git_blob": "ed7370be3c3b392212bf1184658ef521fc3a1532",
+      "upstream_git_blob": "ed7370be3c3b392212bf1184658ef521fc3a1532",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tsv_setup_monkey_idle2.json",
+      "local_git_blob": "6bedc3600fbc95cd6f05deb64fcf39891712cd7d",
+      "upstream_git_blob": "6bedc3600fbc95cd6f05deb64fcf39891712cd7d",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tsv_setup_monkey_peek.json",
+      "local_git_blob": "43fedd744fd6e1e9e8308f526034047f088d8af3",
+      "upstream_git_blob": "43fedd744fd6e1e9e8308f526034047f088d8af3",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/tsv_setup_monkey_tracking.json",
+      "local_git_blob": "c170bac4cca3898540465063f82350b8d0fa9630",
+      "upstream_git_blob": "c170bac4cca3898540465063f82350b8d0fa9630",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/ubuntu_30.json",
+      "local_git_blob": "0b5a2e9d9e9604799a29e802d66faea79db9af49",
+      "upstream_git_blob": "0b5a2e9d9e9604799a29e802d66faea79db9af49",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/unlock_icon.json",
+      "local_git_blob": "b199523eb1829db0fdb4913087f50db1c341373d",
+      "upstream_git_blob": "b199523eb1829db0fdb4913087f50db1c341373d",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/utyan_cache.json",
+      "local_git_blob": "d05613efc45ec4a6f154978690f23e3374b4df21",
+      "upstream_git_blob": "d05613efc45ec4a6f154978690f23e3374b4df21",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/utyan_call.json",
+      "local_git_blob": "a50e28dadb2f46bb9c0d792cee362a1f0e4d3339",
+      "upstream_git_blob": "a50e28dadb2f46bb9c0d792cee362a1f0e4d3339",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/utyan_change_number.json",
+      "local_git_blob": "4085c3f9518d3da0681c4bd59b2b9d8af8c87cd2",
+      "upstream_git_blob": "4085c3f9518d3da0681c4bd59b2b9d8af8c87cd2",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/utyan_draw.json",
+      "local_git_blob": "3f37b48efbfd2de75cd2c0f532cc2b5fe5215215",
+      "upstream_git_blob": "3f37b48efbfd2de75cd2c0f532cc2b5fe5215215",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/utyan_empty.json",
+      "local_git_blob": "81e40a488374ccb620e61b784855e736bb6cb8c1",
+      "upstream_git_blob": "81e40a488374ccb620e61b784855e736bb6cb8c1",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/utyan_empty2.json",
+      "local_git_blob": "d2321b219e3ff0169f0ec28a054d341135e67b10",
+      "upstream_git_blob": "d2321b219e3ff0169f0ec28a054d341135e67b10",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/utyan_gallery.json",
+      "local_git_blob": "605e0a0ac667f4afd1fe28f4916c14e2162e7862",
+      "upstream_git_blob": "605e0a0ac667f4afd1fe28f4916c14e2162e7862",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/utyan_gigagroup.json",
+      "local_git_blob": "a7c24c8c9a4ba02d40d17d1c6a9fe3760125cbfd",
+      "upstream_git_blob": "a7c24c8c9a4ba02d40d17d1c6a9fe3760125cbfd",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/utyan_newborn.json",
+      "local_git_blob": "2f94c5a6f7d70e890e9fb57175a8ecc2f5470f33",
+      "upstream_git_blob": "2f94c5a6f7d70e890e9fb57175a8ecc2f5470f33",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/utyan_passcode.json",
+      "local_git_blob": "8122687f222b492918d17a544c265f277613c488",
+      "upstream_git_blob": "8122687f222b492918d17a544c265f277613c488",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/utyan_private.json",
+      "local_git_blob": "bb7596d61b6c811d3cdd46631beeaf12470f0e84",
+      "upstream_git_blob": "bb7596d61b6c811d3cdd46631beeaf12470f0e84",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/utyan_saved_messages.json",
+      "local_git_blob": "d9d24ce14485c78186a4fef83c1986b05783b671",
+      "upstream_git_blob": "d9d24ce14485c78186a4fef83c1986b05783b671",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/utyan_schedule.json",
+      "local_git_blob": "f61166193e1554c8fc9680bdf74f660209cf15aa",
+      "upstream_git_blob": "f61166193e1554c8fc9680bdf74f660209cf15aa",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/utyan_streaming.json",
+      "local_git_blob": "f61cebb686f1372ac18cbba2cccb8e40e38d0938",
+      "upstream_git_blob": "f61cebb686f1372ac18cbba2cccb8e40e38d0938",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/video_stop.json",
+      "local_git_blob": "31b10a2713285b23273b3b6f133b4f39f7e0fa62",
+      "upstream_git_blob": "31b10a2713285b23273b3b6f133b4f39f7e0fa62",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voice_and_video.json",
+      "local_git_blob": "b3967375ce3e2589750a6409a42b1db4b4a1be4e",
+      "upstream_git_blob": "b3967375ce3e2589750a6409a42b1db4b4a1be4e",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voice_mini.json",
+      "local_git_blob": "987f9255af8c31f0e1bca1e5ec2e64fbf9325a6c",
+      "upstream_git_blob": "987f9255af8c31f0e1bca1e5ec2e64fbf9325a6c",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voice_muted.json",
+      "local_git_blob": "f94984dfc1f1d464289a3453a3a0eceb12b18e3f",
+      "upstream_git_blob": "f94984dfc1f1d464289a3453a3a0eceb12b18e3f",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voice_outlined.json",
+      "local_git_blob": "c08e144a2e85c1c67662b68af0c2ad56ed79c0bd",
+      "upstream_git_blob": "c08e144a2e85c1c67662b68af0c2ad56ed79c0bd",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voice_outlined2.json",
+      "local_git_blob": "c29ffcc7003d6ae0d3d33f2cfef3d669d2a643c7",
+      "upstream_git_blob": "c29ffcc7003d6ae0d3d33f2cfef3d669d2a643c7",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voice_to_text.json",
+      "local_git_blob": "f1130e622dd1189c029c690f9dd2bbfb663fcc31",
+      "upstream_git_blob": "f1130e622dd1189c029c690f9dd2bbfb663fcc31",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voicechat_connecting.mp3",
+      "local_git_blob": "b5cd7af45ef8f6432084be9b3810df4c72eda5af",
+      "upstream_git_blob": "b5cd7af45ef8f6432084be9b3810df4c72eda5af",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voicechat_join.mp3",
+      "local_git_blob": "2a1bbb464a559cf33d83d41cc702440c1359a6e9",
+      "upstream_git_blob": "2a1bbb464a559cf33d83d41cc702440c1359a6e9",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voicechat_leave.mp3",
+      "local_git_blob": "942dd0c653629bb148a5a45ce1ca9cb858a62627",
+      "upstream_git_blob": "942dd0c653629bb148a5a45ce1ca9cb858a62627",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voip_allow_talk.json",
+      "local_git_blob": "b3e308d844cc47efc13c0365e8c9a74200cf5fa1",
+      "upstream_git_blob": "b3e308d844cc47efc13c0365e8c9a74200cf5fa1",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voip_busy.mp3",
+      "local_git_blob": "1d6741e5eaedb322bec4b7c17fe39114db6b6aa3",
+      "upstream_git_blob": "1d6741e5eaedb322bec4b7c17fe39114db6b6aa3",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voip_connecting.mp3",
+      "local_git_blob": "fc425bab97663f579a8274758bb5a7a580441b70",
+      "upstream_git_blob": "fc425bab97663f579a8274758bb5a7a580441b70",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voip_end.mp3",
+      "local_git_blob": "1d6741e5eaedb322bec4b7c17fe39114db6b6aa3",
+      "upstream_git_blob": "1d6741e5eaedb322bec4b7c17fe39114db6b6aa3",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voip_failed.mp3",
+      "local_git_blob": "3b596dbcb1483fb0b002510c46e117b18a5467b7",
+      "upstream_git_blob": "3b596dbcb1483fb0b002510c46e117b18a5467b7",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voip_filled.json",
+      "local_git_blob": "9f900f8fa5955c67a6e3a56d19e4999dfba5ad38",
+      "upstream_git_blob": "9f900f8fa5955c67a6e3a56d19e4999dfba5ad38",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voip_invite.json",
+      "local_git_blob": "bdf0dd946817c16141a7d4542a4bf0e359891bc0",
+      "upstream_git_blob": "bdf0dd946817c16141a7d4542a4bf0e359891bc0",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voip_muted.json",
+      "local_git_blob": "28b8e150b006f546677c95f99e245fd54c554686",
+      "upstream_git_blob": "28b8e150b006f546677c95f99e245fd54c554686",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voip_onallowtalk.mp3",
+      "local_git_blob": "b5dfaa606c912db5c22a97611a8a5755bbc1a702",
+      "upstream_git_blob": "b5dfaa606c912db5c22a97611a8a5755bbc1a702",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voip_record_saved.json",
+      "local_git_blob": "72475d56b69d7ff863193ebf6c5e3ba7e5ab90ed",
+      "upstream_git_blob": "72475d56b69d7ff863193ebf6c5e3ba7e5ab90ed",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voip_record_start.json",
+      "local_git_blob": "1af1e09dd03948a0f5ff8085eeb8a334fa84953c",
+      "upstream_git_blob": "1af1e09dd03948a0f5ff8085eeb8a334fa84953c",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voip_recordstart.mp3",
+      "local_git_blob": "0060e82c3737b9fefb3d3cc59a240cfdcf458f54",
+      "upstream_git_blob": "0060e82c3737b9fefb3d3cc59a240cfdcf458f54",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voip_ringback.mp3",
+      "local_git_blob": "a92325ba31bc1c0ca3c3abcc7a7e62e6f841fc89",
+      "upstream_git_blob": "a92325ba31bc1c0ca3c3abcc7a7e62e6f841fc89",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/voip_unmuted.json",
+      "local_git_blob": "308d93f7bfffb1d86f0686a979f58d96152b2ae8",
+      "upstream_git_blob": "308d93f7bfffb1d86f0686a979f58d96152b2ae8",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/wallet_allset.json",
+      "local_git_blob": "2de6b1b37791863fcb2aad3d64fed6f4a7da0394",
+      "upstream_git_blob": "2de6b1b37791863fcb2aad3d64fed6f4a7da0394",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/wallet_congrats.json",
+      "local_git_blob": "3d19175519d4960f5b85fc34f1b37de18e17832b",
+      "upstream_git_blob": "3d19175519d4960f5b85fc34f1b37de18e17832b",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/wallet_diamond_blue.json",
+      "local_git_blob": "9a988583c0bc903c021908b87b2dbf5917435944",
+      "upstream_git_blob": "9a988583c0bc903c021908b87b2dbf5917435944",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/wallet_diamond_white.json",
+      "local_git_blob": "68fc1fc66620528381559a97f48256314c6f8ccf",
+      "upstream_git_blob": "68fc1fc66620528381559a97f48256314c6f8ccf",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/wallet_gift_trash.json",
+      "local_git_blob": "991d9083c52153af67cae16f343d5beb6fd88576",
+      "upstream_git_blob": "991d9083c52153af67cae16f343d5beb6fd88576",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/wallet_perfect.json",
+      "local_git_blob": "b8b0917572edb5ff4b3df973673d91a5cb55fbc5",
+      "upstream_git_blob": "b8b0917572edb5ff4b3df973673d91a5cb55fbc5",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/wallet_science.json",
+      "local_git_blob": "aca78e369ed03cdc98a1f97fea342baf9d845edc",
+      "upstream_git_blob": "aca78e369ed03cdc98a1f97fea342baf9d845edc",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/windows_30.json",
+      "local_git_blob": "4fb8b6595e1a5b1cfeeab9524d4a37f468adf09e",
+      "upstream_git_blob": "4fb8b6595e1a5b1cfeeab9524d4a37f468adf09e",
+      "status": "identical"
+    },
+    {
+      "path": "TMessagesProj/src/main/res/raw/write_contacts_fab_icon.json",
+      "local_git_blob": "91fae9392fd4c16f2416886a829bd642693ff006",
+      "upstream_git_blob": "91fae9392fd4c16f2416886a829bd642693ff006",
+      "status": "identical"
+    }
+  ]
+}
