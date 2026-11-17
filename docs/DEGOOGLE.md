@@ -25,7 +25,7 @@ copied from other Telegram forks.
 | `com.google.android.gms:play-services-mlkit-image-labeling:16.0.8` | Automatic object labels / suggested object emoji unavailable. |
 | `com.google.mlkit:language-id:17.0.6` | `LanguageDetector.hasSupport()` returns false; direct detection returns `und`. Existing server translation remains. The already-commented ML Kit translation coordinate was also removed. |
 | `com.google.firebase:firebase-bom:34.19.0` | No Firebase platform dependency. |
-| `com.google.firebase:firebase-messaging` | FCM service excluded and manifest registration removed. Provider reports no services; no token requested. TODO UnifiedPush registration/delivery hook in `PushListenerController` (issue #3). |
+| `com.google.firebase:firebase-messaging` | FCM service excluded and manifest registration removed. `org.ayuless.push.UnifiedPushProvider` registers a UnifiedPush endpoint (`org.unifiedpush.android:connector:3.3.5`) with the server as a Web Push token (type 10); `AyulessPushService` passes decrypted payloads to `PushListenerController.processRemoteMessage`. Without a distributor the keep-alive background connection is used. See [Push notifications](#push-notifications-unifiedpush). |
 | `com.google.firebase:firebase-pnv` | `SUPPORTS_FPNV = false`; `PhoneVerification` reports no supported SIMs and fails verification. Existing passkey/manual login fallback remains. |
 | `com.google.firebase:firebase-appindexing:20.0.0` | Assistant indexing acknowledgements removed; normal intent/link handling remains. |
 | `com.google.firebase:firebase-crashlytics` (HockeyApp module) | Crashlytics calls removed; existing local logging remains. |
@@ -148,11 +148,37 @@ tile rendering or device lifecycle test was possible. In particular, verify the
 SDK's bitmap-density handling for icon offsets and the style/render callback
 timing on the device; neither can be established by these offline checks.
 
+## Push notifications (UnifiedPush)
+
+- The user installs a UnifiedPush distributor (ntfy, Sunup, NextPush, ...) and picks
+  it in Settings > Ayuless > Notifications. On start Ayuless also tries the current
+  or default distributor automatically.
+- The connector library generates a P-256 key pair and a 16-byte auth secret and
+  stores them. The endpoint is registered via `account.registerDevice` with
+  `token_type = 10` and the token
+  `{"endpoint": "...", "keys": {"p256dh": "...", "auth": "..."}}`.
+- Incoming messages are RFC 8291 (`aes128gcm`) encrypted. The connector decrypts
+  them with the Web Push decryptor it bundles (from Tink, Apache-2.0); Ayuless
+  does not ship its own copy of the crypto. `Tools/push/Rfc8291Check.java` checks
+  that decryptor against the RFC 8291 section 5 example.
+- The decrypted JSON goes into the upstream push handler through a small branch in
+  `PushListenerController.processRemoteMessage`. If the body carries an
+  MTProto-encrypted `p` field like FCM, that blob goes through the upstream
+  decryption instead. Anything unparseable still wakes the connection, so updates
+  are fetched normally.
+- Without a distributor (none installed, registration failed or unregistered), the
+  upstream keep-alive service is switched on, unless the user already set that
+  option. It is switched off again once a distributor works.
+
+Not verified yet: real delivery from the server to a distributor, the exact
+payload format the server sends for type 10 tokens, and multi-account routing
+(one endpoint is shared by all accounts, as with FCM; if the payload has no
+`user_id`, the selected account is used).
+
 ## Remaining work
 
-- Issue #3: implement UnifiedPush token lifecycle and encrypted message delivery.
-  Notifications currently rely on the existing Telegram connection/background
-  service, subject to Android background restrictions.
+- Issue #3 follow-up: test UnifiedPush delivery on a device with a distributor
+  (see above).
 - Issue #4: compile the MapLibre 11.8.0 integration when dependency downloads are
   available, then test rendering/OSM attribution, location selection, live marker
   rotation/clicks, proximity circles, bounds fitting, permissions and lifecycle

@@ -53,6 +53,8 @@ dependencies {
     // Ayuless: previously pulled in transitively by Play Services.
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'androidx.vectordrawable:vectordrawable:1.2.0'
+    // Ayuless: UnifiedPush connector (Apache-2.0) for push without Firebase.
+    implementation 'org.unifiedpush.android:connector:3.3.5'
 
     // Ayuless: open-source maps; keep platform location free of transitive Play Services.
     implementation('org.maplibre.gl:android-sdk:11.8.0') {
