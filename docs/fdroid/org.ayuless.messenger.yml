@@ -98,7 +98,7 @@ Builds:
       # otherwise produces an unrelated scanner warning.
       - truncate -s 0 ../TMessagesProj_Modules/media/publish.gradle
       # AGP requires the SDK CMake package, not only distro cmake.
-      - $$SDK$$/cmdline-tools/latest/bin/sdkmanager 'cmake;3.22.1'
+      - sdkmanager 'cmake;3.22.1'
     # Executed from subdir after source scanning. The same source-build wrapper
     # as CI is used, with fetching explicitly disabled. All four ABIs are needed.
     # SDK 36/build-tools 36.0.0 are selected by Gradle. Cargo vendoring above

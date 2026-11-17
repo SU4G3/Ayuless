@@ -123,3 +123,27 @@ The connector includes its Web Push decryptor derived from Google Tink
 (Apache License 2.0); the runtime also declares com.google.crypto.tink:tink:1.23.0.
 https://github.com/tink-crypto/tink-java
 Full Apache licence text: ayuless-notices/gumbo-Apache-2.0.txt
+
+Bundled text fonts (unchanged from Telegram)
+Roboto 2.137/2.138: Copyright 2011 Google Inc.; Apache License 2.0.
+Licence: ayuless-notices/roboto-v2-LICENSE.txt
+Roboto 3.009 (ExtraBold): Copyright 2011 The Roboto Project Authors; OFL-1.1.
+Licence: ayuless-notices/roboto-v3-LICENSE.txt
+Roboto Mono 3.000/3.001: Copyright 2015 The Roboto Mono Project Authors; OFL-1.1.
+Licence: ayuless-notices/roboto-mono-LICENSE.txt
+Merriweather 2.002: Copyright 2016 The Merriweather Project Authors,
+Reserved Font Name Merriweather; OFL-1.1.
+Licence: ayuless-notices/merriweather-v2-LICENSE.txt
+Merriweather 2.101: Copyright 2024 The Merriweather Project Authors,
+Reserved Font Name Merriweather; OFL-1.1.
+Licence: ayuless-notices/merriweather-v2-101-LICENSE.txt
+The latter upstream licence also retains its original 2020 copyright notice.
+Pinned licence sources and checksums: docs/fdroid/FONT-LICENSE-SOURCES.json.
+The gram/numbers glyph fonts are inherited Telegram resources, not members of
+these text-font families; see the separate upstream-resource provenance audit.
+
+JLaTeXMath Android main module: GPL with the upstream linking exception.
+Root notice: ayuless-notices/jlatexmath-LICENSE.txt
+Individual bundled font notices remain under
+org/scilab/forge/jlatexmath/fonts/licences/ in the packaged assets.
+The separate jlatexmath-font-greek module is not configured as an app dependency.

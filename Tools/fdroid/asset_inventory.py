@@ -31,9 +31,10 @@ def classify(path):
         if name == "rmono_var.ttf":
             return "roboto-mono", "OFL-1.1 (embedded grant)", "https://github.com/googlefonts/RobotoMono"
         families = {
-            "mw_": ("merriweather", "OFL-1.1 (family; provenance pending)", "https://github.com/EbenSorkin/Merriweather"),
-            "rmono": ("roboto-mono", "OFL-1.1 (family; provenance pending)", "https://github.com/googlefonts/RobotoMono"),
-            "r": ("roboto", "Apache-2.0/OFL-1.1 (version pending)", "https://github.com/googlefonts/roboto-classic"),
+            "mw_": ("merriweather", "OFL-1.1 (version/copyright identified)", "https://github.com/EbenSorkin/Merriweather4"),
+            "rmono": ("roboto-mono", "OFL-1.1", "https://github.com/googlefonts/RobotoMono"),
+            "rextrabold": ("roboto", "OFL-1.1 (3.009)", "https://github.com/googlefonts/roboto-3-classic/tree/v3.009"),
+            "r": ("roboto", "Apache-2.0 (2.137/2.138)", "https://github.com/googlefonts/roboto-2/tree/v2.138"),
         }
         for prefix, result in families.items():
             if name.startswith(prefix):

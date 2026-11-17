@@ -76,7 +76,9 @@ See the [inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/) and
 - [ ] **Asset redistribution evidence remains unresolved.** Unknown/pending
   grants are recorded rather than assigned the app's GPL: OCR weights, model
   source scenes, PhoneFormats/grammars/shapes data, gram/num glyph fonts, exact
-  versions of several other fonts, inherited artwork/sounds and 337 Lottie JSONs.
+  inherited artwork/sounds and 337 Lottie JSONs. Text-font versions/copyrights
+  are now identified; pinned Apache/OFL grants are packaged, so Roboto/Mono/
+  Merriweather replacement is not required by this audit.
   The previous Apple emoji concern is resolved by the Noto replacement below.
   Source files for decorative artwork are not an unconditional F-Droid
   requirement. Recursive font/dependency notices still need inspection/collection.
@@ -212,7 +214,9 @@ See the [inclusion policy](https://f-droid.org/en/docs/Inclusion_Policy/) and
 - [x] UnifiedPush #30 has been integrated into this F-Droid candidate after
   resolving conflicts with current `main`. The user reported working delivery
   in their latest tested artifact on 2026-11-17; its exact hash/distributor were
-  not supplied. README and store descriptions now describe the implementation.
+  not supplied at that point. The user subsequently identified ntfy and
+  confirmed delivery with the screen locked. README/store descriptions now
+  describe the implementation.
   Public alpha.2 does not include #30. All 96 external library-release runtime
   artifacts resolve; the RFC 8291 vector passes with the actual connector/Tink
   classes. See [DEPENDENCIES.md](DEPENDENCIES.md) and

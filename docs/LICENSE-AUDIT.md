@@ -67,12 +67,12 @@ but their licences and the final merged APK still need individual review.
 | Ayuless launcher artwork, `*ayuless*` drawables and store icons | GPL-3.0-or-later, own artwork | `branding/generate.py`, SVGs and Android vectors in this repo; preserve those sources |
 | `ayuless_solar_*.xml` (15) | CC BY 4.0; conversion attribution in XML and packaged notices | [480 Design / R4IN80W Solar set](https://www.figma.com/community/file/1166831539721848736/solar-icons-set); vectors are editable, colors/style adapted |
 | `fonts/rmono_var.ttf` | **OFL-1.1**, explicit embedded name IDs 13/14; copyright 2015 Roboto Mono Project Authors | [Roboto Mono](https://github.com/googlefonts/RobotoMono); retain font, copyright and packaged OFL text; exact source revision/build recipe still needs mapping |
-| `fonts/rmono.ttf` | Roboto Mono copyright embedded; OFL-1.1 family, exact file grant/source revision pending | Same family source; obtain matching source/release and confirm licence |
-| `fonts/r{medium,mediumitalic,italic,condensedbold}.ttf` | Embedded Google 2011 copyright / Roboto names; older Roboto family Apache-2.0, exact file provenance pending | [Roboto Classic](https://github.com/googlefonts/roboto-classic); match original version, do not assume newer family licence applies retroactively |
-| `fonts/rextrabold.ttf` | Embedded Roboto Project Authors / roboto-classic source URL; file licence/version pending | Same source; inspect matching release's Apache/OFL grant |
-| `fonts/mw_bold.ttf`, `mw_bolditalic.ttf` | Embedded Merriweather copyrights 2016 / 2024, Reserved Font Name Merriweather; OFL-1.1 family, exact file grants pending | [Merriweather](https://github.com/EbenSorkin/Merriweather) / [Merriweather4](https://github.com/EbenSorkin/Merriweather4); match releases and retain RFN notices |
+| `fonts/rmono.ttf` | OFL-1.1; version 3.000 and copyright identified; pinned family licence retained | Roboto Mono v3.001 source licence and the embedded copyright agree; font unchanged |
+| `fonts/r{medium,mediumitalic,italic,condensedbold}.ttf` | Apache-2.0; embedded versions 2.137/2.138 and Google 2011 copyright | [Roboto Classic](https://github.com/googlefonts/roboto-classic); pinned v2.138 Apache licence is packaged; no OFL relicensing of these older files is claimed |
+| `fonts/rextrabold.ttf` | OFL-1.1; embedded version 3.009 and Roboto Project Authors copyright | Pinned roboto-3-classic v3.009 OFL grant is packaged |
+| `fonts/mw_bold.ttf`, `mw_bolditalic.ttf` | OFL-1.1; versions 2.002 / 2.101, copyrights 2016 / 2024 and Reserved Font Name Merriweather identified | [Merriweather](https://github.com/EbenSorkin/Merriweather) / [Merriweather4](https://github.com/EbenSorkin/Merriweather4); Pinned family licence texts and embedded copyright/RFN notices are packaged; unchanged fonts retained |
 | `fonts/gram.ttf`, `fonts/num.otf` | **UNKNOWN**; name tables say only gram Medium / numbers SemBd | Telegram distribution in TSV; no editable glyph sources or third-party grant found. Obtain permission/source or replace, preserving glyph mappings |
-| JLaTeXMath fonts from the pinned submodule | Its `LICENSE` lists OFL (Euler/AMS), public domain (stmary/rsfs), Knuth (Computer Modern/Cyrillic), free dsrom, GPLv2 Greek | [jlatexmath-android](https://github.com/dkaraush/jlatexmath-android), actual font notices in `org/scilab/forge/jlatexmath/fonts/licences`; inspect initialized gitlink and packaged variants. Its GPLv2 Greek-font statement needs compatibility review; do not blanket-relicense as GPLv3 |
+| JLaTeXMath fonts from the pinned submodule | Its `LICENSE` lists OFL (Euler/AMS), public domain (stmary/rsfs), Knuth (Computer Modern/Cyrillic), free dsrom, GPLv2 Greek | [jlatexmath-android](https://github.com/dkaraush/jlatexmath-android), actual font notices in `org/scilab/forge/jlatexmath/fonts/licences`; inspect initialized gitlink and packaged variants. Only the main `jlatexmath` module is configured; the separate GPLv2 Greek-font module is not an APK dependency. Main module assets retain their font licences, and its root licence/linking exception is now also packaged; do not relicense fonts as GPLv3 |
 | `secureid_ocr_nn.dat` | **UNKNOWN**, neural-network weights read by `jni/secureid_ocr.cpp` | No training data, training procedure or model grant found; upstream binary alone is insufficient |
 | `models/diamond_ios/*.bin` (9) | **UNKNOWN**, geometry/animation/camera buffers read by `DiamondRenderer` | No original scene or export recipe found; obtain source and asset grant |
 | `models/*.binobj` (6), model PNGs (2) | **UNKNOWN**, geometry/material images | `Tools/BinaryObjConverter.html` explains conversion, but original model inputs and grants are missing |
@@ -114,3 +114,17 @@ Every new file in Ayuless carries:
 ```
 SPDX-License-Identifier: GPL-3.0-or-later
 ```
+
+## Follow-up evidence (2026-11-17)
+
+[FONT-LICENSE-SOURCES.json](fdroid/FONT-LICENSE-SOURCES.json) pins the original
+font licence files and hashes. The text fonts are retained without modification;
+missing byte-identical source-build provenance is not by itself a reason to
+replace an otherwise licensed font. See
+[ASSET-REVIEW-2026-11-17.md](fdroid/ASSET-REVIEW-2026-11-17.md).
+
+[UPSTREAM-ASSET-PROVENANCE.tsv](fdroid/UPSTREAM-ASSET-PROVENANCE.tsv) independently
+compares Git blob hashes against Telegram `7be672ea`: 5,345 resources match
+byte-for-byte. This establishes distribution provenance, not ownership or a new
+licence grant. Unknown individual grants remain review questions rather than
+proof of non-free content or a requirement to replace all Telegram resources.

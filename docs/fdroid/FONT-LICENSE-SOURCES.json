@@ -1,0 +1,42 @@
+[
+  {
+    "name": "roboto-v2",
+    "repository": "googlefonts/roboto-2",
+    "revision": "ab4876f650a4aeb9b661c83fee47f908c739bb70",
+    "path": "LICENSE",
+    "url": "https://raw.githubusercontent.com/googlefonts/roboto-2/ab4876f650a4aeb9b661c83fee47f908c739bb70/LICENSE",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+  },
+  {
+    "name": "roboto-v3",
+    "repository": "googlefonts/roboto-3-classic",
+    "revision": "cc4324ac5e7632b8f5521ed2ad470dc681e249ac",
+    "path": "OFL.txt",
+    "url": "https://raw.githubusercontent.com/googlefonts/roboto-3-classic/cc4324ac5e7632b8f5521ed2ad470dc681e249ac/OFL.txt",
+    "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+  },
+  {
+    "name": "roboto-mono",
+    "repository": "googlefonts/RobotoMono",
+    "revision": "111eb14e367888c9374da4da0b018e72cf8ac46d",
+    "path": "OFL.txt",
+    "url": "https://raw.githubusercontent.com/googlefonts/RobotoMono/111eb14e367888c9374da4da0b018e72cf8ac46d/OFL.txt",
+    "sha256": "50ab8dd54680d3473f649c9db86fece88434d097c7834475c1c72d2f8c429215"
+  },
+  {
+    "name": "merriweather-v2",
+    "repository": "google/fonts",
+    "revision": "b848f42f0bc0a8bc53588c3688ca37890e1db0bd",
+    "path": "ofl/merriweather/OFL.txt",
+    "url": "https://raw.githubusercontent.com/google/fonts/b848f42f0bc0a8bc53588c3688ca37890e1db0bd/ofl/merriweather/OFL.txt",
+    "sha256": "a7ba785ad99b6eae0444ab89910e512d4af9865937fddbcb5c72c4f59f55d6ad"
+  },
+  {
+    "name": "merriweather-v2-101",
+    "repository": "EbenSorkin/Merriweather4",
+    "revision": "e586023aa0fe1dba9a7d4ec80fa8b9e546cb7ecf",
+    "path": "OFL.txt",
+    "url": "https://raw.githubusercontent.com/EbenSorkin/Merriweather4/e586023aa0fe1dba9a7d4ec80fa8b9e546cb7ecf/OFL.txt",
+    "sha256": "715bd349bfa6116f99e351e1548321dcfa25b91df65502d22ca8d624557697d2"
+  }
+]
