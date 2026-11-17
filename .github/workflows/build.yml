@@ -45,7 +45,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 21
 
       # Runner image ships the Android SDK; android-actions/setup-android@v3 fails on the removed 'tools' package.
       - name: Install SDK and NDK
