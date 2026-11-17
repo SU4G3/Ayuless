@@ -100,7 +100,8 @@ Private test APKs: [test-cleanroom](https://github.com/SU4G3/Ayuless-reports/rel
 - ✅ Signed test copy uploaded privately; owner reported it works on a phone.
 - ✅ Known font/native licences packaged; inherited fonts/data and 366 models/animations/sounds compared with the Forkgram recipe source.
 - ✅ [Packaging request #4819](https://gitlab.com/fdroid/rfp/-/work_items/4819) submitted.
-- 🚧 GitLab fork import, metadata MR, pipeline and maintainer review.
+- ✅ [Metadata MR !57850](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/57850) submitted and linked to RFP #4819.
+- 🚧 Maintainer CI/review: GitLab blocks the fork pipeline on identity verification before any jobs run; a maintainer-side run was requested.
 - ⏳ Two-clean-APK reproducibility comparison; individual provenance and login-identity review context remains disclosed.
 
 Detailed status: [F-Droid checklist](fdroid/CHECKLIST.md),
@@ -110,6 +111,6 @@ Detailed status: [F-Droid checklist](fdroid/CHECKLIST.md),
 ## Not done yet
 - Review/merge #62; final APK build/checks and general device feedback are recorded.
 - Finish review/merge of UnifiedPush #30 (#3); verify final-candidate multi-account delivery and fallback.
-- Finish the GitLab metadata MR/pipeline after fork import and answer F-Droid review.
+- Follow the submitted GitLab metadata MR, obtain a maintainer CI run and answer F-Droid review.
 - Finish remaining resource licence/provenance review and release validation.
 - Remaining AyuGram parity items: [AYUGRAM-PARITY.md](AYUGRAM-PARITY.md).

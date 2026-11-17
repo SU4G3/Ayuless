@@ -89,7 +89,7 @@ Tools/native/build-prebuilts.sh
 
 ### F-Droid
 
-Подан [запрос на включение #4819](https://gitlab.com/fdroid/rfp/-/work_items/4819). Проверенный [рецепт сборки](docs/fdroid/org.ayuless.messenger.yml) включён; тег `fdroid-13.2.1-72919` указывает на исходники протестированного APK. Публикация в F-Droid ожидает ревью; отдельный MR пока ждёт импорта форка GitLab. Метаданные EN/RU находятся в `fastlane/metadata/android/`. Приложение требует несвободные серверы Telegram; UnifiedPush #30 для подачи не обязателен.
+Подан [запрос на включение #4819](https://gitlab.com/fdroid/rfp/-/work_items/4819). Проверенный [рецепт сборки](docs/fdroid/org.ayuless.messenger.yml) включён; тег `fdroid-13.2.1-72919` указывает на исходники протестированного APK. Публикация в F-Droid ожидает ревью; [MR !57850](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/57850) отправлен, CI ожидает запуска сопровождающими из-за проверки аккаунта GitLab. Метаданные EN/RU находятся в `fastlane/metadata/android/`. Приложение требует несвободные серверы Telegram; UnifiedPush #30 для подачи не обязателен.
 
 
 В [PR #62](https://github.com/SU4G3/Ayuless/pull/62) подготовлены сборка WidgetJS и
@@ -173,7 +173,7 @@ Tools/native/build-prebuilts.sh
 
 ### F-Droid
 
-[Packaging request #4819](https://gitlab.com/fdroid/rfp/-/work_items/4819) is submitted. The validated [build recipe](docs/fdroid/org.ayuless.messenger.yml) is enabled, and `fdroid-13.2.1-72919` tags the tested APK source. F-Droid publication awaits review; a separate metadata MR awaits GitLab fork import. EN/RU store metadata lives in `fastlane/metadata/android/`. The app requires Telegram's proprietary servers; UnifiedPush #30 is not required for submission.
+[Packaging request #4819](https://gitlab.com/fdroid/rfp/-/work_items/4819) is submitted. The validated [build recipe](docs/fdroid/org.ayuless.messenger.yml) is enabled, and `fdroid-13.2.1-72919` tags the tested APK source. F-Droid publication awaits review; [metadata MR !57850](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/57850) is submitted; CI awaits a maintainer-side run because GitLab blocks the fork pipeline on identity verification. EN/RU store metadata lives in `fastlane/metadata/android/`. The app requires Telegram's proprietary servers; UnifiedPush #30 is not required for submission.
 
 
 [PR #62](https://github.com/SU4G3/Ayuless/pull/62) prepares source-built WidgetJS
