@@ -330,4 +330,16 @@
     <string name="AyulessRegistrationDate">Дата регистрации (примерно)</string>
     <string name="AyulessCreationDate">Дата создания (примерно)</string>
     <string name="AyulessRegistrationUnknown">Неизвестно</string>
+    <!-- Уведомления / UnifiedPush -->
+    <string name="AyulessNotifications">Уведомления</string>
+    <string name="AyulessPushUnifiedPush">UnifiedPush</string>
+    <string name="AyulessPushBackground">Фоновое соединение</string>
+    <string name="AyulessPushDistributor">Дистрибьютор пушей</string>
+    <string name="AyulessPushNone">Нет (фоновое соединение)</string>
+    <string name="AyulessPushStatusRegistered">Пуш-уведомления приходят через UnifiedPush.</string>
+    <string name="AyulessPushStatusPending">Ждём регистрации у дистрибьютора. Если статус не меняется, откройте приложение-дистрибьютор и проверьте подключение.</string>
+    <string name="AyulessPushStatusNoDistributors">Дистрибьютор UnifiedPush не установлен. Уведомления идут через фоновое соединение, оно расходует больше батареи.</string>
+    <string name="AyulessPushStatusFallback">Уведомления идут через фоновое соединение, оно расходует больше батареи.</string>
+    <string name="AyulessPushInfo">В Ayuless нет сервисов Google. Чтобы получать пуши без постоянного фонового соединения, установите приложение-дистрибьютор UnifiedPush (например, ntfy или Sunup) и выберите его здесь.</string>
+    <string name="AyulessPushLearnMore">О дистрибьюторах UnifiedPush</string>
 </resources>

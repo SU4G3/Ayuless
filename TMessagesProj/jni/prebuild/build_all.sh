@@ -8,7 +8,8 @@ source "$SCRIPT_DIR/common.sh"
 
 print_common_config
 
-BUILD_ENV_FILE="$SCRIPT_DIR/build_env.txt"
+# Ayuless: diagnostics are generated build outputs, never tracked source inputs.
+BUILD_ENV_FILE="$SCRIPT_DIR/build/build_env.txt"
 write_build_environment "$BUILD_ENV_FILE"
 
 echo

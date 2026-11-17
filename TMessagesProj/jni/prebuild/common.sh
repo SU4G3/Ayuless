@@ -96,8 +96,11 @@ CMAKE_REPRO_CXX_FLAGS="$CXXFLAGS"
 # archives. Individual build systems are free to ignore SOURCE_DATE_EPOCH, but
 # exporting it is harmless and makes supported tools deterministic.
 export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1}"
-export TZ="${TZ:-UTC}"
-export LC_ALL="${LC_ALL:-C}"
+# Ayuless: caller locale/timezone and archiver defaults must not affect outputs.
+[[ "$SOURCE_DATE_EPOCH" =~ ^[0-9]+$ ]] || { echo 'Invalid SOURCE_DATE_EPOCH' >&2; return 1; }
+export TZ=UTC LC_ALL=C ZERO_AR_DATE=1
+export ARFLAGS=rcD
+umask 022
 
 if [[ -z "${JOBS:-}" ]]; then
     if command -v nproc >/dev/null 2>&1; then
@@ -262,13 +265,18 @@ normalize_archive() {
     # ordering and duplicate member names are preserved. Removing .comment
     # eliminates host-Clang build metadata (+/-bolt, +/-mlgo) without touching
     # code, relocations, or symbols required by the final linker.
-    if ! "$LLVM_OBJCOPY_BIN" --remove-section=.comment "$archive" "$temporary"; then
+    # Ayuless: normalize member metadata as well as the archive symbol index.
+    if ! "$LLVM_OBJCOPY_BIN" --enable-deterministic-archives --remove-section=.comment "$archive" "$temporary"; then
         rm -f "$temporary"
         return 1
     fi
 
     chmod 0644 "$temporary"
     mv -f "$temporary" "$archive"
+    # Ayuless: preserve member order/duplicate names; zero archive/index dates.
+    local ar_bin
+    ar_bin="$(find_ndk_tool llvm-ar)"
+    "$ar_bin" sD "$archive"
 }
 
 finalize_archive() {
@@ -359,7 +367,7 @@ command_version_line() {
 
     local version
     version="$($command_name "$@" 2>&1 | head -n 1 || true)"
-    printf '%-16s %s | %s\n' "$label" "$version" "$command_path"
+    printf '%-16s %s\n' "$label" "$version"
 }
 
 write_build_environment() {
@@ -369,24 +377,24 @@ write_build_environment() {
     mkdir -p "$(dirname "$destination")"
     {
         echo "Build environment"
-        echo "Generated: $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+        # Ayuless: record the declared epoch, never the wall clock.
+        echo "Source epoch: $SOURCE_DATE_EPOCH"
         echo "Host OS: $host_os"
         echo "Host arch: $(uname -m)"
         echo "ABIs: $ABIS"
         echo "API: $API"
-        echo "Jobs: $JOBS"
-        echo "Android SDK: $ANDROID_SDK_ROOT"
-        echo "Android NDK: $ANDROID_NDK_HOME"
+        echo "Android SDK: /android-sdk"
+        echo "Android NDK: $REPRODUCIBLE_NDK_ROOT"
         echo "NDK version: $NDK_VERSION"
         echo "NDK host tag: $NDK_HOST_TAG"
         if [[ -x "$clang_bin" ]]; then
-            printf '%-16s %s | %s\n' "Clang" "$("$clang_bin" --version 2>&1 | head -n 1)" "$clang_bin"
+            printf '%-16s %s\n' "Clang" "$("$clang_bin" --version 2>&1 | head -n 1)"
         fi
         if [[ -n "$CMAKE_BIN" && -x "$CMAKE_BIN" ]]; then
-            printf '%-16s %s | %s\n' "CMake" "$("$CMAKE_BIN" --version 2>&1 | head -n 1)" "$CMAKE_BIN"
+            printf '%-16s %s\n' "CMake" "$("$CMAKE_BIN" --version 2>&1 | head -n 1)"
         fi
         if [[ -n "$NINJA_BIN" && -x "$NINJA_BIN" ]]; then
-            printf '%-16s %s | %s\n' "Ninja" "$("$NINJA_BIN" --version 2>&1 | head -n 1)" "$NINJA_BIN"
+            printf '%-16s %s\n' "Ninja" "$("$NINJA_BIN" --version 2>&1 | head -n 1)"
         fi
         command_version_line "Make" make --version
         command_version_line "NASM" nasm -v
@@ -395,8 +403,10 @@ write_build_environment() {
         command_version_line "pkg-config" pkg-config --version
         command_version_line "gperf" gperf --version
         command_version_line "Python" python3 --version
-        command_version_line "Rust" rustc --version
-        command_version_line "Cargo" cargo --version
+        # Ayuless: the global rustup default is not a build input and could
+        # auto-install. Record the actual selected component pins instead.
+        echo "Wallet Rust: 1.96.1"
+        echo "Tlottie Rust: ${TLOTTIE_RUST_TOOLCHAIN:-1.98.0}"
         command_version_line "Go" go version
         command_version_line "Perl" perl -v
         echo "SOURCE_DATE_EPOCH: ${SOURCE_DATE_EPOCH:-}"

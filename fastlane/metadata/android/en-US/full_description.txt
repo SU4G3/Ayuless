@@ -6,10 +6,11 @@ Features include:
 • Message filters using keywords and regular expressions.
 • Chat export and local database backup, import and cleanup.
 • MapLibre maps, with optional satellite and hybrid views.
+• UnifiedPush notifications through a compatible distributor, without Firebase.
 • Additional chat tools and appearance settings in Settings → Ayuless.
 
-Ayuless is pre-alpha. Features are under development and have not been fully tested on devices. Retention stores only content received by this device; it cannot recover messages that were never received. Review the settings before use.
+Ayuless 1.0.0 is the first non-prerelease GitHub release. The release build and APK checks pass, with positive owner device feedback; not every feature has been exhaustively tested. Retention stores only content received by this device; it cannot recover messages that were never received. Review the settings before use.
 
-A Telegram account and access to Telegram's proprietary servers are required. Telegram may display sponsored messages when their local hiding setting is disabled. Maps contact OpenFreeMap and, for optional imagery, EOX. Payments and embedded web content can contact third-party services. Google Play Services and Firebase are not required. UnifiedPush support is still a draft and is not included in this release.
+A Telegram account and access to Telegram's proprietary servers are required. Telegram may display sponsored messages when their local hiding setting is disabled. Maps contact OpenFreeMap and, for optional imagery, EOX. Payments and embedded web content can contact third-party services. Google Play Services and Firebase are not required. UnifiedPush notifications are available with a compatible distributor app selected in Settings → Ayuless → Notifications. Without a distributor, Ayuless uses a background connection. The distributor and Telegram receive the delivery information needed for notifications.
 
 Ayuless is not affiliated with Telegram, AyuGram or Radolyn Labs. Distributed under GPL-3.0-or-later; third-party asset notices are retained in the project credits.

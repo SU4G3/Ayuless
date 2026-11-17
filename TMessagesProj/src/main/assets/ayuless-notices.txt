@@ -18,12 +18,128 @@ https://www.openstreetmap.org/copyright
 Optional satellite imagery: Sentinel-2 cloudless 2016 by EOX IT Services GmbH,
 containing modified Copernicus Sentinel data 2016, CC BY 4.0.
 https://s2maps.eu / https://maps.eox.at/
+Exact imagery attribution (also displayed with clickable links on the map):
+Sentinel-2 cloudless – https://s2maps.eu by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016)
+https://creativecommons.org/licenses/by/4.0/
+Only the original 2016 s2cloudless_3857 WMTS layer is configured. This notice
+does not license newer EOX mosaics. Current service/vintage availability needs
+confirmation; no newer vintage may be silently substituted.
 Hybrid overlay: data by OpenStreetMap contributors (ODbL) and Natural Earth
 (public domain); rendering by EOX and MapServer. EOX's service permission
 is described in docs/CREDITS.md; no CC BY licence is asserted for the overlay.
 The provider-specific credits and links also appear on the map.
 
-This notice supplements upstream and dependency notices. It is not a complete
-licence inventory of upstream fonts, models, animations or other assets.
-Full project credits and outstanding audit: docs/CREDITS.md and
-docs/fdroid/CHECKLIST.md in the source repository.
+Bundled text fonts (unchanged from Telegram)
+Roboto 2.137/2.138: Copyright 2011 Google Inc.; Apache License 2.0.
+Licence: ayuless-notices/roboto-v2-LICENSE.txt
+Roboto 3.009 (ExtraBold): Copyright 2011 The Roboto Project Authors; OFL-1.1.
+Licence: ayuless-notices/roboto-v3-LICENSE.txt
+Roboto Mono 3.000/3.001: Copyright 2015 The Roboto Mono Project Authors; OFL-1.1.
+Licence: ayuless-notices/roboto-mono-LICENSE.txt
+Merriweather 2.002: Copyright 2016 The Merriweather Project Authors,
+Reserved Font Name Merriweather; OFL-1.1.
+Licence: ayuless-notices/merriweather-v2-LICENSE.txt
+Merriweather 2.101: Copyright 2024 The Merriweather Project Authors,
+Reserved Font Name Merriweather; OFL-1.1.
+Licence: ayuless-notices/merriweather-v2-101-LICENSE.txt
+The latter upstream licence also retains its original 2020 copyright notice.
+Pinned licence sources and checksums: docs/fdroid/FONT-LICENSE-SOURCES.json.
+The gram/numbers glyph fonts are inherited Telegram resources, not members of
+these text-font families; see the separate upstream-resource provenance audit.
+
+JLaTeXMath Android main module: GPL with the upstream linking exception.
+Root notice: ayuless-notices/jlatexmath-LICENSE.txt
+Individual bundled font notices remain under
+org/scilab/forge/jlatexmath/fonts/licences/ in the packaged assets.
+The separate jlatexmath-font-greek module is not configured as an app dependency.
+
+
+Widget engine and resources
+
+QuickJS-ng (TelegramMessenger fork): MIT, Fabrice Bellard, Charlie Gordon,
+Ben Noordhuis, Saúl Ibarra Corretgé and contributors.
+https://github.com/TelegramMessenger/quickjs
+Full licence: ayuless-notices/quickjs-MIT.txt.
+Widget-sandbox sources: TMessagesProj/jni/twidget/widget-sandbox in the Ayuless
+source tree; generated WidgetJS bundles use linkedom (Andrea Giammarchi, ISC),
+parse5 (Ivan Nikulin, MIT) and css-tree (Roman Dvornov, MIT), plus their locked
+transitive dependencies. Their complete licence texts still need collection from
+the prepared source packages; the current third-party notice alone is insufficient.
+Sources: https://github.com/WebReflection/linkedom,
+https://github.com/inikulin/parse5, https://github.com/csstree/csstree
+This profile does not ship the old WidgetJS/libs Chart.js or D3 bundles.
+
+Twidget: BSD-3-Clause, Copyright 2026 The twidget Authors.
+Full licence: ayuless-notices/twidget-BSD.txt.
+litehtml: BSD-3-Clause, Yuri Kobets, https://github.com/litehtml/litehtml
+gumbo-parser: Apache-2.0, Google, https://github.com/google/gumbo-parser
+Phosphor vector icons: MIT, Copyright 2023 Phosphor Icons,
+https://github.com/phosphor-icons/core
+Full texts: ayuless-notices/litehtml-BSD.txt, gumbo-Apache-2.0.txt, phosphor-MIT.txt.
+Phosphor sources are retained in the optional TwidgetAssets tree; whether the
+selected Android renderer actually ships any of them must be checked in the APK.
+
+PhoneFormat reader code: Copyright 2012 Rick Maddy, BSD-2-Clause.
+Full notice: ayuless-notices/phoneformat-BSD.txt. This does not prove a grant for
+PhoneFormats.dat itself.
+
+Outstanding inherited asset provenance
+
+Sources/distribution: https://github.com/DrKLO/Telegram/tree/7be672ea/TMessagesProj/src/main
+No individual grant/preferred source has been established here for:
+secureid_ocr_nn.dat (OCR weights); PhoneFormats.dat, grammars.dat, shapes.dat;
+models/diamond_ios/*.bin and models/*.binobj/model textures; gram.ttf/num.otf;
+raw Lottie JSON animations and MP3/WAV sounds;
+inherited drawable/mipmap art, themes, wallet textures, backgrounds and stickers.
+The previous Apple-derived emoji pack and handshake PNGs have been replaced
+with Noto artwork; its sources and notices are listed below.
+Obtain free sources/grants or replace the affected assets before release.
+
+This notice records known credits and missing evidence; it grants no rights to
+unresolved assets. The per-file inventory with hashes, sources and licence status
+is docs/fdroid/ASSET-INVENTORY.tsv; the audit and remaining release blockers are
+docs/LICENSE-AUDIT.md and docs/fdroid/CHECKLIST.md in the Ayuless source repository.
+
+Bundled emoji: Noto Emoji by Google and contributors.
+https://github.com/googlefonts/noto-emoji
+Source revision: 99701e07d3d1fe1bdbcdb14964547f0fd592966f
+Noto SVG artwork: Copyright 2013 Google, Inc., Apache License 2.0.
+Flag artwork: public domain / copyright-exempt according to Noto's retained
+region-flags notices. Original SVGs and exact file hashes: branding/noto-emoji.
+Modified for Ayuless: rasterized at 64px; handshake layers separated for the
+existing two-hand skin-tone picker; encoded as lossless WebP in the EPK3 pack.
+Copyright notice: ayuless-notices/noto-copyright.txt
+Apache licence: ayuless-notices/gumbo-Apache-2.0.txt
+Flag notices: ayuless-notices/noto-flags.txt
+
+UnifiedPush Android connector 3.3.5
+https://codeberg.org/UnifiedPush/android-connector
+Apache License 2.0; publisher: UnifiedPush / S1m.
+The connector includes its Web Push decryptor derived from Google Tink
+(Apache License 2.0); the runtime also declares com.google.crypto.tink:tink:1.23.0.
+https://github.com/tink-crypto/tink-java
+Full Apache licence text: ayuless-notices/gumbo-Apache-2.0.txt
+
+libprisma and PrismJS 1.29.0 syntax grammars: MIT.
+Copyright (c) 2012 Lea Verou.
+https://github.com/TelegramMessenger/libprisma
+https://github.com/PrismJS/prism/tree/v1.29.0
+Licence: ayuless-notices/libprisma-MIT.txt
+The pinned libprisma submodule includes the grammar generator and npm lockfile.
+
+Ayuless application licence: GPL-3.0-or-later.
+Full text: ayuless-notices/Ayuless-GPL-3.0.txt
+Original Telegram GPLv2 text is retained separately:
+ayuless-notices/Telegram-GPL-2.0.txt
+Sources and corresponding licence notices: https://github.com/SU4G3/Ayuless
+The application licence does not replace third-party font/artwork licences.
+
+Native and Media3 dependency notices
+Original root LICENSE/COPYING/NOTICE/PATENTS texts are retained under
+ayuless-notices/native/. Exact source paths, pinned revisions and SHA-256:
+docs/fdroid/NATIVE-LICENSE-SOURCES.json in the source repository.
+FFmpeg's licence overview and its GPL/LGPL texts are retained together; the
+presence of these texts is not a claim that every optional FFmpeg component
+is enabled. Boost.Regex headers use Boost-1.0; the matching full text is also
+retained as native/td-LICENSE_1_0.txt.txt.
+These copies supplement per-file notices and do not change dependency licences.

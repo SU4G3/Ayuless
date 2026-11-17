@@ -1,0 +1,132 @@
+{
+  "checked_on": "2026-11-17",
+  "purpose": "Content provenance only; comparison does not assign a licence or establish acceptance of this APK.",
+  "comparisons": [
+    {
+      "repository": "Forkgram/TelegramAndroid",
+      "revision": "26dbf897e92ed64b5b6033df6484e05e427fa4d7",
+      "url": "https://raw.githubusercontent.com/Forkgram/TelegramAndroid/26dbf897e92ed64b5b6033df6484e05e427fa4d7/TMessagesProj/src/main/assets/fonts/gram.ttf",
+      "local_path": "TMessagesProj/src/main/assets/fonts/gram.ttf",
+      "remote_sha256": "d7f4772e698115b15dbb157741892e30bf7f5ab14777324baeeca7a9071cdf60",
+      "local_sha256": "d7f4772e698115b15dbb157741892e30bf7f5ab14777324baeeca7a9071cdf60",
+      "identical": true
+    },
+    {
+      "repository": "Forkgram/TelegramAndroid",
+      "revision": "26dbf897e92ed64b5b6033df6484e05e427fa4d7",
+      "url": "https://raw.githubusercontent.com/Forkgram/TelegramAndroid/26dbf897e92ed64b5b6033df6484e05e427fa4d7/TMessagesProj/src/main/assets/fonts/num.otf",
+      "local_path": "TMessagesProj/src/main/assets/fonts/num.otf",
+      "remote_sha256": "afa8e4eb576575c47b90ffd5065ffd91d583ee5c7ae81d4f3033fceb140378bf",
+      "local_sha256": "afa8e4eb576575c47b90ffd5065ffd91d583ee5c7ae81d4f3033fceb140378bf",
+      "identical": true
+    },
+    {
+      "repository": "Forkgram/TelegramAndroid",
+      "revision": "26dbf897e92ed64b5b6033df6484e05e427fa4d7",
+      "url": "https://raw.githubusercontent.com/Forkgram/TelegramAndroid/26dbf897e92ed64b5b6033df6484e05e427fa4d7/TMessagesProj/src/main/assets/secureid_ocr_nn.dat",
+      "local_path": "TMessagesProj/src/main/assets/secureid_ocr_nn.dat",
+      "remote_sha256": "068ff713ea9ada7dcca202106d90022de4fbbb762a2a004c39642e802b2063fe",
+      "local_sha256": "068ff713ea9ada7dcca202106d90022de4fbbb762a2a004c39642e802b2063fe",
+      "identical": true
+    },
+    {
+      "repository": "Forkgram/TelegramAndroid",
+      "revision": "26dbf897e92ed64b5b6033df6484e05e427fa4d7",
+      "url": "https://raw.githubusercontent.com/Forkgram/TelegramAndroid/26dbf897e92ed64b5b6033df6484e05e427fa4d7/TMessagesProj/src/main/assets/PhoneFormats.dat",
+      "local_path": "TMessagesProj/src/main/assets/PhoneFormats.dat",
+      "remote_sha256": "de584c08cb295cc1beaad44c7c07488995407e64af11a27a3d2bcfee3c57b6d0",
+      "local_sha256": "de584c08cb295cc1beaad44c7c07488995407e64af11a27a3d2bcfee3c57b6d0",
+      "identical": true
+    },
+    {
+      "repository": "Forkgram/TelegramAndroid",
+      "revision": "26dbf897e92ed64b5b6033df6484e05e427fa4d7",
+      "url": "https://raw.githubusercontent.com/Forkgram/TelegramAndroid/26dbf897e92ed64b5b6033df6484e05e427fa4d7/TMessagesProj/src/main/assets/shapes.dat",
+      "local_path": "TMessagesProj/src/main/assets/shapes.dat",
+      "remote_sha256": "ffabf2335eddc76a0ed7dc798f2e8e5fb67b988cd6bc61a751092328dac87657",
+      "local_sha256": "ffabf2335eddc76a0ed7dc798f2e8e5fb67b988cd6bc61a751092328dac87657",
+      "identical": true
+    },
+    {
+      "repository": "Forkgram/TelegramAndroid",
+      "revision": "26dbf897e92ed64b5b6033df6484e05e427fa4d7",
+      "url": "https://raw.githubusercontent.com/Forkgram/TelegramAndroid/26dbf897e92ed64b5b6033df6484e05e427fa4d7/TMessagesProj/src/main/assets/models/star.binobj",
+      "local_path": "TMessagesProj/src/main/assets/models/star.binobj",
+      "remote_sha256": "80c4525cddb9157882427a695c68a5f60a989d99d64673a27e9c84b21d499da0",
+      "local_sha256": "80c4525cddb9157882427a695c68a5f60a989d99d64673a27e9c84b21d499da0",
+      "identical": true
+    },
+    {
+      "repository": "Forkgram/TelegramAndroid",
+      "revision": "26dbf897e92ed64b5b6033df6484e05e427fa4d7",
+      "url": "https://raw.githubusercontent.com/Forkgram/TelegramAndroid/26dbf897e92ed64b5b6033df6484e05e427fa4d7/TMessagesProj/src/main/assets/models/diamond_ios/main.bin",
+      "local_path": "TMessagesProj/src/main/assets/models/diamond_ios/main.bin",
+      "remote_sha256": "b870d53f6a27b6e8b1532d172e331b4a0b94a2d043642bd020fa28805d9b7f19",
+      "local_sha256": "b870d53f6a27b6e8b1532d172e331b4a0b94a2d043642bd020fa28805d9b7f19",
+      "identical": true
+    },
+    {
+      "repository": "telegramdesktop/tdesktop",
+      "revision": "86262333a457f62709726ee4ab9c48fa58824da4",
+      "url": "https://raw.githubusercontent.com/telegramdesktop/tdesktop/86262333a457f62709726ee4ab9c48fa58824da4/Telegram/Resources/art/premium/diamond/anchors.bin",
+      "local_path": "TMessagesProj/src/main/assets/models/diamond_ios/anchors.bin",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "repository": "telegramdesktop/tdesktop",
+      "revision": "86262333a457f62709726ee4ab9c48fa58824da4",
+      "url": "https://raw.githubusercontent.com/telegramdesktop/tdesktop/86262333a457f62709726ee4ab9c48fa58824da4/Telegram/Resources/art/premium/diamond/camera.bin",
+      "local_path": "TMessagesProj/src/main/assets/models/diamond_ios/camera.bin",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "repository": "telegramdesktop/tdesktop",
+      "revision": "86262333a457f62709726ee4ab9c48fa58824da4",
+      "url": "https://raw.githubusercontent.com/telegramdesktop/tdesktop/86262333a457f62709726ee4ab9c48fa58824da4/Telegram/Resources/art/premium/diamond/facetProjection.bin",
+      "local_path": "TMessagesProj/src/main/assets/models/diamond_ios/facetProjection.bin",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "repository": "telegramdesktop/tdesktop",
+      "revision": "86262333a457f62709726ee4ab9c48fa58824da4",
+      "url": "https://raw.githubusercontent.com/telegramdesktop/tdesktop/86262333a457f62709726ee4ab9c48fa58824da4/Telegram/Resources/art/premium/diamond/frames.bin",
+      "local_path": "TMessagesProj/src/main/assets/models/diamond_ios/frames.bin",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "repository": "telegramdesktop/tdesktop",
+      "revision": "86262333a457f62709726ee4ab9c48fa58824da4",
+      "url": "https://raw.githubusercontent.com/telegramdesktop/tdesktop/86262333a457f62709726ee4ab9c48fa58824da4/Telegram/Resources/art/premium/diamond/main.bin",
+      "local_path": "TMessagesProj/src/main/assets/models/diamond_ios/main.bin",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "repository": "telegramdesktop/tdesktop",
+      "revision": "86262333a457f62709726ee4ab9c48fa58824da4",
+      "url": "https://raw.githubusercontent.com/telegramdesktop/tdesktop/86262333a457f62709726ee4ab9c48fa58824da4/Telegram/Resources/art/premium/diamond/planes.bin",
+      "local_path": "TMessagesProj/src/main/assets/models/diamond_ios/planes.bin",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "repository": "telegramdesktop/tdesktop",
+      "revision": "86262333a457f62709726ee4ab9c48fa58824da4",
+      "url": "https://raw.githubusercontent.com/telegramdesktop/tdesktop/86262333a457f62709726ee4ab9c48fa58824da4/Telegram/Resources/art/premium/diamond/small.bin",
+      "local_path": "TMessagesProj/src/main/assets/models/diamond_ios/small.bin",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "repository": "telegramdesktop/tdesktop",
+      "revision": "86262333a457f62709726ee4ab9c48fa58824da4",
+      "url": "https://raw.githubusercontent.com/telegramdesktop/tdesktop/86262333a457f62709726ee4ab9c48fa58824da4/Telegram/Resources/art/premium/diamond/vertices.bin",
+      "local_path": "TMessagesProj/src/main/assets/models/diamond_ios/vertices.bin",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "repository": "telegramdesktop/tdesktop",
+      "revision": "86262333a457f62709726ee4ab9c48fa58824da4",
+      "url": "https://raw.githubusercontent.com/telegramdesktop/tdesktop/86262333a457f62709726ee4ab9c48fa58824da4/Telegram/Resources/art/premium/diamond/widths.bin",
+      "local_path": "TMessagesProj/src/main/assets/models/diamond_ios/widths.bin",
+      "error": "HTTP Error 404: Not Found"
+    }
+  ]
+}

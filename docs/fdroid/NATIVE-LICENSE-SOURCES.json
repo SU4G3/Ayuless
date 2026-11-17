@@ -1,0 +1,176 @@
+[
+  {
+    "source": "TMessagesProj/jni/td/LICENSE_1_0.txt",
+    "revision": "022d60202e446ad1287b9fb68e687c8a0760788b",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/td-LICENSE_1_0.txt.txt",
+    "sha256": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566"
+  },
+  {
+    "source": "TMessagesProj/jni/tgcalls/LICENSE",
+    "revision": "545f5ae599f8282e1ae3f38aaff166d179d75703",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/tgcalls-LICENSE.txt",
+    "sha256": "da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/absl/LICENSE",
+    "revision": "54fac219c4ef0bc379dfffb0b8098725d77ac81b",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/absl-LICENSE.txt",
+    "sha256": "c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/boringssl/LICENSE",
+    "revision": "2b44a3701a4788e1ef866ddc7f143060a3d196c9",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/boringssl-LICENSE.txt",
+    "sha256": "827c8d8fc207c2392794eef9e00fe246f9f61fdcc132556c275be3dd8c3cd97f"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/dav1d/COPYING",
+    "revision": "54706fc6bc0cdecab7e9593974a4039cc038fca7",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/dav1d-COPYING.txt",
+    "sha256": "dd92c3c2247c5651606fc23a5e2d6a1ebc5ace9a3e49cbde0e12f05ad1cb1ee5"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/ffmpeg/COPYING.GPLv2",
+    "revision": "8dca1586f468bfcbb78ae3ed618af1361d9f140a",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/ffmpeg-COPYING.GPLv2.txt",
+    "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/ffmpeg/COPYING.GPLv3",
+    "revision": "8dca1586f468bfcbb78ae3ed618af1361d9f140a",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/ffmpeg-COPYING.GPLv3.txt",
+    "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/ffmpeg/COPYING.LGPLv2.1",
+    "revision": "8dca1586f468bfcbb78ae3ed618af1361d9f140a",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/ffmpeg-COPYING.LGPLv2.1.txt",
+    "sha256": "246041b6ecf9bc32d718a62c57877c78b5eb397b6467e74ed7ae2626ab189c30"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/ffmpeg/COPYING.LGPLv3",
+    "revision": "8dca1586f468bfcbb78ae3ed618af1361d9f140a",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/ffmpeg-COPYING.LGPLv3.txt",
+    "sha256": "da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/ffmpeg/LICENSE.md",
+    "revision": "8dca1586f468bfcbb78ae3ed618af1361d9f140a",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/ffmpeg-LICENSE.md.txt",
+    "sha256": "2e1d16c72fd74e12063776371da757322f8b77589386532f4fd8634bde7de1af"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/libprisma/LICENSE",
+    "revision": "94640c63c20eacdf70e37e23198d9ab53c802ebd",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/libprisma-LICENSE.txt",
+    "sha256": "06c72c0dd56ae23738676814f482d78cb57dec4cb8b912fcd9e2e3b6b35e29cc"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/libsrtp/LICENSE",
+    "revision": "f7f7bcfdf5d1a1151513e180a6e4bf105f5512ef",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/libsrtp-LICENSE.txt",
+    "sha256": "8e19d42a1eec9561f3f347253ddf2e385c55f392f025bb0fd41b88dbf38db5ae"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/libvpx/LICENSE",
+    "revision": "6df3ec34557879fff673706f4a1d9fbd0f3a6f0e",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/libvpx-LICENSE.txt",
+    "sha256": "8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/libvpx/PATENTS",
+    "revision": "6df3ec34557879fff673706f4a1d9fbd0f3a6f0e",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/libvpx-PATENTS.txt",
+    "sha256": "cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/libyuv/LICENSE",
+    "revision": "28ce69c2744a6aafdb58564e7b884aec3f66be5f",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/libyuv-LICENSE.txt",
+    "sha256": "2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/libyuv/PATENTS",
+    "revision": "28ce69c2744a6aafdb58564e7b884aec3f66be5f",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/libyuv-PATENTS.txt",
+    "sha256": "4da84211f947c6f9f7dd8fbce513e1522e01833407ae732b8c9a2bbb75fed495"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/openh264/LICENSE",
+    "revision": "652bdb7719f30b52b08e506645a7322ff1b2cc6f",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/openh264-LICENSE.txt",
+    "sha256": "dd5c1c9668512530fa5a96e4c29ac4033d70a7eeb0eed7a42fddb6dd794ebdbb"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/pffft/LICENSE",
+    "revision": "f7f7bcfdf5d1a1151513e180a6e4bf105f5512ef",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/pffft-LICENSE.txt",
+    "sha256": "a46200592eb193853527250da098e6bb0c75424e7a2c7db8da526c4f301c3d88"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/rnnoise/COPYING",
+    "revision": "f7f7bcfdf5d1a1151513e180a6e4bf105f5512ef",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/rnnoise-COPYING.txt",
+    "sha256": "e2f59ff41d9d03adc3dcf3deff170f8c8cf4a6eb4a9b174762a7656d23200ffa"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/wamr/LICENSE",
+    "revision": "25bd7eb63e828e4bd242cc9b38d260b4b31c6605",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/wamr-LICENSE.txt",
+    "sha256": "0a274df3755e61b169266fba62d842489378bc9a6e9a63fe24f02ee6f5de419f"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/xiph/ogg/COPYING",
+    "revision": "be05b13e98b048f0b5a0f5fa8ce514d56db5f822",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/ogg-COPYING.txt",
+    "sha256": "d2ab5758336489da61c12cc5bb757da5339c4ae9001f9bb0562b4370249af814"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/xiph/opus/COPYING",
+    "revision": "22244de5a79bd1d6d623c32e72bf1954b56235be",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/opus-COPYING.txt",
+    "sha256": "01e1167d54a096d123cf6dfbbeb19587278845c6481d2d66d545669846079551"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/xiph/opus/LICENSE_PLEASE_READ.txt",
+    "revision": "22244de5a79bd1d6d623c32e72bf1954b56235be",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/opus-LICENSE_PLEASE_READ.txt.txt",
+    "sha256": "7efb4989e0cd1b256229bdf2f09300c5d14e35db0e7476bfb87fac243498273d"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/xiph/opusfile/COPYING",
+    "revision": "a55c164e9891a9326188b7d4d216ec9a88373739",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/opusfile-COPYING.txt",
+    "sha256": "0267ae795ab744c4e0f9c45e249440fdf2e75dac8c804f36066b28649bf74aaf"
+  },
+  {
+    "source": "TMessagesProj/jni/tlottie/LICENSE",
+    "revision": "31f1b542f88e7b4be9a01e749920d857535fc715",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/tlottie-LICENSE.txt",
+    "sha256": "9c00f2e6db74aedafec31c1e479c8c3fa296f269ad763103de9764bc044e2700"
+  },
+  {
+    "source": "TMessagesProj/jni/wallet-engine/LICENSE-APACHE",
+    "revision": "5c65e47cb8d68727c20d89382d0bc51292486b9a",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/wallet-engine-LICENSE-APACHE.txt",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+  },
+  {
+    "source": "TMessagesProj/jni/wallet-engine/LICENSE-MIT",
+    "revision": "5c65e47cb8d68727c20d89382d0bc51292486b9a",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/wallet-engine-LICENSE-MIT.txt",
+    "sha256": "f668e6538d3e3bddf985af87f9b74fd6da1784115395157ea2f70d6c7aab439d"
+  },
+  {
+    "source": "TMessagesProj_Modules/media/LICENSE",
+    "revision": "09b6c97c0d691c50cd4541e1573995d4066d6f5c",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/media-LICENSE.txt",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  {
+    "source": "TMessagesProj/jni/third_party/simde/COPYING",
+    "revision": "71fd833d9666141edcd1d3c109a80e228303d8d7",
+    "asset": "TMessagesProj/src/main/assets/ayuless-notices/native/simde-COPYING.txt",
+    "sha256": "75ce0a8c5a7bff42fbd6f8f3b469b518132132c4f4948fb8d02b1ccb5d0df9d8"
+  }
+]

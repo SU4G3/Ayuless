@@ -20,6 +20,21 @@ for timed media, credited to 480 Design / R4IN80W under CC BY 4.0.
 CC BY 4.0 is one-way compatible with GPLv3: the icons can be distributed as part of
 Ayuless (GPL-3.0-or-later) as long as this attribution is kept.
 
+## Emoji artwork
+
+The built-in emoji use **Noto Emoji** by Google and contributors, pinned to
+[`99701e07d3d1fe1bdbcdb14964547f0fd592966f`](https://github.com/googlefonts/noto-emoji/tree/99701e07d3d1fe1bdbcdb14964547f0fd592966f).
+Noto SVG artwork is Copyright 2013 Google, Inc., **Apache-2.0**. Region flags
+are public domain or copyright-exempt according to Noto's retained flag notices.
+
+Original SVGs, file hashes, source paths and licence texts are retained in
+[`branding/noto-emoji`](../branding/noto-emoji/README.md). Ayuless rasterizes them
+to 64px, packs lossless WebP images in EPK3, and separates the existing vector
+handshake layers for independent skin-tone selection. These adaptations are
+documented there and in the APK's `assets/ayuless-notices.txt`; copyright,
+Apache licence and flag notices are also included in the APK. No Apple emoji
+font or extracted Apple emoji artwork is bundled or used by the build.
+
 ## Inspiration
 
 Thanks to the [AyuGram](https://github.com/AyuGram) team (Radolyn Labs). Ayuless follows AyuGram's feature set. Ayuless is not affiliated with AyuGram or Radolyn Labs. Name idea from exteraless.

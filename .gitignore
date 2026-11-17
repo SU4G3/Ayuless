@@ -22,3 +22,9 @@ API_KEYS
 # Ayuless: native archives are built from pinned sources, never committed.
 *.a
 TMessagesProj/jni/prebuild/pkgconfig/
+
+# Ayuless: Cargo sources/configuration prepared before the offline native build.
+TMessagesProj/jni/gram-wallet/vendor-fdroid/
+TMessagesProj/jni/gram-wallet/.cargo/
+**/vendor-fdroid/
+*.qbc
