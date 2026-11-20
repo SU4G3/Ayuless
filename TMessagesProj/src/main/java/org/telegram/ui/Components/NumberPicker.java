@@ -1024,10 +1024,9 @@ public class NumberPicker extends LinearLayout implements Theme.Colorable {
     }
 
     private int getWrappedSelectorIndex(int selectorIndex) {
-        if (mMaxValueSet && selectorIndex > mMaxValue && mMaxValue - mMinValue != 0) {
-            return mMinValue + (selectorIndex - mMaxValue) % (mMaxValue - mMinValue) - 1;
-        } else if (mMinValueSet && selectorIndex < mMinValue && mMaxValue - mMinValue != 0) {
-            return mMaxValue - (mMinValue - selectorIndex) % (mMaxValue - mMinValue) + 1;
+        if (mMaxValue >= mMinValue && ((mMaxValueSet && selectorIndex > mMaxValue)
+                || (mMinValueSet && selectorIndex < mMinValue))) {
+            return org.ayuless.security.PickerBounds.wrap(selectorIndex, mMinValue, mMaxValue);
         }
         return selectorIndex;
     }

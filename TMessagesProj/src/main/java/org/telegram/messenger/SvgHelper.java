@@ -46,6 +46,7 @@ import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.wallpaper.WallpaperGiftPatternPosition;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.DrawingInBackgroundThreadDrawable;
+import org.ayuless.security.SvgXmlReader;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
@@ -61,9 +62,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 public class SvgHelper {
 
@@ -445,9 +443,7 @@ public class SvgHelper {
 
     public static Bitmap getBitmap(int res, int width, int height, int color, float scale, ScaleMode scaleMode) {
         try (InputStream stream = ApplicationLoader.applicationContext.getResources().openRawResource(res)) {
-            SAXParserFactory spf = SAXParserFactory.newInstance();
-            SAXParser sp = spf.newSAXParser();
-            XMLReader xr = sp.getXMLReader();
+            XMLReader xr = SvgXmlReader.create();
             SVGHandler handler = new SVGHandler(width, height, color, false, scale, scaleMode);
             xr.setContentHandler(handler);
             xr.parse(new InputSource(stream));
@@ -460,9 +456,7 @@ public class SvgHelper {
 
     public static Bitmap getBitmap(InputStream stream, int width, int height, boolean white) {
         try {
-            SAXParserFactory spf = SAXParserFactory.newInstance();
-            SAXParser sp = spf.newSAXParser();
-            XMLReader xr = sp.getXMLReader();
+            XMLReader xr = SvgXmlReader.create();
             SVGHandler handler = new SVGHandler(width, height, white ? 0xffffffff : null, false, 1f);
             xr.setContentHandler(handler);
             xr.parse(new InputSource(stream));
@@ -479,9 +473,7 @@ public class SvgHelper {
 
     public static Bitmap getBitmap(File file, int width, int height, boolean white, ScaleMode scaleMode) {
         try (FileInputStream stream = new FileInputStream(file)) {
-            SAXParserFactory spf = SAXParserFactory.newInstance();
-            SAXParser sp = spf.newSAXParser();
-            XMLReader xr = sp.getXMLReader();
+            XMLReader xr = SvgXmlReader.create();
             SVGHandler handler = new SVGHandler(width, height, white ? 0xffffffff : null, false, 1f, scaleMode);
             if (!white) {
                 handler.alphaOnly = true;
@@ -497,9 +489,7 @@ public class SvgHelper {
 
     public static SvgResult getSvgBitmap(File file, int width, int height, boolean white) {
         try (FileInputStream stream = new FileInputStream(file)) {
-            SAXParserFactory spf = SAXParserFactory.newInstance();
-            SAXParser sp = spf.newSAXParser();
-            XMLReader xr = sp.getXMLReader();
+            XMLReader xr = SvgXmlReader.create();
             SVGHandler handler = new SVGHandler(width, height, white ? 0xffffffff : null, false, 1f);
             if (!white) {
                 handler.alphaOnly = true;
@@ -515,9 +505,7 @@ public class SvgHelper {
 
     public static Bitmap getBitmap(String xml, int width, int height, boolean white) {
         try {
-            SAXParserFactory spf = SAXParserFactory.newInstance();
-            SAXParser sp = spf.newSAXParser();
-            XMLReader xr = sp.getXMLReader();
+            XMLReader xr = SvgXmlReader.create();
             SVGHandler handler = new SVGHandler(width, height, white ? 0xffffffff : null, false, 1f);
             xr.setContentHandler(handler);
             xr.parse(new InputSource(new StringReader(xml)));
@@ -530,9 +518,7 @@ public class SvgHelper {
 
     public static SvgDrawable getDrawable(String xml) {
         try {
-            SAXParserFactory spf = SAXParserFactory.newInstance();
-            SAXParser sp = spf.newSAXParser();
-            XMLReader xr = sp.getXMLReader();
+            XMLReader xr = SvgXmlReader.create();
             SVGHandler handler = new SVGHandler(0, 0, null, true, 1f);
             xr.setContentHandler(handler);
             xr.parse(new InputSource(new StringReader(xml)));
@@ -545,9 +531,7 @@ public class SvgHelper {
 
     public static SvgDrawable getDrawable(int resId, Integer color) {
         try {
-            SAXParserFactory spf = SAXParserFactory.newInstance();
-            SAXParser sp = spf.newSAXParser();
-            XMLReader xr = sp.getXMLReader();
+            XMLReader xr = SvgXmlReader.create();
             SVGHandler handler = new SVGHandler(0, 0, color, true, 1f);
             xr.setContentHandler(handler);
             xr.parse(new InputSource(ApplicationLoader.applicationContext.getResources().openRawResource(resId)));

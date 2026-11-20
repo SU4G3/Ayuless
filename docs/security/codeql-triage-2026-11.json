@@ -1,0 +1,102 @@
+[
+  {
+    "number": 618,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "The pattern is the locally configured user regex from private ayuless_filters preferences; incoming messages are match input, not regex source. Regex syntax is an intentional filter feature. This does not assert that arbitrary user patterns are immune to excessive backtracking."
+  },
+  {
+    "number": 617,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "ContactsController builds this IN list exclusively from values escaped with DatabaseUtils.appendEscapedSQLString, including existing contact keys. The concatenated SQL does not interpolate unescaped lookup keys."
+  },
+  {
+    "number": 298,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "The ZIP entry name is reduced to the basename with lastIndexOf(\"/\") before createFileInCache and only .txt entries are accepted. The output parent is the fixed sharing cache directory; ZIP directory components do not reach the output path on Android."
+  },
+  {
+    "number": 299,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "AnimationNotificationsLocker is a NotificationCenter animation lifecycle token, not a thread mutex. Release occurs in the animation completion/state transition callbacks (onAnimationFinish), intentionally outside the lexical scope of lock(). Reviewed the corresponding completion paths; this dismissal concerns the mutex model, not a general cancellation audit."
+  },
+  {
+    "number": 300,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "AnimationNotificationsLocker is a NotificationCenter animation lifecycle token, not a thread mutex. Release occurs in the animation completion/state transition callbacks (onAnimationFinish), intentionally outside the lexical scope of lock(). Reviewed the corresponding completion paths; this dismissal concerns the mutex model, not a general cancellation audit."
+  },
+  {
+    "number": 301,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "AnimationNotificationsLocker is a NotificationCenter animation lifecycle token, not a thread mutex. Release occurs in the animation completion/state transition callbacks (onAnimationFinish), intentionally outside the lexical scope of lock(). Reviewed the corresponding completion paths; this dismissal concerns the mutex model, not a general cancellation audit."
+  },
+  {
+    "number": 302,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "AnimationNotificationsLocker is a NotificationCenter animation lifecycle token, not a thread mutex. Release occurs in the animation completion/state transition callbacks (onAnimationFinish), intentionally outside the lexical scope of lock(). Reviewed the corresponding completion paths; this dismissal concerns the mutex model, not a general cancellation audit."
+  },
+  {
+    "number": 303,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "AnimationNotificationsLocker is a NotificationCenter animation lifecycle token, not a thread mutex. Release occurs in the animation completion/state transition callbacks (onAnimationFinish), intentionally outside the lexical scope of lock(). Reviewed the corresponding completion paths; this dismissal concerns the mutex model, not a general cancellation audit."
+  },
+  {
+    "number": 326,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "ProxySettingsActivity configures FIELD_PASSWORD with TYPE_TEXT_VARIATION_PASSWORD and PasswordTransformationMethod before setting its saved value. This sink populates the masked local proxy password editor, not an external recipient."
+  },
+  {
+    "number": 560,
+    "dismissed_reason": "won't fix",
+    "dismissed_comment": "JavaScript is required for this embedded web feature (web pages, mini apps, payments, media or proxy transport). Enabling it is intentional. This accepts the specific JavaScript-enabled policy finding only; content/file access, origin validation and JavascriptInterface findings remain separate and open for review."
+  },
+  {
+    "number": 561,
+    "dismissed_reason": "won't fix",
+    "dismissed_comment": "JavaScript is required for this embedded web feature (web pages, mini apps, payments, media or proxy transport). Enabling it is intentional. This accepts the specific JavaScript-enabled policy finding only; content/file access, origin validation and JavascriptInterface findings remain separate and open for review."
+  },
+  {
+    "number": 562,
+    "dismissed_reason": "won't fix",
+    "dismissed_comment": "JavaScript is required for this embedded web feature (web pages, mini apps, payments, media or proxy transport). Enabling it is intentional. This accepts the specific JavaScript-enabled policy finding only; content/file access, origin validation and JavascriptInterface findings remain separate and open for review."
+  },
+  {
+    "number": 563,
+    "dismissed_reason": "won't fix",
+    "dismissed_comment": "JavaScript is required for this embedded web feature (web pages, mini apps, payments, media or proxy transport). Enabling it is intentional. This accepts the specific JavaScript-enabled policy finding only; content/file access, origin validation and JavascriptInterface findings remain separate and open for review."
+  },
+  {
+    "number": 564,
+    "dismissed_reason": "won't fix",
+    "dismissed_comment": "JavaScript is required for this embedded web feature (web pages, mini apps, payments, media or proxy transport). Enabling it is intentional. This accepts the specific JavaScript-enabled policy finding only; content/file access, origin validation and JavascriptInterface findings remain separate and open for review."
+  },
+  {
+    "number": 565,
+    "dismissed_reason": "won't fix",
+    "dismissed_comment": "JavaScript is required for this embedded web feature (web pages, mini apps, payments, media or proxy transport). Enabling it is intentional. This accepts the specific JavaScript-enabled policy finding only; content/file access, origin validation and JavascriptInterface findings remain separate and open for review."
+  },
+  {
+    "number": 566,
+    "dismissed_reason": "won't fix",
+    "dismissed_comment": "JavaScript is required for this embedded web feature (web pages, mini apps, payments, media or proxy transport). Enabling it is intentional. This accepts the specific JavaScript-enabled policy finding only; content/file access, origin validation and JavascriptInterface findings remain separate and open for review."
+  },
+  {
+    "number": 567,
+    "dismissed_reason": "won't fix",
+    "dismissed_comment": "JavaScript is required for this embedded web feature (web pages, mini apps, payments, media or proxy transport). Enabling it is intentional. This accepts the specific JavaScript-enabled policy finding only; content/file access, origin validation and JavascriptInterface findings remain separate and open for review."
+  },
+  {
+    "number": 568,
+    "dismissed_reason": "won't fix",
+    "dismissed_comment": "JavaScript is required for this embedded web feature (web pages, mini apps, payments, media or proxy transport). Enabling it is intentional. This accepts the specific JavaScript-enabled policy finding only; content/file access, origin validation and JavascriptInterface findings remain separate and open for review."
+  },
+  {
+    "number": 569,
+    "dismissed_reason": "won't fix",
+    "dismissed_comment": "JavaScript is required for this embedded web feature (web pages, mini apps, payments, media or proxy transport). Enabling it is intentional. This accepts the specific JavaScript-enabled policy finding only; content/file access, origin validation and JavascriptInterface findings remain separate and open for review."
+  },
+  {
+    "number": 473,
+    "dismissed_reason": "won't fix",
+    "dismissed_comment": "MD5 here computes the Telegram encrypted-upload protocol fingerprint from the random 32-byte AES key and 32-byte IV, then XORs digest bytes. It is not password hashing or a standalone integrity check. Replacing this algorithm unilaterally would break protocol compatibility."
+  }
+]
