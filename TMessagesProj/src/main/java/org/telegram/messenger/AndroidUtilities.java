@@ -6209,13 +6209,8 @@ public class AndroidUtilities {
         return false;
     }
 
-    private static Pattern uriParse;
-
     public static Pattern getURIParsePattern() {
-        if (uriParse == null) {
-            uriParse = Pattern.compile("^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?"); // RFC 3986 B
-        }
-        return uriParse;
+        return org.ayuless.security.UriParsePattern.VALUE;
     }
 
     public static String getHostAuthority(String uri) {

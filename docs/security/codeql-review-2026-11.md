@@ -19,3 +19,15 @@ Run each check by compiling its Tools/security/*Check.java together with the cor
 The remaining findings include content access and JavaScript bridges, file/URI handling, arithmetic, credential storage and logging, authentication-token backup, legacy wallet cryptography and network/intent destinations. No global rule exclusion, empty SARIF report or configuration deletion is used to hide them. Intentional JavaScript enablement is accepted only for that individual policy warning; it does not approve other WebView settings or origins.
 
 These changes target main for a future release. They do not modify the published v1.0.0 APK.
+
+## Follow-up: credential logging and URI parsing
+
+The subsequent analysis completed successfully but still reported the SVG finding; the scanner has not recognized the shared reader's protections. The finding remains open rather than being claimed as resolved.
+
+The sensitive-log traces identify real credential-bearing data reaching FileLog. The follow-up removes values at their source: future login token bytes, contact-import tokens, FCM registration tokens, raw deep links, and browser URLs that can contain an autologin token. Contact-import diagnostics retain only the numeric error code because free-form server errors may repeat request data. Event messages remain available with logging enabled. This prevents those particular values from being written by these callsites; it does not erase existing logs or certify all logging in the application. The FCM service is not part of the Google-free application build, but its source is hardened too. The theme debug log also no longer echoes the incoming style parameter.
+
+The URI authority parser's optional, overlapping regex components allowed excessive backtracking on malformed external input (alert #273). The old expression exceeded a five-second subprocess timeout for a 200,000-character input followed by an invalid fragment. The replacement uses possessive quantifiers within delimiter-bounded components while preserving the original RFC 3986 appendix B capture groups. UriParsePatternCheck compares all captures against the old expression on representative links and 20,000 deterministic generated inputs, then checks the long malformed input with the production pattern. The test passed within a 15-second process timeout. Device performance has not been measured.
+
+Alerts #477, #478, #557, #558, #559 and #273 are left to the next analysis; no manual dismissal is used to claim these source changes were recognized by CodeQL.
+
+The follow-up also passed offline `:TMessagesProj:compileReleaseJavaWithJavac` with JDK 21. FCM source remains excluded by the Google-free build configuration. No APK was built or published for this review.

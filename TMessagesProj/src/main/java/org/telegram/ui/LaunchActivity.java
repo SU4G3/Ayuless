@@ -4001,7 +4001,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 if (progress != null) {
                     progress.end();
                 }
-                FileLog.e("cant import contact token, err=" + (error == null ? null : error.text)); // (no token in the log)
+                FileLog.e("Cannot import contact token; error code=" + (error == null ? 0 : error.code));
                 final BaseFragment fragment = getLastFragment();
                 if (fragment != null) {
                     BulletinFactory.of(fragment).createErrorBulletin(LocaleController.getString(R.string.NoUsernameFound)).show();
@@ -4169,7 +4169,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     args.putLong("user_id", user.id);
                     presentFragment(new ChatActivity(args));
                 } else {
-                    FileLog.e("cant import contact token. token=" + contactToken + " err=" + (error == null ? null : error.text));
+                    FileLog.e("Cannot import contact token; error code=" + (error == null ? 0 : error.code));
                     BulletinFactory.of(mainFragmentsStack.get(mainFragmentsStack.size() - 1)).createErrorBulletin(LocaleController.getString(R.string.NoUsernameFound)).show();
                 }
 
@@ -7054,7 +7054,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         }
         final boolean toDark = "night".equals(mode) || !"day".equals(mode) && !Theme.getActiveTheme().isDark();
         final Theme.ThemeInfo themeInfo = Theme.getTheme(toDark ? nightThemeName : dayThemeName);
-        Log.i("tmessages", "DEBUG_THEME " + (toDark ? "night" : "day") + " (" + themeInfo.getKey() + "), style " + style);
+        Log.i("tmessages", "DEBUG_THEME " + (toDark ? "night" : "day"));
         if ("instant".equals(style)) {
             // same notification as the in-app toggle (fragments such as ChatActivity react to it), without animation
             debugInstantThemeSwitch = true;

@@ -34,7 +34,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     public void onNewToken(@NonNull String token) {
         AndroidUtilities.runOnUIThread(() -> {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("Refreshed FCM token: " + token);
+                FileLog.d("FCM token refreshed");
             }
             ApplicationLoader.postInitApplication();
             PushListenerController.sendRegistrationToServer(PushListenerController.PUSH_TYPE_FIREBASE, token);

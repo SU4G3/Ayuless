@@ -93,7 +93,7 @@ public class LinkManager {
     public boolean handle(Uri uri) {
         if (uri == null) return false;
 
-        FileLog.d("link manager handle " + uri);
+        FileLog.d("Link manager handling a URI");
 
         final String scheme = uri.getScheme();
 

@@ -712,7 +712,7 @@ public class Browser {
             }
             if (BuildVars.LOGS_ENABLED) {
                 for (int a = 0; a < allActivities.size(); a++) {
-                    FileLog.d("device has " + allActivities.get(a).activityInfo.packageName + " to open " + url);
+                    FileLog.d("device has " + allActivities.get(a).activityInfo.packageName + " to open the link");
                 }
             }
         } catch (Exception ignore) {}
