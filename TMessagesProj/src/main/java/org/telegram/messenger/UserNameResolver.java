@@ -39,7 +39,7 @@ public class UserNameResolver {
             if (cachedPeer != null) {
                 if (System.currentTimeMillis() - cachedPeer.time < CACHE_TIME) {
                     resolveConsumer.run(cachedPeer.peerId);
-                    FileLog.d("resolve username from cache " + username + " " + cachedPeer.peerId);
+                    FileLog.d("Resolved username from cache");
                     return null;
                 } else {
                     resolvedCache.remove(username);

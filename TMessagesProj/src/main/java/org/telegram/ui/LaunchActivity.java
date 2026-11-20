@@ -1722,7 +1722,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                     String originalPath = uri.toString();
                                     if (dialogId == 0 && originalPath != null) {
                                         if (BuildVars.LOGS_ENABLED) {
-                                            FileLog.d("export path = " + originalPath);
+                                            FileLog.d("Checking an incoming export URI");
                                         }
                                         Set<String> exportUris = MessagesController.getInstance(intentAccount[0]).exportUri;
                                         String fileName = FileLoader.fixFileName(MediaController.getFileName(uri));
@@ -1858,7 +1858,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                     }
 
                                     if (BuildVars.LOGS_ENABLED) {
-                                        FileLog.d("export path = " + originalPath);
+                                        FileLog.d("Checking an incoming export URI");
                                     }
                                     if (dialogId == 0 && originalPath != null && exportingChatUri == null) {
                                         boolean ok = false;

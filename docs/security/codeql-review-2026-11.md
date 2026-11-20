@@ -31,3 +31,11 @@ The URI authority parser's optional, overlapping regex components allowed excess
 Alerts #477, #478, #557, #558, #559 and #273 are left to the next analysis; no manual dismissal is used to claim these source changes were recognized by CodeQL.
 
 The follow-up also passed offline `:TMessagesProj:compileReleaseJavaWithJavac` with JDK 21. FCM source remains excluded by the Google-free build configuration. No APK was built or published for this review.
+
+## Follow-up analysis and remaining log paths
+
+Analysis 2217779705 of commit 253115354 completed successfully with 615 findings, leaving 595 open after the 20 earlier dismissals. GitHub marked #273 (URI regex), #477 (contact-token error logging) and #559 (theme log injection) fixed. #478 remains open: the query reports additional paths after the earlier callsites are removed. A reduced aggregate count is not evidence that every sensitive log is resolved.
+
+The next source change removes another direct dump of `future_auth_token` in LoginActivity. It also removes incoming export URI values from both single- and multiple-share diagnostics, usernames/peer IDs from the resolver cache diagnostic, and the rich-media cache key from its diagnostic. Class names and event messages remain available. The ImageLocation trace originates from a broad object flow involving account password state; this review does not establish that a plaintext password was printed there. Removing its unnecessary cache identifier reduces metadata exposure without modifying cache keys or image lookup behavior.
+
+The additional log changes passed offline release Java compilation with JDK 21 (2m 14s). No APK was built or published.

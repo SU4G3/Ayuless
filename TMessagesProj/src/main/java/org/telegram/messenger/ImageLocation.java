@@ -415,8 +415,7 @@ public class ImageLocation {
     public static String getStrippedKey(Object parentObject, Object fullObject, Object strippedObject) {
         String key = getStrippedKeyInternal(parentObject, fullObject, strippedObject);
         if (BuildVars.LOGS_ENABLED && parentObject instanceof MessageObject && ((MessageObject) parentObject).messageOwner != null && ((MessageObject) parentObject).messageOwner.rich_message != null) {
-            FileLog.d("[richmedia] strippedKey=" + key
-                + " fullObject=" + (fullObject == null ? "null" : fullObject.getClass().getSimpleName())
+            FileLog.d("[richmedia] fullObject=" + (fullObject == null ? "null" : fullObject.getClass().getSimpleName())
                 + " stripped=" + (strippedObject == null ? "null" : strippedObject.getClass().getSimpleName()));
         }
         return key;

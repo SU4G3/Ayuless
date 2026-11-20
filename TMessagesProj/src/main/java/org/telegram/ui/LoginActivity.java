@@ -209,7 +209,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -3023,7 +3022,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         settings.logout_tokens = new ArrayList<>();
                     }
                     if (BuildVars.DEBUG_VERSION) {
-                        FileLog.d("login token to check " + new String(loginTokens.get(i).future_auth_token, StandardCharsets.UTF_8));
+                        FileLog.d("Checking a saved login token");
                     }
                     settings.logout_tokens.add(loginTokens.get(i).future_auth_token);
                     if (settings.logout_tokens.size() >= 20) {
