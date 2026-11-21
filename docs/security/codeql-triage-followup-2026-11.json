@@ -1,0 +1,207 @@
+[
+  {
+    "number": 616,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "After the inclusive NumberPicker wrapping fix (8cd0a84af), picker values stay within 0..5 (or 0..4 without tabs). All parallel arrays have length 6. Icon calls use picker.getValue(); recoloring loops use i < icons.length. Extreme-range regression tests pass."
+  },
+  {
+    "number": 615,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "After the inclusive NumberPicker wrapping fix (8cd0a84af), picker values stay within 0..5 (or 0..4 without tabs). All parallel arrays have length 6. Icon calls use picker.getValue(); recoloring loops use i < icons.length. Extreme-range regression tests pass."
+  },
+  {
+    "number": 614,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "After the inclusive NumberPicker wrapping fix (8cd0a84af), picker values stay within 0..5 (or 0..4 without tabs). All parallel arrays have length 6. Icon calls use picker.getValue(); recoloring loops use i < icons.length. Extreme-range regression tests pass."
+  },
+  {
+    "number": 613,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "After the inclusive NumberPicker wrapping fix (8cd0a84af), picker values stay within 0..5 (or 0..4 without tabs). All parallel arrays have length 6. Icon calls use picker.getValue(); recoloring loops use i < icons.length. Extreme-range regression tests pass."
+  },
+  {
+    "number": 612,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "After the inclusive NumberPicker wrapping fix (8cd0a84af), picker values stay within 0..5 (or 0..4 without tabs). All parallel arrays have length 6. Icon calls use picker.getValue(); recoloring loops use i < icons.length. Extreme-range regression tests pass."
+  },
+  {
+    "number": 611,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "After the inclusive NumberPicker wrapping fix (8cd0a84af), picker values stay within 0..5 (or 0..4 without tabs). All parallel arrays have length 6. Icon calls use picker.getValue(); recoloring loops use i < icons.length. Extreme-range regression tests pass."
+  },
+  {
+    "number": 610,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "After the inclusive NumberPicker wrapping fix (8cd0a84af), picker values stay within 0..5 (or 0..4 without tabs). All parallel arrays have length 6. Icon calls use picker.getValue(); recoloring loops use i < icons.length. Extreme-range regression tests pass."
+  },
+  {
+    "number": 609,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "After the inclusive NumberPicker wrapping fix (8cd0a84af), picker values stay within 0..5 (or 0..4 without tabs). All parallel arrays have length 6. Icon calls use picker.getValue(); recoloring loops use i < icons.length. Extreme-range regression tests pass."
+  },
+  {
+    "number": 608,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "After the inclusive NumberPicker wrapping fix (8cd0a84af), picker values stay within 0..5 (or 0..4 without tabs). All parallel arrays have length 6. Icon calls use picker.getValue(); recoloring loops use i < icons.length. Extreme-range regression tests pass."
+  },
+  {
+    "number": 607,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "After the inclusive NumberPicker wrapping fix (8cd0a84af), picker values stay within 0..5 (or 0..4 without tabs). All parallel arrays have length 6. Icon calls use picker.getValue(); recoloring loops use i < icons.length. Extreme-range regression tests pass."
+  },
+  {
+    "number": 606,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "After the inclusive NumberPicker wrapping fix (8cd0a84af), picker values stay within 0..5 (or 0..4 without tabs). All parallel arrays have length 6. Icon calls use picker.getValue(); recoloring loops use i < icons.length. Extreme-range regression tests pass."
+  },
+  {
+    "number": 605,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "After the inclusive NumberPicker wrapping fix (8cd0a84af), picker values stay within 0..5 (or 0..4 without tabs). All parallel arrays have length 6. Icon calls use picker.getValue(); recoloring loops use i < icons.length. Extreme-range regression tests pass."
+  },
+  {
+    "number": 604,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "After the inclusive NumberPicker wrapping fix (8cd0a84af), picker values stay within 0..5 (or 0..4 without tabs). All parallel arrays have length 6. Icon calls use picker.getValue(); recoloring loops use i < icons.length. Extreme-range regression tests pass."
+  },
+  {
+    "number": 603,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "After the inclusive NumberPicker wrapping fix (8cd0a84af), picker values stay within 0..5 (or 0..4 without tabs). All parallel arrays have length 6. Icon calls use picker.getValue(); recoloring loops use i < icons.length. Extreme-range regression tests pass."
+  },
+  {
+    "number": 602,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "After the inclusive NumberPicker wrapping fix (8cd0a84af), picker values stay within 0..5 (or 0..4 without tabs). All parallel arrays have length 6. Icon calls use picker.getValue(); recoloring loops use i < icons.length. Extreme-range regression tests pass."
+  },
+  {
+    "number": 601,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "After the inclusive NumberPicker wrapping fix (8cd0a84af), picker values stay within 0..5 (or 0..4 without tabs). All parallel arrays have length 6. Icon calls use picker.getValue(); recoloring loops use i < icons.length. Extreme-range regression tests pass."
+  },
+  {
+    "number": 600,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "After the inclusive NumberPicker wrapping fix (8cd0a84af), picker values stay within 0..5 (or 0..4 without tabs). All parallel arrays have length 6. Icon calls use picker.getValue(); recoloring loops use i < icons.length. Extreme-range regression tests pass."
+  },
+  {
+    "number": 599,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 598,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 597,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 596,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 595,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 594,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 593,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 592,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 591,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 590,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 589,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 588,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 587,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 586,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 585,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 584,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 583,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 582,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 581,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 580,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 579,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "These formatters index arrays using NumberPicker values bounded by min=0 and max=array.length-1. NumberPicker clamps or wraps values and guards selector indices before formatting. Inclusive wrapping was fixed in 8cd0a84af and extreme values are regression-tested."
+  },
+  {
+    "number": 278,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "The U+0001..U+001F range intentionally removes C0 control characters from file names. U+202E and the punctuation are separate explicitly forbidden characters. The broad control range is required sanitization, not an accidental A-z style range."
+  },
+  {
+    "number": 518,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "calcHash is a fixed-width 64-bit protocol hash. Shift/XOR mixing and hash + id intentionally use Java long wraparound. The result is not used as an allocation size or array bound. Checked sticker-hash callers; adding overflow rejection would change protocol output."
+  },
+  {
+    "number": 272,
+    "dismissed_reason": "false positive",
+    "dismissed_comment": "All seven SvgHelper parsers use SvgXmlReader.create(): external general/parameter entities disabled, rejecting EntityResolver, and lexical startDTD throws. UTF-8/16 file/HTTP/DTD/entity regression tests pass with zero HTTP requests. CodeQL misses these helper protections."
+  }
+]

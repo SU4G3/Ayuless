@@ -9268,7 +9268,10 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
                 webView.getSettings().setJavaScriptEnabled(true);
                 webView.getSettings().setDomStorageEnabled(true);
 
-                webView.getSettings().setAllowContentAccess(true);
+                webView.getSettings().setAllowContentAccess(false);
+                webView.getSettings().setAllowFileAccess(false);
+                webView.getSettings().setAllowFileAccessFromFileURLs(false);
+                webView.getSettings().setAllowUniversalAccessFromFileURLs(false);
                 webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
                 webView.addJavascriptInterface(new TelegramWebviewProxy(), "TelegramWebviewProxy");
 

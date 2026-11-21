@@ -269,7 +269,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     // only our own call notifications know it, so other apps can't answer calls via the exported activity
     public final static String VOIP_ANSWER_TOKEN = UUID.randomUUID().toString();
     public final static String EXTRA_FORCE_REQUEST = "force_request";
-    public final static Pattern PREFIX_T_ME_PATTERN = Pattern.compile("^(?:http(?:s|)://|)([A-z0-9-]+?)\\.t\\.me");
+    public final static Pattern PREFIX_T_ME_PATTERN = org.ayuless.security.TelegramSubdomainPattern.VALUE;
 
     public static boolean isActive;
     private static int activeInstanceCount;

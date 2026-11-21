@@ -39,3 +39,17 @@ Analysis 2217779705 of commit 253115354 completed successfully with 615 findings
 The next source change removes another direct dump of `future_auth_token` in LoginActivity. It also removes incoming export URI values from both single- and multiple-share diagnostics, usernames/peer IDs from the resolver cache diagnostic, and the rich-media cache key from its diagnostic. Class names and event messages remain available. The ImageLocation trace originates from a broad object flow involving account password state; this review does not establish that a plaintext password was printed there. Removing its unnecessary cache identifier reduces metadata exposure without modifying cache keys or image lookup behavior.
 
 The additional log changes passed offline release Java compilation with JDK 21 (2m 14s). No APK was built or published.
+
+## Fourth review: embedded WebViews, host parsing and validated picker indices
+
+Analysis 2217986696 of d424f3d64 completed with 614 findings and 594 open after previous dismissals. The additional sensitive-log alert was no longer present in the open list.
+
+The article embed WebView loads remote URLs or HTML with an HTTPS base URL; it has no content-provider/file resource requirement. Its explicit content access is disabled, and file access plus file-origin cross-origin access are explicitly disabled. The temporary mini-app popup WebView only forwards navigation to the normal URI handler and then destroys itself; the same local-resource settings are disabled before it is handed to WebViewTransport. JavaScript and normal network embeds remain configured as before. Device tests of article embeds and mini-app external links are still needed; Java compilation does not verify rendering.
+
+LaunchActivity rewrites a recognized username.t.me host into a t.me link. Its previous A-z class admitted ASCII punctuation, and its prefix match also recognized username.t.me.attacker.example as a Telegram subdomain. The replacement explicitly lists ASCII letters, digits, underscore and hyphen, preserves underscore usernames, and requires an absolute end of input. Regression tests exercise the production pattern with valid usernames and invalid punctuation, suffix hosts, paths, userinfo, query strings and trailing newlines.
+
+The exact additional manual decisions are in [the follow-up manifest](codeql-triage-followup-2026-11.json). The 38 picker-index findings were reviewed against the actual min/max bounds, formatter guards, icon callsites and parallel array lengths after the earlier inclusive wrapping fix. They are dismissed as remaining modeling false positives, not as proof that the original wrapping implementation was correct. PickerBoundsCheck again passed edge cases and 10,000 ranges.
+
+The broad control-character sanitization range (#278) and fixed-width protocol-hash wraparound (#518) are intentional. The SVG finding (#272) is now explicitly dismissed after source review of the shared reader and its regression checks; this is a manual false-positive decision, not a claim that the last CodeQL scan recognized the protection. Earlier paragraphs record the decision at the time of each preceding analysis.
+
+The fourth review passed offline release Java compilation with JDK 21, TelegramSubdomainPatternCheck and PickerBoundsCheck. No APK was built or published. Rendering and external-link behavior on a device remain untested for these WebView changes.

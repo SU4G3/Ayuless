@@ -4700,6 +4700,10 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
                         }
                     } else {
                         WebView newWebView = new WebView(view.getContext());
+                        newWebView.getSettings().setAllowContentAccess(false);
+                        newWebView.getSettings().setAllowFileAccess(false);
+                        newWebView.getSettings().setAllowFileAccessFromFileURLs(false);
+                        newWebView.getSettings().setAllowUniversalAccessFromFileURLs(false);
                         newWebView.setWebViewClient(new WebViewClient() {
                             @Override
                             public boolean onRenderProcessGone(WebView view, RenderProcessGoneDetail detail) {
