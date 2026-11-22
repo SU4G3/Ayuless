@@ -133,8 +133,8 @@
             android:enabled="false"
             android:name="org.telegram.messenger.VintageIcon"
             android:targetActivity="org.telegram.ui.LaunchActivity"
-            android:icon="@mipmap/ic_launcher_ayuless"
-            android:roundIcon="@mipmap/ic_launcher_ayuless_round"
+            android:icon="@mipmap/ic_launcher_ayuless_classic"
+            android:roundIcon="@mipmap/ic_launcher_ayuless_classic_round"
             android:exported="true">
 
             <intent-filter>
@@ -149,8 +149,8 @@
             android:enabled="false"
             android:name="org.telegram.messenger.AquaIcon"
             android:targetActivity="org.telegram.ui.LaunchActivity"
-            android:icon="@mipmap/ic_launcher_ayuless"
-            android:roundIcon="@mipmap/ic_launcher_ayuless_round"
+            android:icon="@mipmap/ic_launcher_ayuless_ocean"
+            android:roundIcon="@mipmap/ic_launcher_ayuless_ocean_round"
             android:exported="true">
 
             <intent-filter>
@@ -165,8 +165,8 @@
             android:enabled="false"
             android:name="org.telegram.messenger.PremiumIcon"
             android:targetActivity="org.telegram.ui.LaunchActivity"
-            android:icon="@mipmap/icon_3_launcher"
-            android:roundIcon="@mipmap/icon_3_launcher_round"
+            android:icon="@mipmap/ic_launcher_ayuless_premium"
+            android:roundIcon="@mipmap/ic_launcher_ayuless_premium_round"
             android:exported="true">
 
             <intent-filter>
@@ -181,8 +181,8 @@
             android:enabled="false"
             android:name="org.telegram.messenger.TurboIcon"
             android:targetActivity="org.telegram.ui.LaunchActivity"
-            android:icon="@mipmap/icon_5_launcher"
-            android:roundIcon="@mipmap/icon_5_launcher_round"
+            android:icon="@mipmap/ic_launcher_ayuless_turbo"
+            android:roundIcon="@mipmap/ic_launcher_ayuless_turbo_round"
             android:exported="true">
 
             <intent-filter>
@@ -197,8 +197,8 @@
             android:enabled="false"
             android:name="org.telegram.messenger.NoxIcon"
             android:targetActivity="org.telegram.ui.LaunchActivity"
-            android:icon="@mipmap/icon_2_launcher"
-            android:roundIcon="@mipmap/icon_2_launcher_round"
+            android:icon="@mipmap/ic_launcher_ayuless_night"
+            android:roundIcon="@mipmap/ic_launcher_ayuless_night_round"
             android:exported="true">
 
             <intent-filter>

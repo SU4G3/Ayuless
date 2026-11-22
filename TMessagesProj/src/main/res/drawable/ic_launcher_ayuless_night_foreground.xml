@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="640" android:viewportHeight="640"><group android:scaleX="0.72" android:scaleY="0.72" android:pivotX="320" android:pivotY="345">
+<path android:fillColor="#FFFFFF" android:pathData="M190,195 L196,211 L212,217 L196,223 L190,239 L184,223 L168,217 L184,211 Z"/>
+<path android:fillColor="#A6FFFFFF" android:pathData="M440,174 L444,185 L455,189 L444,193 L440,204 L436,193 L425,189 L436,185 Z"/>
+<path android:fillColor="#FFFFFF" android:pathData="M478,456 L483,469 L496,474 L483,479 L478,492 L473,479 L460,474 L473,469 Z"/>
+<path android:fillColor="#80FFFFFF" android:pathData="M176,482 L180,493 L191,497 L180,501 L176,512 L172,501 L161,497 L172,493 Z"/>
+<path android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="72" android:strokeLineCap="round" android:strokeLineJoin="round" android:pathData="M165,398 L320,253 L475,398"/>
+<path android:fillColor="#FFFFFFFF" android:pathData="M283,452 a37,37 0 1,0 74,0 a37,37 0 1,0 -74,0 Z"/>
+</group></vector>

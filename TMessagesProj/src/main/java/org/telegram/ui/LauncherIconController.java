@@ -35,17 +35,18 @@ public class LauncherIconController {
 
     public enum LauncherIcon {
         DEFAULT("DefaultIcon", R.drawable.ic_launcher_ayuless_background, R.drawable.ic_launcher_ayuless_foreground, R.string.AppIconDefault),
-        // Ayuless: ordinary launcher choices match their manifest aliases.
-        VINTAGE("VintageIcon", R.drawable.ic_launcher_ayuless_background, R.drawable.ic_launcher_ayuless_foreground, R.string.AppIconVintage),
-        AQUA("AquaIcon", R.drawable.ic_launcher_ayuless_background, R.drawable.ic_launcher_ayuless_foreground, R.string.AppIconAqua),
-        PREMIUM("PremiumIcon", R.drawable.icon_3_background_sa, R.mipmap.icon_3_foreground_sa, R.string.AppIconPremium, true),
-        TURBO("TurboIcon", R.drawable.icon_5_background_sa, R.mipmap.icon_5_foreground_sa, R.string.AppIconTurbo, true),
-        NOX("NoxIcon", R.mipmap.icon_2_background_sa, R.mipmap.icon_foreground_sa, R.string.AppIconNox, true);
+        // Ayuless variants share resources with their actual launcher aliases.
+        VINTAGE("VintageIcon", R.drawable.ic_launcher_ayuless_classic_background, R.drawable.ic_launcher_ayuless_classic_foreground, R.string.AppIconVintage),
+        AQUA("AquaIcon", R.drawable.ic_launcher_ayuless_ocean_background, R.drawable.ic_launcher_ayuless_ocean_foreground, R.string.AppIconAqua),
+        PREMIUM("PremiumIcon", R.drawable.ic_launcher_ayuless_premium_background, R.drawable.ic_launcher_ayuless_premium_foreground, R.string.AppIconPremium, true),
+        TURBO("TurboIcon", R.drawable.ic_launcher_ayuless_turbo_background, R.drawable.ic_launcher_ayuless_turbo_foreground, R.string.AppIconTurbo, true),
+        NOX("NoxIcon", R.drawable.ic_launcher_ayuless_night_background, R.drawable.ic_launcher_ayuless_night_foreground, R.string.AppIconNox, true);
 
         public final String key;
         public final int background;
         public final int foreground;
         public final int title;
+        // Upstream preview grouping only; every launcher icon is free to select in Ayuless.
         public final boolean premium;
 
         private ComponentName componentName;
