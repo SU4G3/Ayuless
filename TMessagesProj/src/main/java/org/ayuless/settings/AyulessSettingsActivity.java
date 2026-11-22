@@ -14,19 +14,18 @@ import android.content.pm.PackageManager;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.pm.PackageInfoCompat;
 
 import org.ayuless.ghost.GhostConfig;
-import org.telegram.utils.glass.BaseFragmentSimpleGlass;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.R;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeBind;
 import org.telegram.ui.Components.LayoutHelper;
@@ -59,14 +58,6 @@ public class AyulessSettingsActivity extends AyulessSettingsFragment {
     }
 
     @Override
-    public void onInsets(int left, int top, int right, int bottom) {
-        super.onInsets(left, top, right, bottom);
-        if (listView != null) {
-            BaseFragmentSimpleGlass.setListViewParams(listView, top, bottom, dp(12), 0);
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         // Category values (e.g. ghost mode on/off) may have changed in a sub-screen.
@@ -81,7 +72,7 @@ public class AyulessSettingsActivity extends AyulessSettingsFragment {
             headerView = createHeader(getParentActivity());
         }
         if (headerView != null) {
-            items.add(UItem.asCustomShadow(headerView, 198));
+            items.add(UItem.asCustomShadow(headerView, LayoutHelper.WRAP_CONTENT));
         }
 
         items.add(UItem.asHeader(getString(R.string.AyulessCategoriesHeader)));
@@ -142,25 +133,36 @@ public class AyulessSettingsActivity extends AyulessSettingsFragment {
     }
 
     private View createHeader(Context context) {
-        LinearLayout layout = new LinearLayout(context);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setGravity(Gravity.CENTER);
-        layout.setPadding(0, dp(28), 0, dp(28));
-
-        ImageView icon = new ImageView(context);
-        icon.setImageResource(R.drawable.ayuless_settings_logo);
-        icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        icon.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
-        layout.addView(icon, LayoutHelper.createLinear(72, 72));
-
         TextView name = new TextView(context);
+        LinearLayout layout = new LinearLayout(context) {
+            @Override protected void onMeasure(int widthSpec, int heightSpec) {
+                super.onMeasure(widthSpec, heightSpec);
+                // Balance the logo center between the action-bar title and the name below.
+                // Use measured text height so font scaling and landscape keep the same balance.
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) name.getLayoutParams();
+                int gap = Math.max(dp(12), ActionBar.getCurrentActionBarHeight() / 2
+                        + getPaddingTop() - name.getMeasuredHeight() / 2);
+                if (params.topMargin != gap) {
+                    params.topMargin = gap;
+                    super.onMeasure(widthSpec, heightSpec);
+                }
+            }
+        };
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setGravity(Gravity.CENTER_HORIZONTAL);
+        layout.setPadding(0, dp(16), 0, dp(24));
+
+        AyulessHeaderLogo icon = new AyulessHeaderLogo(context, getResourceProvider());
+        layout.addView(icon, LayoutHelper.createLinear(104, 104));
+
         name.setText(getString(R.string.AyulessLauncherName));
         name.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         name.setTypeface(AndroidUtilities.bold());
         name.setGravity(Gravity.CENTER);
         name.setSingleLine(true);
+        name.setIncludeFontPadding(false);
         ThemeBind.textColor(name, Theme.key_windowBackgroundWhiteBlackText, getResourceProvider());
-        layout.addView(name, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 50, 16, 50, 0));
+        layout.addView(name, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 50, 32, 50, 0));
 
         TextView version = new TextView(context);
         version.setText(BuildVars.BUILD_VERSION_STRING);
@@ -171,12 +173,12 @@ public class AyulessSettingsActivity extends AyulessSettingsFragment {
         } catch (PackageManager.NameNotFoundException e) {
             FileLog.e(e);
         }
-        version.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-        version.setTypeface(AndroidUtilities.bold());
+        version.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        version.setIncludeFontPadding(false);
         version.setGravity(Gravity.CENTER);
         version.setLineSpacing(dp(2), 1);
         ThemeBind.textColor(version, Theme.key_windowBackgroundWhiteGrayText, getResourceProvider());
-        layout.addView(version, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 60, 2, 60, 0));
+        layout.addView(version, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 60, 6, 60, 0));
         return layout;
     }
 }
