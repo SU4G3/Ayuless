@@ -40,7 +40,8 @@ public final class AppearanceConfig {
         editor.apply();
     }
     public static final String KEY_TRANSLUCENT_DELETED = "translucentDeleted";
-    public static final String KEY_MARK_EMOJI = "deletedMarkEmoji";
+    private static final String KEY_MARK_EMOJI = "deletedMarkEmoji";
+    private static final String KEY_MARK_ICON = "deletedMarkIcon";
     public static final String KEY_MARK_COLOR = "deletedMarkColor";
     public static final String KEY_GHOST_IN_DIALOGS = "ghostInDialogs";
 
@@ -78,13 +79,16 @@ public final class AppearanceConfig {
         prefs().edit().putBoolean(KEY_TRANSLUCENT_DELETED, value).apply();
     }
 
-    /** One emoji, or an empty string to hide the mark. Replaces the old icon/text preference. */
-    public static String markEmoji() {
-        return ready() ? prefs().getString(KEY_MARK_EMOJI, "🗑️") : "🗑️";
+    public static DeletedMarkIcon markIcon() {
+        if (!ready()) return DeletedMarkIcon.TRASH;
+        String key = prefs().getString(KEY_MARK_ICON, null);
+        return key != null ? DeletedMarkIcon.fromKey(key)
+                : DeletedMarkIcon.fromLegacyEmoji(prefs().getString(KEY_MARK_EMOJI, null));
     }
 
-    public static void setMarkEmoji(String emoji) {
-        prefs().edit().putString(KEY_MARK_EMOJI, emoji).putBoolean(KEY_CUSTOM_MARKS, false).apply();
+    public static void setMarkIcon(DeletedMarkIcon icon) {
+        prefs().edit().putString(KEY_MARK_ICON, icon.key).remove(KEY_MARK_EMOJI)
+                .putBoolean(KEY_CUSTOM_MARKS, false).apply();
     }
 
     public static int markColor() {

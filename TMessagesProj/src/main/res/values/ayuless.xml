@@ -356,4 +356,9 @@
     <string name="AyulessExportTotalFiles">Total files:</string>
     <string name="AyulessExportTotalSize">Total size:</string>
     <string name="AyulessExportShowData">Show my data</string>
+    <string name="AyulessMarkTrash">Trash</string>
+    <string name="AyulessMarkGhost">Ghost</string>
+    <string name="AyulessMarkBlock">Prohibited</string>
+    <string name="AyulessMarkEye">Eye</string>
+    <string name="AyulessMarkClock">Clock</string>
 </resources>

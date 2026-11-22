@@ -8,14 +8,9 @@ import android.graphics.Canvas;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.text.style.ReplacementSpan;
 
 import org.ayuless.antidelete.DeletedCache;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.ColoredImageSpan;
 
@@ -46,46 +41,19 @@ public final class DeletedStyle {
             String prefix = AppearanceConfig.deletedMarkText();
             return TextUtils.isEmpty(prefix) ? time : TextUtils.concat(prefix, " ", time);
         }
-        String emoji = AppearanceConfig.markEmoji();
-        if (TextUtils.isEmpty(emoji)) return time;
-        SpannableString mark = new SpannableString(emoji + " ");
-        if ("🗑️".equals(emoji) || "🗑".equals(emoji)) {
-            // Keep the approved Solar delete mark; other choices use the selected emoji.
-            ColoredImageSpan span = new ColoredImageSpan(R.drawable.ayuless_solar_msg_delete);
-            if (Theme.chat_timePaint != null) {
-                span.setRelativeSize(Theme.chat_timePaint.getFontMetricsInt());
-            } else {
-                span.setSize(org.telegram.messenger.AndroidUtilities.dp(12));
-            }
-            int color = AppearanceConfig.markColor();
-            if (color != AppearanceConfig.COLOR_DEFAULT) span.setOverrideColor(color);
-            mark.setSpan(span, 0, emoji.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        DeletedMarkIcon icon = AppearanceConfig.markIcon();
+        if (icon == DeletedMarkIcon.NONE) return time;
+        SpannableString mark = new SpannableString("\uFFFC ");
+        ColoredImageSpan span = new ColoredImageSpan(icon.drawable);
+        if (Theme.chat_timePaint != null) {
+            span.setRelativeSize(Theme.chat_timePaint.getFontMetricsInt());
         } else {
-            mark.setSpan(new EmojiMarkSpan(), 0, emoji.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            span.setSize(org.telegram.messenger.AndroidUtilities.dp(12));
         }
+        int color = AppearanceConfig.markColor();
+        if (color != AppearanceConfig.COLOR_DEFAULT) span.setOverrideColor(color);
+        mark.setSpan(span, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return TextUtils.concat(mark, time);
-    }
-
-    /** Tint the emoji layer, including color fonts, without changing the timestamp color. */
-    private static final class EmojiMarkSpan extends ReplacementSpan {
-        @Override
-        public int getSize(Paint paint, CharSequence text, int start, int end, Paint.FontMetricsInt fm) {
-            if (fm != null) paint.getFontMetricsInt(fm);
-            return (int) Math.ceil(paint.measureText(text, start, end));
-        }
-
-        @Override
-        public void draw(Canvas canvas, CharSequence text, int start, int end, float x,
-                         int top, int y, int bottom, Paint paint) {
-            Paint tint = new Paint();
-            int color = AppearanceConfig.markColor();
-            tint.setColorFilter(new PorterDuffColorFilter(
-                    color == AppearanceConfig.COLOR_DEFAULT ? paint.getColor() : color, PorterDuff.Mode.SRC_IN));
-            float width = paint.measureText(text, start, end);
-            int save = canvas.saveLayer(x, top, x + width, bottom, tint);
-            canvas.drawText(text, start, end, x, y, paint);
-            canvas.restoreToCount(save);
-        }
     }
 
     /**

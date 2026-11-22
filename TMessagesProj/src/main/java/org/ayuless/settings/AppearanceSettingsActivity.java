@@ -7,18 +7,14 @@ package org.ayuless.settings;
 
 import static org.telegram.messenger.LocaleController.getString;
 
-import android.text.TextUtils;
 import android.view.View;
 
 import org.ayuless.appearance.AppearanceConfig;
+import org.ayuless.appearance.DeletedMarkIcon;
 import org.ayuless.extras.ExtrasConfig;
 import org.ayuless.extras.KeepAliveService;
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.Emoji;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UniversalAdapter;
 
@@ -55,7 +51,7 @@ public class AppearanceSettingsActivity extends AyulessSettingsFragment {
         }
         items.add(UItem.asHeader(getString(R.string.AyulessDeletedHeader)));
         items.add(UItem.asCheck(ID_TRANSLUCENT, getString(R.string.AyulessTranslucentDeleted)).setChecked(AppearanceConfig.translucentDeleted()));
-        items.add(UItem.asButton(ID_MARK_STYLE, R.drawable.ayuless_solar_msg_delete, getString(R.string.AyulessDeletedMarkStyle), TextUtils.isEmpty(AppearanceConfig.markEmoji()) ? getString(R.string.AyulessSpyExceptionsNone) : AppearanceConfig.markEmoji()));
+        items.add(UItem.asButton(ID_MARK_STYLE, R.drawable.ayuless_solar_msg_delete, getString(R.string.AyulessDeletedMarkStyle), getString(AppearanceConfig.markIcon().label)));
         if (colors != null) items.add(UItem.asCustom(colors));
         items.add(UItem.asShadow(getString(R.string.AyulessDeletedAppearanceInfo)));
         items.add(UItem.asHeader(getString(R.string.AyulessUsefulHeader)));
@@ -119,48 +115,18 @@ public class AppearanceSettingsActivity extends AyulessSettingsFragment {
 
     private void showStylePicker() {
         if (getParentActivity() == null) return;
-        String[] emojis = {"", "🗑️", "❌", "👻", "🚫", "💀", "✖️", "🫥"};
-        CharSequence[] labels = new CharSequence[emojis.length + 1];
-        for (int i = 0; i < emojis.length; i++) {
-            labels[i] = i == 0 ? getString(R.string.AyulessSpyExceptionsNone) : emojis[i];
+        DeletedMarkIcon[] choices = DeletedMarkIcon.values();
+        CharSequence[] labels = new CharSequence[choices.length];
+        int[] icons = new int[choices.length];
+        for (int i = 0; i < choices.length; i++) {
+            labels[i] = getString(choices[i].label);
+            icons[i] = choices[i].drawable;
         }
-        labels[emojis.length] = getString(R.string.AyulessChooseEmoji);
         showDialog(new AlertDialog.Builder(getParentActivity(), getResourceProvider())
                 .setTitle(getString(R.string.AyulessDeletedMarkStyle))
-                .setItems(labels, (dialog, which) -> {
-                    if (which == emojis.length) {
-                        showCustomEmoji();
-                    } else {
-                        AppearanceConfig.setMarkEmoji(emojis[which]);
-                        update();
-                    }
+                .setItems(labels, icons, (dialog, which) -> {
+                    AppearanceConfig.setMarkIcon(choices[which]);
+                    update();
                 }).create());
-    }
-
-    private void showCustomEmoji() {
-        EditTextBoldCursor input = new EditTextBoldCursor(getParentActivity());
-        input.setTextSize(24);
-        input.setTextColor(Theme.getColor(Theme.key_dialogTextBlack, getResourceProvider()));
-        input.setSingleLine(true);
-        input.setText(AppearanceConfig.markEmoji());
-        input.setPadding(AndroidUtilities.dp(24), AndroidUtilities.dp(12), AndroidUtilities.dp(24), AndroidUtilities.dp(12));
-        AlertDialog dialog = new AlertDialog.Builder(getParentActivity(), getResourceProvider())
-                .setTitle(getString(R.string.AyulessChooseEmoji))
-                .setView(input)
-                .setPositiveButton(getString(R.string.Save), null)
-                .setNegativeButton(getString(R.string.Cancel), null).create();
-        showDialog(dialog);
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
-            String value = input.getText().toString().trim();
-            if (!value.isEmpty() && (!Emoji.fullyConsistsOfEmojis(value) || Emoji.parseEmojis(value).size() != 1)) {
-                input.setError(getString(R.string.AyulessChooseOneEmoji));
-                return;
-            }
-            AppearanceConfig.setMarkEmoji(value);
-            update();
-            dialog.dismiss();
-        });
-        input.requestFocus();
-        AndroidUtilities.showKeyboard(input);
     }
 }

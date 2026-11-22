@@ -355,4 +355,9 @@
     <string name="AyulessExportTotalFiles">Всего файлов:</string>
     <string name="AyulessExportTotalSize">Общий размер:</string>
     <string name="AyulessExportShowData">Показать данные</string>
+    <string name="AyulessMarkTrash">Корзина</string>
+    <string name="AyulessMarkGhost">Призрак</string>
+    <string name="AyulessMarkBlock">Запрет</string>
+    <string name="AyulessMarkEye">Глаз</string>
+    <string name="AyulessMarkClock">Часы</string>
 </resources>
