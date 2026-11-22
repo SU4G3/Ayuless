@@ -6,7 +6,7 @@
     <!-- White Ayuless glyph; SettingsActivity supplies the standard rounded gradient tile. -->
     <path android:fillColor="#00000000" android:strokeColor="#FFFFFFFF"
         android:strokeWidth="7" android:strokeLineCap="round" android:strokeLineJoin="round"
-        android:pathData="M14,39 L36,17 L58,39"/>
+        android:pathData="M14,44 L36,22 L58,44"/>
     <path android:fillColor="#FFFFFFFF"
-        android:pathData="M31,54 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0 Z"/>
+        android:pathData="M31,49 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0 Z"/>
 </vector>
