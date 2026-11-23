@@ -111,7 +111,7 @@ Build output: `TMessagesProj_App/build/outputs/apk/afat/release/app.apk`. Local 
 
 ## Contributing and credits / Участие и благодарности
 
-[Contribution rules](CONTRIBUTING.md) · [Bug reports](https://github.com/SU4G3/Ayuless/issues) · [Security reports](SECURITY.md)
+[Contribution rules](CONTRIBUTING.md) · [Translations / Переводы](docs/TRANSLATING.md) · [Bug reports](https://github.com/SU4G3/Ayuless/issues) · [Security reports](SECURITY.md)
 
 Thanks to [Telegram](https://github.com/DrKLO/Telegram) for the upstream client, [AyuGram / Radolyn Labs](https://github.com/AyuGram) for feature inspiration, and [exteraless](https://github.com/exteraless) for the name idea. AyuGram-derived implementation code was removed and independently reimplemented from a written specification; earlier Git history still contains that port. [Clean-room notes](docs/CLEANROOM-REMOVED.md).
 

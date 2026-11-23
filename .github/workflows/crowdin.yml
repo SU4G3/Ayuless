@@ -1,0 +1,77 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: Crowdin translations
+on:
+  workflow_dispatch:
+    inputs:
+      seed_existing_translations:
+        description: Upload current repository translations on the first sync
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths:
+      - TMessagesProj/src/main/res/values/ayuless.xml
+      - crowdin.yml
+      - Tools/localization/**
+      - .github/workflows/crowdin.yml
+  schedule:
+    - cron: '17 3 * * *'
+permissions:
+  contents: read
+concurrency:
+  group: crowdin-translations
+  cancel-in-progress: false
+jobs:
+  synchronize:
+    if: vars.CROWDIN_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Check localization tooling
+        run: |
+          python3 Tools/localization/sync_translations.py
+          python3 -m unittest discover -s Tools/localization -p 'test_*.py'
+      - name: Check credentials
+        env:
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+        run: |
+          test -n "$CROWDIN_PROJECT_ID" || { echo 'Missing CROWDIN_PROJECT_ID'; exit 1; }
+          test -n "$CROWDIN_PERSONAL_TOKEN" || { echo 'Missing CROWDIN_PERSONAL_TOKEN'; exit 1; }
+      - name: Seed existing translations for first upload
+        if: github.event_name == 'workflow_dispatch' && inputs.seed_existing_translations
+        run: python3 Tools/localization/sync_translations.py --seed
+      - name: Synchronize approved translations
+        uses: crowdin/github-action@8f01d54f70f1713ee3f09d82c2bbb2daeac28689 # v2
+        with:
+          config: crowdin.yml
+          upload_sources: true
+          upload_translations: ${{ github.event_name == 'workflow_dispatch' && inputs.seed_existing_translations }}
+          auto_approve_imported: false
+          download_translations: true
+          skip_untranslated_strings: true
+          export_only_approved: true
+          push_translations: false
+          create_pull_request: false
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+      - name: Validate and merge downloads without dropping existing translations
+        run: python3 Tools/localization/sync_translations.py --merge
+      - name: Open a translation pull request
+        uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7
+        with:
+          branch: l10n/crowdin
+          base: main
+          title: Update Ayuless translations
+          commit-message: Update Ayuless translations
+          body: |
+            Approved Crowdin translations. XML and format placeholders were checked before opening this PR. Missing translations retain the existing entry or English fallback.
+
+            <!-- ayuless-agent -->
+          add-paths: TMessagesProj/src/main/res/values-*/ayuless.xml

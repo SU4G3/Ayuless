@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+project_id_env: CROWDIN_PROJECT_ID
+api_token_env: CROWDIN_PERSONAL_TOKEN
+base_path: .
+preserve_hierarchy: true
+files:
+  - source: /TMessagesProj/src/main/res/values/ayuless.xml
+    translation: /.crowdin/translations/values-%android_code%/ayuless.xml
+    type: android

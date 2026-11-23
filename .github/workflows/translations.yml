@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: Validate translations
+on:
+  pull_request:
+    paths:
+      - TMessagesProj/src/main/res/values*/ayuless.xml
+      - Tools/localization/**
+      - .github/workflows/translations.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - run: python3 Tools/localization/sync_translations.py
+      - run: python3 -m unittest discover -s Tools/localization -p 'test_*.py'

@@ -22,6 +22,8 @@ class TelegramBuildPlugin : Plugin<Project> {
                 localizationFiles.from(
                     project.fileTree("src/main/res") {
                         include("values-*/strings.xml")
+                        // Ayuless-only locales must also be discoverable at runtime.
+                        include("values-*/ayuless.xml")
                     }
                 )
 

@@ -28,3 +28,10 @@ TMessagesProj/jni/gram-wallet/vendor-fdroid/
 TMessagesProj/jni/gram-wallet/.cargo/
 **/vendor-fdroid/
 *.qbc
+
+# Local Crowdin download/import staging; never packaged or committed.
+.crowdin/
+
+# Python localization tool cache.
+__pycache__/
+*.pyc

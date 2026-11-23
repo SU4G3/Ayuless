@@ -35,3 +35,5 @@ git checkout main && git rebase upstream/master
 ## PRs
 
 Each PR describes which upstream files it touches and why, and includes a manual test checklist.
+
+For language contributions and Crowdin setup, see [Translating Ayuless](docs/TRANSLATING.md).
