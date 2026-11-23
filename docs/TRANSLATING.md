@@ -61,6 +61,9 @@ manually for the translation branch when a build is needed before merging.
 New Ayuless-only languages are included in both the binary translation assets
 and the generated runtime locale lookup. Existing Telegram strings continue
 to use their normal fallback if that language is not bundled upstream.
+`languages_mapping` in `crowdin.yml` keeps existing language-wide resource
+directories such as `values-ru` and `values-es`; Crowdin's default Android
+codes may include a region. Keep this mapping when importing existing files.
 
 Configuration references: [Crowdin GitHub Action](https://github.com/crowdin/github-action),
 [Crowdin configuration](https://support.crowdin.com/developer/configuration-file/),
