@@ -113,6 +113,8 @@ Build output: `TMessagesProj_App/build/outputs/apk/afat/release/app.apk`. Local 
 
 [Contribution rules](CONTRIBUTING.md) · [Translations / Переводы](docs/TRANSLATING.md) · [Bug reports](https://github.com/SU4G3/Ayuless/issues) · [Security reports](SECURITY.md)
 
+Help translate Ayuless on [Crowdin](https://crowdin.com/project/ayuless). Помочь с переводом Ayuless можно на [Crowdin](https://crowdin.com/project/ayuless).
+
 Thanks to [Telegram](https://github.com/DrKLO/Telegram) for the upstream client, [AyuGram / Radolyn Labs](https://github.com/AyuGram) for feature inspiration, and [exteraless](https://github.com/exteraless) for the name idea. AyuGram-derived implementation code was removed and independently reimplemented from a written specification; earlier Git history still contains that port. [Clean-room notes](docs/CLEANROOM-REMOVED.md).
 
 Ayuless: [GPL-3.0-or-later](LICENSE). Telegram upstream: [GPL-2.0-or-later](LICENSE.GPL-2.0). Solar icons by 480 Design and R4IN80W: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Credits](docs/CREDITS.md) · [Release resource audit](https://github.com/SU4G3/Ayuless/blob/v1.0.0/docs/LICENSE-AUDIT.md).

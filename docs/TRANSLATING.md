@@ -8,7 +8,7 @@ added to the app. Translations ship inside the APK.
 
 ## Contributing
 
-Translate through the project's Crowdin page once the maintainer connects it,
+Translate on [Ayuless on Crowdin](https://crowdin.com/project/ayuless),
 or submit an XML translation directly in a pull request. Preserve resource
 names, Android escaping and format arguments such as `%1$s` and `%2$d`.
 Do not translate entries marked `translatable="false"`.
