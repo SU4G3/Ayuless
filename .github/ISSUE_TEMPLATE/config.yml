@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
+  - name: Translate Ayuless / Перевести Ayuless
+    url: https://crowdin.com/project/ayuless
+    about: Contribute or improve translations on Crowdin
   - name: Download the latest Ayuless APK
     url: https://github.com/SU4G3/Ayuless/releases/latest
     about: Official project releases and installation notes

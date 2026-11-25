@@ -29,8 +29,9 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      actions: write
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - name: Check localization tooling
         run: |
           python3 Tools/localization/sync_translations.py
@@ -64,7 +65,8 @@ jobs:
       - name: Validate and merge downloads without dropping existing translations
         run: python3 Tools/localization/sync_translations.py --merge
       - name: Open a translation pull request
-        uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7
+        id: pr
+        uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1 # v8
         with:
           branch: l10n/crowdin
           base: main
@@ -75,3 +77,10 @@ jobs:
 
             <!-- ayuless-agent -->
           add-paths: TMessagesProj/src/main/res/values-*/ayuless.xml
+          labels: translations
+      # PRs created with GITHUB_TOKEN do not emit ordinary pull_request workflows.
+      - name: Validate the translation pull request
+        if: steps.pr.outputs.pull-request-operation == 'created' || steps.pr.outputs.pull-request-operation == 'updated'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run ci.yml --repo "$GITHUB_REPOSITORY" --ref l10n/crowdin

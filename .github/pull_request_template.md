@@ -1,15 +1,19 @@
-## What
+## Summary
 
-## Upstream files touched (and why)
+Describe the problem and resulting behavior. Link the relevant issue, if any.
 
--
+## Validation
 
-## Manual test checklist
+List the checks you ran and any device testing. Explain any relevant checks
+that could not be run. For app changes, include steps to test the behavior.
 
-- [ ]
+## Upstream changes and risks
 
-## Rules
+List changes outside `org.ayuless`, why they are needed, and any compatibility,
+data migration or release implications. Write “None” when not applicable.
 
-- [ ] New files have `SPDX-License-Identifier: GPL-3.0-or-later`
-- [ ] No code copied from exteraGram; code from AyuGram keeps its original header and is listed in docs/CREDITS.md
-- [ ] No secrets, no proprietary deps
+## Contributor checklist
+
+- [ ] The change follows [CONTRIBUTING.md](../CONTRIBUTING.md), including the clean-room boundary.
+- [ ] New code has the appropriate license notice; existing notices are preserved.
+- [ ] No secrets, private messages, proprietary SDKs or binary blobs are included.

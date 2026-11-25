@@ -29,11 +29,19 @@ Sync upstream:
 ```bash
 git remote add upstream https://github.com/DrKLO/Telegram.git
 git fetch upstream
-git checkout main && git rebase upstream/master
+git fetch origin
+git switch -c chore/upstream-sync origin/main
+git merge upstream/master
 ```
 
 ## PRs
 
 Each PR describes which upstream files it touches and why, and includes a manual test checklist.
+
+Run `bash Tools/ci/check.sh` with Python 3 and JDK 21 before submitting.
+`Repository checks` runs on every PR. App changes also need a successful APK
+build and relevant device testing. PRs use squash merge; do not force-push
+`main`. See [development and GitHub checks](docs/DEVELOPMENT.md) for workflow
+triggers, artifacts and maintainer settings.
 
 Help translate on [Crowdin](https://crowdin.com/project/ayuless). For language contribution rules and integration setup, see [Translating Ayuless](docs/TRANSLATING.md).

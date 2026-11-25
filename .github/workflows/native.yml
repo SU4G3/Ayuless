@@ -4,27 +4,8 @@ name: Native libraries
 
 on:
   workflow_dispatch:
-  pull_request:
-    branches: [main]
-    paths:
-      - 'TMessagesProj/jni/prebuild/**'
-      - 'TMessagesProj/jni/td'
-      - 'TMessagesProj/jni/tlottie'
-      - 'TMessagesProj/jni/wallet-engine'
-      - 'TMessagesProj/jni/gram-wallet/**'
-      - 'TMessagesProj/jni/third_party/boringssl'
-      - 'TMessagesProj/jni/third_party/dav1d'
-      - 'TMessagesProj/jni/third_party/ffmpeg'
-      - 'TMessagesProj/jni/third_party/libvpx'
-      - 'TMessagesProj/jni/third_party/openh264'
-      - 'TMessagesProj/jni/third_party/wamr'
-      - 'TMessagesProj/jni/third_party/xiph/opus'
-      - 'TMessagesProj/jni/**/CMakeLists.txt'
-      - 'TMessagesProj/jni/**/Android.mk'
-      - '.gitmodules'
-      - 'Tools/native/**'
-      - '.github/actions/native-prebuilts/**'
-      - '.github/workflows/native.yml'
+  # Build already builds and validates these libraries for application changes.
+  # Keep this entry point for inspecting native archives independently.
 
 permissions:
   contents: read
@@ -45,19 +26,20 @@ jobs:
           sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/lib/android/sdk/ndk/2* /opt/hostedtoolcache/CodeQL
           df -h /
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           fetch-depth: 1
 
       - name: Install NDK
-        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "ndk;27.2.12479018" "cmake;3.22.1"
+        run: '"$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "ndk;27.2.12479018" "cmake;3.22.1"'
 
       - uses: ./.github/actions/native-prebuilts
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: native-prebuilts
           path: |
             TMessagesProj/jni/prebuild/lib
             TMessagesProj/jni/prebuild/include
           if-no-files-found: error
+          retention-days: 7

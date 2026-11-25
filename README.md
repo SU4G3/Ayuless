@@ -11,6 +11,8 @@
 [![Latest release](https://img.shields.io/github/v/release/SU4G3/Ayuless?label=release)](https://github.com/SU4G3/Ayuless/releases/latest)
 [![License](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)](LICENSE)
 [![Android](https://img.shields.io/badge/Android-6.0%2B-green)](https://github.com/SU4G3/Ayuless/releases/latest)
+[![CI](https://github.com/SU4G3/Ayuless/actions/workflows/ci.yml/badge.svg)](https://github.com/SU4G3/Ayuless/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/SU4G3/Ayuless/actions/workflows/codeql.yml/badge.svg)](https://github.com/SU4G3/Ayuless/actions/workflows/codeql.yml)
 
 **[Download APK / Скачать APK](https://github.com/SU4G3/Ayuless/releases/latest)** · [Telegram](https://t.me/ayulessapp) · [Changelog](docs/CHANGELOG.md) · [FAQ](docs/FAQ.md) · [Report a bug](https://github.com/SU4G3/Ayuless/issues/new?template=bug_report.yml)
 
@@ -112,6 +114,8 @@ Build output: `TMessagesProj_App/build/outputs/apk/afat/release/app.apk`. Local 
 ## Contributing and credits / Участие и благодарности
 
 [Contribution rules](CONTRIBUTING.md) · [Translations / Переводы](docs/TRANSLATING.md) · [Bug reports](https://github.com/SU4G3/Ayuless/issues) · [Security reports](SECURITY.md)
+
+[Development and GitHub Actions / Разработка и проверки](docs/DEVELOPMENT.md)
 
 Help translate Ayuless on [Crowdin](https://crowdin.com/project/ayuless). Помочь с переводом Ayuless можно на [Crowdin](https://crowdin.com/project/ayuless).
 
