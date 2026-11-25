@@ -14,6 +14,6 @@ data migration or release implications. Write “None” when not applicable.
 
 ## Contributor checklist
 
-- [ ] The change follows [CONTRIBUTING.md](../CONTRIBUTING.md), including the clean-room boundary.
+- [ ] The change follows [CONTRIBUTING.md](https://github.com/SU4G3/Ayuless/blob/main/CONTRIBUTING.md), including the clean-room boundary.
 - [ ] New code has the appropriate license notice; existing notices are preserved.
 - [ ] No secrets, private messages, proprietary SDKs or binary blobs are included.

@@ -11,7 +11,7 @@ branches small enough to review. `master` mirrors Telegram upstream.
 | Build | App, Gradle or native build input changes; or manually | Universal `afat` APK, source-built native libraries and packaged emoji validation |
 | CodeQL | Non-documentation PRs/pushes, weekly, or manually | Java source and GitHub Actions security analysis |
 | Native libraries | Manually | Native archives and headers for investigating the native build independently |
-| Crowdin translations | Daily, source/config changes, or manually | A reviewed-translation PR and an explicit CI run for its branch |
+| Crowdin translations | Daily, source/config changes, or manually | A reviewed-translation PR and a `Repository checks` commit status after checking its actual head commit |
 
 CI does not need the Android SDK or repository secrets. It runs even on
 documentation changes so its required status cannot be left pending by path

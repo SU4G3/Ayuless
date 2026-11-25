@@ -29,7 +29,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-      actions: write
+      statuses: write
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - name: Check localization tooling
@@ -78,9 +78,41 @@ jobs:
             <!-- ayuless-agent -->
           add-paths: TMessagesProj/src/main/res/values-*/ayuless.xml
           labels: translations
-      # PRs created with GITHUB_TOKEN do not emit ordinary pull_request workflows.
-      - name: Validate the translation pull request
-        if: steps.pr.outputs.pull-request-operation == 'created' || steps.pr.outputs.pull-request-operation == 'updated'
+      # Validate the actual PR commit, including on a retry with no new changes.
+      # GITHUB_TOKEN-created PRs do not emit ordinary pull_request workflows.
+      - name: Check out the translation PR
+        if: steps.pr.outputs.pull-request-number != '' && steps.pr.outputs.pull-request-operation != 'closed'
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ steps.pr.outputs.pull-request-head-sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        if: steps.pr.outputs.pull-request-number != '' && steps.pr.outputs.pull-request-operation != 'closed'
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        if: steps.pr.outputs.pull-request-number != '' && steps.pr.outputs.pull-request-operation != 'closed'
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Validate the translation PR commit
+        id: validate-pr
+        if: steps.pr.outputs.pull-request-number != '' && steps.pr.outputs.pull-request-operation != 'closed'
+        run: |
+          go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 -color -shellcheck= -pyflakes=
+          bash Tools/ci/check.sh
+      # Commit statuses are independent of workflow job check-run eligibility.
+      - name: Report repository checks on the PR commit
+        if: always() && steps.pr.outputs.pull-request-number != '' && steps.pr.outputs.pull-request-operation != 'closed'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run ci.yml --repo "$GITHUB_REPOSITORY" --ref l10n/crowdin
+          PR_HEAD: ${{ steps.pr.outputs.pull-request-head-sha }}
+          CHECK_RESULT: ${{ steps.validate-pr.outcome }}
+        run: |
+          [[ "$PR_HEAD" =~ ^[0-9a-f]{40}$ ]]
+          state=failure
+          if [ "$CHECK_RESULT" = success ]; then state=success; fi
+          gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$PR_HEAD" \
+            -f "state=$state" -f 'context=Repository checks' \
+            -f 'description=Workflow lint and repository regression checks' \
+            -f "target_url=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
