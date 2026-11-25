@@ -1,6 +1,6 @@
 name: Bug report
 description: Something does not work as expected
-labels: [bug]
+labels: [bug, needs-triage]
 body:
   - type: markdown
     attributes:
@@ -23,7 +23,7 @@ body:
     id: area
     attributes:
       label: Area
-      options: [Ghost mode, Anti-delete, Edit history, Settings, Build, Push / UnifiedPush, Installation / signature, Security warning, Maps, Other]
+      options: [Ghost mode, Anti-delete, Edit history, Settings, Translations, Chat export, Build, Push / UnifiedPush, Installation / signature, Security warning, Maps, Other]
   - type: textarea
     id: steps
     attributes:

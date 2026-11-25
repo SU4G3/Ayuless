@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# This only groups generated GitHub release notes; it does not publish releases.
+changelog:
+  categories:
+    - title: Features
+      labels: [enhancement]
+    - title: Fixes
+      labels: [bug]
+    - title: Translations
+      labels: [translations]
+    - title: Documentation
+      labels: [documentation]
+    - title: Build and dependencies
+      labels: [build, dependencies]
+    - title: Other changes
+      labels: ['*']

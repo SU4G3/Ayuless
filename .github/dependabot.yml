@@ -4,10 +4,14 @@ updates:
     directory: /
     schedule:
       interval: weekly
+      day: monday
+      time: '06:00'
+      timezone: Etc/UTC
+    open-pull-requests-limit: 3
     groups:
       actions:
         patterns: ["*"]
-    labels: [build]
+    labels: [dependencies, build]
 
   # Gradle: security updates only. Version bumps come from upstream rebases.
   - package-ecosystem: gradle
@@ -15,4 +19,4 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 0
-    labels: [build]
+    labels: [dependencies, build]
