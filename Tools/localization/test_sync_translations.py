@@ -71,6 +71,25 @@ class TranslationTests(unittest.TestCase):
         self.assertEqual((self.staging / 'values-ru/ayuless.xml').read_bytes(), before)
         self.assertEqual(file.read_bytes(), before)
 
+    def test_upstream_override_removed_without_reformatting_or_losing_notices(self):
+        upstream = self.resources / 'values-fr/strings.xml'
+        upstream.parent.mkdir(parents=True)
+        keep = '<string name="Keep">Keep &amp; preserve</string>'
+        upstream.write_text('<?xml version="1.0"?>\n<!-- original copyright -->\n<resources>\n'
+                            '    <string name="Other">Old <![CDATA[</string>]]> value</string>\n'
+                            '    ' + keep + '\n</resources>\n')
+        self.write(self.staging / 'values-fr/ayuless.xml', '<string name="Other">Autre</string>')
+        self.assertEqual(sync.merge(self.resources, self.staging), 2)
+        self.assertEqual(upstream.read_text(), '<?xml version="1.0"?>\n<!-- original copyright -->\n<resources>\n    ' + keep + '\n</resources>\n')
+        self.assertEqual(sync.merge(self.resources, self.staging), 0)
+
+    def test_existing_duplicate_is_rejected_and_can_be_repaired(self):
+        self.write(self.resources / 'values-ru/strings.xml', '<string name="Other"/><string name="Keep">Keep</string>')
+        with self.assertRaises(ValueError):
+            sync.check_all(self.resources)
+        self.assertEqual(sync.merge(self.resources, self.staging), 1)
+        sync.check_all(self.resources)
+
 
 if __name__ == '__main__':
     unittest.main()

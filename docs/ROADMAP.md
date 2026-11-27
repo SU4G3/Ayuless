@@ -43,6 +43,8 @@ Private test APKs: [test-cleanroom](https://github.com/SU4G3/Ayuless-reports/rel
 - ✅ Full source-built native/WidgetJS/afat release APK and scanner checks completed in the official F-Droid image.
 
 ## Step 2: Ghost mode ✅ (#16, #23, #28, #29, #33)
+- ✅ User exceptions for read, typing and story receipts; account-wide online policy stays shared (main, next release)
+- ✅ Optional incoming-message read receipt hint, queried without acknowledging the message (main, next release)
 - ✅ Block `account.updateStatus` (online), read receipts, `messages.setTyping`, story views
 - ✅ Go offline right after sending
 - ✅ Global profile plus per-account overrides, "N/5" master switch

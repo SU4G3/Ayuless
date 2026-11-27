@@ -61,6 +61,10 @@ public final class GhostSeen {
         return account >= 0 && account < instances.length && GhostConfig.hideRead(account);
     }
 
+    private static boolean enabled(int account, long dialog) {
+        return enabled(account) && !GhostExceptions.contains(account, dialog);
+    }
+
     private static String key(long dialog, long topic, int kind) {
         return dialog + ":" + topic + ":" + kind;
     }
@@ -88,7 +92,7 @@ public final class GhostSeen {
     }
 
     public static void applyReactions(int account, long dialog, int id, TLRPC.TL_messageReactions reactions) {
-        if (!enabled(account) || reactions == null) return;
+        if (!enabled(account, dialog) || reactions == null) return;
         GhostSeen store = get(account);
         Set<String> seen = store.prefs.getStringSet(store.messageKey(dialog, REACTIONS, id), java.util.Collections.emptySet());
         if (seen.isEmpty()) return;
@@ -98,14 +102,14 @@ public final class GhostSeen {
     }
 
     public static void applyPoll(int account, long dialog, int id, TLRPC.PollResults results) {
-        if (!enabled(account) || results == null || !results.has_unread_votes) return;
+        if (!enabled(account, dialog) || results == null || !results.has_unread_votes) return;
         GhostSeen store = get(account);
         if (store.prefs.getStringSet(store.messageKey(dialog, POLL_VOTES, id), java.util.Collections.emptySet())
                 .contains(pollToken(results))) results.has_unread_votes = false;
     }
 
     public static void applyMessage(int account, TLRPC.Message message) {
-        if (!enabled(account) || message == null || message.id <= 0) return;
+        if (message == null || !enabled(account, MessageObject.getDialogId(message)) || message.id <= 0) return;
         long dialog = MessageObject.getDialogId(message);
         GhostSeen store = get(account);
         if (message.mentioned && store.prefs.contains(store.messageKey(dialog, MENTIONS, message.id))) {
@@ -118,14 +122,14 @@ public final class GhostSeen {
     }
 
     public static void rememberContent(int account, MessageObject message) {
-        if (!enabled(account) || message == null || !message.messageOwner.mentioned) return;
+        if (message == null || !enabled(account, message.getDialogId()) || !message.messageOwner.mentioned) return;
         TLRPC.Dialog dialog = MessagesController.getInstance(account).dialogs_dict.get(message.getDialogId());
         remember(account, message, message.getTopicId(), MENTIONS, dialog == null ? 0 : dialog.unread_mentions_count - 1);
     }
 
     /** Called only when the corresponding marker was actually displayed, before upstream clears it. */
     public static void remember(int account, MessageObject message, long topic, int kind, int remaining) {
-        if (!enabled(account) || message == null || message.getId() <= 0) return;
+        if (message == null || !enabled(account, message.getDialogId()) || message.getId() <= 0) return;
         if (kind == MENTIONS && !message.messageOwner.media_unread) return;
         GhostSeen store = get(account);
         String mk = store.messageKey(message.getDialogId(), kind, message.getId());
@@ -174,6 +178,7 @@ public final class GhostSeen {
 
     /** Counters persisted by upstream may already be reduced; do not subtract twice. */
     private int count(long dialog, long topic, int kind, int raw) {
+        if (!enabled(account, dialog)) return raw;
         String scope = key(dialog, topic, kind);
         if (!prefs.getBoolean("scope:" + scope, false)) return raw;
         int left = prefs.getInt("left:" + scope, raw);
@@ -186,7 +191,7 @@ public final class GhostSeen {
     }
 
     public static int countForChat(int account, long dialog, long topic, int kind, int raw) {
-        if (!enabled(account)) return raw;
+        if (!enabled(account, dialog)) return raw;
         GhostSeen store = get(account);
         int result = store.count(dialog, topic, kind, raw);
         store.refresh(dialog, topic, kind);
@@ -200,7 +205,7 @@ public final class GhostSeen {
 
     /** Jump over server-unread markers already seen here, including reactions on old messages. */
     public static boolean findNext(int account, long dialog, long topic, int kind, Consumer<Integer> callback) {
-        if (!enabled(account)) return false;
+        if (!enabled(account, dialog)) return false;
         GhostSeen store = get(account);
         if (!store.prefs.getBoolean("kind:" + dialog + ":" + kind, false)) return false;
         String scope = key(dialog, topic, kind);
@@ -211,7 +216,7 @@ public final class GhostSeen {
     }
 
     private void applyDialog(TLRPC.Dialog dialog) {
-        if (!prefs.getBoolean("dialog:" + dialog.id, false)) return;
+        if (!enabled(account, dialog.id) || !prefs.getBoolean("dialog:" + dialog.id, false)) return;
         dialog.unread_mentions_count = count(dialog.id, 0, MENTIONS, dialog.unread_mentions_count);
         dialog.unread_reactions_count = count(dialog.id, 0, REACTIONS, dialog.unread_reactions_count);
         dialog.unread_poll_votes_count = count(dialog.id, 0, POLL_VOTES, dialog.unread_poll_votes_count);
@@ -234,7 +239,8 @@ public final class GhostSeen {
         GhostSeen store = get(account);
         if (isLocalCount(args)) {
             LocalCount snapshot = (LocalCount) args[4];
-            return snapshot.account == account && snapshot.generation == store.generation;
+            return snapshot.account == account && snapshot.generation == store.generation
+                    && !GhostExceptions.contains(account, (long) args[0]);
         }
         if (store.publishing) return true;
         MessagesController controller = MessagesController.getInstance(account);
@@ -255,6 +261,7 @@ public final class GhostSeen {
     }
 
     private void refresh(long dialog, long topic, int kind) {
+        if (!enabled(account, dialog)) return;
         String scope = key(dialog, topic, kind);
         if (!prefs.getBoolean("kind:" + dialog + ":" + kind, false) || loading.containsKey(scope)
                 || DialogObject.isEncryptedDialog(dialog)) return;
@@ -293,10 +300,10 @@ public final class GhostSeen {
             String scope = key(dialog, topic, kind);
             Integer pendingVersion = loading.get(scope);
             if (pendingVersion == null || pendingVersion != version) return; // A previous login must not retire a new query.
-            if (!enabled(account) || version != generation || !(response instanceof TLRPC.messages_Messages)) {
+            if (!enabled(account, dialog) || version != generation || !(response instanceof TLRPC.messages_Messages)) {
                 loading.remove(scope);
                 refreshed.remove(scope);
-                if (enabled(account) && version != generation) refresh(dialog, topic, kind);
+                if (enabled(account, dialog) && version != generation) refresh(dialog, topic, kind);
                 else nextCallbacks.remove(scope); // A failed query must not clear a marker or issue a receipt.
                 return;
             }

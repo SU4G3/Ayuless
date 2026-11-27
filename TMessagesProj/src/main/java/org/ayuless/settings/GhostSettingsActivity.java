@@ -17,6 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.ayuless.ghost.GhostConfig;
+import org.ayuless.ghost.GhostExceptions;
+import org.telegram.ui.UsersSelectActivity;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
@@ -45,6 +47,7 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
     private static final int ID_SEND_SILENTLY = 21;
     private static final int ID_STORY_PROMPT = 23;
     private static final int ID_DELAYED_SEND = 22;
+    private static final int ID_EXCEPTIONS = 24;
 
     private static final int[] OPTION_TITLES = {
             R.string.AyulessGhostHideRead,
@@ -155,6 +158,12 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
         }
         items.add(UItem.asShadow(getString(R.string.AyulessGhostLockHint)));
 
+        int exceptions = GhostExceptions.get(profile).size();
+        items.add(UItem.asButton(ID_EXCEPTIONS, R.drawable.ayuless_solar_msg_block,
+                getString(R.string.AyulessSpyExceptions), exceptions == 0
+                        ? getString(R.string.AyulessSpyExceptionsNone) : String.valueOf(exceptions)).setEnabled(inUse));
+        items.add(UItem.asShadow(getString(R.string.AyulessGhostExceptionsInfo)));
+
         final boolean hideRead = GhostConfig.getProfile(profile, GhostConfig.KEY_HIDE_READ);
         items.add(UItem.asCheck(ID_READ_ON_ACTION, getString(R.string.AyulessGhostReadOnAction))
                 .setChecked(GhostConfig.getProfile(profile, GhostConfig.KEY_READ_ON_ACTION))
@@ -195,6 +204,18 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
             return;
         }
         if (!item.enabled) {
+            return;
+        }
+        if (item.id == ID_EXCEPTIONS) {
+            final int editedProfile = profile;
+            UsersSelectActivity selector = new UsersSelectActivity(true, GhostExceptions.get(editedProfile), 0).asPrivateChats();
+            selector.setCurrentAccount(editedProfile == GhostConfig.PROFILE_ALL ? currentAccount : editedProfile);
+            selector.noChatTypes = true;
+            selector.setDelegate((ids, flags) -> {
+                GhostExceptions.set(editedProfile, ids);
+                update();
+            });
+            presentFragment(selector);
             return;
         }
         if (item.id == ID_MENU || item.id == ID_SHORTCUT) {

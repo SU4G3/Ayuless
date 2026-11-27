@@ -30,6 +30,7 @@ public class AppearanceSettingsActivity extends AyulessSettingsFragment {
     private static final int ID_LOCAL_PREMIUM = 11;
     private static final int ID_WORK_IN_BACKGROUND = 12;
     private static final int ID_PROFILE_IDENTITY = 13;
+    private static final int ID_READ_RECEIPT = 14;
 
     private DeletedMessagePreview preview;
     private DeletedMarkColors colors;
@@ -59,6 +60,9 @@ public class AppearanceSettingsActivity extends AyulessSettingsFragment {
         items.add(UItem.asShadow(getString(R.string.AyulessRegistrationInfo)));
         items.add(UItem.asCheck(ID_GHOST_IN_DIALOGS, getString(R.string.AyulessGhostInDialogs)).setChecked(AppearanceConfig.ghostInDialogs()));
         items.add(UItem.asShadow(getString(R.string.AyulessGhostInDialogsInfo)));
+        items.add(UItem.asCheck(ID_READ_RECEIPT, getString(R.string.AyulessReadReceiptSetting))
+                .setChecked(ExtrasConfig.get(ExtrasConfig.KEY_GHOST_READ_RECEIPT)));
+        items.add(UItem.asShadow(getString(R.string.AyulessReadReceiptInfo)));
         items.add(UItem.asCheck(ID_HIDE_SPONSORED, getString(R.string.AyulessHideSponsored)).setChecked(ExtrasConfig.hideSponsored()));
         items.add(UItem.asCheck(ID_LOCAL_PREMIUM, getString(R.string.AyulessLocalPremium)).setChecked(ExtrasConfig.localPremium()));
         items.add(UItem.asCheck(ID_WORK_IN_BACKGROUND, getString(R.string.AyulessWorkInBackground)).setChecked(ExtrasConfig.workInBackground()));
@@ -68,6 +72,10 @@ public class AppearanceSettingsActivity extends AyulessSettingsFragment {
     @Override
     protected void onClick(UItem item, View view, int position, float x, float y) {
         switch (item.id) {
+            case ID_READ_RECEIPT:
+                ExtrasConfig.set(ExtrasConfig.KEY_GHOST_READ_RECEIPT, !ExtrasConfig.get(ExtrasConfig.KEY_GHOST_READ_RECEIPT));
+                update();
+                break;
             case ID_PROFILE_IDENTITY:
                 ProfileMapConfig.setShowProfileIdentity(!ProfileMapConfig.showProfileIdentity());
                 update();

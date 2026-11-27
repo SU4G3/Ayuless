@@ -7,7 +7,7 @@ branches small enough to review. `master` mirrors Telegram upstream.
 
 | Workflow | When it runs | Result |
 | --- | --- | --- |
-| CI | Every PR to `main`, every push to `main`, or manually | Required `Repository checks`: workflow lint, translation validation/tests, binary string lookup regression, registration estimate tests and the DeGoogle source audit |
+| CI | Every PR to `main`, every push to `main`, or manually | Required `Repository checks`: workflow lint, translation validation/tests, binary string lookup regression, registration estimate and ghost privacy tests, and the DeGoogle source audit |
 | Build | App, Gradle or native build input changes; or manually | Universal `afat` APK, source-built native libraries and packaged emoji validation |
 | CodeQL | Non-documentation PRs/pushes, weekly, or manually | Java source and GitHub Actions security analysis |
 | Native libraries | Manually | Native archives and headers for investigating the native build independently |

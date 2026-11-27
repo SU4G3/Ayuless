@@ -14470,6 +14470,7 @@ public class MessagesController extends BaseController implements NotificationCe
             } else {
                 TLRPC.TL_messages_readMessageContents req = new TLRPC.TL_messages_readMessageContents();
                 req.id.add(messageObject.getId());
+                org.ayuless.ghost.GhostInterceptor.tagReadRequest(req, dialogId); // Ayuless: peer-less content receipt.
                 getConnectionsManager().sendRequest(req, (response, error) -> {
                     if (error == null) {
                         TLRPC.TL_messages_affectedMessages res = (TLRPC.TL_messages_affectedMessages) response;
@@ -14495,6 +14496,7 @@ public class MessagesController extends BaseController implements NotificationCe
         } else {
             TLRPC.TL_messages_readMessageContents req = new TLRPC.TL_messages_readMessageContents();
             req.id.add(mid);
+            org.ayuless.ghost.GhostInterceptor.tagReadRequest(req, did); // Ayuless: peer-less content receipt.
             getConnectionsManager().sendRequest(req, (response, error) -> {
                 if (error == null) {
                     TLRPC.TL_messages_affectedMessages res = (TLRPC.TL_messages_affectedMessages) response;
@@ -14578,6 +14580,7 @@ public class MessagesController extends BaseController implements NotificationCe
         } else {
             TLRPC.TL_messages_readMessageContents req = new TLRPC.TL_messages_readMessageContents();
             req.id.add(mid);
+            org.ayuless.ghost.GhostInterceptor.tagReadRequest(req, dialogId); // Ayuless: peer-less content receipt.
             getConnectionsManager().sendRequest(req, (response, error) -> {
                 if (error == null) {
                     TLRPC.TL_messages_affectedMessages res = (TLRPC.TL_messages_affectedMessages) response;

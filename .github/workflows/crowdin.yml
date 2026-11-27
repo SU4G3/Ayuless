@@ -76,7 +76,9 @@ jobs:
             Approved Crowdin translations. XML and format placeholders were checked before opening this PR. Missing translations retain the existing entry or English fallback.
 
             <!-- ayuless-agent -->
-          add-paths: TMessagesProj/src/main/res/values-*/ayuless.xml
+          add-paths: |
+            TMessagesProj/src/main/res/values-*/ayuless.xml
+            TMessagesProj/src/main/res/values-*/strings.xml
           labels: translations
       # Validate the actual PR commit, including on a retry with no new changes.
       # GITHUB_TOKEN-created PRs do not emit ordinary pull_request workflows.

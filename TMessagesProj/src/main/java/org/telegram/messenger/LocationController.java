@@ -960,6 +960,7 @@ public class LocationController extends BaseController implements NotificationCe
             }
             request = req;
         }
+        org.ayuless.ghost.GhostInterceptor.tagReadRequest(request, dialogId); // Ayuless: retain the receipt peer.
         getConnectionsManager().sendRequest(request, (response, error) -> {
             if (response instanceof TLRPC.TL_messages_affectedMessages) {
                 TLRPC.TL_messages_affectedMessages res = (TLRPC.TL_messages_affectedMessages) response;

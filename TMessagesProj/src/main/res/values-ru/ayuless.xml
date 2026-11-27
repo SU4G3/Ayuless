@@ -354,4 +354,11 @@
     <string name="AyulessMarkBlock">Запрет</string>
     <string name="AyulessMarkEye">Глаз</string>
     <string name="AyulessMarkClock">Часы</string>
+    <string name="AyulessGhostExceptionsInfo">Выбранные пользователи увидят прочтение, набор текста и просмотры их историй. Настройки онлайна действуют для всего аккаунта.</string>
+    <string name="AyulessReadReceiptSetting">Статус прочтения в меню сообщений</string>
+    <string name="AyulessReadReceiptInfo">В режиме призрака показывает, отправлена ли отметка прочтения входящего сообщения. Доступно в обычных личных чатах.</string>
+    <string name="AyulessReadReceiptLoading">Проверка прочтения…</string>
+    <string name="AyulessReadReceiptSent">Отметка прочтения отправлена</string>
+    <string name="AyulessReadReceiptNotSent">Отметка прочтения не отправлена</string>
+    <string name="AyulessReadReceiptUnknown">Статус прочтения недоступен</string>
 </resources>

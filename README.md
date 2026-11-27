@@ -117,6 +117,8 @@ Build output: `TMessagesProj_App/build/outputs/apk/afat/release/app.apk`. Local 
 
 [Development and GitHub Actions / Разработка и проверки](docs/DEVELOPMENT.md)
 
+[Ghost exceptions and receipt hints / Исключения призрака и статус прочтения](docs/GHOST-MODE.md) — next release / следующий релиз.
+
 Help translate Ayuless on [Crowdin](https://crowdin.com/project/ayuless). Помочь с переводом Ayuless можно на [Crowdin](https://crowdin.com/project/ayuless).
 
 Thanks to [Telegram](https://github.com/DrKLO/Telegram) for the upstream client, [AyuGram / Radolyn Labs](https://github.com/AyuGram) for feature inspiration, and [exteraless](https://github.com/exteraless) for the name idea. AyuGram-derived implementation code was removed and independently reimplemented from a written specification; earlier Git history still contains that port. [Clean-room notes](docs/CLEANROOM-REMOVED.md).

@@ -18,6 +18,7 @@ public final class ExtrasConfig {
     public static final String KEY_DELETE_DATE = "deleteDate";
     public static final String KEY_GHOST_IN_MENU = "ghostInMenu";
     public static final String KEY_GHOST_SHORTCUT = "ghostShortcut";
+    public static final String KEY_GHOST_READ_RECEIPT = "ghostReadReceipt";
     public static final String KEY_HIDE_SPONSORED = "hideSponsored";
     public static final String KEY_LOCAL_PREMIUM = "localPremium";
     public static final String KEY_WORK_IN_BACKGROUND = "workInBackground";

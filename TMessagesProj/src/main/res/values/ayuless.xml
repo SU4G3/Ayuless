@@ -361,4 +361,11 @@
     <string name="AyulessMarkBlock">Prohibited</string>
     <string name="AyulessMarkEye">Eye</string>
     <string name="AyulessMarkClock">Clock</string>
+    <string name="AyulessGhostExceptionsInfo">Selected users can see read receipts, typing and views of their stories. Online status settings apply to the whole account.</string>
+    <string name="AyulessReadReceiptSetting">Read receipt status in message menu</string>
+    <string name="AyulessReadReceiptInfo">In ghost mode, show whether a read receipt was sent for an incoming message. Available in non-secret private chats.</string>
+    <string name="AyulessReadReceiptLoading">Checking read receipt…</string>
+    <string name="AyulessReadReceiptSent">Read receipt sent</string>
+    <string name="AyulessReadReceiptNotSent">Read receipt not sent</string>
+    <string name="AyulessReadReceiptUnknown">Read receipt status unavailable</string>
 </resources>

@@ -33226,16 +33226,19 @@ public class ChatActivity extends BaseFragment implements
 
                 // Ayuless: always explain the original forwarding restriction, without a preference.
                 boolean explainOriginalRestriction = org.ayuless.content.ProtectedContent.showForwardHint(currentAccount, message);
+                boolean showGhostReceipt = org.ayuless.ghost.GhostReadReceipt.shouldShow(currentAccount, message);
                 boolean showNoForwards = explainOriginalRestriction || (isPeerNoForwards() || message.messageOwner.noforwards && currentUser != null && currentUser.bot) && message.messageOwner.action == null && message.isSent() && !message.isEditing() && chatMode != MODE_SCHEDULED && chatMode != MODE_SAVED && getDialogId() != UserObject.VERIFY;
                 scrimPopupContainerLayout.addView(popupLayout, LayoutHelper.createLinearRelatively(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, isReactionsAvailable ? 16 : 0, 0, isReactionsAvailable ? 36 : 0, 0));
                 scrimPopupContainerLayout.setPopupWindowLayout(popupLayout);
-                if (showNoForwards) {
+                if (showNoForwards || showGhostReceipt) {
                     popupLayout.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
                     boolean isChannel = ChatObject.isChannel(currentChat) && !currentChat.megagroup;
                     TextView tv = new TextView(contentView.getContext());
                     tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                     ThemeBind.textColor(tv, Theme.key_actionBarDefaultSubmenuItem, getResourceProvider());
-                    if (explainOriginalRestriction) {
+                    if (!showNoForwards) {
+                        tv.setText("");
+                    } else if (explainOriginalRestriction) {
                         tv.setText(getString(R.string.AyulessOriginalForwardRestricted));
                     } else if (isPeerNoForwards()) {
                         final CharSequence str;
@@ -33256,6 +33259,21 @@ public class ChatActivity extends BaseFragment implements
                         tv.setText(LocaleController.getString(R.string.ForwardsRestrictedInfoBot));
                     }
                     tv.setMaxWidth(popupLayout.getMeasuredWidth() - AndroidUtilities.dp(38));
+
+                    // Ayuless: this hint is read-only; opening the menu never sends a receipt.
+                    if (showGhostReceipt) {
+                        final CharSequence restriction = tv.getText();
+                        final java.util.function.Consumer<Integer> showReceipt = status -> {
+                            CharSequence label = getString(status == org.ayuless.ghost.GhostReadReceipt.SENT
+                                    ? R.string.AyulessReadReceiptSent : status == org.ayuless.ghost.GhostReadReceipt.NOT_SENT
+                                    ? R.string.AyulessReadReceiptNotSent : R.string.AyulessReadReceiptUnknown);
+                            tv.setText(TextUtils.isEmpty(restriction) ? label : TextUtils.concat(restriction, "\n\n", label));
+                        };
+                        CharSequence loading = getString(R.string.AyulessReadReceiptLoading);
+                        tv.setText(TextUtils.isEmpty(restriction) ? loading : TextUtils.concat(restriction, "\n\n", loading));
+                        int requestId = org.ayuless.ghost.GhostReadReceipt.query(currentAccount, message, showReceipt);
+                        if (requestId != 0) ConnectionsManager.getInstance(currentAccount).bindRequestToGuid(requestId, classGuid);
+                    }
 
                     Drawable shadowDrawable2 = ContextCompat.getDrawable(contentView.getContext(), R.drawable.popup_fixed_alert4).mutate();
                     shadowDrawable2.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_actionBarDefaultSubmenuBackground), PorterDuff.Mode.MULTIPLY));
