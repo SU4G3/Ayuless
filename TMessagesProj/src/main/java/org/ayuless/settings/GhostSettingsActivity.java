@@ -211,6 +211,7 @@ public class GhostSettingsActivity extends AyulessSettingsFragment {
             UsersSelectActivity selector = new UsersSelectActivity(true, GhostExceptions.get(editedProfile), 0).asPrivateChats();
             selector.setCurrentAccount(editedProfile == GhostConfig.PROFILE_ALL ? currentAccount : editedProfile);
             selector.noChatTypes = true;
+            selector.preserveUnknownUsers = true;
             selector.setDelegate((ids, flags) -> {
                 GhostExceptions.set(editedProfile, ids);
                 update();

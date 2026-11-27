@@ -110,6 +110,8 @@ public class UsersSelectActivity extends BaseFragment implements NotificationCen
     AnimatedAvatarContainer animatedAvatarContainer;
 
     public boolean noChatTypes;
+    /** Ayuless: shared-profile users can be absent from this account's cache. */
+    public boolean preserveUnknownUsers;
     public boolean allowSelf;
     public boolean allowBots;
     public boolean doNotNewChats;
@@ -893,7 +895,15 @@ public class UsersSelectActivity extends BaseFragment implements NotificationCen
                     object = getMessagesController().getChat(-id);
                 }
                 if (object == null) {
-                    continue;
+                    if (preserveUnknownUsers && DialogObject.isUserDialog(id)) {
+                        // Display-only chip: do not copy another account's access hash or cache.
+                        TLRPC.TL_user unknown = new TLRPC.TL_user();
+                        unknown.id = id;
+                        unknown.first_name = "#" + id;
+                        object = unknown;
+                    } else {
+                        continue;
+                    }
                 }
                 GroupCreateSpan span = new GroupCreateSpan(editText.getContext(), object);
                 spansContainer.addSpan(span, false);

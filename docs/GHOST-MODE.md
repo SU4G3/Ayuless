@@ -8,6 +8,9 @@ Ayuless 1.0.0 APK.
 Open **Settings → Ayuless → Ghost mode → Exceptions** and select users. The list
 belongs to the profile selected at the top of the ghost settings screen: either
 the shared profile or an account's own profile.
+If another account does not know a selected user yet, the removable selection
+chip shows `#user_id` instead of silently losing that exception. No user access
+hash is copied between accounts.
 
 Selected users can receive normal read receipts, typing indicators and views of
 their stories. This also covers a secret chat with the selected user. A user
