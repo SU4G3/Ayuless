@@ -72,7 +72,7 @@ public final class StoryGhostPrompt {
         }
         long self = UserConfig.getInstance(account).getClientUserId();
         for (Long id : peerIds) {
-            if (id != null && id != self) {
+            if (id != null && id != self && !GhostExceptions.contains(account, id)) {
                 return true;
             }
         }

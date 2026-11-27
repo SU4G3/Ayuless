@@ -21,6 +21,7 @@ import org.telegram.tgnet.tl.TL_stories;
 import java.util.Collections;
 import java.util.Set;
 import java.util.WeakHashMap;
+import java.util.Map;
 
 /**
  * Outgoing request filter for ghost mode, called from ConnectionsManager before a
@@ -38,6 +39,12 @@ public final class GhostInterceptor {
     private static final Set<TLObject> allowedOnce = Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap<>()));
 
     private static final Set<TLObject> explicitOnce = Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap<>()));
+    // readMessageContents has message IDs but no peer; its caller supplies the dialog.
+    private static final Map<TLObject, Long> readDialogs = Collections.synchronizedMap(new WeakHashMap<>());
+
+    public static void tagReadRequest(TLObject request, long dialog) {
+        readDialogs.put(request, dialog);
+    }
     private GhostInterceptor() {
     }
 
@@ -52,7 +59,7 @@ public final class GhostInterceptor {
         if (explicitOnce.remove(req)) return false;
         if (allowedOnce.remove(req)) {
             // Automatic acknowledgements must still be enabled when the request leaves.
-            return GhostConfig.hideRead(account) && !GhostConfig.readOnAction(account);
+            return blocksRead(account, requestDialog(req)) && !GhostConfig.readOnAction(account);
         }
         if (org.ayuless.extras.SponsoredBlocker.shouldBlock(req)) {
             return true;
@@ -77,13 +84,13 @@ public final class GhostInterceptor {
             return false;
         }
         if (isReadRequest(req)) {
-            return GhostConfig.hideRead(account);
+            return blocksRead(account, requestDialog(req));
         }
         if (req instanceof TLRPC.TL_messages_setTyping || req instanceof TLRPC.TL_messages_setEncryptedTyping) {
-            return GhostConfig.hideTyping(account);
+            return GhostConfig.hideTyping(account) && !GhostExceptions.contains(account, requestDialog(req));
         }
         if (req instanceof TL_stories.TL_stories_readStories || req instanceof TL_stories.TL_stories_incrementStoryViews) {
-            return GhostConfig.hideStoryViews(account);
+            return GhostConfig.hideStoryViews(account) && !GhostExceptions.contains(account, requestDialog(req));
         }
         if (isSendRequest(req) && GhostConfig.offlineAfterSend(account)) {
             scheduleOffline(account);
@@ -137,7 +144,7 @@ public final class GhostInterceptor {
                 AndroidUtilities.runOnUIThread(() -> {
                     MessagesController controller = MessagesController.getInstance(account);
                     controller.markDialogAsRead(dialogId, maxId, maxId, maxDate, false, 0, countDiff, true, 0);
-                    if (encrypted && GhostConfig.hideRead(account)) {
+                    if (encrypted && blocksRead(account, dialogId)) {
                         TLRPC.EncryptedChat chat = controller.getEncryptedChat(DialogObject.getEncryptedChatId(dialogId));
                         if (chat != null && chat.ttl > 0) {
                             storage.createTaskForSecretChat(chat.id, maxDate,
@@ -217,10 +224,36 @@ public final class GhostInterceptor {
     }
 
     public static boolean blocksRead(int account, long dialog) {
-        return GhostConfig.hideRead(account);
+        return GhostConfig.hideRead(account) && !GhostExceptions.contains(account, dialog);
     }
 
     public static boolean blocksMediaRead(int account, long dialog) { return blocksRead(account, dialog); }
+
+    private static long peerDialog(TLRPC.InputPeer peer) {
+        return peer == null ? 0 : DialogObject.getPeerDialogId(peer);
+    }
+
+    private static long encryptedDialog(TLRPC.TL_inputEncryptedChat peer) {
+        return peer == null ? 0 : DialogObject.makeEncryptedDialogId(peer.chat_id);
+    }
+
+    /** Return zero for unscoped requests: an unknown peer must never bypass ghost mode. */
+    private static long requestDialog(TLObject request) {
+        Long tagged = readDialogs.get(request);
+        if (tagged != null) return tagged;
+        if (request instanceof TLRPC.TL_messages_readHistory) return peerDialog(((TLRPC.TL_messages_readHistory) request).peer);
+        if (request instanceof TLRPC.TL_messages_readMentions) return peerDialog(((TLRPC.TL_messages_readMentions) request).peer);
+        if (request instanceof TLRPC.TL_messages_readReactions) return peerDialog(((TLRPC.TL_messages_readReactions) request).peer);
+        if (request instanceof TLRPC.TL_messages_readPollVotes) return peerDialog(((TLRPC.TL_messages_readPollVotes) request).peer);
+        if (request instanceof TLRPC.TL_messages_readDiscussion) return peerDialog(((TLRPC.TL_messages_readDiscussion) request).peer);
+        if (request instanceof TLRPC.TL_messages_readSavedHistory) return peerDialog(((TLRPC.TL_messages_readSavedHistory) request).parent_peer);
+        if (request instanceof TLRPC.TL_messages_readEncryptedHistory) return encryptedDialog(((TLRPC.TL_messages_readEncryptedHistory) request).peer);
+        if (request instanceof TLRPC.TL_messages_setTyping) return peerDialog(((TLRPC.TL_messages_setTyping) request).peer);
+        if (request instanceof TLRPC.TL_messages_setEncryptedTyping) return encryptedDialog(((TLRPC.TL_messages_setEncryptedTyping) request).peer);
+        if (request instanceof TL_stories.TL_stories_readStories) return peerDialog(((TL_stories.TL_stories_readStories) request).peer);
+        if (request instanceof TL_stories.TL_stories_incrementStoryViews) return peerDialog(((TL_stories.TL_stories_incrementStoryViews) request).peer);
+        return 0;
+    }
 
     private static boolean isReadRequest(TLObject req) {
         return req instanceof TLRPC.TL_messages_readHistory

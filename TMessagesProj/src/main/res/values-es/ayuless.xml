@@ -354,4 +354,11 @@
     <string name="AyulessMarkBlock">Prohibido</string>
     <string name="AyulessMarkEye">Ojo</string>
     <string name="AyulessMarkClock">Reloj</string>
+    <string name="AyulessGhostExceptionsInfo">Los usuarios seleccionados verán las confirmaciones de lectura, el estado de escritura y las visualizaciones de sus historias. Los ajustes del estado en línea se aplican a toda la cuenta.</string>
+    <string name="AyulessReadReceiptSetting">Estado de lectura en el menú de mensajes</string>
+    <string name="AyulessReadReceiptInfo">En modo fantasma, muestra si se envió una confirmación de lectura para un mensaje recibido. Disponible en chats privados que no sean secretos.</string>
+    <string name="AyulessReadReceiptLoading">Comprobando confirmación de lectura…</string>
+    <string name="AyulessReadReceiptSent">Confirmación de lectura enviada</string>
+    <string name="AyulessReadReceiptNotSent">Confirmación de lectura no enviada</string>
+    <string name="AyulessReadReceiptUnknown">Estado de confirmación de lectura no disponible</string>
 </resources>

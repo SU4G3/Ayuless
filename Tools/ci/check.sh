@@ -9,4 +9,5 @@ python3 Tools/localization/sync_translations.py
 python3 -m unittest discover -s Tools/localization -p 'test_*.py'
 python3 Tools/test_strings_build.py
 python3 Tools/test_registration_estimate.py
+python3 Tools/test_ghost_exceptions.py
 python3 Tools/check_degoogle.py
