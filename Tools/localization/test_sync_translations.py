@@ -90,6 +90,13 @@ class TranslationTests(unittest.TestCase):
         self.assertEqual(sync.merge(self.resources, self.staging), 1)
         sync.check_all(self.resources)
 
+    def test_unrelated_crlf_upstream_is_not_rewritten(self):
+        file = self.resources / 'values-ru/strings.xml'
+        original = b'<resources>\r\n    <string name="Keep">Keep</string>\r\n</resources>\r\n'
+        file.write_bytes(original)
+        self.assertEqual(sync.merge(self.resources, self.staging), 0)
+        self.assertEqual(file.read_bytes(), original)
+
 
 if __name__ == '__main__':
     unittest.main()

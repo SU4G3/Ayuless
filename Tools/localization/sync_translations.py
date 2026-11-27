@@ -160,12 +160,12 @@ def merge(resources=RESOURCES, staging=STAGING):
         upstream = resources / locale / 'strings.xml'
         if upstream.exists():
             cleaned = remove_overrides(upstream, keys)
-            if cleaned != upstream.read_text(encoding='utf-8'):
+            if cleaned.encode('utf-8') != upstream.read_bytes():
                 planned.append((upstream, cleaned))
     # Validate the complete batch before changing any repository translation.
     for destination, text in planned:
         destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_text(text, encoding='utf-8')
+        destination.write_bytes(text.encode('utf-8'))
     check_all(resources)
     return len(planned)
 
