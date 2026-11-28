@@ -40,7 +40,8 @@ public class LauncherIconController {
         AQUA("AquaIcon", R.drawable.ic_launcher_ayuless_ocean_background, R.drawable.ic_launcher_ayuless_ocean_foreground, R.string.AppIconAqua),
         PREMIUM("PremiumIcon", R.drawable.ic_launcher_ayuless_premium_background, R.drawable.ic_launcher_ayuless_premium_foreground, R.string.AppIconPremium, true),
         TURBO("TurboIcon", R.drawable.ic_launcher_ayuless_turbo_background, R.drawable.ic_launcher_ayuless_turbo_foreground, R.string.AppIconTurbo, true),
-        NOX("NoxIcon", R.drawable.ic_launcher_ayuless_night_background, R.drawable.ic_launcher_ayuless_night_foreground, R.string.AppIconNox, true);
+        NOX("NoxIcon", R.drawable.ic_launcher_ayuless_night_background, R.drawable.ic_launcher_ayuless_night_foreground, R.string.AppIconNox, true),
+        PIXEL("PixelIcon", R.drawable.ic_launcher_ayuless_pixel_background, R.drawable.ic_launcher_ayuless_pixel_foreground, R.string.AyulessAppIconPixel);
 
         public final String key;
         public final int background;

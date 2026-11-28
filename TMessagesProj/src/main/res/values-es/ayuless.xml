@@ -354,4 +354,5 @@
     <string name="AyulessMarkBlock">Prohibido</string>
     <string name="AyulessMarkEye">Ojo</string>
     <string name="AyulessMarkClock">Reloj</string>
+    <string name="AyulessAppIconPixel">Píxel</string>
 </resources>

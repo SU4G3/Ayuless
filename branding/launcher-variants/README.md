@@ -26,8 +26,21 @@ ImageMagick or SVG support.
 
 The picker preview, launcher aliases in both main and standalone manifests, and
 adaptive resources reference the same variants. Component names remain unchanged
-so the selected alias can survive an update. All six choices are available without
+so the selected alias can survive an update. All choices are available without
 Telegram Premium; the enum's `premium` field only groups artwork in the upstream
 Premium preview screen.
 
 Artwork and generator: Copyright (C) 2026 Ayuless contributors, GPL-3.0-or-later.
+
+## Pixel
+
+Pixel is an optional purple-haired pixel character icon, adapted with OpenAI
+image generation from the reference supplied by the project owner and approved
+on 2026-11-28. The approved square master is `pixel.png`; it contains background
+overscan for launcher masks. It does not replace the default Ayuless icon.
+
+Regenerate Android assets with `python3 branding/generate-pixel-launcher.py`
+(ImageMagick required). The adaptive icon uses the artwork as its masked
+background and a transparent foreground, so the existing circular picker cannot
+draw opaque corners. Legacy icons crop the 72dp visible area of the 108dp layer.
+Android themed icons use the Ayuless monochrome mark.
