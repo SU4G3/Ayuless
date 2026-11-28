@@ -361,4 +361,5 @@
     <string name="AyulessMarkBlock">Prohibited</string>
     <string name="AyulessMarkEye">Eye</string>
     <string name="AyulessMarkClock">Clock</string>
+    <string name="AyulessAppIconPixel">Pixel</string>
 </resources>
